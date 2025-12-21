@@ -25,6 +25,7 @@ export default function Index() {
           <div className="flex items-center gap-8">
             <a href="/" className="text-blue-600 font-semibold">Home</a>
             <Link to="/templates" className="text-gray-700 hover:text-gray-900 transition">Templates</Link>
+            <Link to="/courses" className="text-gray-700 hover:text-gray-900 transition">Courses</Link>
             <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
               Sign In
             </button>
