@@ -504,13 +504,13 @@ function ExpandableModule({ module, courseId }: { module: Module; courseId: stri
         className="w-full flex items-center justify-between p-6 bg-white hover:bg-gray-50 transition-colors duration-200"
       >
         <div className="text-left flex-1">
-          <h3 className="text-lg font-bold text-gray-900 mb-1">{module.title}</h3>
+          <h3 className="text-lg font-bold text-primary mb-1">{module.title}</h3>
           <p className="text-sm text-gray-600">Duration: {module.duration}</p>
         </div>
         {expanded ? (
-          <ChevronUp className="w-5 h-5 text-gray-600" />
+          <ChevronUp className="w-5 h-5 text-primary" />
         ) : (
-          <ChevronDown className="w-5 h-5 text-gray-600" />
+          <ChevronDown className="w-5 h-5 text-primary" />
         )}
       </button>
 
@@ -519,7 +519,7 @@ function ExpandableModule({ module, courseId }: { module: Module; courseId: stri
           <div className="space-y-4 p-6">
             {module.lessons.map((lesson) => (
               <div key={lesson.id} className="bg-white rounded-lg p-4 border border-gray-100">
-                <h4 className="text-base font-semibold text-gray-900 mb-4">{lesson.title}</h4>
+                <h4 className="text-base font-semibold text-primary mb-4">{lesson.title}</h4>
                 <div className="space-y-3">
                   {lesson.resources.map((resource, idx) => (
                     <a
@@ -527,17 +527,17 @@ function ExpandableModule({ module, courseId }: { module: Module; courseId: stri
                       href={resource.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-start gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors duration-200 group"
+                      className="flex items-start gap-3 p-3 bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors duration-200 group"
                     >
                       <div className="flex-1">
-                        <p className="text-sm font-semibold text-blue-600 group-hover:text-blue-700">
+                        <p className="text-sm font-semibold text-primary group-hover:text-opacity-90">
                           {resource.title}
                         </p>
                         <p className="text-xs text-gray-600 mt-1">
                           {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)} • {resource.platform}
                         </p>
                       </div>
-                      <span className="text-blue-600 group-hover:text-blue-700 mt-1">→</span>
+                      <span className="text-primary group-hover:text-opacity-90 mt-1">→</span>
                     </a>
                   ))}
                 </div>
@@ -556,20 +556,20 @@ function CourseCard({ course }: { course: Course }) {
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow duration-300">
       {/* Course Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-8">
+      <div className="bg-gradient-to-r from-primary to-primary/80 text-white p-8">
         <h2 className="text-3xl font-bold mb-3">{course.title}</h2>
-        <p className="text-blue-100 mb-6">{course.description}</p>
+        <p className="text-gray-100 mb-6">{course.description}</p>
         <div className="grid grid-cols-3 gap-4 text-sm">
           <div>
-            <p className="text-blue-200 font-semibold">Duration</p>
+            <p className="text-gray-200 font-semibold">Duration</p>
             <p className="font-bold">{course.duration}</p>
           </div>
           <div>
-            <p className="text-blue-200 font-semibold">Level</p>
+            <p className="text-gray-200 font-semibold">Level</p>
             <p className="font-bold">{course.level}</p>
           </div>
           <div>
-            <p className="text-blue-200 font-semibold">Best For</p>
+            <p className="text-gray-200 font-semibold">Best For</p>
             <p className="font-bold text-xs">{course.target}</p>
           </div>
         </div>
@@ -580,15 +580,15 @@ function CourseCard({ course }: { course: Course }) {
         <div className="mb-8">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="w-full flex items-center justify-between bg-blue-50 hover:bg-blue-100 p-4 rounded-lg transition-colors duration-200 mb-6"
+            className="w-full flex items-center justify-between bg-primary/10 hover:bg-primary/20 p-4 rounded-lg transition-colors duration-200 mb-6"
           >
-            <span className="font-semibold text-gray-900">
+            <span className="font-semibold text-primary">
               {expanded ? "Hide" : "Show"} Course Modules
             </span>
             {expanded ? (
-              <ChevronUp className="w-5 h-5 text-blue-600" />
+              <ChevronUp className="w-5 h-5 text-primary" />
             ) : (
-              <ChevronDown className="w-5 h-5 text-blue-600" />
+              <ChevronDown className="w-5 h-5 text-primary" />
             )}
           </button>
 
@@ -603,7 +603,7 @@ function CourseCard({ course }: { course: Course }) {
 
         {/* Call to Action */}
         <div className="border-t border-gray-200 pt-6">
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+          <button className="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
             Start Learning Now
           </button>
         </div>
@@ -616,19 +616,19 @@ export default function Courses() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+      <nav className="bg-primary sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">R</span>
+            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
+              <span className="text-primary font-bold text-xl">R</span>
             </div>
-            <span className="font-bold text-gray-900 text-lg">ResumeCraft</span>
+            <span className="font-bold text-white text-lg">ResumeCraft</span>
           </div>
           <div className="flex items-center gap-8">
-            <a href="/" className="text-gray-700 hover:text-gray-900 transition">Home</a>
-            <a href="/templates" className="text-gray-700 hover:text-gray-900 transition">Templates</a>
-            <a href="/courses" className="text-blue-600 font-semibold">Courses</a>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
+            <a href="/" className="text-gray-100 hover:text-white transition">Home</a>
+            <a href="/templates" className="text-gray-100 hover:text-white transition">Templates</a>
+            <a href="/courses" className="text-white font-semibold">Courses</a>
+            <button className="bg-accent hover:bg-yellow-200 text-primary font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
               Sign In
             </button>
           </div>
@@ -636,18 +636,15 @@ export default function Courses() {
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 via-white to-blue-50 py-20 px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-br from-primary/5 to-white py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Level Up Your Skills with<br />
-            <span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-              Free Job-Ready Courses
-            </span>
+          <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 leading-tight">
+            Level Up Your Skills
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
             Accelerate your career with curated, self-paced learning paths. Master in-demand skills and land your dream job. All courses are 100% free.
           </p>
-          <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold">
+          <div className="inline-block bg-accent text-primary px-4 py-2 rounded-full text-sm font-semibold">
             ✓ 100% Free • Self-Paced • Industry-Relevant
           </div>
         </div>
@@ -657,10 +654,10 @@ export default function Courses() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-primary mb-4">
               Featured Learning Paths
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-700">
               Choose your path and start learning with curated resources from industry leaders
             </p>
           </div>
@@ -675,19 +672,19 @@ export default function Courses() {
       {/* Benefits Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">
+          <h2 className="text-4xl font-bold text-primary mb-12 text-center">
             Why These Courses?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary">
                   <span className="text-white text-xl">🚀</span>
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">High Demand Skills</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold text-primary mb-2">High Demand Skills</h3>
+                <p className="text-gray-700">
                   Learn skills that employers actively seek right now. Frontend development and data analytics are among the most in-demand fields.
                 </p>
               </div>
@@ -695,13 +692,13 @@ export default function Courses() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary">
                   <span className="text-white text-xl">📚</span>
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Curated Resources</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold text-primary mb-2">Curated Resources</h3>
+                <p className="text-gray-700">
                   We've curated the best free resources from platforms like freeCodeCamp, MDN, Kaggle, and industry experts.
                 </p>
               </div>
@@ -709,13 +706,13 @@ export default function Courses() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary">
                   <span className="text-white text-xl">⏰</span>
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Self-Paced Learning</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold text-primary mb-2">Self-Paced Learning</h3>
+                <p className="text-gray-700">
                   Learn at your own speed. No fixed schedules or deadlines. Progress through modules as quickly or slowly as you need.
                 </p>
               </div>
@@ -723,13 +720,13 @@ export default function Courses() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary">
                   <span className="text-white text-xl">💼</span>
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Career-Focused</h3>
-                <p className="text-gray-600">
+                <h3 className="text-xl font-bold text-primary mb-2">Career-Focused</h3>
+                <p className="text-gray-700">
                   Each course includes practical projects and capstone assignments to build portfolio-ready work samples.
                 </p>
               </div>
@@ -739,22 +736,22 @@ export default function Courses() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-blue-600">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary">
         <div className="max-w-4xl mx-auto text-center text-white">
           <h2 className="text-4xl font-bold mb-4">
             Combine Skills with Professional Resumes
           </h2>
-          <p className="text-xl opacity-90 mb-8">
+          <p className="text-xl opacity-95 mb-8">
             Once you've learned new skills, showcase them with our professional resume templates. Create a compelling application package.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <a
               href="/templates"
-              className="bg-white text-blue-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition-colors duration-200 inline-block text-lg"
+              className="bg-accent text-primary hover:bg-yellow-200 font-bold py-3 px-8 rounded-lg transition-colors duration-200 inline-block text-lg"
             >
               View Resume Templates
             </a>
-            <button className="border-2 border-white text-white hover:bg-blue-700 font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-lg">
+            <button className="border-2 border-accent text-accent hover:bg-accent hover:text-primary font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-lg">
               Get Started Learning
             </button>
           </div>
@@ -762,13 +759,13 @@ export default function Courses() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300">
+      <footer className="bg-primary text-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">R</span>
+                <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
+                  <span className="text-primary font-bold text-sm">R</span>
                 </div>
                 <span className="font-bold text-white">ResumeCraft</span>
               </div>
@@ -799,7 +796,7 @@ export default function Courses() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8">
+          <div className="border-t border-primary/20 pt-8">
             <p className="text-center text-sm">&copy; 2024 ResumeCraft. Free learning for everyone.</p>
           </div>
         </div>
