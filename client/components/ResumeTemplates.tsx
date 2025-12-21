@@ -1,95 +1,139 @@
 import React from 'react';
 
 // Template 1: Modern Blue
-export const ModernBlueTemplate: React.FC<{ data?: any }> = ({ data }) => (
-  <div className="bg-white min-h-screen p-12 font-sans">
-    <div className="max-w-4xl mx-auto">
-      <div className="border-b-4 border-blue-600 pb-6 mb-8">
-        <h1 className="text-4xl font-bold text-gray-900">John Anderson</h1>
-        <p className="text-lg text-blue-600 font-semibold mt-2">Senior Product Designer</p>
-        <div className="flex gap-6 mt-4 text-sm text-gray-600">
-          <span>📧 john.anderson@email.com</span>
-          <span>📱 (555) 123-4567</span>
-          <span>📍 San Francisco, CA</span>
-          <span>🔗 linkedin.com/in/johnanderson</span>
+export const ModernBlueTemplate: React.FC<{ data?: any }> = ({ data }) => {
+  const resumeData = data || {
+    personalInfo: {
+      fullName: "John Anderson",
+      email: "john.anderson@email.com",
+      phone: "(555) 123-4567",
+      location: "San Francisco, CA",
+      linkedIn: "linkedin.com/in/johnanderson",
+    },
+    professionalSummary:
+      "Innovative product designer with 8+ years of experience creating user-centered digital solutions. Proven track record of leading design teams and delivering products that increase user engagement by 40%.",
+    experience: [
+      {
+        position: "Senior Product Designer",
+        company: "Tech Innovation Corp",
+        startDate: "2020",
+        endDate: "Present",
+        currentlyWorking: true,
+        description:
+          "Led design of flagship mobile app used by 2M+ users. Established design system increasing team productivity by 35%. Mentored team of 5 junior designers.",
+      },
+      {
+        position: "Product Designer",
+        company: "Digital Solutions Inc",
+        startDate: "2018",
+        endDate: "2020",
+        currentlyWorking: false,
+        description:
+          "Designed and prototyped user interfaces for 15+ products. Conducted user research sessions and usability testing.",
+      },
+    ],
+    education: [
+      {
+        school: "University of Design",
+        degree: "Bachelor of Fine Arts",
+        graduationDate: "2015",
+      },
+    ],
+    skills: [
+      { name: "UI/UX Design" },
+      { name: "Figma" },
+      { name: "Adobe XD" },
+      { name: "User Research" },
+      { name: "Prototyping" },
+      { name: "Design Systems" },
+    ],
+  };
+
+  return (
+    <div className="bg-white min-h-screen p-12 font-sans">
+      <div className="max-w-4xl mx-auto">
+        <div className="border-b-4 border-blue-600 pb-6 mb-8">
+          <h1 className="text-4xl font-bold text-gray-900">{resumeData.personalInfo.fullName}</h1>
+          <div className="flex gap-6 mt-4 text-sm text-gray-600 flex-wrap">
+            {resumeData.personalInfo.email && <span>📧 {resumeData.personalInfo.email}</span>}
+            {resumeData.personalInfo.phone && <span>📱 {resumeData.personalInfo.phone}</span>}
+            {resumeData.personalInfo.location && <span>📍 {resumeData.personalInfo.location}</span>}
+            {resumeData.personalInfo.linkedIn && <span>🔗 {resumeData.personalInfo.linkedIn}</span>}
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-3 gap-8">
-        <div className="col-span-2">
-          <section className="mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">PROFESSIONAL SUMMARY</h2>
-            <p className="text-gray-700 leading-relaxed">Innovative product designer with 8+ years of experience creating user-centered digital solutions. Proven track record of leading design teams and delivering products that increase user engagement by 40%.</p>
-          </section>
+        <div className="grid grid-cols-3 gap-8">
+          <div className="col-span-2">
+            {resumeData.professionalSummary && (
+              <section className="mb-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">
+                  PROFESSIONAL SUMMARY
+                </h2>
+                <p className="text-gray-700 leading-relaxed">{resumeData.professionalSummary}</p>
+              </section>
+            )}
 
-          <section className="mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">EXPERIENCE</h2>
-            <div className="mb-6">
-              <div className="flex justify-between items-baseline mb-1">
-                <h3 className="text-lg font-bold text-gray-900">Senior Product Designer</h3>
-                <span className="text-sm text-gray-600">2020 - Present</span>
-              </div>
-              <p className="text-blue-600 font-semibold mb-2">Tech Innovation Corp</p>
-              <ul className="text-gray-700 space-y-1 text-sm">
-                <li>• Led design of flagship mobile app used by 2M+ users</li>
-                <li>• Established design system increasing team productivity by 35%</li>
-                <li>• Mentored team of 5 junior designers</li>
-              </ul>
-            </div>
-            <div>
-              <div className="flex justify-between items-baseline mb-1">
-                <h3 className="text-lg font-bold text-gray-900">Product Designer</h3>
-                <span className="text-sm text-gray-600">2018 - 2020</span>
-              </div>
-              <p className="text-blue-600 font-semibold mb-2">Digital Solutions Inc</p>
-              <ul className="text-gray-700 space-y-1 text-sm">
-                <li>• Designed and prototyped user interfaces for 15+ products</li>
-                <li>• Conducted user research sessions and usability testing</li>
-              </ul>
-            </div>
-          </section>
-        </div>
+            {resumeData.experience && resumeData.experience.length > 0 && (
+              <section className="mb-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-blue-600">
+                  EXPERIENCE
+                </h2>
+                {resumeData.experience.map((exp: any, idx: number) => (
+                  <div key={idx} className={idx > 0 ? "mb-6" : "mb-6"}>
+                    <div className="flex justify-between items-baseline mb-1">
+                      <h3 className="text-lg font-bold text-gray-900">{exp.position}</h3>
+                      <span className="text-sm text-gray-600">
+                        {exp.startDate} - {exp.currentlyWorking ? "Present" : exp.endDate}
+                      </span>
+                    </div>
+                    <p className="text-blue-600 font-semibold mb-2">{exp.company}</p>
+                    {exp.description && (
+                      <p className="text-gray-700 text-sm leading-relaxed">{exp.description}</p>
+                    )}
+                  </div>
+                ))}
+              </section>
+            )}
+          </div>
 
-        <div>
-          <section className="mb-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-blue-600">SKILLS</h2>
-            <div className="space-y-3">
-              <div>
-                <p className="font-semibold text-gray-900 text-sm mb-1">Design Tools</p>
-                <p className="text-gray-700 text-sm">Figma, Adobe XD, Sketch</p>
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900 text-sm mb-1">Technical</p>
-                <p className="text-gray-700 text-sm">HTML, CSS, React basics</p>
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900 text-sm mb-1">Methods</p>
-                <p className="text-gray-700 text-sm">UX Research, Wireframing, Prototyping</p>
-              </div>
-            </div>
-          </section>
+          <div>
+            {resumeData.skills && resumeData.skills.length > 0 && (
+              <section className="mb-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-blue-600">
+                  SKILLS
+                </h2>
+                <div className="space-y-2">
+                  {resumeData.skills.map((skill: any, idx: number) => (
+                    <p key={idx} className="text-gray-700 text-sm">
+                      • {skill.name}
+                    </p>
+                  ))}
+                </div>
+              </section>
+            )}
 
-          <section className="mb-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-blue-600">EDUCATION</h2>
-            <div>
-              <p className="font-semibold text-gray-900 text-sm">Bachelor of Fine Arts</p>
-              <p className="text-gray-700 text-sm">University of Design</p>
-              <p className="text-gray-600 text-sm">Graduated 2015</p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-blue-600">AWARDS</h2>
-            <ul className="text-gray-700 text-sm space-y-1">
-              <li>• Design Excellence Award 2023</li>
-              <li>• Innovation Recognition 2022</li>
-            </ul>
-          </section>
+            {resumeData.education && resumeData.education.length > 0 && (
+              <section className="mb-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-blue-600">
+                  EDUCATION
+                </h2>
+                {resumeData.education.map((edu: any, idx: number) => (
+                  <div key={idx}>
+                    <p className="font-semibold text-gray-900 text-sm">{edu.degree}</p>
+                    <p className="text-gray-700 text-sm">{edu.school}</p>
+                    {edu.graduationDate && (
+                      <p className="text-gray-600 text-sm">Graduated {edu.graduationDate}</p>
+                    )}
+                  </div>
+                ))}
+              </section>
+            )}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Template 2: Elegant Classic
 export const ElegantClassicTemplate: React.FC<{ data?: any }> = ({ data }) => (
