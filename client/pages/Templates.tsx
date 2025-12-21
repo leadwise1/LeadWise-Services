@@ -157,11 +157,12 @@ export default function Templates() {
                       >
                         Preview
                       </button>
-                      <button
-                        className="flex-1 border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+                      <a
+                        href="/editor"
+                        className="flex-1 border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-center"
                       >
                         Use Template
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>
