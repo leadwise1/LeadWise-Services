@@ -45,17 +45,17 @@ export default function Index() {
                 Choose from professionally designed resume templates crafted by industry experts. Create a stunning, ATS-optimized resume in minutes with complete HTML and CSS customization.
               </p>
               <div className="flex gap-4 flex-wrap">
-                <Link 
-                  to="/templates"
+                <Link
+                  to="/editor"
                   className="bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-lg"
                 >
-                  Explore Templates
+                  Start Editing
                 </Link>
-                <Link 
-                  to="/courses"
+                <Link
+                  to="/templates"
                   className="border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-lg"
                 >
-                  Learn & Grow
+                  Browse Templates
                 </Link>
               </div>
             </div>
