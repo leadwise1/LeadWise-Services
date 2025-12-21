@@ -84,6 +84,7 @@ export default function Templates() {
           <div className="flex items-center gap-4">
             <a href="/" className="text-gray-700 hover:text-gray-900 transition">Home</a>
             <a href="/templates" className="text-blue-600 font-semibold">Templates</a>
+            <a href="/courses" className="text-gray-700 hover:text-gray-900 transition">Courses</a>
           </div>
         </div>
       </nav>
