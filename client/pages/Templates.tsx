@@ -228,9 +228,9 @@ export default function Templates() {
 
           {/* Actions */}
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 flex gap-4 justify-center">
-            <button className="bg-primary hover:bg-opacity-90 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200">
+            <a href="/editor" className="bg-primary hover:bg-opacity-90 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 inline-block">
               Use This Template
-            </button>
+            </a>
             <button className="border-2 border-gray-300 hover:border-primary text-primary hover:bg-primary hover:text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200">
               Download as PDF
             </button>
