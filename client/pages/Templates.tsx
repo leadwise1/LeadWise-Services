@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { ModernBlueTemplate, ElegantClassicTemplate, CreativeVibrantTemplate, MinimalCleanTemplate, ExecutiveBoldTemplate, AcademicProfessionalTemplate } from "@/components/ResumeTemplates";
+import { Link } from "react-router-dom";
+import {
+  ModernBlueTemplate,
+  ElegantClassicTemplate,
+  CreativeVibrantTemplate,
+  MinimalCleanTemplate,
+  ExecutiveBoldTemplate,
+  AcademicProfessionalTemplate
+} from "@/components/ResumeTemplates";
 
 interface Template {
   id: string;
