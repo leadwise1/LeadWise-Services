@@ -620,9 +620,9 @@ export default function Courses() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-              <span className="text-primary font-bold text-xl">R</span>
+              <span className="text-primary font-bold text-xl">LW</span>
             </div>
-            <span className="font-bold text-white text-lg">ResumeCraft</span>
+            <span className="font-bold text-white text-lg">LeadWise Foundation</span>
           </div>
           <div className="flex items-center gap-8">
             <a href="/" className="text-gray-100 hover:text-white transition">Home</a>
@@ -765,9 +765,9 @@ export default function Courses() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                  <span className="text-primary font-bold text-sm">R</span>
+                  <span className="text-primary font-bold text-sm">LW</span>
                 </div>
-                <span className="font-bold text-white">ResumeCraft</span>
+                <span className="font-bold text-white">LeadWise Foundation</span>
               </div>
               <p className="text-sm">Free tools to help you land your dream job through better resumes and continuous learning.</p>
             </div>
@@ -797,7 +797,7 @@ export default function Courses() {
             </div>
           </div>
           <div className="border-t border-primary/20 pt-8">
-            <p className="text-center text-sm">&copy; 2024 ResumeCraft. Free learning for everyone.</p>
+            <p className="text-center text-sm">&copy; 2024 LeadWise Foundation. Free learning for everyone.</p>
           </div>
         </div>
       </footer>
