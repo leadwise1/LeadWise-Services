@@ -1,13 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  ModernBlueTemplate,
-  ElegantClassicTemplate,
-  CreativeVibrantTemplate,
-  MinimalCleanTemplate,
-  ExecutiveBoldTemplate,
-  AcademicProfessionalTemplate
-} from "@/components/ResumeTemplates";
+import { ModernBlueTemplate, ElegantClassicTemplate, CreativeVibrantTemplate, MinimalCleanTemplate, ExecutiveBoldTemplate, AcademicProfessionalTemplate } from "@/components/ResumeTemplates";
 
 interface Template {
   id: string;
@@ -80,25 +72,22 @@ export default function Templates() {
     <div className="min-h-screen bg-white">
       {/* Navigation */}
       <nav className="bg-primary sticky top-0 z-40 shadow-sm">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-    <div className="flex items-center gap-3">
-      <img
-        src="https://cdn.builder.io/api/v1/image/assets%2Ff72e554e0fa6467ca673bcaff4e3bb43%2F879d9ef74e9f42bf8cebbfd985bb75c9?format=webp&width=200"
-        alt="LeadWise Foundation"
-        className="h-10 w-auto"
-      />
-      <span className="font-bold text-white text-lg">LeadWise Foundation</span>
-    </div>
-    <div className="flex items-center gap-8">
-      <a href="/" className="text-white font-semibold">Home</a>
-      <Link to="/templates" className="text-gray-100 hover:text-white transition">Templates</Link>
-      <Link to="/courses" className="text-gray-100 hover:text-white transition">Courses</Link>
-      <button className="bg-accent hover:bg-yellow-200 text-primary font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
-        Sign In
-      </button>
-    </div>
-  </div>
-</nav>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <a href="/" className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
+                <span className="text-primary font-bold text-xl">R</span>
+              </div>
+              <span className="font-bold text-white">ResumeCraft</span>
+            </a>
+          </div>
+          <div className="flex items-center gap-4">
+            <a href="/" className="text-gray-100 hover:text-white transition">Home</a>
+            <a href="/templates" className="text-white font-semibold">Templates</a>
+            <a href="/courses" className="text-gray-100 hover:text-white transition">Courses</a>
+          </div>
+        </div>
+      </nav>
 
       {previewMode === "list" ? (
         <>
