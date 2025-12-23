@@ -7,17 +7,31 @@ export default function Index() {
       <nav className="bg-primary sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img 
-              src="https://cdn.builder.io/api/v1/image/assets%2Ff72e554e0fa6467ca673bcaff4e3bb43%2F879d9ef74e9f42bf8cebbfd985bb75c9?format=webp&width=200" 
-              alt="LeadWise Foundation" 
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2Ff72e554e0fa6467ca673bcaff4e3bb43%2F879d9ef74e9f42bf8cebbfd985bb75c9?format=webp&width=200"
+              alt="LeadWise Foundation"
               className="h-10 w-auto"
             />
-            <span className="font-bold text-white text-lg">LeadWise Foundation</span>
+            <span className="font-bold text-white text-lg">
+              LeadWise Foundation
+            </span>
           </div>
           <div className="flex items-center gap-8">
-            <a href="/" className="text-white font-semibold">Home</a>
-            <a href="#programs" className="text-gray-100 hover:text-white transition">Programs</a>
-            <a href="#impact" className="text-gray-100 hover:text-white transition">Impact</a>
+            <a href="/" className="text-white font-semibold">
+              Home
+            </a>
+            <a
+              href="#programs"
+              className="text-gray-100 hover:text-white transition"
+            >
+              Programs
+            </a>
+            <a
+              href="#impact"
+              className="text-gray-100 hover:text-white transition"
+            >
+              Impact
+            </a>
             <button className="bg-accent hover:bg-yellow-200 text-primary font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
               Get Involved
             </button>
@@ -34,7 +48,9 @@ export default function Index() {
                 Unlock Limitless Possibilities Through Education
               </h1>
               <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-                We equip individuals with the skills and confidence to confront inequities. Our evidence-driven programs bridge the gap in STEM leadership and break glass ceilings.
+                We equip individuals with the skills and confidence to confront
+                inequities. Our evidence-driven programs bridge the gap in STEM
+                leadership and break glass ceilings.
               </p>
               <div className="flex gap-4 flex-wrap">
                 <button className="bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-lg">
@@ -47,7 +63,9 @@ export default function Index() {
             </div>
             <div className="bg-gradient-to-br from-primary to-primary/80 rounded-2xl p-12 text-white flex flex-col justify-center items-center">
               <div className="text-6xl mb-4">🌟</div>
-              <p className="text-center text-lg font-semibold">Building Tomorrow's Leaders Today</p>
+              <p className="text-center text-lg font-semibold">
+                Building Tomorrow's Leaders Today
+              </p>
             </div>
           </div>
         </div>
@@ -92,18 +110,33 @@ export default function Index() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl p-8 border-l-4 border-accent hover:shadow-lg transition-shadow duration-300">
               <div className="text-4xl mb-4">🎨</div>
-              <h3 className="text-xl font-bold text-primary mb-3">Evidence-Driven Training</h3>
-              <p className="text-gray-700">Comprehensive leadership development strategies designed to help you overcome challenges and enhance effectiveness.</p>
+              <h3 className="text-xl font-bold text-primary mb-3">
+                Evidence-Driven Training
+              </h3>
+              <p className="text-gray-700">
+                Comprehensive leadership development strategies designed to help
+                you overcome challenges and enhance effectiveness.
+              </p>
             </div>
             <div className="bg-white rounded-xl p-8 border-l-4 border-accent hover:shadow-lg transition-shadow duration-300">
               <div className="text-4xl mb-4">⚡</div>
-              <h3 className="text-xl font-bold text-primary mb-3">Systemic Advocacy</h3>
-              <p className="text-gray-700">Real change requires structural improvements. We remove barriers that marginalized people face in corporate settings.</p>
+              <h3 className="text-xl font-bold text-primary mb-3">
+                Systemic Advocacy
+              </h3>
+              <p className="text-gray-700">
+                Real change requires structural improvements. We remove barriers
+                that marginalized people face in corporate settings.
+              </p>
             </div>
             <div className="bg-white rounded-xl p-8 border-l-4 border-accent hover:shadow-lg transition-shadow duration-300">
               <div className="text-4xl mb-4">✓</div>
-              <h3 className="text-xl font-bold text-primary mb-3">Practical Application</h3>
-              <p className="text-gray-700">We focus on real-world skills to ensure leaders are not just prepared for opportunities but equipped to create them.</p>
+              <h3 className="text-xl font-bold text-primary mb-3">
+                Practical Application
+              </h3>
+              <p className="text-gray-700">
+                We focus on real-world skills to ensure leaders are not just
+                prepared for opportunities but equipped to create them.
+              </p>
             </div>
           </div>
         </div>
@@ -118,13 +151,16 @@ export default function Index() {
           <div className="space-y-4">
             {[
               "Leadership Development: Transform your potential with comprehensive training",
-              "STEM Equity: Addressing the \"leaky pipeline\" in tech leadership",
+              'STEM Equity: Addressing the "leaky pipeline" in tech leadership',
               "Policy Advocacy: Structural improvements to remove barriers to access",
               "Career Coaching: Personalized resources to control your trajectory",
               "Mentorship: Connecting emerging talent with established leaders",
               "Community: A network of changemakers transforming industries",
             ].map((pillar, index) => (
-              <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-accent/10 transition-colors duration-200">
+              <div
+                key={index}
+                className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg hover:bg-accent/10 transition-colors duration-200"
+              >
                 <div className="flex-shrink-0 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
                   <span className="text-primary text-sm font-bold">✓</span>
                 </div>
@@ -143,7 +179,8 @@ export default function Index() {
               Our Comprehensive Services
             </h2>
             <p className="text-xl text-gray-700">
-              Resources designed to empower individuals to take control of their careers and redefine success
+              Resources designed to empower individuals to take control of their
+              careers and redefine success
             </p>
           </div>
 
@@ -151,33 +188,39 @@ export default function Index() {
             {[
               {
                 name: "Leadership Program",
-                description: "Transform your potential with comprehensive training. Perfect for professionals navigating corporate landscapes.",
-                icon: "🎨"
+                description:
+                  "Transform your potential with comprehensive training. Perfect for professionals navigating corporate landscapes.",
+                icon: "🎨",
               },
               {
                 name: "Advocacy & Policy",
-                description: "Strategic work centered on increasing access. Ideal for changemakers fighting systemic barriers.",
-                icon: "👔"
+                description:
+                  "Strategic work centered on increasing access. Ideal for changemakers fighting systemic barriers.",
+                icon: "👔",
               },
               {
                 name: "Career Coaching",
-                description: "Personalized guidance to advance your trajectory. Great for professionals seeking new opportunities.",
-                icon: "✨"
+                description:
+                  "Personalized guidance to advance your trajectory. Great for professionals seeking new opportunities.",
+                icon: "✨",
               },
               {
                 name: "STEM Mentorship",
-                description: "Addressing the \"leaky pipeline\" in tech. Perfect for emerging talent seeking industry connection.",
-                icon: "📊"
+                description:
+                  'Addressing the "leaky pipeline" in tech. Perfect for emerging talent seeking industry connection.',
+                icon: "📊",
               },
               {
                 name: "Corporate Consulting",
-                description: "Helping organizations identify glass ceilings. Ideal for companies committed to real equity.",
-                icon: "💼"
+                description:
+                  "Helping organizations identify glass ceilings. Ideal for companies committed to real equity.",
+                icon: "💼",
               },
               {
                 name: "Community Workshops",
-                description: "Accessible education sessions. Perfect for those seeking the courage to confront inequities.",
-                icon: "🎓"
+                description:
+                  "Accessible education sessions. Perfect for those seeking the courage to confront inequities.",
+                icon: "🎓",
               },
             ].map((service, index) => (
               <div
@@ -188,9 +231,7 @@ export default function Index() {
                 <h3 className="text-xl font-bold text-primary mb-2">
                   {service.name}
                 </h3>
-                <p className="text-gray-600 text-sm">
-                  {service.description}
-                </p>
+                <p className="text-gray-600 text-sm">{service.description}</p>
               </div>
             ))}
           </div>
@@ -210,7 +251,8 @@ export default function Index() {
             Ready to Redefine Success?
           </h2>
           <p className="text-xl opacity-95 mb-8">
-            Join a community where every potential is realized and every leader possesses the ability to propel change.
+            Join a community where every potential is realized and every leader
+            possesses the ability to propel change.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <button className="bg-accent text-primary hover:bg-yellow-200 font-bold py-3 px-8 rounded-lg transition-colors duration-200 inline-block text-lg">
@@ -274,22 +316,25 @@ export default function Index() {
             {[
               {
                 q: "Can I get involved other than donating?",
-                a: "Yes! We welcome partners and mentors. You can join our community to connect with change-makers or subscribe to our newsletter for leadership insights."
+                a: "Yes! We welcome partners and mentors. You can join our community to connect with change-makers or subscribe to our newsletter for leadership insights.",
               },
               {
                 q: "Who are the programs designed for?",
-                a: "Our programs target a broad range of professionals, specifically focusing on women and marginalized voices seeking to advance their trajectories in STEM and corporate leadership."
+                a: "Our programs target a broad range of professionals, specifically focusing on women and marginalized voices seeking to advance their trajectories in STEM and corporate leadership.",
               },
               {
-                q: "What is the \"Leaky Pipeline\"?",
-                a: "We address systemic barriers that cause talented individuals from marginalized backgrounds to drop out of STEM and leadership paths before reaching their full potential."
+                q: 'What is the "Leaky Pipeline"?',
+                a: "We address systemic barriers that cause talented individuals from marginalized backgrounds to drop out of STEM and leadership paths before reaching their full potential.",
               },
               {
                 q: "Do you offer customized training for organizations?",
-                a: "Yes. We partner with organizations to address glass ceilings through tailored workshops and consultancy."
+                a: "Yes. We partner with organizations to address glass ceilings through tailored workshops and consultancy.",
               },
             ].map((faq, index) => (
-              <div key={index} className="border border-gray-200 rounded-lg p-6 bg-white hover:shadow-md transition-shadow duration-200">
+              <div
+                key={index}
+                className="border border-gray-200 rounded-lg p-6 bg-white hover:shadow-md transition-shadow duration-200"
+              >
                 <h3 className="text-lg font-bold text-primary mb-3">{faq.q}</h3>
                 <p className="text-gray-700">{faq.a}</p>
               </div>
@@ -301,14 +346,15 @@ export default function Index() {
       {/* Impact Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white" id="impact">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-primary mb-6">
-            Our Impact
-          </h2>
+          <h2 className="text-4xl font-bold text-primary mb-6">Our Impact</h2>
           <p className="text-xl text-gray-700 mb-8">
             Education Gives You A Voice. Knowledge Gives You Power.
           </p>
           <p className="text-gray-600">
-            We're building a movement of leaders who understand that systemic change starts with individual empowerment. By investing in people, we're transforming industries and creating pathways to success for those historically left behind.
+            We're building a movement of leaders who understand that systemic
+            change starts with individual empowerment. By investing in people,
+            we're transforming industries and creating pathways to success for
+            those historically left behind.
           </p>
         </div>
       </section>
@@ -319,43 +365,88 @@ export default function Index() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img 
-                  src="https://cdn.builder.io/api/v1/image/assets%2Ff72e554e0fa6467ca673bcaff4e3bb43%2F879d9ef74e9f42bf8cebbfd985bb75c9?format=webp&width=100" 
-                  alt="LeadWise Foundation" 
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2Ff72e554e0fa6467ca673bcaff4e3bb43%2F879d9ef74e9f42bf8cebbfd985bb75c9?format=webp&width=100"
+                  alt="LeadWise Foundation"
                   className="h-8 w-auto"
                 />
                 <span className="font-bold text-white">LeadWise</span>
               </div>
-              <p className="text-sm">Education Gives You A Voice. Knowledge Gives You Power.</p>
+              <p className="text-sm">
+                Education Gives You A Voice. Knowledge Gives You Power.
+              </p>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Programs</a></li>
-                <li><a href="#" className="hover:text-white transition">Leadership</a></li>
-                <li><a href="#" className="hover:text-white transition">Advocacy</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Programs
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Leadership
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Advocacy
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Impact</a></li>
-                <li><a href="#" className="hover:text-white transition">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition">Events</a></li>
-                <li><a href="#" className="hover:text-white transition">FAQ</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Impact
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Events
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    FAQ
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Legal</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition">Terms</a></li>
-                <li><a href="#" className="hover:text-white transition">Contact</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Privacy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Terms
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-primary/20 pt-8">
-            <p className="text-center text-sm">&copy; 2025 LeadWise Foundation. We don't just talk about change; we create it.</p>
+            <p className="text-center text-sm">
+              &copy; 2025 LeadWise Foundation. We don't just talk about change;
+              we create it.
+            </p>
           </div>
         </div>
       </footer>
