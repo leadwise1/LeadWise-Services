@@ -106,17 +106,14 @@ export default function Index() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl p-8 border-l-4 border-accent hover:shadow-lg transition-shadow duration-300">
-              <div className="text-4xl mb-4">🎨</div>
               <h3 className="text-xl font-bold text-primary mb-3">Professional Design</h3>
               <p className="text-gray-700">Crafted by industry experts with modern, clean aesthetics that impress recruiters.</p>
             </div>
             <div className="bg-white rounded-xl p-8 border-l-4 border-accent hover:shadow-lg transition-shadow duration-300">
-              <div className="text-4xl mb-4">⚡</div>
               <h3 className="text-xl font-bold text-primary mb-3">Fully Customizable</h3>
               <p className="text-gray-700">Complete HTML and CSS source code included. Customize colors, fonts, and layouts to match your style.</p>
             </div>
             <div className="bg-white rounded-xl p-8 border-l-4 border-accent hover:shadow-lg transition-shadow duration-300">
-              <div className="text-4xl mb-4">✓</div>
               <h3 className="text-xl font-bold text-primary mb-3">ATS-Optimized</h3>
               <p className="text-gray-700">Pass through Applicant Tracking Systems while maintaining a professional, eye-catching design.</p>
             </div>
@@ -167,32 +164,26 @@ export default function Index() {
               {
                 name: "Modern Blue",
                 description: "Clean and professional with bold accents. Perfect for tech and creative fields.",
-                icon: "🎨"
               },
               {
                 name: "Elegant Classic",
                 description: "Timeless design with serif typography. Ideal for executives and traditional industries.",
-                icon: "👔"
               },
               {
                 name: "Creative Vibrant",
                 description: "Bold and colorful design. Great for designers and marketing professionals.",
-                icon: "✨"
               },
               {
                 name: "Minimal Clean",
                 description: "Ultra-minimal design with maximum focus. Perfect for engineers and analysts.",
-                icon: "📊"
-              },
+               },
               {
                 name: "Executive Bold",
                 description: "Strong visual hierarchy with sidebar. Ideal for sales and business roles.",
-                icon: "💼"
               },
               {
                 name: "Academic Professional",
                 description: "Structured layout for credentials. Perfect for scholars and researchers.",
-                icon: "🎓"
               },
             ].map((template, index) => (
               <div
@@ -285,7 +276,7 @@ export default function Index() {
         </div>
       </section>
 
-      /* FAQ Section */}
+    {/* FAQ Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-primary mb-12 text-center">
