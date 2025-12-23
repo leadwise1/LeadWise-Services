@@ -9,35 +9,32 @@ const templatePreviews = [
   { id: "executive-bold", name: "Executive Bold", component: ExecutiveBoldTemplate },
   { id: "academic-professional", name: "Academic Professional", component: AcademicProfessionalTemplate },
 ];
-
 export default function Index() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="bg-primary sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                   <div className="flex items-center gap-3">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2Ff72e554e0fa6467ca673bcaff4e3bb43%2F879d9ef74e9f42bf8cebbfd985bb75c9?format=webp&width=200"
-              alt="LeadWise Foundation"
-              className="h-10 w-auto"
-            />
-            <span className="font-bold text-white text-lg">
-              LeadWise Foundation
-            </span>
-          </div>
-          <div className="flex items-center gap-8">
-            <a href="/" className="text-white font-semibold">Home</a>
-            <Link to="/templates" className="text-gray-100 hover:text-white transition">Templates</Link>
-            <Link to="/courses" className="text-gray-100 hover:text-white transition">Courses</Link>
-            <button className="bg-accent hover:bg-yellow-200 text-primary font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
-              Sign In
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
+     {/* Navigation */}
+<nav className="bg-primary sticky top-0 z-40 shadow-sm">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+    <div className="flex items-center gap-3">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets%2Ff72e554e0fa6467ca673bcaff4e3bb43%2F879d9ef74e9f42bf8cebbfd985bb75c9?format=webp&width=200"
+        alt="LeadWise Foundation"
+        className="h-10 w-auto"
+      />
+      <span className="font-bold text-white text-lg">LeadWise Foundation</span>
+    </div>
+    <div className="flex items-center gap-8">
+      <a href="/" className="text-white font-semibold">Home</a>
+      <Link to="/templates" className="text-gray-100 hover:text-white transition">Templates</Link>
+      <Link to="/courses" className="text-gray-100 hover:text-white transition">Courses</Link>
+      <button className="bg-accent hover:bg-yellow-200 text-primary font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
+        Sign In
+      </button>
+    </div>
+  </div>
+</nav>
+    
+    {/* Hero Section */}
       <section className="bg-white py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -425,10 +422,7 @@ export default function Index() {
             </div>
           </div>
           <div className="border-t border-primary/20 pt-8">
-            <p className="text-center text-sm">
-              &copy; 2025 LeadWise Foundation. We don't just talk about change;
-              we create it.
-            </p>
+<p className="text-center text-sm">&copy; 2025 LeadWise Foundation. We don't just talk about change; we create it.</p>
           </div>
         </div>
       </footer>
