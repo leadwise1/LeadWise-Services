@@ -16,11 +16,15 @@ export default function Index() {
       {/* Navigation */}
       <nav className="bg-primary sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-              <span className="text-primary font-bold text-xl">R</span>
-            </div>
-            <span className="font-bold text-white text-lg">ResumeCraft</span>
+                   <div className="flex items-center gap-3">
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2Ff72e554e0fa6467ca673bcaff4e3bb43%2F879d9ef74e9f42bf8cebbfd985bb75c9?format=webp&width=200"
+              alt="LeadWise Foundation"
+              className="h-10 w-auto"
+            />
+            <span className="font-bold text-white text-lg">
+              LeadWise Foundation
+            </span>
           </div>
           <div className="flex items-center gap-8">
             <a href="/" className="text-white font-semibold">Home</a>
@@ -284,7 +288,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      /* FAQ Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-primary mb-12 text-center">
@@ -293,28 +297,47 @@ export default function Index() {
           <div className="space-y-6">
             {[
               {
-                q: "Can I customize the templates?",
-                a: "Yes! All templates include full HTML and CSS source code. You can customize colors, fonts, spacing, and layout to match your preferences."
+                q: "Can I get involved other than donating?",
+                a: "Yes! We welcome partners and mentors. You can join our community to connect with change-makers or subscribe to our newsletter for leadership insights.",
               },
               {
-                q: "Are these ATS-optimized?",
-                a: "Absolutely. All templates are formatted to pass through Applicant Tracking Systems while maintaining professional appearance."
+                q: "Who are the programs designed for?",
+                a: "Our programs target a broad range of professionals, specifically focusing on women and marginalized voices seeking to advance their trajectories in STEM and corporate leadership.",
               },
               {
-                q: "Do I get both resume and cover letter?",
-                a: "Yes, each template includes both a resume design and a matching cover letter template for a cohesive application package."
+                q: 'What is the "Leaky Pipeline"?',
+                a: "We address systemic barriers that cause talented individuals from marginalized backgrounds to drop out of STEM and leadership paths before reaching their full potential.",
               },
               {
-                q: "Can I download the templates as PDF?",
-                a: "Yes, you can download your completed resume and cover letter as PDF files for easy sharing and printing."
+                q: "Do you offer customized training for organizations?",
+                a: "Yes. We partner with organizations to address glass ceilings through tailored workshops and consultancy.",
               },
             ].map((faq, index) => (
-              <div key={index} className="border border-gray-200 rounded-lg p-6 bg-white hover:shadow-md transition-shadow duration-200">
+              <div
+                key={index}
+                className="border border-gray-200 rounded-lg p-6 bg-white hover:shadow-md transition-shadow duration-200"
+              >
                 <h3 className="text-lg font-bold text-primary mb-3">{faq.q}</h3>
                 <p className="text-gray-700">{faq.a}</p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Impact Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white" id="impact">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold text-primary mb-6">Our Impact</h2>
+          <p className="text-xl text-gray-700 mb-8">
+            Education Gives You A Voice. Knowledge Gives You Power.
+          </p>
+          <p className="text-gray-600">
+            We're building a movement of leaders who understand that systemic
+            change starts with individual empowerment. By investing in people,
+            we're transforming industries and creating pathways to success for
+            those historically left behind.
+          </p>
         </div>
       </section>
 
@@ -324,40 +347,88 @@ export default function Index() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                  <span className="text-primary font-bold text-sm">R</span>
-                </div>
-                <span className="font-bold text-white">ResumeCraft</span>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2Ff72e554e0fa6467ca673bcaff4e3bb43%2F879d9ef74e9f42bf8cebbfd985bb75c9?format=webp&width=100"
+                  alt="LeadWise Foundation"
+                  className="h-8 w-auto"
+                />
+                <span className="font-bold text-white">LeadWise</span>
               </div>
-              <p className="text-sm">Free professional resume templates to help you land your dream job.</p>
+              <p className="text-sm">
+                Education Gives You A Voice. Knowledge Gives You Power.
+              </p>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="/" className="hover:text-white transition">Templates</a></li>
-                <li><a href="/courses" className="hover:text-white transition">Courses</a></li>
-                <li><a href="#" className="hover:text-white transition">Tracker</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Programs
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Leadership
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Advocacy
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition">Guide</a></li>
-                <li><a href="#" className="hover:text-white transition">FAQ</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Impact
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Events
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    FAQ
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4">Legal</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition">Terms</a></li>
-                <li><a href="#" className="hover:text-white transition">Contact</a></li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Privacy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Terms
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white transition">
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-primary/20 pt-8">
-            <p className="text-center text-sm">&copy; 2024 ResumeCraft. Free tools for your success.</p>
+            <p className="text-center text-sm">
+              &copy; 2025 LeadWise Foundation. We don't just talk about change;
+              we create it.
+            </p>
           </div>
         </div>
       </footer>
