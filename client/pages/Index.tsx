@@ -97,12 +97,13 @@ export default function Index() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-primary mb-4">
-              Why ResumeCraft?
+                Why LeadWise?
             </h2>
             <p className="text-xl text-gray-700">
-              Everything you need to stand out and get hired
+              How We Ignite Leadership & Drive Systemic Change
             </p>
           </div>
+          
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl p-8 border-l-4 border-accent hover:shadow-lg transition-shadow duration-300">
