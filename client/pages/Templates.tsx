@@ -76,9 +76,9 @@ export default function Templates() {
           <div className="flex items-center gap-8">
             <a href="/" className="flex items-center gap-2">
               <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-                <span className="text-primary font-bold text-xl">R</span>
+                <span className="text-primary font-bold text-xl">LW</span>
               </div>
-              <span className="font-bold text-white">ResumeCraft</span>
+              <span className="font-bold text-white">LeadWise Foundation</span>
             </a>
           </div>
           <div className="flex items-center gap-4">
@@ -243,7 +243,7 @@ export default function Templates() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-white font-bold mb-4">ResumeCraft</h3>
+              <h3 className="text-white font-bold mb-4">LeadWise Foundation</h3>
               <p className="text-sm">Professional resume templates for every career.</p>
             </div>
             <div>
@@ -272,7 +272,7 @@ export default function Templates() {
             </div>
           </div>
           <div className="border-t border-primary/20 pt-8 text-center text-sm">
-            <p>&copy; 2024 ResumeCraft. Free tools for your success.</p>
+            <p>&copy; 2024 LeadWise Foundation. Free tools for your success.</p>
           </div>
         </div>
       </footer>
