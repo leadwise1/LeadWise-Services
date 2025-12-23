@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { ModernBlueTemplate } from "@/components/ResumeTemplates";
 import { ResumeData, getResumeFromStorage, saveResumeToStorage } from "@shared/resume";
 import { Trash2, Plus } from "lucide-react";
