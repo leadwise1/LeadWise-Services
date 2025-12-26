@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Head from "next/head"; // Import Head to manage the browser tab
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface Module {
@@ -31,16 +32,15 @@ interface Course {
   modules: Module[];
 }
 
-// 1. UPDATED: Frontend Course Data
+// 1. FRONTEND COURSE DATA (Includes Vercel & Grant Hook)
 const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
-  description: "Learn HTML, CSS, and JavaScript to build interactive websites. Master the fundamentals of modern web development and deploy professional applications.",
+  description: "Learn HTML, CSS, and JavaScript to build interactive websites. Master the fundamentals of modern web development and create responsive, user-friendly web applications.",
   duration: "8-10 weeks",
   level: "Beginner to Intermediate",
   target: "Aspiring web developers, career changers, freelancers",
   modules: [
-    // ... Module 1 (HTML), Module 2 (CSS), Module 3 (JS) remain unchanged ...
     {
       id: "html-basics",
       title: "Module 1: HTML Fundamentals",
@@ -241,10 +241,10 @@ const frontendCourse: Course = {
             }
           ]
         },
-        // STRATEGIC CHANGE: Deployment Module for Employability
+        // Deployment to Vercel (Workforce Readiness)
         {
           id: "deployment",
-          title: "Professional Deployment (Workforce Readiness)",
+          title: "Professional Deployment",
           resources: [
             {
               title: "Deploying to Vercel",
@@ -260,7 +260,7 @@ const frontendCourse: Course = {
             }
           ]
         },
-        // STRATEGIC CHANGE: Volunteer Grant Hook
+        // Mentor Review (Funding Trigger)
         {
           id: "mentor-review",
           title: "Grant Requirement: Mentor Code Review",
@@ -269,8 +269,7 @@ const frontendCourse: Course = {
               title: "Request Texas Instruments Mentor Review",
               type: "interactive",
               platform: "LeadWise Mentor Network",
-              // This mailto link triggers the "Volunteer" action for the $125 grant
-              url: "mailto:mentors@leadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20capstone%20and%20am%20requesting%20code%20review."
+              url: "mailto:mentors@leadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20frontend%20capstone%20and%20am%20requesting%20review."
             }
           ]
         }
@@ -279,6 +278,7 @@ const frontendCourse: Course = {
   ]
 };
 
+// 2. DATA ANALYTICS COURSE DATA (Includes Google Cloud & Looker Studio)
 const dataAnalyticsCourse: Course = {
   id: "data-analytics",
   title: "Data Analytics Fundamentals",
@@ -302,7 +302,7 @@ const dataAnalyticsCourse: Course = {
               platform: "Google Analytics Academy",
               url: "https://analytics.google.com/analytics/academy/"
             },
-            // STRATEGIC CHANGE: Removed Medium Paywall, added Google Cloud Skills Boost
+            // Replaced Medium with Google Cloud Skills Boost (No Paywall)
             {
               title: "Google Data Analytics Foundations",
               type: "documentation",
@@ -331,7 +331,6 @@ const dataAnalyticsCourse: Course = {
         }
       ]
     },
-    // ... Module 2 (Excel) and Module 3 (SQL) remain unchanged ...
     {
       id: "excel-mastery",
       title: "Module 2: Excel for Data Analysis",
@@ -493,7 +492,7 @@ const dataAnalyticsCourse: Course = {
               platform: "YouTube - Alex The Analyst",
               url: "https://www.youtube.com/results?search_query=power+bi+tutorial"
             },
-            // STRATEGIC CHANGE: Added Looker Studio for Cloud/Tech Donor Appeal
+            // Added Looker Studio (Innovation)
             {
               title: "Google Looker Studio (Cloud Native)",
               type: "interactive",
@@ -527,7 +526,7 @@ const dataAnalyticsCourse: Course = {
             }
           ]
         },
-        // STRATEGIC CHANGE: Volunteer Grant Hook
+        // Mentor Review (Funding Trigger)
         {
           id: "mentor-review-analytics",
           title: "Grant Requirement: Mentor Code Review",
@@ -536,7 +535,6 @@ const dataAnalyticsCourse: Course = {
               title: "Request Texas Instruments Mentor Review",
               type: "interactive",
               platform: "LeadWise Mentor Network",
-              // Triggers the volunteer hour count
               url: "mailto:mentors@leadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20data%20analytics%20capstone%20and%20am%20requesting%20review."
             }
           ]
@@ -667,14 +665,26 @@ function CourseCard({ course }: { course: Course }) {
 export default function Courses() {
   return (
     <div className="min-h-screen bg-white">
+      {/* Browser Tab Settings - OVERRIDE FIX */}
+      <Head>
+        <title>Courses | LeadWise Foundation</title>
+        <meta name="description" content="Free professional courses in Frontend Development and Data Analytics." />
+        {/* The ?v=2 forces the browser to re-download the icon instead of using the cached one */}
+        <link rel="icon" href="/leadwise-logo.svg?v=2" type="image/svg+xml" />
+        <link rel="shortcut icon" href="/leadwise-logo.svg?v=2" />
+      </Head>
+
       {/* Navigation */}
       <nav className="bg-primary sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-              <span className="text-primary font-bold text-xl">LW</span>
-            </div>
-            <span className="font-bold text-white text-lg">LeadWise Foundation</span>
+            {/* The Logo Image on the Page */}
+            <img 
+              src="/leadwise-logo.svg" 
+              alt="LeadWise Foundation" 
+              className="h-10 w-auto object-contain bg-white/10 rounded p-1" 
+            />
+            <span className="font-bold text-white text-lg hidden sm:block">LeadWise Foundation</span>
           </div>
           <div className="flex items-center gap-8">
             <a href="/" className="text-gray-100 hover:text-white transition">Home</a>
@@ -816,9 +826,11 @@ export default function Courses() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                  <span className="text-primary font-bold text-sm">LW</span>
-                </div>
+                <img 
+                  src="/leadwise-logo.svg" 
+                  alt="LeadWise Foundation" 
+                  className="w-8 h-8 object-contain bg-white/10 rounded p-1" 
+                />
                 <span className="font-bold text-white">LeadWise Foundation</span>
               </div>
               <p className="text-sm">Free tools to help you land your dream job through better resumes and continuous learning.</p>
