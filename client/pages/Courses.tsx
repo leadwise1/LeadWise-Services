@@ -31,14 +31,16 @@ interface Course {
   modules: Module[];
 }
 
+// 1. UPDATED: Frontend Course Data
 const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
-  description: "Learn HTML, CSS, and JavaScript to build interactive websites. Master the fundamentals of modern web development and create responsive, user-friendly web applications.",
+  description: "Learn HTML, CSS, and JavaScript to build interactive websites. Master the fundamentals of modern web development and deploy professional applications.",
   duration: "8-10 weeks",
   level: "Beginner to Intermediate",
   target: "Aspiring web developers, career changers, freelancers",
   modules: [
+    // ... Module 1 (HTML), Module 2 (CSS), Module 3 (JS) remain unchanged ...
     {
       id: "html-basics",
       title: "Module 1: HTML Fundamentals",
@@ -236,12 +238,39 @@ const frontendCourse: Course = {
               type: "article",
               platform: "freeCodeCamp Blog",
               url: "https://www.freecodecamp.org/news/"
+            }
+          ]
+        },
+        // STRATEGIC CHANGE: Deployment Module for Employability
+        {
+          id: "deployment",
+          title: "Professional Deployment (Workforce Readiness)",
+          resources: [
+            {
+              title: "Deploying to Vercel",
+              type: "documentation",
+              platform: "Vercel Docs",
+              url: "https://vercel.com/docs/concepts/deployments/overview"
             },
             {
-              title: "Responsive Portfolio Example",
+              title: "Git & GitHub Crash Course",
+              type: "video",
+              platform: "YouTube - FreeCodeCamp",
+              url: "https://www.youtube.com/watch?v=RGOj5yH7evk"
+            }
+          ]
+        },
+        // STRATEGIC CHANGE: Volunteer Grant Hook
+        {
+          id: "mentor-review",
+          title: "Grant Requirement: Mentor Code Review",
+          resources: [
+            {
+              title: "Request Texas Instruments Mentor Review",
               type: "interactive",
-              platform: "CodePen",
-              url: "https://codepen.io/"
+              platform: "LeadWise Mentor Network",
+              // This mailto link triggers the "Volunteer" action for the $125 grant
+              url: "mailto:mentors@leadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20capstone%20and%20am%20requesting%20code%20review."
             }
           ]
         }
@@ -273,11 +302,12 @@ const dataAnalyticsCourse: Course = {
               platform: "Google Analytics Academy",
               url: "https://analytics.google.com/analytics/academy/"
             },
+            // STRATEGIC CHANGE: Removed Medium Paywall, added Google Cloud Skills Boost
             {
-              title: "Introduction to Data Analytics",
-              type: "article",
-              platform: "Medium",
-              url: "https://medium.com/"
+              title: "Google Data Analytics Foundations",
+              type: "documentation",
+              platform: "Google Cloud Skills Boost",
+              url: "https://www.cloudskillsboost.google/paths/18"
             }
           ]
         },
@@ -301,6 +331,7 @@ const dataAnalyticsCourse: Course = {
         }
       ]
     },
+    // ... Module 2 (Excel) and Module 3 (SQL) remain unchanged ...
     {
       id: "excel-mastery",
       title: "Module 2: Excel for Data Analysis",
@@ -448,7 +479,7 @@ const dataAnalyticsCourse: Course = {
         },
         {
           id: "visualization-tools",
-          title: "Visualization Tools (Google Sheets, Power BI, Tableau)",
+          title: "Visualization Tools",
           resources: [
             {
               title: "Google Sheets Visualization",
@@ -461,6 +492,13 @@ const dataAnalyticsCourse: Course = {
               type: "video",
               platform: "YouTube - Alex The Analyst",
               url: "https://www.youtube.com/results?search_query=power+bi+tutorial"
+            },
+            // STRATEGIC CHANGE: Added Looker Studio for Cloud/Tech Donor Appeal
+            {
+              title: "Google Looker Studio (Cloud Native)",
+              type: "interactive",
+              platform: "Google Cloud",
+              url: "https://lookerstudio.google.com/overview"
             }
           ]
         }
@@ -486,6 +524,20 @@ const dataAnalyticsCourse: Course = {
               type: "article",
               platform: "Alex The Analyst Blog",
               url: "https://www.youtube.com/c/AlexTheAnalyst"
+            }
+          ]
+        },
+        // STRATEGIC CHANGE: Volunteer Grant Hook
+        {
+          id: "mentor-review-analytics",
+          title: "Grant Requirement: Mentor Code Review",
+          resources: [
+            {
+              title: "Request Texas Instruments Mentor Review",
+              type: "interactive",
+              platform: "LeadWise Mentor Network",
+              // Triggers the volunteer hour count
+              url: "mailto:mentors@leadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20data%20analytics%20capstone%20and%20am%20requesting%20review."
             }
           ]
         }
