@@ -1,46 +1,9 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw } from "lucide-react";
-import { initializeApp } from "firebase/app";
-import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, collection } from "firebase/firestore";
 
 // --- Configuration ---
-const getFirebaseConfig = () => {
-  try {
-    if (import.meta.env.VITE_FIREBASE_API_KEY) {
-      return {
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-        appId: import.meta.env.VITE_FIREBASE_APP_ID
-      };
-    }
-    if (typeof __firebase_config !== 'undefined') {
-      return JSON.parse(__firebase_config);
-    }
-  } catch (e) {
-    console.warn("Error loading config", e);
-  }
-  return null;
-};
-
-const firebaseConfig = getFirebaseConfig();
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'leadwise-default';
-
-let auth: any;
-let db: any;
-
-if (firebaseConfig && firebaseConfig.apiKey) {
-  try {
-    const app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
-  } catch (e) {
-    console.error("Firebase initialization failed:", e);
-  }
-}
+// FIREBASE REMOVED TEMPORARILY TO FIX BUILD
+// This version runs in "Local Mode" using browser storage.
 
 // --- Types ---
 interface Module {
@@ -460,11 +423,8 @@ function IntakeModal({
     setLoading(true);
 
     try {
-      let uid = `demo-${Date.now()}`;
-      if (auth) {
-        if (!auth.currentUser) await signInAnonymously(auth);
-        if (auth.currentUser) uid = auth.currentUser.uid;
-      }
+      // Create a fake ID for Demo Mode
+      const uid = `student-${Math.floor(Math.random() * 10000)}`;
 
       const intakeRecord = {
         ...formData,
@@ -475,11 +435,9 @@ function IntakeModal({
         lmiVerified: true, 
       };
 
-      if (db && auth?.currentUser) {
-        await setDoc(doc(db, "artifacts", appId, "users", uid, "intake"), intakeRecord);
-      } else {
-        localStorage.setItem("leadwise_intake", JSON.stringify(intakeRecord));
-      }
+      // Save to LocalStorage (Browser Memory)
+      console.log("Saved to LocalStorage (Emergency Mode)");
+      localStorage.setItem("leadwise_intake", JSON.stringify(intakeRecord));
 
       onComplete();
     } catch (error) {
@@ -734,26 +692,11 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: { course: Course, i
 export default function Courses() {
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (auth) {
-      const initAuth = async () => {
-        try {
-          if (!auth.currentUser) await signInAnonymously(auth);
-        } catch(e) { console.error("Auth error", e); }
-      };
-      initAuth();
-      return onAuthStateChanged(auth, (u) => {
-        setUser(u);
-        if (localStorage.getItem("leadwise_intake")) {
-          setIsEnrolled(true);
-        }
-      });
-    } else {
-        if (localStorage.getItem("leadwise_intake")) {
-          setIsEnrolled(true);
-        }
+    // Basic Auth Simulation (Browser Memory Only)
+    if (localStorage.getItem("leadwise_intake")) {
+      setIsEnrolled(true);
     }
   }, []);
 
