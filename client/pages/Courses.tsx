@@ -238,6 +238,9 @@ const frontendCourse: Course = {
               type: "article",
               platform: "freeCodeCamp Blog",
               url: "https://www.freecodecamp.org/news/"
+            }
+          ]
+        },
         // Deployment to Vercel (Workforce Readiness)
         {
           id: "deployment",
