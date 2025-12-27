@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw } from "lucide-react";
 
+// --- Configuration ---
+// FIREBASE REMOVED TEMPORARILY TO FIX BUILD
+// This version runs in "Local Mode" using browser storage.
+
+// --- Types ---
 interface Module {
   id: string;
   title: string;
@@ -32,11 +37,11 @@ interface Course {
   modules: Module[];
 }
 
-// --- DATA: Frontend Course (ALL RESOURCES LOCKED) ---
+// --- DATA: Frontend Course (NOW USING GOOGLE RESOURCES) ---
 const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
-  description: "Learn HTML, CSS, and JavaScript to build interactive websites. Master the fundamentals of modern web development.",
+  description: "Learn HTML, CSS, and JavaScript with Google's official web.dev curriculum. Master the modern web standards.",
   duration: "8-10 weeks",
   level: "Beginner to Intermediate",
   target: "Aspiring web developers, career changers, freelancers",
@@ -48,40 +53,40 @@ const frontendCourse: Course = {
       lessons: [
         {
           id: "html-intro",
-          title: "Introduction to HTML & Web Structure",
+          title: "Introduction to HTML",
           resources: [
             {
-              title: "HTML Introduction",
-              type: "interactive",
-              platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/responsive-web-design/",
+              title: "Learn HTML by Google",
+              type: "documentation",
+              platform: "Google web.dev",
+              url: "https://web.dev/learn/html",
               requiresIntake: true
             },
             {
-              title: "HTML Elements and Attributes",
+              title: "Semantic HTML Elements",
               type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML",
+              platform: "Google Developers",
+              url: "https://developers.google.com/style/semantic-tagging",
               requiresIntake: true
             }
           ]
         },
         {
           id: "semantic-html",
-          title: "Semantic HTML & Forms",
+          title: "Web Structure & Accessibility",
           resources: [
             {
-              title: "Semantic HTML5 Elements",
-              type: "video",
-              platform: "YouTube - Traversy Media",
-              url: "https://www.youtube.com/results?search_query=semantic+html5",
+              title: "Accessibility Fundamentals",
+              type: "documentation",
+              platform: "Google web.dev",
+              url: "https://web.dev/learn/accessibility",
               requiresIntake: true
             },
             {
-              title: "HTML Forms Guide",
+              title: "Building Accessible Forms",
               type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/Forms",
+              platform: "Google web.dev",
+              url: "https://web.dev/learn/forms",
               requiresIntake: true
             }
           ]
@@ -95,20 +100,20 @@ const frontendCourse: Course = {
       lessons: [
         {
           id: "css-fundamentals",
-          title: "CSS Selectors, Properties & Box Model",
+          title: "CSS Basics & Box Model",
           resources: [
             {
-              title: "CSS Basics Course",
-              type: "interactive",
-              platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/responsive-web-design/",
+              title: "Learn CSS by Google",
+              type: "documentation",
+              platform: "Google web.dev",
+              url: "https://web.dev/learn/css",
               requiresIntake: true
             },
             {
-              title: "CSS Box Model",
+              title: "The CSS Box Model",
               type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model",
+              platform: "Google web.dev",
+              url: "https://web.dev/learn/css/box-model",
               requiresIntake: true
             }
           ]
@@ -118,37 +123,17 @@ const frontendCourse: Course = {
           title: "Responsive Design & Flexbox",
           resources: [
             {
-              title: "Flexbox Complete Guide",
-              type: "article",
-              platform: "CSS-Tricks",
-              url: "https://css-tricks.com/snippets/css/a-guide-to-flexbox/",
+              title: "Responsive Web Design",
+              type: "documentation",
+              platform: "Google web.dev",
+              url: "https://web.dev/learn/design",
               requiresIntake: true
             },
             {
-              title: "CSS Grid & Flexbox",
+              title: "Flexbox Layouts",
               type: "interactive",
-              platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/responsive-web-design/",
-              requiresIntake: true
-            }
-          ]
-        },
-        {
-          id: "css-advanced",
-          title: "CSS Grid, Animations & Transitions",
-          resources: [
-            {
-              title: "CSS Grid Layout",
-              type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Grids",
-              requiresIntake: true
-            },
-            {
-              title: "CSS Animations & Transitions",
-              type: "video",
-              platform: "YouTube - Traversy Media",
-              url: "https://www.youtube.com/results?search_query=css+animations",
+              platform: "Google web.dev",
+              url: "https://web.dev/learn/css/flexbox",
               requiresIntake: true
             }
           ]
@@ -162,80 +147,26 @@ const frontendCourse: Course = {
       lessons: [
         {
           id: "js-intro",
-          title: "Variables, Data Types & Operators",
+          title: "JavaScript Basics",
           resources: [
             {
-              title: "JavaScript Basics",
+              title: "Introduction to JavaScript",
               type: "interactive",
-              platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
-              requiresIntake: true
-            },
-            {
-              title: "JavaScript Fundamentals",
-              type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript",
-              requiresIntake: true
-            }
-          ]
-        },
-        {
-          id: "js-functions",
-          title: "Functions, Scope & Closures",
-          resources: [
-            {
-              title: "JavaScript Functions",
-              type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Functions",
-              requiresIntake: true
-            },
-            {
-              title: "Understanding Scope & Closures",
-              type: "video",
-              platform: "YouTube - Traversy Media",
-              url: "https://www.youtube.com/results?search_query=javascript+scope+closures",
+              platform: "MDN Web Docs (Google Recommended)",
+              url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction",
               requiresIntake: true
             }
           ]
         },
         {
           id: "js-dom",
-          title: "DOM Manipulation & Events",
+          title: "DOM Manipulation",
           resources: [
             {
-              title: "DOM Introduction",
+              title: "Introduction to the DOM",
               type: "article",
               platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Manipulating_documents",
-              requiresIntake: true
-            },
-            {
-              title: "Event Handling in JavaScript",
-              type: "interactive",
-              platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
-              requiresIntake: true
-            }
-          ]
-        },
-        {
-          id: "js-async",
-          title: "Async Programming, APIs & Fetch",
-          resources: [
-            {
-              title: "Asynchronous JavaScript",
-              type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous",
-              requiresIntake: true
-            },
-            {
-              title: "Fetch API & AJAX",
-              type: "video",
-              platform: "YouTube - Traversy Media",
-              url: "https://www.youtube.com/results?search_query=fetch+api+javascript",
+              url: "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction",
               requiresIntake: true
             }
           ]
@@ -248,19 +179,6 @@ const frontendCourse: Course = {
       duration: "1-2 weeks",
       lessons: [
         {
-          id: "portfolio-project",
-          title: "Build a Portfolio Website",
-          resources: [
-            {
-              title: "Portfolio Project Ideas",
-              type: "article",
-              platform: "freeCodeCamp Blog",
-              url: "https://www.freecodecamp.org/news/",
-              requiresIntake: true
-            }
-          ]
-        },
-        {
           id: "deployment",
           title: "Professional Deployment",
           resources: [
@@ -269,13 +187,6 @@ const frontendCourse: Course = {
               type: "documentation",
               platform: "Vercel Docs",
               url: "https://vercel.com/docs/concepts/deployments/overview",
-              requiresIntake: true
-            },
-            {
-              title: "Git & GitHub Crash Course",
-              type: "video",
-              platform: "YouTube - FreeCodeCamp",
-              url: "https://www.youtube.com/watch?v=RGOj5yH7evk",
               requiresIntake: true
             }
           ]
@@ -298,11 +209,11 @@ const frontendCourse: Course = {
   ]
 };
 
-// --- DATA: Analytics Course (ALL RESOURCES LOCKED) ---
+// --- DATA: Analytics Course (REMAINS GOOGLE CLOUD) ---
 const dataAnalyticsCourse: Course = {
   id: "data-analytics",
   title: "Data Analytics Fundamentals",
-  description: "Master the essentials of data analysis: Excel, SQL, and data visualization.",
+  description: "Master the essentials of data analysis: Excel, SQL, and data visualization with Google Cloud.",
   duration: "8-10 weeks",
   level: "Beginner to Intermediate",
   target: "Career changers, business professionals",
