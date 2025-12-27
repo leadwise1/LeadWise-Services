@@ -1,5 +1,4 @@
-import { useState } from "react";
-import Head from "next/head";
+import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface Module {
@@ -666,17 +665,26 @@ function CourseCard({ course }: { course: Course }) {
 }
 
 export default function Courses() {
+  useEffect(() => {
+    // Set Title
+    document.title = "Courses | LeadWise Foundation";
+
+    // Set Favicon
+    const updateFavicon = () => {
+      let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'shortcut icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+      link.type = 'image/svg+xml';
+      link.href = '/leadwise-logo.svg?v=2';
+    };
+    updateFavicon();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Browser Tab Settings - OVERRIDE FIX */}
-      <Head>
-        <title>Courses | LeadWise Foundation</title>
-        <meta name="description" content="Free professional courses in Frontend Development and Data Analytics." />
-        {/* The ?v=2 forces the browser to re-download the icon instead of using the cached one */}
-        <link rel="icon" href="/leadwise-logo.svg?v=2" type="image/svg+xml" />
-        <link rel="shortcut icon" href="/leadwise-logo.svg?v=2" />
-      </Head>
-
       {/* Navigation */}
       <nav className="bg-primary sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
