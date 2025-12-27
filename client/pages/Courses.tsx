@@ -1,9 +1,48 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw } from "lucide-react";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
-// --- Configuration ---
-// FIREBASE REMOVED TEMPORARILY TO FIX BUILD
-// This version runs in "Local Mode" using browser storage.
+const getFirebaseConfig = () => {
+  try {
+    if (import.meta.env.VITE_FIREBASE_API_KEY) {
+      return {
+        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+        appId: import.meta.env.VITE_FIREBASE_APP_ID
+      };
+    }
+    
+    if (typeof __firebase_config !== 'undefined') {
+      return JSON.parse(__firebase_config);
+    }
+  } catch (e) {
+    console.warn("Error loading config", e);
+  }
+  return null;
+};
+
+const firebaseConfig = getFirebaseConfig();
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'leadwise-default';
+
+
+let auth: any;
+let db: any;
+
+if (firebaseConfig && firebaseConfig.apiKey) {
+  try {
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    console.log("Firebase initialized: Data will be saved to Cloud.");
+  } catch (e) {
+    console.error("Firebase initialization failed:", e);
+  }
+}
 
 // --- Types ---
 interface Module {
@@ -37,11 +76,11 @@ interface Course {
   modules: Module[];
 }
 
-// --- DATA: Frontend Course (NOW USING GOOGLE RESOURCES) ---
+
 const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
-  description: "Learn HTML, CSS, and JavaScript with Google's official web.dev curriculum. Master the modern web standards.",
+  description: "Learn HTML, CSS, and JavaScript with Google's official web.dev curriculum.",
   duration: "8-10 weeks",
   level: "Beginner to Intermediate",
   target: "Aspiring web developers, career changers, freelancers",
@@ -209,11 +248,11 @@ const frontendCourse: Course = {
   ]
 };
 
-// --- DATA: Analytics Course (REMAINS GOOGLE CLOUD) ---
+
 const dataAnalyticsCourse: Course = {
   id: "data-analytics",
   title: "Data Analytics Fundamentals",
-  description: "Master the essentials of data analysis: Excel, SQL, and data visualization with Google Cloud.",
+  description: "Master the essentials of data analysis: Excel, SQL, and data visualization.",
   duration: "8-10 weeks",
   level: "Beginner to Intermediate",
   target: "Career changers, business professionals",
@@ -389,8 +428,17 @@ function IntakeModal({
     setLoading(true);
 
     try {
-      // Create a fake ID for Demo Mode
-      const uid = `student-${Math.floor(Math.random() * 10000)}`;
+      let uid = `demo-${Date.now()}`;
+      
+      // Use Firebase Auth if available
+      if (auth) {
+        if (!auth.currentUser) {
+           await signInAnonymously(auth);
+        }
+        if (auth.currentUser) {
+          uid = auth.currentUser.uid;
+        }
+      }
 
       const intakeRecord = {
         ...formData,
@@ -401,8 +449,17 @@ function IntakeModal({
         lmiVerified: true, 
       };
 
-      // Save to LocalStorage (Browser Memory)
-      console.log("Saved to LocalStorage (Emergency Mode)");
+      // 1. SAVE TO CLOUD (If connected)
+      if (db && auth?.currentUser) {
+        // Path: artifacts/{appId}/users/{uid}/intake
+        await setDoc(doc(db, "artifacts", appId, "users", uid, "intake"), intakeRecord);
+        console.log("SUCCESS: Data saved to Firebase Cloud.");
+      } else {
+        // 2. FALLBACK (If keys are wrong)
+        console.warn("WARNING: Firebase not connected. Saving locally only.");
+      }
+      
+      // Always save local backup so user can access courses immediately
       localStorage.setItem("leadwise_intake", JSON.stringify(intakeRecord));
 
       onComplete();
@@ -514,7 +571,6 @@ function IntakeModal({
 
 function ProtectedResource({ resource, isEnrolled, onTriggerIntake }: { resource: Resource, isEnrolled: boolean, onTriggerIntake: () => void }) {
   const handleClick = (e: React.MouseEvent) => {
-    // LOCK LOGIC: If not enrolled, BLOCK the click and show modal
     if (!isEnrolled) {
       e.preventDefault();
       onTriggerIntake();
@@ -658,11 +714,27 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: { course: Course, i
 export default function Courses() {
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Basic Auth Simulation (Browser Memory Only)
-    if (localStorage.getItem("leadwise_intake")) {
-      setIsEnrolled(true);
+    // Auth Init Logic
+    if (auth) {
+      const initAuth = async () => {
+        try {
+          if (!auth.currentUser) await signInAnonymously(auth);
+        } catch(e) { console.error("Auth error", e); }
+      };
+      initAuth();
+      return onAuthStateChanged(auth, (u) => {
+        setUser(u);
+        if (localStorage.getItem("leadwise_intake")) {
+          setIsEnrolled(true);
+        }
+      });
+    } else {
+        if (localStorage.getItem("leadwise_intake")) {
+          setIsEnrolled(true);
+        }
     }
   }, []);
 
