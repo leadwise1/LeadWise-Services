@@ -774,14 +774,14 @@ export default function Courses() {
       <section className="bg-gradient-to-br from-primary/5 to-white py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 leading-tight">Level Up Your Skills</h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">Accelerate your career with curated, self-paced learning paths. All courses are 100% free.</p>
-          <div className="inline-block bg-accent text-primary px-4 py-2 rounded-full text-sm font-semibold">✓ 100% Free • Self-Paced • Industry-Relevant</div>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">Google-Verified Workforce Pathways, Self-paced learning paths. 100% Free.</p>
+          <div className="inline-block bg-accent text-primary px-4 py-2 rounded-full text-sm font-semibold">✓ $0 • Self-Paced • Industry-Relevant</div>
         </div>
       </section>
 
       {/* PARTNER LOGO SECTION */}
       <section className="bg-white py-12 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm font-semibold text-gray-500 uppercase tracking-wide mb-8">
             Official Training & Technology Partners
           </p>
@@ -810,7 +810,7 @@ export default function Courses() {
       </section>
 
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-primary mb-4">Featured Learning Paths</h2>
             <p className="text-xl text-gray-700">{isEnrolled ? "Your courses are unlocked. Click any module to start." : "Complete the intake process to unlock full access to industry certifications."}</p>
