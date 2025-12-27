@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
+// --- Types ---
 interface Module {
   id: string;
   title: string;
@@ -31,7 +32,7 @@ interface Course {
   modules: Module[];
 }
 
-// 1. FRONTEND COURSE DATA
+// --- Data: Frontend Course ---
 const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
@@ -240,7 +241,6 @@ const frontendCourse: Course = {
             }
           ]
         },
-        // Deployment to Vercel (Workforce Readiness)
         {
           id: "deployment",
           title: "Professional Deployment",
@@ -259,7 +259,6 @@ const frontendCourse: Course = {
             }
           ]
         },
-        // Mentor Review (Funding Trigger)
         {
           id: "mentor-review",
           title: "Grant Requirement: Mentor Code Review",
@@ -268,7 +267,6 @@ const frontendCourse: Course = {
               title: "Request Texas Instruments Mentor Review",
               type: "interactive",
               platform: "LeadWise Mentor Network",
-              // UPDATED EMAIL: mentor@letsleadwise.org
               url: "mailto:mentor@letsleadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20frontend%20capstone%20and%20am%20requesting%20review."
             }
           ]
@@ -278,7 +276,7 @@ const frontendCourse: Course = {
   ]
 };
 
-// 2. DATA ANALYTICS COURSE DATA
+// --- Data: Analytics Course ---
 const dataAnalyticsCourse: Course = {
   id: "data-analytics",
   title: "Data Analytics Fundamentals",
@@ -532,7 +530,6 @@ const dataAnalyticsCourse: Course = {
               title: "Request Texas Instruments Mentor Review",
               type: "interactive",
               platform: "LeadWise Mentor Network",
-              // UPDATED EMAIL: mentor@letsleadwise.org
               url: "mailto:mentor@letsleadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20data%20analytics%20capstone%20and%20am%20requesting%20review."
             }
           ]
@@ -541,6 +538,8 @@ const dataAnalyticsCourse: Course = {
     }
   ]
 };
+
+// --- Components ---
 
 function ExpandableModule({ module, courseId }: { module: Module; courseId: string }) {
   const [expanded, setExpanded] = useState(false);
@@ -570,7 +569,6 @@ function ExpandableModule({ module, courseId }: { module: Module; courseId: stri
                 <h4 className="text-base font-semibold text-primary mb-4">{lesson.title}</h4>
                 <div className="space-y-3">
                   {lesson.resources.map((resource, idx) => (
-                    // This is the link component. target="_blank" forces a new tab.
                     <a
                       key={idx}
                       href={resource.url}
