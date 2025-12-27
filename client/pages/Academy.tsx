@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw } from "lucide-react";
+import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw, BadgeCheck, ShieldCheck } from "lucide-react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
@@ -776,6 +776,36 @@ export default function Courses() {
           <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 leading-tight">Level Up Your Skills</h1>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">Accelerate your career with curated, self-paced learning paths. All courses are 100% free.</p>
           <div className="inline-block bg-accent text-primary px-4 py-2 rounded-full text-sm font-semibold">✓ 100% Free • Self-Paced • Industry-Relevant</div>
+        </div>
+      </section>
+
+      {/* PARTNER LOGO SECTION */}
+      <section className="bg-white py-8 border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-sm font-semibold text-gray-500 uppercase tracking-wide mb-6">
+            Official Training & Technology Partners
+          </p>
+          <div className="flex justify-center items-center gap-12 flex-wrap opacity-80 grayscale hover:grayscale-0 transition-all duration-500">
+            
+            {/* Google Cloud Partner */}
+            <div className="flex items-center gap-3">
+              <img src="/google-cloud.png" alt="Google Cloud Partner" className="h-10 w-auto object-contain" />
+              <div className="text-left">
+                <p className="font-bold text-gray-900 leading-tight">Google Cloud</p>
+                <p className="text-xs text-gray-500 font-medium">Build Partner</p>
+              </div>
+            </div>
+
+            {/* Google Workspace */}
+            <div className="flex items-center gap-3">
+              <img src="/google-workspace.png" alt="Google Workspace Partner" className="h-8 w-auto object-contain" />
+              <div className="text-left">
+                <p className="font-bold text-gray-900 leading-tight">Workspace</p>
+                <p className="text-xs text-gray-500 font-medium">Authorized Partner</p>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
