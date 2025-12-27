@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw, BadgeCheck, ShieldCheck } from "lucide-react";
+import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, BadgeCheck, ShieldCheck } from "lucide-react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
@@ -439,6 +439,7 @@ function IntakeModal({
 
       // 1. SAVE TO CLOUD (If connected)
       if (db && auth?.currentUser) {
+        // Path: artifacts/{appId}/users/{uid}/profile/intake
         await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord);
         console.log("SUCCESS: Data saved to Firebase Cloud.");
       } else {
@@ -744,14 +745,6 @@ export default function Courses() {
     setIntakeOpen(false);
   };
 
-  const resetEnrollment = () => {
-    if (confirm("Reset enrollment? This will clear your test data.")) {
-      localStorage.removeItem("leadwise_intake");
-      setIsEnrolled(false);
-      window.location.reload();
-    }
-  };
-
   return (
     <div className="min-h-screen bg-white">
       <nav className="bg-primary sticky top-0 z-40 shadow-sm">
@@ -774,14 +767,15 @@ export default function Courses() {
       <section className="bg-gradient-to-br from-primary/5 to-white py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 leading-tight">Level Up Your Skills</h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">Google-Verified Workforce Pathways, Self-paced learning paths. 100% Free.</p>
-          <div className="inline-block bg-accent text-primary px-4 py-2 rounded-full text-sm font-semibold">✓ $0 • Self-Paced • Industry-Relevant</div>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">Google-Verified Workforce Pathways, Self-paced learning. 100% Free.
+                ✓ $0 • Self-Paced • Industry-Relevant</p>
+          <div className="inline-block bg-accent text-primary px-4 py-2 rounded-full text-sm font-semibold">✓ 100% Free • Self-Paced • Industry-Relevant</div>
         </div>
       </section>
 
       {/* PARTNER LOGO SECTION */}
       <section className="bg-white py-12 border-b border-gray-100">
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm font-semibold text-gray-500 uppercase tracking-wide mb-8">
             Official Training & Technology Partners
           </p>
@@ -810,32 +804,6 @@ export default function Courses() {
       </section>
 
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-8xl mx-auto">
+        <div className="max-w-9xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-primary mb-4">Featured Learning Paths</h2>
-            <p className="text-xl text-gray-700">{isEnrolled ? "Your courses are unlocked. Click any module to start." : "Complete the intake process to unlock full access to industry certifications."}</p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <CourseCard course={frontendCourse} isEnrolled={isEnrolled} onTriggerIntake={() => setIntakeOpen(true)} />
-            <CourseCard course={dataAnalyticsCourse} isEnrolled={isEnrolled} onTriggerIntake={() => setIntakeOpen(true)} />
-          </div>
-        </div>
-      </section>
-
-      <IntakeModal isOpen={intakeOpen} onClose={() => setIntakeOpen(false)} onComplete={handleEnrollmentComplete} targetResource="General Enrollment" />
-
-      <footer className="bg-primary text-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col items-center border-t border-primary/20 pt-8">
-            <p className="text-center text-sm">&copy; 2024 LeadWise Foundation. Free learning for everyone.</p>
-            {/* RESET BUTTON FOR TESTING */}
-            <button onClick={resetEnrollment} className="mt-4 flex items-center gap-2 text-xs text-gray-400 hover:text-white bg-primary/50 px-2 py-1 rounded">
-              <RefreshCw className="w-3 h-3" /> Reset Enrollment (Test Mode)
-            </button>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
+            <h2 className="text-
