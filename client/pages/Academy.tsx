@@ -5,7 +5,7 @@ import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/a
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 // --- CONFIGURATION START ---
-// Real Firebase Config for 'leadwise-platform'
+// ✅ Real Firebase Config (Hardcoded to bypass Vercel issues)
 const firebaseConfig = {
   apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
   authDomain: "leadwise-platform.firebaseapp.com",
