@@ -1,40 +1,27 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw } from "lucide-react";
-// Re-importing Firebase services (Now safe to use!)
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
-// --- Configuration ---
-const getFirebaseConfig = () => {
-  try {
-    if (import.meta.env.VITE_FIREBASE_API_KEY) {
-      return {
-        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-        appId: import.meta.env.VITE_FIREBASE_APP_ID
-      };
-    }
-    if (typeof __firebase_config !== 'undefined') {
-      return JSON.parse(__firebase_config);
-    }
-  } catch (e) {
-    console.warn("Error loading config", e);
-  }
-  return null;
+const firebaseConfig = {
+  apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
+  authDomain: "leadwise-platform.firebaseapp.com",
+  projectId: "leadwise-platform",
+  storageBucket: "leadwise-platform.firebasestorage.app",
+  messagingSenderId: "423460758070",
+  appId: "1:423460758070:web:6ff12a230fc1e65b44ee97",
+  measurementId: "G-W5SVR52646"
 };
 
-const firebaseConfig = getFirebaseConfig();
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'leadwise-default';
+const appId = 'leadwise-default';
 
 // Initialize Firebase (Safely)
 let auth: any;
 let db: any;
 
-if (firebaseConfig && firebaseConfig.apiKey) {
+// We check if you replaced the dummy text "AIzaSy..." with a real key
+if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "AIzaSy...") {
   try {
     const app = initializeApp(firebaseConfig);
     auth = getAuth(app);
@@ -44,7 +31,7 @@ if (firebaseConfig && firebaseConfig.apiKey) {
     console.error("Firebase initialization failed:", e);
   }
 } else {
-  console.log("Running in Local Demo Mode (No Keys Found)");
+  console.error("CRITICAL: Firebase Config is still using placeholder values. Please edit the file.");
 }
 
 // --- Types ---
@@ -454,7 +441,7 @@ function IntakeModal({
 
       // 1. SAVE TO CLOUD (If connected)
       if (db && auth?.currentUser) {
-        // Updated Path: artifacts/{appId}/users/{uid}/profile/intake (6 segments - VALID)
+        // Path: artifacts/{appId}/users/{uid}/profile/intake
         await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord);
         console.log("SUCCESS: Data saved to Firebase Cloud.");
       } else {
