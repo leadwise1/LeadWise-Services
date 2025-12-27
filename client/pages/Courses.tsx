@@ -4,6 +4,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
+// --- CONFIGURATION START ---
+// Real Firebase Config for 'leadwise-platform'
 const firebaseConfig = {
   apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
   authDomain: "leadwise-platform.firebaseapp.com",
@@ -13,6 +15,7 @@ const firebaseConfig = {
   appId: "1:423460758070:web:6ff12a230fc1e65b44ee97",
   measurementId: "G-W5SVR52646"
 };
+// --- CONFIGURATION END ---
 
 const appId = 'leadwise-default';
 
@@ -20,18 +23,13 @@ const appId = 'leadwise-default';
 let auth: any;
 let db: any;
 
-// We check if you replaced the dummy text "AIzaSy..." with a real key
-if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "AIzaSy...") {
-  try {
-    const app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
-    console.log("Firebase initialized: Data will be saved to Cloud.");
-  } catch (e) {
-    console.error("Firebase initialization failed:", e);
-  }
-} else {
-  console.error("CRITICAL: Firebase Config is still using placeholder values. Please edit the file.");
+try {
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  console.log("Firebase initialized: Data will be saved to Cloud.");
+} catch (e) {
+  console.error("Firebase initialization failed:", e);
 }
 
 // --- Types ---
@@ -441,7 +439,6 @@ function IntakeModal({
 
       // 1. SAVE TO CLOUD (If connected)
       if (db && auth?.currentUser) {
-        // Path: artifacts/{appId}/users/{uid}/profile/intake
         await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord);
         console.log("SUCCESS: Data saved to Firebase Cloud.");
       } else {
