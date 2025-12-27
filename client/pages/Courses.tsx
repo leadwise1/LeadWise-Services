@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw } from "lucide-react";
 
-// --- Configuration ---
-// FIREBASE REMOVED TEMPORARILY TO FIX BUILD
-// This version runs in "Local Mode" using browser storage.
-
-// --- Types ---
 interface Module {
   id: string;
   title: string;
