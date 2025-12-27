@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Head from "next/head"; // Import Head to manage the browser tab
+import Head from "next/head";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface Module {
@@ -32,7 +32,7 @@ interface Course {
   modules: Module[];
 }
 
-// 1. FRONTEND COURSE DATA (Includes Vercel & Grant Hook)
+// 1. FRONTEND COURSE DATA
 const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
@@ -238,9 +238,6 @@ const frontendCourse: Course = {
               type: "article",
               platform: "freeCodeCamp Blog",
               url: "https://www.freecodecamp.org/news/"
-            }
-          ]
-        },
         // Deployment to Vercel (Workforce Readiness)
         {
           id: "deployment",
@@ -269,7 +266,8 @@ const frontendCourse: Course = {
               title: "Request Texas Instruments Mentor Review",
               type: "interactive",
               platform: "LeadWise Mentor Network",
-              url: "mailto:mentors@leadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20frontend%20capstone%20and%20am%20requesting%20review."
+              // UPDATED EMAIL: mentor@letsleadwise.org
+              url: "mailto:mentor@letsleadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20frontend%20capstone%20and%20am%20requesting%20review."
             }
           ]
         }
@@ -278,7 +276,7 @@ const frontendCourse: Course = {
   ]
 };
 
-// 2. DATA ANALYTICS COURSE DATA (Includes Google Cloud & Looker Studio)
+// 2. DATA ANALYTICS COURSE DATA
 const dataAnalyticsCourse: Course = {
   id: "data-analytics",
   title: "Data Analytics Fundamentals",
@@ -302,7 +300,6 @@ const dataAnalyticsCourse: Course = {
               platform: "Google Analytics Academy",
               url: "https://analytics.google.com/analytics/academy/"
             },
-            // Replaced Medium with Google Cloud Skills Boost (No Paywall)
             {
               title: "Google Data Analytics Foundations",
               type: "documentation",
@@ -492,7 +489,6 @@ const dataAnalyticsCourse: Course = {
               platform: "YouTube - Alex The Analyst",
               url: "https://www.youtube.com/results?search_query=power+bi+tutorial"
             },
-            // Added Looker Studio (Innovation)
             {
               title: "Google Looker Studio (Cloud Native)",
               type: "interactive",
@@ -526,7 +522,6 @@ const dataAnalyticsCourse: Course = {
             }
           ]
         },
-        // Mentor Review (Funding Trigger)
         {
           id: "mentor-review-analytics",
           title: "Grant Requirement: Mentor Code Review",
@@ -535,7 +530,8 @@ const dataAnalyticsCourse: Course = {
               title: "Request Texas Instruments Mentor Review",
               type: "interactive",
               platform: "LeadWise Mentor Network",
-              url: "mailto:mentors@leadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20data%20analytics%20capstone%20and%20am%20requesting%20review."
+              // UPDATED EMAIL: mentor@letsleadwise.org
+              url: "mailto:mentor@letsleadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20data%20analytics%20capstone%20and%20am%20requesting%20review."
             }
           ]
         }
@@ -572,6 +568,7 @@ function ExpandableModule({ module, courseId }: { module: Module; courseId: stri
                 <h4 className="text-base font-semibold text-primary mb-4">{lesson.title}</h4>
                 <div className="space-y-3">
                   {lesson.resources.map((resource, idx) => (
+                    // This is the link component. target="_blank" forces a new tab.
                     <a
                       key={idx}
                       href={resource.url}
@@ -651,9 +648,12 @@ function CourseCard({ course }: { course: Course }) {
           )}
         </div>
 
-        {/* Call to Action */}
+        {/* Call to Action - Now expands the modules! */}
         <div className="border-t border-gray-200 pt-6">
-          <button className="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+          <button 
+            onClick={() => setExpanded(true)}
+            className="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+          >
             Start Learning Now
           </button>
         </div>
