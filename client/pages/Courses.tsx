@@ -137,6 +137,26 @@ const frontendCourse: Course = {
               requiresIntake: true
             }
           ]
+        },
+        {
+          id: "css-advanced",
+          title: "CSS Grid, Animations & Transitions",
+          resources: [
+            {
+              title: "CSS Grid Layout",
+              type: "article",
+              platform: "MDN Web Docs",
+              url: "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Grids",
+              requiresIntake: true
+            },
+            {
+              title: "CSS Animations & Transitions",
+              type: "video",
+              platform: "YouTube - Traversy Media",
+              url: "https://www.youtube.com/results?search_query=css+animations",
+              requiresIntake: true
+            }
+          ]
         }
       ]
     },
@@ -181,6 +201,46 @@ const frontendCourse: Course = {
               type: "video",
               platform: "YouTube - Traversy Media",
               url: "https://www.youtube.com/results?search_query=javascript+scope+closures",
+              requiresIntake: true
+            }
+          ]
+        },
+        {
+          id: "js-dom",
+          title: "DOM Manipulation & Events",
+          resources: [
+            {
+              title: "DOM Introduction",
+              type: "article",
+              platform: "MDN Web Docs",
+              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Manipulating_documents",
+              requiresIntake: true
+            },
+            {
+              title: "Event Handling in JavaScript",
+              type: "interactive",
+              platform: "freeCodeCamp",
+              url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
+              requiresIntake: true
+            }
+          ]
+        },
+        {
+          id: "js-async",
+          title: "Async Programming, APIs & Fetch",
+          resources: [
+            {
+              title: "Asynchronous JavaScript",
+              type: "article",
+              platform: "MDN Web Docs",
+              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous",
+              requiresIntake: true
+            },
+            {
+              title: "Fetch API & AJAX",
+              type: "video",
+              platform: "YouTube - Traversy Media",
+              url: "https://www.youtube.com/results?search_query=fetch+api+javascript",
               requiresIntake: true
             }
           ]
