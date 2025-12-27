@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw } from "lucide-react";
+// Re-importing Firebase services (Now safe to use!)
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
+// --- Configuration ---
 const getFirebaseConfig = () => {
   try {
     if (import.meta.env.VITE_FIREBASE_API_KEY) {
@@ -16,7 +18,7 @@ const getFirebaseConfig = () => {
         appId: import.meta.env.VITE_FIREBASE_APP_ID
       };
     }
-    
+    // Fallback for preview environments
     if (typeof __firebase_config !== 'undefined') {
       return JSON.parse(__firebase_config);
     }
@@ -29,7 +31,7 @@ const getFirebaseConfig = () => {
 const firebaseConfig = getFirebaseConfig();
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'leadwise-default';
 
-
+// Initialize Firebase (Safely)
 let auth: any;
 let db: any;
 
@@ -42,6 +44,8 @@ if (firebaseConfig && firebaseConfig.apiKey) {
   } catch (e) {
     console.error("Firebase initialization failed:", e);
   }
+} else {
+  console.log("Running in Local Demo Mode (No Keys Found)");
 }
 
 // --- Types ---
@@ -76,7 +80,7 @@ interface Course {
   modules: Module[];
 }
 
-
+// --- DATA: Frontend Course (GOOGLE CURRICULUM) ---
 const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
@@ -248,7 +252,7 @@ const frontendCourse: Course = {
   ]
 };
 
-
+// --- DATA: Analytics Course ---
 const dataAnalyticsCourse: Course = {
   id: "data-analytics",
   title: "Data Analytics Fundamentals",
@@ -451,15 +455,13 @@ function IntakeModal({
 
       // 1. SAVE TO CLOUD (If connected)
       if (db && auth?.currentUser) {
-        // Path: artifacts/{appId}/users/{uid}/intake
         await setDoc(doc(db, "artifacts", appId, "users", uid, "intake"), intakeRecord);
         console.log("SUCCESS: Data saved to Firebase Cloud.");
       } else {
-        // 2. FALLBACK (If keys are wrong)
         console.warn("WARNING: Firebase not connected. Saving locally only.");
       }
       
-      // Always save local backup so user can access courses immediately
+      // Always save local backup
       localStorage.setItem("leadwise_intake", JSON.stringify(intakeRecord));
 
       onComplete();
