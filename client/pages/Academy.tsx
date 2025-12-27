@@ -780,28 +780,28 @@ export default function Courses() {
       </section>
 
       {/* PARTNER LOGO SECTION */}
-      <section className="bg-white py-8 border-b border-gray-100">
+      <section className="bg-white py-12 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-sm font-semibold text-gray-500 uppercase tracking-wide mb-6">
+          <p className="text-center text-sm font-semibold text-gray-500 uppercase tracking-wide mb-8">
             Official Training & Technology Partners
           </p>
-          <div className="flex justify-center items-center gap-12 flex-wrap opacity-80 grayscale hover:grayscale-0 transition-all duration-500">
+          <div className="flex justify-center items-center gap-16 flex-wrap opacity-90 hover:opacity-100 transition-all duration-300">
             
             {/* Google Cloud Partner */}
-            <div className="flex items-center gap-3">
-              <img src="/google-cloud.png" alt="Google Cloud Partner" className="h-10 w-auto object-contain" />
+            <div className="flex items-center gap-4">
+              <img src="/google-cloud.png" alt="Google Cloud Partner" className="h-16 w-auto object-contain" />
               <div className="text-left">
-                <p className="font-bold text-gray-900 leading-tight">Google Cloud</p>
-                <p className="text-xs text-gray-500 font-medium">Build Partner</p>
+                <p className="font-bold text-gray-900 text-lg leading-tight">Google Cloud</p>
+                <p className="text-sm text-gray-600 font-medium">Build Partner</p>
               </div>
             </div>
 
             {/* Google Workspace */}
-            <div className="flex items-center gap-3">
-              <img src="/google-workspace.png" alt="Google Workspace Partner" className="h-8 w-auto object-contain" />
+            <div className="flex items-center gap-4">
+              <img src="/google-workspace.png" alt="Google Workspace Partner" className="h-14 w-auto object-contain" />
               <div className="text-left">
-                <p className="font-bold text-gray-900 leading-tight">Workspace</p>
-                <p className="text-xs text-gray-500 font-medium">Authorized Partner</p>
+                <p className="font-bold text-gray-900 text-lg leading-tight">Workspace</p>
+                <p className="text-sm text-gray-600 font-medium">Authorized Partner</p>
               </div>
             </div>
 
