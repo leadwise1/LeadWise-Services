@@ -1,5 +1,46 @@
 import { useState, useEffect } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Lock, CheckCircle, ExternalLink, RefreshCw } from "lucide-react";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc, collection } from "firebase/firestore";
+
+// --- Configuration ---
+const getFirebaseConfig = () => {
+  try {
+    if (import.meta.env.VITE_FIREBASE_API_KEY) {
+      return {
+        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+        appId: import.meta.env.VITE_FIREBASE_APP_ID
+      };
+    }
+    if (typeof __firebase_config !== 'undefined') {
+      return JSON.parse(__firebase_config);
+    }
+  } catch (e) {
+    console.warn("Error loading config", e);
+  }
+  return null;
+};
+
+const firebaseConfig = getFirebaseConfig();
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'leadwise-default';
+
+let auth: any;
+let db: any;
+
+if (firebaseConfig && firebaseConfig.apiKey) {
+  try {
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } catch (e) {
+    console.error("Firebase initialization failed:", e);
+  }
+}
 
 // --- Types ---
 interface Module {
@@ -20,6 +61,7 @@ interface Resource {
   type: "video" | "article" | "interactive" | "documentation";
   url: string;
   platform: string;
+  requiresIntake?: boolean; 
 }
 
 interface Course {
@@ -32,11 +74,11 @@ interface Course {
   modules: Module[];
 }
 
-// --- Data: Frontend Course ---
+// --- DATA: Frontend Course (ALL RESOURCES LOCKED) ---
 const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
-  description: "Learn HTML, CSS, and JavaScript to build interactive websites. Master the fundamentals of modern web development and create responsive, user-friendly web applications.",
+  description: "Learn HTML, CSS, and JavaScript to build interactive websites. Master the fundamentals of modern web development.",
   duration: "8-10 weeks",
   level: "Beginner to Intermediate",
   target: "Aspiring web developers, career changers, freelancers",
@@ -54,13 +96,15 @@ const frontendCourse: Course = {
               title: "HTML Introduction",
               type: "interactive",
               platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/responsive-web-design/"
+              url: "https://www.freecodecamp.org/learn/responsive-web-design/",
+              requiresIntake: true
             },
             {
               title: "HTML Elements and Attributes",
               type: "article",
               platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML"
+              url: "https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML",
+              requiresIntake: true
             }
           ]
         },
@@ -72,13 +116,15 @@ const frontendCourse: Course = {
               title: "Semantic HTML5 Elements",
               type: "video",
               platform: "YouTube - Traversy Media",
-              url: "https://www.youtube.com/results?search_query=semantic+html5"
+              url: "https://www.youtube.com/results?search_query=semantic+html5",
+              requiresIntake: true
             },
             {
               title: "HTML Forms Guide",
               type: "article",
               platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/Forms"
+              url: "https://developer.mozilla.org/en-US/docs/Learn/Forms",
+              requiresIntake: true
             }
           ]
         }
@@ -97,13 +143,15 @@ const frontendCourse: Course = {
               title: "CSS Basics Course",
               type: "interactive",
               platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/responsive-web-design/"
+              url: "https://www.freecodecamp.org/learn/responsive-web-design/",
+              requiresIntake: true
             },
             {
               title: "CSS Box Model",
               type: "article",
               platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model"
+              url: "https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/The_box_model",
+              requiresIntake: true
             }
           ]
         },
@@ -115,31 +163,15 @@ const frontendCourse: Course = {
               title: "Flexbox Complete Guide",
               type: "article",
               platform: "CSS-Tricks",
-              url: "https://css-tricks.com/snippets/css/a-guide-to-flexbox/"
+              url: "https://css-tricks.com/snippets/css/a-guide-to-flexbox/",
+              requiresIntake: true
             },
             {
               title: "CSS Grid & Flexbox",
               type: "interactive",
               platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/responsive-web-design/"
-            }
-          ]
-        },
-        {
-          id: "css-advanced",
-          title: "CSS Grid, Animations & Transitions",
-          resources: [
-            {
-              title: "CSS Grid Layout",
-              type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Grids"
-            },
-            {
-              title: "CSS Animations & Transitions",
-              type: "video",
-              platform: "YouTube - Traversy Media",
-              url: "https://www.youtube.com/results?search_query=css+animations"
+              url: "https://www.freecodecamp.org/learn/responsive-web-design/",
+              requiresIntake: true
             }
           ]
         }
@@ -158,13 +190,15 @@ const frontendCourse: Course = {
               title: "JavaScript Basics",
               type: "interactive",
               platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/"
+              url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
+              requiresIntake: true
             },
             {
               title: "JavaScript Fundamentals",
               type: "article",
               platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript"
+              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript",
+              requiresIntake: true
             }
           ]
         },
@@ -176,49 +210,15 @@ const frontendCourse: Course = {
               title: "JavaScript Functions",
               type: "article",
               platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Functions"
+              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Functions",
+              requiresIntake: true
             },
             {
               title: "Understanding Scope & Closures",
               type: "video",
               platform: "YouTube - Traversy Media",
-              url: "https://www.youtube.com/results?search_query=javascript+scope+closures"
-            }
-          ]
-        },
-        {
-          id: "js-dom",
-          title: "DOM Manipulation & Events",
-          resources: [
-            {
-              title: "DOM Introduction",
-              type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Manipulating_documents"
-            },
-            {
-              title: "Event Handling in JavaScript",
-              type: "interactive",
-              platform: "freeCodeCamp",
-              url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/"
-            }
-          ]
-        },
-        {
-          id: "js-async",
-          title: "Async Programming, APIs & Fetch",
-          resources: [
-            {
-              title: "Asynchronous JavaScript",
-              type: "article",
-              platform: "MDN Web Docs",
-              url: "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous"
-            },
-            {
-              title: "Fetch API & AJAX",
-              type: "video",
-              platform: "YouTube - Traversy Media",
-              url: "https://www.youtube.com/results?search_query=fetch+api+javascript"
+              url: "https://www.youtube.com/results?search_query=javascript+scope+closures",
+              requiresIntake: true
             }
           ]
         }
@@ -237,7 +237,8 @@ const frontendCourse: Course = {
               title: "Portfolio Project Ideas",
               type: "article",
               platform: "freeCodeCamp Blog",
-              url: "https://www.freecodecamp.org/news/"
+              url: "https://www.freecodecamp.org/news/",
+              requiresIntake: true
             }
           ]
         },
@@ -249,13 +250,15 @@ const frontendCourse: Course = {
               title: "Deploying to Vercel",
               type: "documentation",
               platform: "Vercel Docs",
-              url: "https://vercel.com/docs/concepts/deployments/overview"
+              url: "https://vercel.com/docs/concepts/deployments/overview",
+              requiresIntake: true
             },
             {
               title: "Git & GitHub Crash Course",
               type: "video",
               platform: "YouTube - FreeCodeCamp",
-              url: "https://www.youtube.com/watch?v=RGOj5yH7evk"
+              url: "https://www.youtube.com/watch?v=RGOj5yH7evk",
+              requiresIntake: true
             }
           ]
         },
@@ -267,7 +270,8 @@ const frontendCourse: Course = {
               title: "Request Texas Instruments Mentor Review",
               type: "interactive",
               platform: "LeadWise Mentor Network",
-              url: "mailto:mentor@letsleadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20frontend%20capstone%20and%20am%20requesting%20review."
+              url: "mailto:mentor@letsleadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20frontend%20capstone%20and%20am%20requesting%20review.",
+              requiresIntake: true
             }
           ]
         }
@@ -276,14 +280,14 @@ const frontendCourse: Course = {
   ]
 };
 
-// --- Data: Analytics Course ---
+// --- DATA: Analytics Course (ALL RESOURCES LOCKED) ---
 const dataAnalyticsCourse: Course = {
   id: "data-analytics",
   title: "Data Analytics Fundamentals",
-  description: "Master the essentials of data analysis: Excel, SQL, and data visualization. Learn how to collect, clean, analyze, and visualize data to drive business decisions.",
+  description: "Master the essentials of data analysis: Excel, SQL, and data visualization.",
   duration: "8-10 weeks",
   level: "Beginner to Intermediate",
-  target: "Career changers, business professionals, aspiring data analysts",
+  target: "Career changers, business professionals",
   modules: [
     {
       id: "data-analytics-intro",
@@ -292,37 +296,21 @@ const dataAnalyticsCourse: Course = {
       lessons: [
         {
           id: "what-is-analytics",
-          title: "What is Data Analytics & Its Impact",
+          title: "What is Data Analytics",
           resources: [
-            {
-              title: "Data Analytics Overview",
-              type: "video",
-              platform: "Google Analytics Academy",
-              url: "https://analytics.google.com/analytics/academy/"
-            },
             {
               title: "Google Data Analytics Foundations",
               type: "documentation",
               platform: "Google Cloud Skills Boost",
-              url: "https://www.cloudskillsboost.google/paths/18"
-            }
-          ]
-        },
-        {
-          id: "analytics-types",
-          title: "Types of Analytics (Descriptive, Predictive, Prescriptive)",
-          resources: [
+              url: "https://www.cloudskillsboost.google/paths/18",
+              requiresIntake: true
+            },
             {
               title: "Analytics Types Guide",
               type: "article",
               platform: "Towards Data Science",
-              url: "https://towardsdatascience.com/"
-            },
-            {
-              title: "Data Analytics Framework",
-              type: "video",
-              platform: "YouTube - Alex The Analyst",
-              url: "https://www.youtube.com/results?search_query=data+analytics+types"
+              url: "https://towardsdatascience.com/",
+              requiresIntake: true
             }
           ]
         }
@@ -335,55 +323,21 @@ const dataAnalyticsCourse: Course = {
       lessons: [
         {
           id: "excel-basics",
-          title: "Excel Basics & Formulas",
+          title: "Excel Basics",
           resources: [
             {
               title: "Excel Tutorial for Beginners",
               type: "interactive",
               platform: "Microsoft Excel Help",
-              url: "https://support.microsoft.com/en-us/excel"
+              url: "https://support.microsoft.com/en-us/excel",
+              requiresIntake: true
             },
-            {
-              title: "Excel Formulas & Functions",
-              type: "video",
-              platform: "YouTube - Excel Easy",
-              url: "https://www.youtube.com/results?search_query=excel+formulas+tutorial"
-            }
-          ]
-        },
-        {
-          id: "data-cleaning",
-          title: "Data Cleaning & Manipulation",
-          resources: [
             {
               title: "Data Cleaning in Excel",
               type: "article",
               platform: "Datacamp Blog",
-              url: "https://www.datacamp.com/blog"
-            },
-            {
-              title: "Advanced Excel Functions",
-              type: "video",
-              platform: "YouTube - Alex The Analyst",
-              url: "https://www.youtube.com/results?search_query=data+cleaning+excel"
-            }
-          ]
-        },
-        {
-          id: "excel-analysis",
-          title: "Pivot Tables & Data Analysis",
-          resources: [
-            {
-              title: "Pivot Tables Guide",
-              type: "article",
-              platform: "Excel Easy",
-              url: "https://www.excel-easy.com/"
-            },
-            {
-              title: "Pivot Tables Tutorial",
-              type: "video",
-              platform: "YouTube - Traversy Media",
-              url: "https://www.youtube.com/results?search_query=pivot+tables+excel"
+              url: "https://www.datacamp.com/blog",
+              requiresIntake: true
             }
           ]
         }
@@ -396,55 +350,21 @@ const dataAnalyticsCourse: Course = {
       lessons: [
         {
           id: "sql-basics",
-          title: "SQL Fundamentals & SELECT Queries",
+          title: "SQL Fundamentals",
           resources: [
             {
               title: "SQL Tutorial",
               type: "interactive",
               platform: "W3Schools",
-              url: "https://www.w3schools.com/sql/"
+              url: "https://www.w3schools.com/sql/",
+              requiresIntake: true
             },
             {
               title: "SQL for Data Analysis",
               type: "article",
               platform: "Mode Analytics SQL Tutorial",
-              url: "https://mode.com/sql-tutorial/"
-            }
-          ]
-        },
-        {
-          id: "sql-intermediate",
-          title: "JOINs, Aggregation & Subqueries",
-          resources: [
-            {
-              title: "SQL JOINs Explained",
-              type: "video",
-              platform: "YouTube - Alex The Analyst",
-              url: "https://www.youtube.com/results?search_query=sql+joins"
-            },
-            {
-              title: "Advanced SQL Queries",
-              type: "article",
-              platform: "Mode Analytics SQL Tutorial",
-              url: "https://mode.com/sql-tutorial/"
-            }
-          ]
-        },
-        {
-          id: "database-design",
-          title: "Database Concepts & Design",
-          resources: [
-            {
-              title: "Database Design Basics",
-              type: "article",
-              platform: "Medium",
-              url: "https://medium.com/"
-            },
-            {
-              title: "Relational Databases",
-              type: "video",
-              platform: "YouTube - Fireship",
-              url: "https://www.youtube.com/results?search_query=database+design"
+              url: "https://mode.com/sql-tutorial/",
+              requiresIntake: true
             }
           ]
         }
@@ -456,44 +376,22 @@ const dataAnalyticsCourse: Course = {
       duration: "1-2 weeks",
       lessons: [
         {
-          id: "viz-principles",
-          title: "Data Visualization Principles & Best Practices",
-          resources: [
-            {
-              title: "Data Visualization Guide",
-              type: "article",
-              platform: "Tableau Blog",
-              url: "https://www.tableau.com/about/blog"
-            },
-            {
-              title: "Effective Data Visualization",
-              type: "video",
-              platform: "YouTube - Alex The Analyst",
-              url: "https://www.youtube.com/results?search_query=data+visualization+best+practices"
-            }
-          ]
-        },
-        {
           id: "visualization-tools",
           title: "Visualization Tools",
           resources: [
             {
-              title: "Google Sheets Visualization",
-              type: "article",
-              platform: "Google Support",
-              url: "https://support.google.com/docs"
-            },
-            {
-              title: "Power BI for Beginners",
-              type: "video",
-              platform: "YouTube - Alex The Analyst",
-              url: "https://www.youtube.com/results?search_query=power+bi+tutorial"
-            },
-            {
               title: "Google Looker Studio (Cloud Native)",
               type: "interactive",
               platform: "Google Cloud",
-              url: "https://lookerstudio.google.com/overview"
+              url: "https://lookerstudio.google.com/overview",
+              requiresIntake: true
+            },
+            {
+              title: "Data Visualization Guide",
+              type: "article",
+              platform: "Tableau Blog",
+              url: "https://www.tableau.com/about/blog",
+              requiresIntake: true
             }
           ]
         }
@@ -505,24 +403,6 @@ const dataAnalyticsCourse: Course = {
       duration: "1-2 weeks",
       lessons: [
         {
-          id: "analytics-project",
-          title: "Real-World Data Analysis Project",
-          resources: [
-            {
-              title: "Kaggle Datasets",
-              type: "interactive",
-              platform: "Kaggle",
-              url: "https://www.kaggle.com/"
-            },
-            {
-              title: "Portfolio Project Ideas",
-              type: "article",
-              platform: "Alex The Analyst Blog",
-              url: "https://www.youtube.com/c/AlexTheAnalyst"
-            }
-          ]
-        },
-        {
           id: "mentor-review-analytics",
           title: "Grant Requirement: Mentor Code Review",
           resources: [
@@ -530,7 +410,15 @@ const dataAnalyticsCourse: Course = {
               title: "Request Texas Instruments Mentor Review",
               type: "interactive",
               platform: "LeadWise Mentor Network",
-              url: "mailto:mentor@letsleadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20data%20analytics%20capstone%20and%20am%20requesting%20review."
+              url: "mailto:mentor@letsleadwise.org?subject=TI%20Volunteer%20Grant%20Review%20Request&body=I%20have%20completed%20my%20data%20analytics%20capstone%20and%20am%20requesting%20review.",
+              requiresIntake: true
+            },
+            {
+              title: "Kaggle Datasets",
+              type: "interactive",
+              platform: "Kaggle",
+              url: "https://www.kaggle.com/",
+              requiresIntake: true
             }
           ]
         }
@@ -539,26 +427,226 @@ const dataAnalyticsCourse: Course = {
   ]
 };
 
-// --- Components ---
+// --- COMPONENTS ---
 
-function ExpandableModule({ module, courseId }: { module: Module; courseId: string }) {
+function IntakeModal({ 
+  isOpen, 
+  onClose, 
+  onComplete, 
+  targetResource 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  onComplete: () => void;
+  targetResource: string;
+}) {
+  const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    zipCode: "",
+    householdIncome: "",
+    householdSize: "",
+    employmentStatus: "",
+    consent: false
+  });
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      let uid = `demo-${Date.now()}`;
+      if (auth) {
+        if (!auth.currentUser) await signInAnonymously(auth);
+        if (auth.currentUser) uid = auth.currentUser.uid;
+      }
+
+      const intakeRecord = {
+        ...formData,
+        participantId: uid,
+        enrolledAt: new Date().toISOString(),
+        targetCourse: targetResource,
+        status: "Enrolled",
+        lmiVerified: true, 
+      };
+
+      if (db && auth?.currentUser) {
+        await setDoc(doc(db, "artifacts", appId, "users", uid, "intake"), intakeRecord);
+      } else {
+        localStorage.setItem("leadwise_intake", JSON.stringify(intakeRecord));
+      }
+
+      onComplete();
+    } catch (error) {
+      console.error("Intake failed:", error);
+      alert("Error saving intake. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300">
+        <div className="bg-primary p-6 text-white">
+          <h2 className="text-xl font-bold">New Student Enrollment</h2>
+          <p className="text-sm opacity-90">Step {step} of 3: {step === 1 ? 'Contact Info' : step === 2 ? 'Eligibility' : 'Consent'}</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          {step === 1 && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                  <input required className="w-full p-2 border border-gray-300 rounded-md" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                  <input required className="w-full p-2 border border-gray-300 rounded-md" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" required className="w-full p-2 border border-gray-300 rounded-md" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Zip Code</label>
+                <input required maxLength={5} className="w-full p-2 border border-gray-300 rounded-md" placeholder="e.g. 75001" value={formData.zipCode} onChange={(e) => setFormData({...formData, zipCode: e.target.value})} />
+                <p className="text-xs text-gray-500 mt-1">Used for LMI census tract verification.</p>
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="space-y-4">
+              <div className="bg-blue-50 p-3 rounded-lg text-sm text-blue-800 mb-4">
+                This information is required for our grant funding and allows us to keep this course <strong>100% free</strong>.
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Annual Household Income</label>
+                <select required className="w-full p-2 border border-gray-300 rounded-md" value={formData.householdIncome} onChange={(e) => setFormData({...formData, householdIncome: e.target.value})}>
+                  <option value="">Select Range...</option>
+                  <option value="0-25k">$0 - $25,000</option>
+                  <option value="25-50k">$25,001 - $50,000</option>
+                  <option value="50-75k">$50,001 - $75,000</option>
+                  <option value="75k+">$75,001+</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Employment Status</label>
+                <select required className="w-full p-2 border border-gray-300 rounded-md" value={formData.employmentStatus} onChange={(e) => setFormData({...formData, employmentStatus: e.target.value})}>
+                  <option value="">Select Status...</option>
+                  <option value="unemployed">Unemployed</option>
+                  <option value="part-time">Part-Time</option>
+                  <option value="full-time">Full-Time</option>
+                  <option value="student">Student</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="space-y-4">
+               <div className="border p-4 rounded-lg bg-gray-50 text-sm space-y-2">
+                 <h3 className="font-bold text-gray-900">Program Participation Agreement</h3>
+                 <p>By clicking "Submit", I certify that the information provided is true. I understand that LeadWise Foundation is a non-profit and will use this data in aggregate form for grant reporting purposes.</p>
+               </div>
+               <label className="flex items-start gap-3 p-2 cursor-pointer hover:bg-gray-100 rounded-md">
+                 <input type="checkbox" required className="mt-1" checked={formData.consent} onChange={(e) => setFormData({...formData, consent: e.target.checked})} />
+                 <span className="text-sm font-medium text-gray-700">I Agree and wish to enroll.</span>
+               </label>
+            </div>
+          )}
+
+          <div className="flex justify-between pt-4 border-t mt-4">
+            {step > 1 ? (
+              <button type="button" onClick={() => setStep(step - 1)} className="px-4 py-2 text-gray-600 font-medium">Back</button>
+            ) : (
+              <button type="button" onClick={onClose} className="px-4 py-2 text-gray-500">Cancel</button>
+            )}
+            {step < 3 ? (
+              <button type="button" onClick={() => {
+                  if (step === 1 && (!formData.firstName || !formData.email || !formData.zipCode)) return alert("Please fill in all fields");
+                  if (step === 2 && (!formData.householdIncome || !formData.employmentStatus)) return alert("Please verify eligibility");
+                  setStep(step + 1);
+                }} className="bg-primary text-white px-6 py-2 rounded-lg font-bold">Next Step</button>
+            ) : (
+              <button type="submit" disabled={loading} className="bg-accent text-primary px-8 py-2 rounded-lg font-bold hover:bg-yellow-400">
+                {loading ? "Enrolling..." : "Submit & Start Learning"}
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function ProtectedResource({ resource, isEnrolled, onTriggerIntake }: { resource: Resource, isEnrolled: boolean, onTriggerIntake: () => void }) {
+  const handleClick = (e: React.MouseEvent) => {
+    // LOCK LOGIC: If not enrolled, BLOCK the click and show modal
+    if (!isEnrolled) {
+      e.preventDefault();
+      onTriggerIntake();
+    }
+  };
+
+  return (
+    <a
+      href={isEnrolled ? resource.url : "#"}
+      onClick={handleClick}
+      target={isEnrolled ? "_blank" : "_self"}
+      rel="noopener noreferrer"
+      className={`flex items-start gap-3 p-3 rounded-lg transition-colors duration-200 group relative ${
+        isEnrolled ? "bg-primary/10 hover:bg-primary/20 cursor-pointer" : "bg-gray-100 hover:bg-gray-200 cursor-not-allowed"
+      }`}
+    >
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-semibold text-primary group-hover:text-opacity-90">
+            {resource.title}
+          </p>
+          {!isEnrolled && (
+            <Lock className="w-3 h-3 text-gray-500" />
+          )}
+          {isEnrolled && (
+            <CheckCircle className="w-3 h-3 text-green-600" />
+          )}
+        </div>
+        <p className="text-xs text-gray-600 mt-1">
+          {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)} • {resource.platform}
+        </p>
+        
+        {isEnrolled && resource.platform.includes("Google") && (
+          <p className="text-[10px] text-orange-600 font-bold mt-1 bg-orange-100 inline-block px-1 rounded">
+             Tip: Enter "LeadWise Student" for Company Name
+          </p>
+        )}
+      </div>
+      <span className="text-primary group-hover:text-opacity-90 mt-1">
+        {isEnrolled ? <ExternalLink className="w-4 h-4"/> : <Lock className="w-4 h-4"/>}
+      </span>
+    </a>
+  );
+}
+
+function ExpandableModule({ module, isEnrolled, onTriggerIntake }: { module: Module; isEnrolled: boolean; onTriggerIntake: () => void }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200">
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-6 bg-white hover:bg-gray-50 transition-colors duration-200"
-      >
+      <button onClick={() => setExpanded(!expanded)} className="w-full flex items-center justify-between p-6 bg-white hover:bg-gray-50 transition-colors duration-200">
         <div className="text-left flex-1">
           <h3 className="text-lg font-bold text-primary mb-1">{module.title}</h3>
           <p className="text-sm text-gray-600">Duration: {module.duration}</p>
         </div>
-        {expanded ? (
-          <ChevronUp className="w-5 h-5 text-primary" />
-        ) : (
-          <ChevronDown className="w-5 h-5 text-primary" />
-        )}
+        {expanded ? <ChevronUp className="w-5 h-5 text-primary" /> : <ChevronDown className="w-5 h-5 text-primary" />}
       </button>
 
       {expanded && (
@@ -569,23 +657,12 @@ function ExpandableModule({ module, courseId }: { module: Module; courseId: stri
                 <h4 className="text-base font-semibold text-primary mb-4">{lesson.title}</h4>
                 <div className="space-y-3">
                   {lesson.resources.map((resource, idx) => (
-                    <a
-                      key={idx}
-                      href={resource.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-start gap-3 p-3 bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors duration-200 group"
-                    >
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-primary group-hover:text-opacity-90">
-                          {resource.title}
-                        </p>
-                        <p className="text-xs text-gray-600 mt-1">
-                          {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)} • {resource.platform}
-                        </p>
-                      </div>
-                      <span className="text-primary group-hover:text-opacity-90 mt-1">→</span>
-                    </a>
+                    <ProtectedResource 
+                      key={idx} 
+                      resource={resource} 
+                      isEnrolled={isEnrolled}
+                      onTriggerIntake={onTriggerIntake}
+                    />
                   ))}
                 </div>
               </div>
@@ -597,12 +674,11 @@ function ExpandableModule({ module, courseId }: { module: Module; courseId: stri
   );
 }
 
-function CourseCard({ course }: { course: Course }) {
+function CourseCard({ course, isEnrolled, onTriggerIntake }: { course: Course, isEnrolled: boolean, onTriggerIntake: () => void }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow duration-300">
-      {/* Course Header */}
       <div className="bg-gradient-to-r from-primary to-primary/80 text-white p-8">
         <h2 className="text-3xl font-bold mb-3">{course.title}</h2>
         <p className="text-gray-100 mb-6">{course.description}</p>
@@ -622,40 +698,33 @@ function CourseCard({ course }: { course: Course }) {
         </div>
       </div>
 
-      {/* Course Content */}
       <div className="p-8">
         <div className="mb-8">
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="w-full flex items-center justify-between bg-primary/10 hover:bg-primary/20 p-4 rounded-lg transition-colors duration-200 mb-6"
-          >
-            <span className="font-semibold text-primary">
-              {expanded ? "Hide" : "Show"} Course Modules
-            </span>
-            {expanded ? (
-              <ChevronUp className="w-5 h-5 text-primary" />
-            ) : (
-              <ChevronDown className="w-5 h-5 text-primary" />
-            )}
+          <button onClick={() => setExpanded(!expanded)} className="w-full flex items-center justify-between bg-primary/10 hover:bg-primary/20 p-4 rounded-lg transition-colors duration-200 mb-6">
+            <span className="font-semibold text-primary">{expanded ? "Hide" : "Show"} Course Modules</span>
+            {expanded ? <ChevronUp className="w-5 h-5 text-primary" /> : <ChevronDown className="w-5 h-5 text-primary" />}
           </button>
 
           {expanded && (
             <div className="space-y-4">
               {course.modules.map((module) => (
-                <ExpandableModule key={module.id} module={module} courseId={course.id} />
+                <ExpandableModule key={module.id} module={module} isEnrolled={isEnrolled} onTriggerIntake={onTriggerIntake} />
               ))}
             </div>
           )}
         </div>
 
-        {/* Call to Action - Now expands the modules! */}
         <div className="border-t border-gray-200 pt-6">
-          <button 
-            onClick={() => setExpanded(true)}
-            className="w-full bg-primary hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
-          >
-            Start Learning Now
-          </button>
+          {!isEnrolled ? (
+            <button onClick={onTriggerIntake} className="w-full bg-accent text-primary hover:bg-yellow-400 font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+              Enroll & Start Tracking
+            </button>
+          ) : (
+             <button onClick={() => setExpanded(true)} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+              <CheckCircle className="w-5 h-5" />
+              Continue Learning
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -663,39 +732,65 @@ function CourseCard({ course }: { course: Course }) {
 }
 
 export default function Courses() {
-  useEffect(() => {
-    // Set Title
-    document.title = "Courses | LeadWise Foundation";
+  const [intakeOpen, setIntakeOpen] = useState(false);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
-    // Set Favicon
+  useEffect(() => {
+    if (auth) {
+      const initAuth = async () => {
+        try {
+          if (!auth.currentUser) await signInAnonymously(auth);
+        } catch(e) { console.error("Auth error", e); }
+      };
+      initAuth();
+      return onAuthStateChanged(auth, (u) => {
+        setUser(u);
+        if (localStorage.getItem("leadwise_intake")) {
+          setIsEnrolled(true);
+        }
+      });
+    } else {
+        if (localStorage.getItem("leadwise_intake")) {
+          setIsEnrolled(true);
+        }
+    }
+  }, []);
+
+  useEffect(() => {
+    document.title = "Courses | LeadWise Foundation";
     const updateFavicon = () => {
-      // Find existing favicon
       let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
-      // If none exists, create one
       if (!link) {
         link = document.createElement('link');
         link.rel = 'shortcut icon';
         document.getElementsByTagName('head')[0].appendChild(link);
       }
-      // Set new favicon
       link.type = 'image/svg+xml';
       link.href = '/leadwise-logo.svg?v=2';
     };
     updateFavicon();
   }, []);
 
+  const handleEnrollmentComplete = () => {
+    setIsEnrolled(true);
+    setIntakeOpen(false);
+  };
+
+  const resetEnrollment = () => {
+    if (confirm("Reset enrollment? This will clear your test data.")) {
+      localStorage.removeItem("leadwise_intake");
+      setIsEnrolled(false);
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
       <nav className="bg-primary sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            {/* The Logo Image on the Page */}
-            <img 
-              src="/leadwise-logo.svg" 
-              alt="LeadWise Foundation" 
-              className="h-10 w-auto object-contain bg-white/10 rounded p-1" 
-            />
+            <img src="/leadwise-logo.svg" alt="LeadWise Foundation" className="h-10 w-auto object-contain bg-white/10 rounded p-1" />
             <span className="font-bold text-white text-lg hidden sm:block">LeadWise Foundation</span>
           </div>
           <div className="flex items-center gap-8">
@@ -703,177 +798,44 @@ export default function Courses() {
             <a href="/templates" className="text-gray-100 hover:text-white transition">Templates</a>
             <a href="/courses" className="text-white font-semibold">Courses</a>
             <button className="bg-accent hover:bg-yellow-200 text-primary font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
-              Sign In
+              {isEnrolled ? "My Dashboard" : "Sign In"}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary/5 to-white py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 leading-tight">
-            Level Up Your Skills
-          </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
-            Accelerate your career with curated, self-paced learning paths. Master in-demand skills and land your dream job. All courses are 100% free.
-          </p>
-          <div className="inline-block bg-accent text-primary px-4 py-2 rounded-full text-sm font-semibold">
-            ✓ 100% Free • Self-Paced • Industry-Relevant
-          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 leading-tight">Level Up Your Skills</h1>
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">Accelerate your career with curated, self-paced learning paths. All courses are 100% free.</p>
+          <div className="inline-block bg-accent text-primary px-4 py-2 rounded-full text-sm font-semibold">✓ 100% Free • Self-Paced • Industry-Relevant</div>
         </div>
       </section>
 
-      {/* Courses Grid */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-primary mb-4">
-              Featured Learning Paths
-            </h2>
-            <p className="text-xl text-gray-700">
-              Choose your path and start learning with curated resources from industry leaders
-            </p>
+            <h2 className="text-4xl font-bold text-primary mb-4">Featured Learning Paths</h2>
+            <p className="text-xl text-gray-700">{isEnrolled ? "Your courses are unlocked. Click any module to start." : "Complete the intake process to unlock full access to industry certifications."}</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <CourseCard course={frontendCourse} />
-            <CourseCard course={dataAnalyticsCourse} />
+            <CourseCard course={frontendCourse} isEnrolled={isEnrolled} onTriggerIntake={() => setIntakeOpen(true)} />
+            <CourseCard course={dataAnalyticsCourse} isEnrolled={isEnrolled} onTriggerIntake={() => setIntakeOpen(true)} />
           </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-primary mb-12 text-center">
-            Why These Courses?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary">
-                  <span className="text-white text-xl">🚀</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-primary mb-2">High Demand Skills</h3>
-                <p className="text-gray-700">
-                  Learn skills that employers actively seek right now. Frontend development and data analytics are among the most in-demand fields.
-                </p>
-              </div>
-            </div>
+      <IntakeModal isOpen={intakeOpen} onClose={() => setIntakeOpen(false)} onComplete={handleEnrollmentComplete} targetResource="General Enrollment" />
 
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary">
-                  <span className="text-white text-xl">📚</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-primary mb-2">Curated Resources</h3>
-                <p className="text-gray-700">
-                  We've curated the best free resources from platforms like freeCodeCamp, MDN, Kaggle, and industry experts.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary">
-                  <span className="text-white text-xl">⏰</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-primary mb-2">Self-Paced Learning</h3>
-                <p className="text-gray-700">
-                  Learn at your own speed. No fixed schedules or deadlines. Progress through modules as quickly or slowly as you need.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-primary">
-                  <span className="text-white text-xl">💼</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-primary mb-2">Career-Focused</h3>
-                <p className="text-gray-700">
-                  Each course includes practical projects and capstone assignments to build portfolio-ready work samples.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary">
-        <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-4xl font-bold mb-4">
-            Combine Skills with Professional Resumes
-          </h2>
-          <p className="text-xl opacity-95 mb-8">
-            Once you've learned new skills, showcase them with our professional resume templates. Create a compelling application package.
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <a
-              href="/templates"
-              className="bg-accent text-primary hover:bg-yellow-200 font-bold py-3 px-8 rounded-lg transition-colors duration-200 inline-block text-lg"
-            >
-              View Resume Templates
-            </a>
-            <button className="border-2 border-accent text-accent hover:bg-accent hover:text-primary font-bold py-3 px-8 rounded-lg transition-colors duration-200 text-lg">
-              Get Started Learning
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
       <footer className="bg-primary text-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <img 
-                  src="/leadwise-logo.svg" 
-                  alt="LeadWise Foundation" 
-                  className="w-8 h-8 object-contain bg-white/10 rounded p-1" 
-                />
-                <span className="font-bold text-white">LeadWise Foundation</span>
-              </div>
-              <p className="text-sm">Free tools to help you land your dream job through better resumes and continuous learning.</p>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="/templates" className="hover:text-white transition">Templates</a></li>
-                <li><a href="/courses" className="hover:text-white transition">Courses</a></li>
-                <li><a href="#" className="hover:text-white transition">Tracker</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition">Guide</a></li>
-                <li><a href="#" className="hover:text-white transition">FAQ</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition">Terms</a></li>
-                <li><a href="#" className="hover:text-white transition">Contact</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-primary/20 pt-8">
+          <div className="flex flex-col items-center border-t border-primary/20 pt-8">
             <p className="text-center text-sm">&copy; 2024 LeadWise Foundation. Free learning for everyone.</p>
+            {/* RESET BUTTON FOR TESTING */}
+            <button onClick={resetEnrollment} className="mt-4 flex items-center gap-2 text-xs text-gray-400 hover:text-white bg-primary/50 px-2 py-1 rounded">
+              <RefreshCw className="w-3 h-3" /> Reset Enrollment (Test Mode)
+            </button>
           </div>
         </div>
       </footer>
