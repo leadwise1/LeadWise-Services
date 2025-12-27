@@ -18,7 +18,6 @@ const getFirebaseConfig = () => {
         appId: import.meta.env.VITE_FIREBASE_APP_ID
       };
     }
-    // Fallback for preview environments
     if (typeof __firebase_config !== 'undefined') {
       return JSON.parse(__firebase_config);
     }
@@ -455,7 +454,8 @@ function IntakeModal({
 
       // 1. SAVE TO CLOUD (If connected)
       if (db && auth?.currentUser) {
-        await setDoc(doc(db, "artifacts", appId, "users", uid, "intake"), intakeRecord);
+        // Updated Path: artifacts/{appId}/users/{uid}/profile/intake (6 segments - VALID)
+        await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord);
         console.log("SUCCESS: Data saved to Firebase Cloud.");
       } else {
         console.warn("WARNING: Firebase not connected. Saving locally only.");
