@@ -671,12 +671,15 @@ export default function Courses() {
 
     // Set Favicon
     const updateFavicon = () => {
+      // Find existing favicon
       let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
+      // If none exists, create one
       if (!link) {
         link = document.createElement('link');
         link.rel = 'shortcut icon';
         document.getElementsByTagName('head')[0].appendChild(link);
       }
+      // Set new favicon
       link.type = 'image/svg+xml';
       link.href = '/leadwise-logo.svg?v=2';
     };
