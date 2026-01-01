@@ -697,7 +697,7 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: { course: Course, i
   );
 }
 
-export default function Academy() {
+export default function Courses() {
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
