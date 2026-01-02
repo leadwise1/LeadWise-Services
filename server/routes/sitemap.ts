@@ -1,5 +1,4 @@
-// client/pages/api/sitemap.ts
-import type { NextApiRequest, NextApiResponse } from "next";
+import { RequestHandler } from "express";
 
 const baseUrl = "https://services.letsleadwise.org";
 
@@ -23,7 +22,7 @@ function generateSiteMap() {
 </urlset>`;
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export const handleSitemap: RequestHandler = (_req, res) => {
   res.setHeader("Content-Type", "application/xml");
   res.status(200).send(generateSiteMap());
-}
+};
