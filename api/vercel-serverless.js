@@ -12,14 +12,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// API routes
-app.get("/api/ping", (_req, res) => {
+// API routes - Note: /api prefix is already handled by Vercel routing
+app.get("/ping", (_req, res) => {
   const ping = process.env.PING_MESSAGE ?? "ping";
   res.json({ message: ping });
 });
 
-app.get("/api/demo", handleDemo);
-app.get("/api/sitemap.xml", handleSitemap);
+app.get("/demo", handleDemo);
+app.get("/sitemap.xml", handleSitemap);
 
 // Wrap with serverless-http
 const handler = serverless(app);
