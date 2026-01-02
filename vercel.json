@@ -1,12 +1,16 @@
 {
-  "buildCommand": "pnpm build",
-  "outputDirectory": "dist/spa",
-  "devCommand": "pnpm dev",
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/vercel-serverless.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/.+", "dest": "api/vercel-serverless.js" },
+    { "src": "/(.*)", "dest": "dist/spa/index.html" }
+  ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" },
-    { "source": "/:path*", "destination": "/index.html" }
-  ]
+  }
 }
