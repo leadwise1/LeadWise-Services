@@ -50,6 +50,23 @@ export default function IndexPage() {
         </script>
       </Helmet>
 
+      {/* Site-wide Navigation */}
+      {currentView === "templates" && (
+        <nav className="bg-[#232136] sticky top-0 z-40 shadow-sm text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <a href="/" className="flex items-center gap-2">
+              <img src="/leadwise-logo.svg" alt="LeadWise" className="w-10 h-10 rounded-lg" />
+              <span className="font-bold text-xl">LeadWise Foundation</span>
+            </a>
+            <div className="flex items-center gap-6 text-sm font-medium">
+              <a href="/" className="text-gray-300 hover:text-white transition">Home</a>
+              <button onClick={() => setCurrentView("templates")} className="text-white font-semibold">Templates</button>
+              <a href="/courses" className="text-gray-300 hover:text-white transition">Courses</a>
+            </div>
+          </div>
+        </nav>
+      )}
+
       {/* Hero Section */}
       {currentView === "templates" && (
         <section className="relative min-h-[60vh] flex flex-col items-center justify-center bg-[#232136] text-white text-center px-4 py-32">
