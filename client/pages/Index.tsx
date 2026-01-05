@@ -52,12 +52,12 @@ export default function IndexPage() {
 
       {/* Hero Section */}
       {currentView === "templates" && (
-        <section className="relative min-h-[60vh] flex flex-col items-center justify-center bg-gradient-to-br from-indigo-900 via-blue-800 to-indigo-700 text-white text-center px-4 py-32">
+        <section className="relative min-h-[60vh] flex flex-col items-center justify-center bg-[#232136] text-white text-center px-4 py-32">
           <div className="max-w-3xl mx-auto z-10">
             <img src="/leadwise-logo.svg" alt="LeadWise Logo" className="mx-auto mb-6 h-16 w-16 bg-white/10 rounded-full p-2" />
             <h1 className="text-5xl sm:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-             Bridging the Gap <span className="text-amber-300">Between</span>.<br />
-              Potential & <span className="text-emerald-300">Opportunity</span>.
+             Bridging the Gap <span className="text-[#fac0ab]">Between</span>.<br />
+              Potential & <span className="text-[#fac0ab]">Opportunity</span>.
             </h1>
             <p className="text-lg sm:text-2xl mb-10 text-indigo-100 font-light">
              As a proud Google Cloud & Workspace Partner, LeadWise is dedicated to equipping individuals with the technical skills and career confidence needed to overcome challenges and confront inequities <br />
@@ -65,7 +65,7 @@ export default function IndexPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
-                className="bg-amber-400 hover:bg-amber-300 text-indigo-900 font-bold px-8 py-3 rounded shadow-lg transition text-lg flex items-center justify-center gap-2"
+                className="bg-[#fac0ab] hover:bg-opacity-90 text-[#232136] font-bold px-8 py-3 rounded shadow-lg transition text-lg flex items-center justify-center gap-2"
                 onClick={() => setCurrentView("resume")}
               >
                 <PenTool size={20} /> Build Resume
@@ -86,12 +86,12 @@ export default function IndexPage() {
       {currentView === "templates" && (
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-4xl font-bold text-primary mb-8 text-center">Take advantage of our free ATS resume and cover letter builders to equip yourself with the tools necessary for career success.</h2>
+            <h2 className="text-4xl font-bold text-[#232136] mb-8 text-center">Take advantage of our free ATS resume and cover letter builders to equip yourself with the tools necessary for career success.</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {templates.map((template) => (
                 <div
                   key={template.id}
-                  className={`rounded-xl border-2 ${selectedTemplateId === template.id ? "border-primary shadow-xl" : "border-gray-200"} bg-gray-50 p-6 flex flex-col items-center text-center transition`}
+                  className={`rounded-xl border-2 ${selectedTemplateId === template.id ? "border-[#232136] shadow-xl" : "border-gray-200"} bg-gray-50 p-6 flex flex-col items-center text-center transition`}
                   onClick={() => setSelectedTemplateId(template.id)}
                   style={{ cursor: "pointer" }}
                 >
@@ -102,9 +102,9 @@ export default function IndexPage() {
                   <p className="text-gray-600 text-sm mb-4">{template.description}</p>
                   <button
                     className={`mt-auto px-6 py-2 rounded font-bold ${
-                      selectedTemplateId === template.id
-                        ? "bg-primary text-white"
-                        : "bg-white text-primary border border-primary"
+                      selectedTemplateId === template.id ?
+                        "bg-[#232136] text-white" :
+                        "bg-white text-[#232136] border border-[#232136]"
                     }`}
                     onClick={() => setCurrentView("resume")}
                   >
@@ -137,7 +137,7 @@ export default function IndexPage() {
       {currentView === "templates" && (
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-primary mb-12 text-center">
+            <h2 className="text-4xl font-bold text-[#232136] mb-12 text-center">
               Frequently Asked Questions
             </h2>
             <div className="space-y-6">
@@ -163,7 +163,7 @@ export default function IndexPage() {
                   key={index}
                   className="border border-gray-200 rounded-lg p-6 bg-white hover:shadow-md transition-shadow duration-200"
                 >
-                  <h3 className="text-lg font-bold text-primary mb-3">{faq.q}</h3>
+                <h3 className="text-lg font-bold text-[#232136] mb-3">{faq.q}</h3>
                   <p className="text-gray-700">{faq.a}</p>
                 </div>
               ))}
@@ -176,8 +176,7 @@ export default function IndexPage() {
       {currentView === "templates" && (
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white" id="impact">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-primary mb-6">Empower Your Career Journey </h2>
-</h2>
+            <h2 className="text-4xl font-bold text-[#232136] mb-6">Empower Your Career Journey</h2>
             <p className="text-xl text-gray-700 mb-8">
               Free ATS Resume Builder: Create a professional resume that is optimized for Applicant Tracking Systems (ATS). This tool ensures your resume is formatted correctly and highlights your skills and experiences effectively, increasing your chances of catching the attention of employers.
             </p>
@@ -190,7 +189,7 @@ export default function IndexPage() {
 
       {/* Footer */}
       {currentView === "templates" && (
-        <footer className="bg-primary text-gray-100">
+        <footer className="bg-[#232136] text-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
               <div>
