@@ -56,7 +56,7 @@ export default function IndexPage() {
           <div className="max-w-3xl mx-auto z-10">
             <img src="/leadwise-logo.svg" alt="LeadWise Logo" className="mx-auto mb-6 h-16 w-16 bg-white/10 rounded-full p-2" />
             <h1 className="text-5xl sm:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-             Bridging the Gap <span className="text-[#fac0ab]">Between</span>.<br />
+             Bridging the Gap <span className="text-[#fac0ab]">Between</span><br />
               Potential & <span className="text-[#fac0ab]">Opportunity</span>.
             </h1>
             <p className="text-lg sm:text-2xl mb-10 text-indigo-100 font-light">
