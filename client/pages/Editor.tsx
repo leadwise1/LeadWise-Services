@@ -1021,26 +1021,26 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
         }
       `}</style>
       
-      <nav className="bg-indigo-900 text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
+      <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
           <a href="https://services.letsleadwise.org" className="flex items-center gap-2">
             <img src="/leadwise-logo.svg" alt="LeadWise" className="w-8 h-8 rounded-lg" />
             <h1 className="font-bold text-lg hidden sm:inline">LeadWise</h1>
           </a>
-          <div className="h-6 w-px bg-indigo-700 hidden md:block"></div>
+          <div className="h-6 w-px bg-[#4b486c] hidden md:block"></div>
           <div className="flex items-center gap-4">
-             <button onClick={onBack} className="flex items-center gap-1 text-indigo-200 hover:text-white transition text-sm font-medium"><ChevronLeft size={16} /> Templates</button>
-             <a href="https://services.letsleadwise.org/courses" className="text-indigo-200 hover:text-white transition text-sm font-medium">Courses</a>
+             <button onClick={onBack} className="flex items-center gap-1 text-gray-300 hover:text-white transition text-sm font-medium"><ChevronLeft size={16} /> Templates</button>
+             <a href="https://services.letsleadwise.org/courses" className="text-gray-300 hover:text-white transition text-sm font-medium">Courses</a>
           </div>
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-           <select value={activeTemplateId} onChange={(e) => setActiveTemplateId(e.target.value)} className="bg-indigo-800 text-white text-sm rounded px-3 py-1 border border-indigo-700">
+           <select value={activeTemplateId} onChange={(e) => setActiveTemplateId(e.target.value)} className="bg-[#3a3758] text-white text-sm rounded px-3 py-1 border border-[#4b486c]">
              {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
            </select>
-           <button onClick={() => downloadATS(resume)} className="bg-indigo-800 hover:bg-indigo-700 px-3 py-1 rounded text-sm flex items-center gap-2 border border-indigo-600">
+           <button onClick={() => downloadATS(resume)} className="bg-[#3a3758] hover:bg-opacity-80 px-3 py-1 rounded text-sm flex items-center gap-2 border border-[#4b486c]">
              <FileText size={16}/> ATS Text
            </button>
-           <button onClick={() => window.print()} className="bg-white text-indigo-900 px-3 py-1 rounded text-sm font-bold flex items-center gap-2">
+           <button onClick={() => window.print()} className="bg-[#fac0ab] text-[#232136] px-3 py-1 rounded text-sm font-bold flex items-center gap-2">
              <Printer size={16}/> Save PDF
            </button>
         </div>
@@ -1050,7 +1050,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
         <div className="bg-white rounded-xl shadow-lg p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print">
           
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
-             <div className="flex items-center gap-2 mb-3 text-indigo-900 font-bold text-sm uppercase tracking-wider">
+             <div className="flex items-center gap-2 mb-3 text-[#232136] font-bold text-sm uppercase tracking-wider">
                <Palette size={16}/> Design Settings
              </div>
              <div className="grid grid-cols-2 gap-6">
@@ -1074,7 +1074,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
                        <button 
                          key={f}
                          onClick={() => updateSettings('font', f)}
-                         className={`px-2 py-1 rounded border ${resume.settings?.font === f ? 'bg-indigo-100 border-indigo-300 text-indigo-900' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
+                         className={`px-2 py-1 rounded border ${resume.settings?.font === f ? 'bg-[#fac0ab]/20 border-[#fac0ab] text-[#232136]' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
                        >
                          {f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}
                        </button>
@@ -1108,13 +1108,13 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
             <section>
               <div className="flex justify-between mb-2">
                 <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Experience</h2>
-                <button onClick={addExp} className="text-indigo-600 text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add</button>
+                <button onClick={addExp} className="text-[#4b486c] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add</button>
               </div>
               {resume.experience.map(exp => (
                 <div key={exp.id} className="p-4 bg-gray-50 rounded mb-3 border relative group">
                   <button onClick={() => delExp(exp.id)} className="absolute top-2 right-2 text-gray-400 hover:text-red-500"><Trash2 size={16}/></button>
-                  <input className="w-full p-1 bg-transparent font-medium mb-1 border-b border-transparent focus:border-indigo-300 focus:outline-none" placeholder="Company Name" value={exp.company} onChange={e => updateExp(exp.id, 'company', e.target.value)} />
-                  <input className="w-full p-1 bg-transparent text-sm mb-2 border-b border-transparent focus:border-indigo-300 focus:outline-none" placeholder="Job Title" value={exp.position} onChange={e => updateExp(exp.id, 'position', e.target.value)} />
+                  <input className="w-full p-1 bg-transparent font-medium mb-1 border-b border-transparent focus:border-[#fac0ab] focus:outline-none" placeholder="Company Name" value={exp.company} onChange={e => updateExp(exp.id, 'company', e.target.value)} />
+                  <input className="w-full p-1 bg-transparent text-sm mb-2 border-b border-transparent focus:border-[#fac0ab] focus:outline-none" placeholder="Job Title" value={exp.position} onChange={e => updateExp(exp.id, 'position', e.target.value)} />
                   <div className="flex gap-2 mb-2">
                     <input className="w-1/2 p-1 text-xs border rounded" placeholder="Start" value={exp.startDate} onChange={e => updateExp(exp.id, 'startDate', e.target.value)} />
                     <input className="w-1/2 p-1 text-xs border rounded" placeholder="End" value={exp.endDate} onChange={e => updateExp(exp.id, 'endDate', e.target.value)} disabled={exp.currentlyWorking}/>
@@ -1127,7 +1127,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
              <section>
               <div className="flex justify-between mb-2">
                 <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Education</h2>
-                <button onClick={addEdu} className="text-indigo-600 text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add</button>
+                <button onClick={addEdu} className="text-[#4b486c] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add</button>
               </div>
               {resume.education.map(edu => (
                 <div key={edu.id} className="p-4 bg-gray-50 rounded mb-3 border relative">
@@ -1144,7 +1144,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
              <section>
               <div className="flex justify-between mb-2">
                 <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider">Skills</h2>
-                <button onClick={addSkill} className="text-indigo-600 text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add</button>
+                <button onClick={addSkill} className="text-[#4b486c] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add</button>
               </div>
               <div className="flex flex-wrap gap-2">
                 {resume.skills.map(skill => (
@@ -1221,23 +1221,23 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
                   .print-scale { transform: none !important; width: 100% !important; min-height: auto !important; height: auto !important; box-shadow: none !important; }
                 }
               `}</style>
-             <nav className="bg-emerald-900 text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
+             <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
                <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
                   <a href="https://services.letsleadwise.org" className="flex items-center gap-2">
                     <img src="/leadwise-logo.svg" alt="LeadWise" className="w-8 h-8 rounded-lg" />
                     <h1 className="font-bold text-lg hidden sm:inline">LeadWise</h1>
                   </a>
-                  <div className="h-6 w-px bg-emerald-700 hidden md:block"></div>
+                  <div className="h-6 w-px bg-[#4b486c] hidden md:block"></div>
                   <div className="flex items-center gap-4">
-                     <button onClick={onBack} className="flex items-center gap-1 text-emerald-200 hover:text-white transition text-sm font-medium"><ChevronLeft size={16} /> Templates</button>
-                     <a href="https://services.letsleadwise.org/courses" className="text-emerald-200 hover:text-white transition text-sm font-medium">Courses</a>
+                     <button onClick={onBack} className="flex items-center gap-1 text-gray-300 hover:text-white transition text-sm font-medium"><ChevronLeft size={16} /> Templates</button>
+                     <a href="https://services.letsleadwise.org/courses" className="text-gray-300 hover:text-white transition text-sm font-medium">Courses</a>
                   </div>
                </div>
                <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-                  <select value={activeTemplateId} onChange={(e) => setActiveTemplateId(e.target.value)} className="bg-emerald-800 text-white text-sm rounded px-3 py-1 border border-emerald-700">
+                  <select value={activeTemplateId} onChange={(e) => setActiveTemplateId(e.target.value)} className="bg-[#3a3758] text-white text-sm rounded px-3 py-1 border border-[#4b486c]">
                     {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                   </select>
-                  <button onClick={() => window.print()} className="bg-white text-emerald-900 px-3 py-1 rounded text-sm font-bold flex items-center gap-2">
+                  <button onClick={() => window.print()} className="bg-[#fac0ab] text-[#232136] px-3 py-1 rounded text-sm font-bold flex items-center gap-2">
                     <Printer size={16}/> Save PDF
                   </button>
                </div>
@@ -1248,7 +1248,7 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
                   
                   {/* DESIGN SETTINGS FOR COVER LETTER */}
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
-                    <div className="flex items-center gap-2 mb-3 text-emerald-900 font-bold text-sm uppercase tracking-wider">
+                    <div className="flex items-center gap-2 mb-3 text-[#232136] font-bold text-sm uppercase tracking-wider">
                       <Palette size={16}/> Appearance
                     </div>
                     <div className="flex gap-4">
@@ -1260,7 +1260,7 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
                        <div className="h-5 w-px bg-gray-300"></div>
                        <div className="flex gap-2 text-xs">
                           {['sans', 'serif', 'mono'].map(f => (
-                            <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 rounded border ${data.settings?.font === f ? 'bg-emerald-100 text-emerald-900' : 'bg-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
+                            <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 rounded border ${data.settings?.font === f ? 'bg-[#fac0ab]/20 text-[#232136]' : 'bg-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
                           ))}
                        </div>
                     </div>
@@ -1327,7 +1327,7 @@ export default function ResumeApp() {
   if (currentView === "templates") {
     return (
       <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
-        <nav className="bg-indigo-900 sticky top-0 z-40 shadow-sm text-white">
+        <nav className="bg-[#232136] sticky top-0 z-40 shadow-sm text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div className="flex items-center gap-8">
               <a href="https://services.letsleadwise.org" className="flex items-center gap-2">
@@ -1336,14 +1336,14 @@ export default function ResumeApp() {
               </a>
             </div>
             <div className="flex items-center gap-6 text-sm font-medium">
-              <a href="https://services.letsleadwise.org" className="text-indigo-200 hover:text-white transition">Home</a>
+              <a href="https://services.letsleadwise.org" className="text-gray-300 hover:text-white transition">Home</a>
               <button className="text-white">Templates</button>
-              <a href="https://services.letsleadwise.org/courses" className="text-indigo-200 hover:text-white transition">Courses</a>
+              <a href="https://services.letsleadwise.org/courses" className="text-gray-300 hover:text-white transition">Courses</a>
             </div>
           </div>
         </nav>
 
-        <div className="bg-indigo-900 text-white py-20 px-4 text-center">
+        <div className="bg-[#232136] text-white py-20 px-4 text-center">
            <h1 className="text-4xl md:text-5xl font-bold mb-6">Resume Templates</h1>
            <p className="text-xl text-indigo-100 max-w-2xl mx-auto">
              Professionally designed, ATS-friendly templates. Now with full personalization support.
@@ -1353,7 +1353,7 @@ export default function ResumeApp() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {templates.map((template) => (
-              <div key={template.id} className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-indigo-300">
+              <div key={template.id} className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-[#fac0ab]">
                 <div className="h-48 bg-gray-100 p-4 relative overflow-hidden flex items-center justify-center">
                    <div className="text-center opacity-40">
                       <Layout size={48} className="mx-auto mb-2"/>
@@ -1366,12 +1366,12 @@ export default function ResumeApp() {
                   <p className="text-gray-500 text-sm mb-6 h-10">{template.description}</p>
                   
                   <div className="flex gap-3">
-                    <button onClick={() => setPreviewModalTemplate(template.id)} className="flex-1 border border-gray-300 hover:border-indigo-600 hover:text-indigo-600 text-gray-600 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">Preview</button>
-                    <button onClick={() => navigateToEditor(template.id)} className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">Use Template</button>
+                    <button onClick={() => setPreviewModalTemplate(template.id)} className="flex-1 border border-gray-300 hover:border-[#4b486c] hover:text-[#232136] text-gray-600 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">Preview</button>
+                    <button onClick={() => navigateToEditor(template.id)} className="flex-1 bg-[#232136] hover:bg-[#3a3758] text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">Use Template</button>
                   </div>
                   <div className="mt-3 grid grid-cols-2 gap-3">
-                     <button onClick={() => navigateToEditor(template.id)} className="text-xs text-center text-gray-500 hover:text-indigo-600 hover:underline">Resume</button>
-                     <button onClick={() => navigateToCoverLetter(template.id)} className="text-xs text-center text-gray-500 hover:text-indigo-600 hover:underline">Cover Letter</button>
+                     <button onClick={() => navigateToEditor(template.id)} className="text-xs text-center text-gray-500 hover:text-[#232136] hover:underline">Resume</button>
+                     <button onClick={() => navigateToCoverLetter(template.id)} className="text-xs text-center text-gray-500 hover:text-[#232136] hover:underline">Cover Letter</button>
                   </div>
                 </div>
               </div>
@@ -1404,7 +1404,7 @@ export default function ResumeApp() {
                 </div>
                 <div className="p-4 border-t flex justify-end gap-3 bg-white">
                    <button onClick={() => setPreviewModalTemplate(null)} className="px-6 py-2 border rounded-lg hover:bg-gray-50">Close</button>
-                   <button onClick={() => { setPreviewModalTemplate(null); navigateToEditor(previewModalTemplate); }} className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Use This Template</button>
+                   <button onClick={() => { setPreviewModalTemplate(null); navigateToEditor(previewModalTemplate); }} className="px-6 py-2 bg-[#232136] text-white rounded-lg hover:bg-[#3a3758]">Use This Template</button>
                 </div>
              </div>
           </div>
