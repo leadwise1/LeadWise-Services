@@ -56,12 +56,12 @@ export default function IndexPage() {
           <div className="max-w-3xl mx-auto z-10">
             <img src="/leadwise-logo.svg" alt="LeadWise Logo" className="mx-auto mb-6 h-16 w-16 bg-white/10 rounded-full p-2" />
             <h1 className="text-5xl sm:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-              Empowering <span className="text-amber-300">Voices</span>.<br />
-              Building <span className="text-emerald-300">Leaders</span>.
+             Bridging the Gap <span className="text-amber-300">Between</span>.<br />
+              Potential & <span className="text-emerald-300">Opportunity</span>.
             </h1>
             <p className="text-lg sm:text-2xl mb-10 text-indigo-100 font-light">
-              Free resume and cover letter builder for women and marginalized voices in STEM and leadership. <br />
-              Create, customize, and print beautiful, ATS-friendly documents.
+             As a proud Google Cloud & Workspace Partner, LeadWise is dedicated to equipping individuals with the technical skills and career confidence needed to overcome challenges and confront inequities <br />
+              Our programs focus on providing the essential skills needed in today’s job market, fostering both personal and professional growth.  
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
@@ -86,7 +86,7 @@ export default function IndexPage() {
       {currentView === "templates" && (
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-4xl font-bold text-primary mb-8 text-center">Choose Your Style</h2>
+            <h2 className="text-4xl font-bold text-primary mb-8 text-center">Take advantage of our free ATS resume and cover letter builders to equip yourself with the tools necessary for career success.</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {templates.map((template) => (
                 <div
@@ -176,15 +176,13 @@ export default function IndexPage() {
       {currentView === "templates" && (
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white" id="impact">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-primary mb-6">Our Impact</h2>
+            <h2 className="text-4xl font-bold text-primary mb-6">Empower Your Career Journey </h2>
+</h2>
             <p className="text-xl text-gray-700 mb-8">
-              Education Gives You A Voice. Knowledge Gives You Power.
+              Free ATS Resume Builder: Create a professional resume that is optimized for Applicant Tracking Systems (ATS). This tool ensures your resume is formatted correctly and highlights your skills and experiences effectively, increasing your chances of catching the attention of employers.
             </p>
             <p className="text-gray-600">
-              We're building a movement of leaders who understand that systemic
-              change starts with individual empowerment. By investing in people,
-              we're transforming industries and creating pathways to success for
-              those historically left behind.
+              Free Cover Letter Builder: Complement your resume with a powerful cover letter. Our builder guides you in crafting a personalized cover letter that showcases your qualifications and enthusiasm for the position you are applying for.
             </p>
           </div>
         </section>
@@ -205,7 +203,7 @@ export default function IndexPage() {
                   <span className="font-bold text-white">LeadWise</span>
                 </div>
                 <p className="text-sm">
-                  Education Gives You A Voice. Knowledge Gives You Power.
+                  Fostering Both Personal and Professional Growth.
                 </p>
               </div>
               <div>
@@ -275,7 +273,7 @@ export default function IndexPage() {
               </div>
             </div>
             <div className="border-t border-primary/20 pt-8">
-              <p className="text-center text-sm">&copy; 2025 LeadWise Foundation. We don't just talk about change; we create it.</p>
+              <p className="text-center text-sm">&copy; 2026 LeadWise Foundation.</p>
             </div>
           </div>
         </footer>
