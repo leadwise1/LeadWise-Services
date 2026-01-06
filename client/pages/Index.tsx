@@ -30,11 +30,11 @@ export default function IndexPage() {
         <meta property="og:image" content="https://services.letsleadwise.org/leadwise-logo.svg" />
 
         {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://services.letsleadwise.org/" />
-        <meta property="twitter:title" content="LeadWise Resume Builder | Free ATS-Friendly Resume Maker" />
-        <meta property="twitter:description" content="Create professional, ATS-friendly resumes and cover letters for free. Join the movement for equity and impact." />
-        <meta property="twitter:image" content="https://services.letsleadwise.org/leadwise-logo.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://services.letsleadwise.org/" />
+        <meta name="twitter:title" content="LeadWise Resume Builder | Free ATS-Friendly Resume Maker" />
+        <meta name="twitter:description" content="Create professional, ATS-friendly resumes and cover letters for free. Join the movement for equity and impact." />
+        <meta name="twitter:image" content="https://services.letsleadwise.org/leadwise-logo.svg" />
 
         {/* Structured Data (JSON-LD) */}
         <script type="application/ld+json">
