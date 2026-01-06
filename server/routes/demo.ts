@@ -1,5 +1,9 @@
 import { RequestHandler } from "express";
-import { DemoResponse } from "@shared/api";
+
+// Define the interface locally to fix the "Cannot use namespace" error
+interface DemoResponse {
+  message: string;
+}
 
 export const handleDemo: RequestHandler = (req, res) => {
   const response: DemoResponse = {
