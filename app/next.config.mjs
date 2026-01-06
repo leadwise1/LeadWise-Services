@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* CRITICAL FIX: 
-     Vercel is stuck looking for the 'dist' folder from your old project setup.
-     This setting forces Next.js to build into 'dist' (instead of the default .next)
-     so Vercel can find the files it expects.
+     Force Next.js to build to the 'dist' folder.
+     Your Vercel project is configured to look for 'dist' (legacy Vite setting).
+     This ensures Vercel finds the build files.
   */
   distDir: 'dist',
 };
