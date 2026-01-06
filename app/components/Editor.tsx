@@ -74,7 +74,8 @@ export interface CoverLetterData {
   settings: DesignSettings;
 }
 
-export interface TemplateConfig {
+// RENAMED from TemplateConfig to Template to fix import error
+export interface Template {
   id: string;
   name: string;
   description: string;
@@ -646,12 +647,12 @@ const ElegantClassicCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }
       </div>
       <div className="space-y-6 text-base leading-loose">
          <div className="flex justify-between items-start mb-8 text-sm">
-            <div>
-              <div className="font-bold">{data.recipient.name}</div>
-              <div className="italic">{data.recipient.title}</div>
-              <div>{data.recipient.company}</div>
-            </div>
-            <div className="italic text-gray-500">{new Date().toLocaleDateString()}</div>
+           <div>
+             <div className="font-bold">{data.recipient.name}</div>
+             <div className="italic">{data.recipient.title}</div>
+             <div>{data.recipient.company}</div>
+           </div>
+           <div className="italic text-gray-500">{new Date().toLocaleDateString()}</div>
          </div>
          <div>{data.content.greeting}</div>
          <div className="whitespace-pre-wrap text-justify">{data.content.body}</div>
@@ -802,7 +803,8 @@ const AcademicProfessionalCoverLetter: React.FC<{ data: CoverLetterData }> = ({ 
 // 4. CONFIGURATION MAP
 // ==========================================
 
-export const templates: TemplateConfig[] = [
+// Updated to use the new 'Template' type
+export const templates: Template[] = [
   {
     id: "modern-blue",
     name: "Modern Blue",
