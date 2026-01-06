@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST='{"app/coverletter/page.tsx -> ../components/Editor":{"id":7709,"files":["static/chunks/709-84c6fc79a6894b4b.js"]},"app/resume/page.tsx -> ../components/Editor":{"id":7709,"files":["static/chunks/709-84c6fc79a6894b4b.js"]}}';

@@ -2,7 +2,9 @@
 import React, { useState } from "react";
 import { Layout, FileText, PenTool } from "lucide-react";
 import Link from "next/link";
-import { templates } from "./components/Editor";
+import { templates, Template } from "./components/Editor";
+
+
 
 // =======================
 // PAGE COMPONENT
@@ -10,8 +12,6 @@ import { templates } from "./components/Editor";
 
 export default function IndexPage() {
   const [previewModalTemplate, setPreviewModalTemplate] = useState<string | null>(null);
-  
-  const selectedModalTemplateData = templates.find(t => t.id === previewModalTemplate);
   const ModalComponent = selectedModalTemplateData?.resumeComponent;
 
   return (
@@ -150,83 +150,84 @@ export default function IndexPage() {
 
       {/* Footer */}
      
-        <footer className="bg-[#232136] text-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-              <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <img
-                    src="/leadwise-logo.svg"
-                    alt="LeadWise Foundation"
-                    className="h-8 w-auto object-contain bg-white/10 rounded p-1"
-                  />
-                  <span className="font-bold text-white">LeadWise</span>
-                </div>
-                <p className="text-sm">
-                  Fostering Both Personal and Professional Growth.
-                </p>
+       <footer className="bg-[#232136] text-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <img
+                  src="/leadwise-logo.svg"
+                  alt="LeadWise Foundation"
+                  className="h-8 w-auto object-contain bg-white/10 rounded p-1"
+                />
+                <span className="font-bold text-white">LeadWise</span>
               </div>
-              <div>
-                <h4 className="text-white font-semibold mb-4">Product</h4>
-                <ul className="space-y-2 text-sm">
-                  <li><a href="#" className="hover:text-white transition">Programs</a></li>
-                  <li><a href="#" className="hover:text-white transition">Leadership</a></li>
-                  <li><a href="#" className="hover:text-white transition">Advocacy</a></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-white font-semibold mb-4">Resources</h4>
-                <ul className="space-y-2 text-sm">
-                  <li><a href="#" className="hover:text-white transition">Impact</a></li>
-                  <li><a href="#" className="hover:text-white transition">Blog</a></li>
-                  <li><a href="#" className="hover:text-white transition">Events</a></li>
-                  <li><a href="#" className="hover:text-white transition">FAQ</a></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-white font-semibold mb-4">Legal</h4>
-                <ul className="space-y-2 text-sm">
-                  <li><a href="#" className="hover:text-white transition">Privacy</a></li>
-                  <li><a href="#" className="hover:text-white transition">Terms</a></li>
-                  <li><a href="#" className="hover:text-white transition">Contact</a></li>
-                </ul>
-              </div>
+              <p className="text-sm">
+                Fostering Both Personal and Professional Growth.
+              </p>
             </div>
-            <div className="border-t border-primary/20 pt-8">
-              <p className="text-center text-sm">&copy; 2026 LeadWise Foundation.</p>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Product</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="hover:text-white transition">Programs</a></li>
+                <li><a href="#" className="hover:text-white transition">Leadership</a></li>
+                <li><a href="#" className="hover:text-white transition">Advocacy</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Resources</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="hover:text-white transition">Impact</a></li>
+                <li><a href="#" className="hover:text-white transition">Blog</a></li>
+                <li><a href="#" className="hover:text-white transition">Events</a></li>
+                <li><a href="#" className="hover:text-white transition">FAQ</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Legal</h4>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="hover:text-white transition">Privacy</a></li>
+                <li><a href="#" className="hover:text-white transition">Terms</a></li>
+                <li><a href="#" className="hover:text-white transition">Contact</a></li>
+              </ul>
             </div>
           </div>
-        </footer>
-          {previewModalTemplate && ModalComponent && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-             <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
-                <div className="flex items-center justify-between p-4 border-b">
-                   <div>
-                      <h2 className="text-xl font-bold">{selectedModalTemplateData?.name}</h2>
-                      <p className="text-sm text-gray-500">{selectedModalTemplateData?.description}</p>
-                   </div>
-                   <button onClick={() => setPreviewModalTemplate(null)} className="p-2 hover:bg-gray-100 rounded-full">✕</button>
-                </div>
-                <div className="flex-1 overflow-auto bg-gray-100 p-8">
-                   <div className="mx-auto shadow-lg bg-white max-w-[210mm] min-h-[297mm]">
-                      <ModalComponent data={{
-                        personalInfo: { fullName: "Alex Morgan", email: "alex@example.com", phone: "(555) 123-4567", location: "New York, NY", linkedIn: "linkedin.com/in/alex" },
-                        professionalSummary: "Experienced professional with a demonstrated history of working in the industry.",
-                        experience: [{ id: "1", company: "Tech Solutions Inc.", position: "Senior Manager", startDate: "2020", endDate: "Present", currentlyWorking: true, description: "Leading a team of 15 developers." }],
-                        education: [{ id: "1", school: "State University", degree: "Bachelor of Science", field: "Computer Science", graduationDate: "2018" }],
-                        skills: [{id:"1", name:"Leadership"}, {id:"2", name:"Project Management"}],
-                        template: previewModalTemplate,
-                        settings: { themeColor: 'blue', font: 'sans' }
-                      }} />
-                   </div>
-                </div>
-                <div className="p-4 border-t flex justify-end gap-3 bg-white">
-                   <button onClick={() => setPreviewModalTemplate(null)} className="px-6 py-2 border rounded-lg hover:bg-gray-50">Close</button>
-                   <Link href={`/resume?template=${previewModalTemplate}`} className="px-6 py-2 bg-[#232136] text-white rounded-lg hover:bg-[#3a3758] flex items-center">Use This Template</Link>
-                </div>
-             </div>
+          <div className="border-t border-primary/20 pt-8">
+            <p className="text-center text-sm">&copy; 2026 LeadWise Foundation.</p>
           </div>
-        )}
+        </div>
+      </footer>
+
+      {previewModalTemplate && ModalComponent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+           <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+              <div className="flex items-center justify-between p-4 border-b">
+                 <div>
+                    <h2 className="text-xl font-bold">{previewModalTemplate.name}</h2>
+                    <p className="text-sm text-gray-500">{previewModalTemplate.description}</p>
+                 </div>
+                 <button onClick={() => setPreviewModalTemplate(null)} className="p-2 hover:bg-gray-100 rounded-full">✕</button>
+              </div>
+              <div className="flex-1 overflow-auto bg-gray-100 p-8">
+                 <div className="mx-auto shadow-lg bg-white max-w-[210mm] min-h-[297mm]">
+                    <ModalComponent data={{
+                      personalInfo: { fullName: "Alex Morgan", email: "alex@example.com", phone: "(555) 123-4567", location: "New York, NY", linkedIn: "linkedin.com/in/alex" },
+                      professionalSummary: "Experienced professional with a demonstrated history of working in the industry.",
+                      experience: [{ id: "1", company: "Tech Solutions Inc.", position: "Senior Manager", startDate: "2020", endDate: "Present", currentlyWorking: true, description: "Leading a team of 15 developers." }],
+                      education: [{ id: "1", school: "State University", degree: "Bachelor of Science", field: "Computer Science", graduationDate: "2018" }],
+                      skills: [{id:"1", name:"Leadership"}, {id:"2", name:"Project Management"}],
+                      template: previewModalTemplate.id,
+                      settings: { themeColor: 'blue', font: 'sans' }
+                    }} />
+                 </div>
+              </div>
+              <div className="p-4 border-t flex justify-end gap-3 bg-white">
+                 <button onClick={() => setPreviewModalTemplate(null)} className="px-6 py-2 border rounded-lg hover:bg-gray-50">Close</button>
+                 <Link href={`/resume?template=${previewModalTemplate.id}`} className="px-6 py-2 bg-[#232136] text-white rounded-lg hover:bg-[#3a3758] flex items-center">Use This Template</Link>
+              </div>
+           </div>
+        </div>
+      )}
     </>
   );
 }
