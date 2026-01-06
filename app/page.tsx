@@ -1,44 +1,39 @@
 'use client';
 import React, { useState } from "react";
 import { Layout, FileText, PenTool } from "lucide-react";
-import dynamic from 'next/dynamic';
+import Link from "next/link";
 import { templates } from "./components/Editor";
-
-// Dynamically import editor components to avoid hydration mismatch with localStorage
-const ResumeEditorView = dynamic(() => import('./components/Editor').then(mod => mod.ResumeEditorView), { ssr: false });
-const CoverLetterEditorView = dynamic(() => import('./components/Editor').then(mod => mod.CoverLetterEditorView), { ssr: false });
 
 // =======================
 // PAGE COMPONENT
 // =======================
 
 export default function IndexPage() {
-  // State for navigation
-  const [currentView, setCurrentView] = useState<"templates" | "resume" | "cover-letter">("templates");
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
+  const [previewModalTemplate, setPreviewModalTemplate] = useState<string | null>(null);
+  
+  const selectedModalTemplateData = templates.find(t => t.id === previewModalTemplate);
+  const ModalComponent = selectedModalTemplateData?.resumeComponent;
 
   return (
     <>
       {/* Site-wide Navigation */}
-      {currentView === "templates" && (
         <nav className="bg-[#232136] sticky top-0 z-40 shadow-sm text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <a href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
               <img src="/leadwise-logo.svg" alt="LeadWise" className="w-10 h-10 rounded-lg" />
               <span className="font-bold text-xl">LeadWise Foundation</span>
-            </a>
+             </Link>
             <div className="flex items-center gap-6 text-sm font-medium">
-              <a href="/" className="text-gray-300 hover:text-white transition">Home</a>
-              <button onClick={() => setCurrentView("templates")} className="text-white font-semibold">Templates</button>
-              <a href="/courses" className="text-gray-300 hover:text-white transition">Courses</a>
+              <Link href="/" className="text-white font-semibold transition">Home</Link>
+              <Link href="#templates" className="text-gray-300 hover:text-white transition">Templates</Link>
+              <a href="https://services.letsleadwise.org/courses" className="text-gray-300 hover:text-white transition">Courses</a>
             </div>
-          </div>
+           </div>
         </nav>
-      )}
+    
 
       {/* Hero Section */}
-      {currentView === "templates" && (
-        <section className="relative min-h-[60vh] flex flex-col items-center justify-center bg-[#232136] text-white text-center px-4 py-32">
+       <section className="relative min-h-[60vh] flex flex-col items-center justify-center bg-[#232136] text-white text-center px-4 py-32">
           <div className="max-w-3xl mx-auto z-10">
             <img src="/leadwise-logo.svg" alt="LeadWise Logo" className="mx-auto mb-6 h-16 w-16 bg-white/10 rounded-full p-2" />
             <h1 className="text-5xl sm:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">
@@ -50,77 +45,57 @@ export default function IndexPage() {
               Our programs focus on providing the essential skills needed in today’s job market, fostering both personal and professional growth.  
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
+               <Link
+                href="/resume"
                 className="bg-[#fac0ab] hover:bg-opacity-90 text-[#232136] font-bold px-8 py-3 rounded shadow-lg transition text-lg flex items-center justify-center gap-2"
-                onClick={() => setCurrentView("resume")}
+               
               >
                 <PenTool size={20} /> Build Resume
-              </button>
-              <button
+               </Link>
+              <Link
+                href="/cover-letter" 
                 className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3 rounded shadow-lg transition text-lg flex items-center justify-center gap-2"
-                onClick={() => setCurrentView("cover-letter")}
+               
               >
                 <FileText size={20} /> Cover Letter
-              </button>
+            </Link>
             </div>
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-indigo-900 opacity-80 pointer-events-none"></div>
         </section>
-      )}
+   
 
       {/* Template Selection */}
-      {currentView === "templates" && (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+        <section id="templates" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-4xl font-bold text-[#232136] mb-8 text-center">Take advantage of our free ATS resume and cover letter builders to equip yourself with the tools necessary for career success.</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {templates.map((template) => (
                 <div
                   key={template.id}
-                  className={`rounded-xl border-2 ${selectedTemplateId === template.id ? "border-[#232136] shadow-xl" : "border-gray-200"} bg-gray-50 p-6 flex flex-col items-center text-center transition`}
-                  onClick={() => setSelectedTemplateId(template.id)}
-                  style={{ cursor: "pointer" }}
+                  className="rounded-xl border-2 border-gray-200 bg-gray-50 p-6 flex flex-col items-center text-center transition hover:border-[#fac0ab] hover:shadow-lg"
                 >
                   <div className={`w-12 h-12 rounded-full mb-4 flex items-center justify-center ${template.color}`}>
                     <Layout size={28} className="text-white" />
                   </div>
                   <h3 className="font-bold text-lg mb-2">{template.name}</h3>
                   <p className="text-gray-600 text-sm mb-4">{template.description}</p>
-                  <button
-                    className={`mt-auto px-6 py-2 rounded font-bold ${
-                      selectedTemplateId === template.id ?
-                        "bg-[#232136] text-white" :
-                        "bg-white text-[#232136] border border-[#232136]"
-                    }`}
-                    onClick={() => setCurrentView("resume")}
-                  >
-                    Use Template
-                  </button>
+                  <div className="flex gap-3 w-full mt-auto">
+                    <button onClick={() => setPreviewModalTemplate(template.id)} className="flex-1 border border-gray-300 hover:border-[#4b486c] hover:text-[#232136] text-gray-600 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">Preview</button>
+                    <Link href={`/resume?template=${template.id}`} className="flex-1 bg-[#232136] hover:bg-[#3a3758] text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm flex items-center justify-center">Use</Link>
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 gap-3 w-full">
+                     <Link href={`/resume?template=${template.id}`} className="text-xs text-center text-gray-500 hover:text-[#232136] hover:underline">Resume</Link>
+                     <Link href={`/cover-letter?template=${template.id}`} className="text-xs text-center text-gray-500 hover:text-[#232136] hover:underline">Cover Letter</Link>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
-      )}
-
-      {/* Resume Editor */}
-      {currentView === "resume" && (
-        <ResumeEditorView
-          templateId={selectedTemplateId}
-          onBack={() => setCurrentView("templates")}
-        />
-      )}
-
-      {/* Cover Letter Editor */}
-      {currentView === "cover-letter" && (
-        <CoverLetterEditorView
-          templateId={selectedTemplateId}
-          onBack={() => setCurrentView("templates")}
-        />
-      )}
-
+    
       {/* FAQ Section */}
-      {currentView === "templates" && (
+     
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-4xl font-bold text-[#232136] mb-12 text-center">
@@ -156,10 +131,10 @@ export default function IndexPage() {
             </div>
           </div>
         </section>
-      )}
+     
 
       {/* Impact Section */}
-      {currentView === "templates" && (
+     
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white" id="impact">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold text-[#232136] mb-6">Empower Your Career Journey</h2>
@@ -171,10 +146,10 @@ export default function IndexPage() {
             </p>
           </div>
         </section>
-      )}
+  
 
       {/* Footer */}
-      {currentView === "templates" && (
+     
         <footer className="bg-[#232136] text-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
@@ -222,7 +197,36 @@ export default function IndexPage() {
             </div>
           </div>
         </footer>
-      )}
+          {previewModalTemplate && ModalComponent && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+             <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+                <div className="flex items-center justify-between p-4 border-b">
+                   <div>
+                      <h2 className="text-xl font-bold">{selectedModalTemplateData?.name}</h2>
+                      <p className="text-sm text-gray-500">{selectedModalTemplateData?.description}</p>
+                   </div>
+                   <button onClick={() => setPreviewModalTemplate(null)} className="p-2 hover:bg-gray-100 rounded-full">✕</button>
+                </div>
+                <div className="flex-1 overflow-auto bg-gray-100 p-8">
+                   <div className="mx-auto shadow-lg bg-white max-w-[210mm] min-h-[297mm]">
+                      <ModalComponent data={{
+                        personalInfo: { fullName: "Alex Morgan", email: "alex@example.com", phone: "(555) 123-4567", location: "New York, NY", linkedIn: "linkedin.com/in/alex" },
+                        professionalSummary: "Experienced professional with a demonstrated history of working in the industry.",
+                        experience: [{ id: "1", company: "Tech Solutions Inc.", position: "Senior Manager", startDate: "2020", endDate: "Present", currentlyWorking: true, description: "Leading a team of 15 developers." }],
+                        education: [{ id: "1", school: "State University", degree: "Bachelor of Science", field: "Computer Science", graduationDate: "2018" }],
+                        skills: [{id:"1", name:"Leadership"}, {id:"2", name:"Project Management"}],
+                        template: previewModalTemplate,
+                        settings: { themeColor: 'blue', font: 'sans' }
+                      }} />
+                   </div>
+                </div>
+                <div className="p-4 border-t flex justify-end gap-3 bg-white">
+                   <button onClick={() => setPreviewModalTemplate(null)} className="px-6 py-2 border rounded-lg hover:bg-gray-50">Close</button>
+                   <Link href={`/resume?template=${previewModalTemplate}`} className="px-6 py-2 bg-[#232136] text-white rounded-lg hover:bg-[#3a3758] flex items-center">Use This Template</Link>
+                </div>
+             </div>
+          </div>
+        )}
     </>
   );
 }
