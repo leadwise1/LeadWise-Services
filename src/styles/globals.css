@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -24,7 +23,7 @@
     --border: 217.2 32.6% 17.5%;
   }
 }
-
+ 
 @layer base {
   html {
     font-feature-settings: "rlig" 1, "calt" 1;
