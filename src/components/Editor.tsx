@@ -945,33 +945,32 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
   const previewRef = useRef<HTMLDivElement>(null);
   
   // Initial state with Safety Merge for old data
-  const [resume, setResume] = useState<ResumeData>(() => {
+  const [resume, setResume] = useState<ResumeData>({
+    personalInfo: { fullName: "", email: "", phone: "", location: "", linkedIn: "" },
+    professionalSummary: "",
+    experience: [],
+    education: [],
+    skills: [],
+    template: templateId,
+    settings: { themeColor: 'blue', font: 'sans' }
+  });
+
+  useEffect(() => {
     const saved = getResumeFromStorage();
     const defaultSettings: DesignSettings = { themeColor: 'blue', font: 'sans' };
     
-    // Safety Merge: If saved data lacks arrays (old data bug), force them to exist
     if (saved) {
-        return {
-            ...saved,
-            settings: saved.settings || defaultSettings,
-            experience: saved.experience || [],
-            education: saved.education || [],
-            skills: saved.skills || [],
-            professionalSummary: saved.professionalSummary || "",
-            personalInfo: saved.personalInfo || { fullName: "", email: "", phone: "", location: "", linkedIn: "" }
-        }
+      setResume({
+        ...saved,
+        settings: saved.settings || defaultSettings,
+        experience: saved.experience || [],
+        education: saved.education || [],
+        skills: saved.skills || [],
+        professionalSummary: saved.professionalSummary || "",
+        personalInfo: saved.personalInfo || { fullName: "", email: "", phone: "", location: "", linkedIn: "" }
+      });
     }
-
-    return {
-      personalInfo: { fullName: "", email: "", phone: "", location: "", linkedIn: "" },
-      professionalSummary: "",
-      experience: [],
-      education: [],
-      skills: [],
-      template: templateId,
-      settings: defaultSettings
-    };
-  });
+  }, []);
 
   const SelectedTemplate = templates.find(t => t.id === activeTemplateId)?.resumeComponent || ModernBlueTemplate;
 
@@ -1172,25 +1171,28 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
 
 export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () => void }> = ({ templateId, onBack }) => {
     const [activeTemplateId, setActiveTemplateId] = useState(templateId);
-    const [data, setData] = useState<CoverLetterData>(() => {
+    const [data, setData] = useState<CoverLetterData>({
+        personalInfo: { fullName: "", email: "", phone: "", location: "", linkedIn: "" },
+        recipient: { name: "", title: "", company: "", address: "" },
+        content: { greeting: "Dear Hiring Manager,", body: "I am writing...", closing: "Sincerely," },
+        template: templateId,
+        settings: { themeColor: 'blue', font: 'sans' }
+    });
+
+    useEffect(() => {
         const saved = getCoverLetterFromStorage();
         const defaultInfo = getStoredPersonalInfo();
         const defaultSettings: DesignSettings = { themeColor: 'blue', font: 'sans' };
 
         if (saved) {
-             return {
+             setData({
                  ...saved,
                  settings: saved.settings || defaultSettings
-             }
+             });
+        } else if (defaultInfo.fullName) {
+             setData(prev => ({ ...prev, personalInfo: defaultInfo }));
         }
-        return {
-            personalInfo: defaultInfo.fullName ? defaultInfo : { fullName: "", email: "", phone: "", location: "", linkedIn: "" },
-            recipient: { name: "", title: "", company: "", address: "" },
-            content: { greeting: "Dear Hiring Manager,", body: "I am writing...", closing: "Sincerely," },
-            template: templateId,
-            settings: defaultSettings
-        };
-    });
+    }, []);
 
     useEffect(() => { saveCoverLetterToStorage(data); }, [data]);
     const SelectedTemplate = templates.find(t => t.id === activeTemplateId)?.coverLetterComponent || ModernBlueCoverLetter;
