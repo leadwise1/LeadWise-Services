@@ -1,18 +1,13 @@
 'use client';
-import React, { useState } from "react";
-import { Layout, FileText, PenTool } from "lucide-react";
+import React from "react";
+import { FileText, Cloud, CheckCircle, ArrowRight, Cpu } from "lucide-react";
 import Link from "next/link";
-import { templates, Template } from "@/components/Editor";
 
 // =======================
 // PAGE COMPONENT
 // =======================
 
 export default function IndexPage() {
-  const [previewModalTemplate, setPreviewModalTemplate] = useState<Template | null>(null);
-
-  const ModalComponent = previewModalTemplate?.resumeComponent;
-
   return (
     <>
       {/* Site-wide Navigation */}
@@ -24,133 +19,190 @@ export default function IndexPage() {
           </Link>
           <div className="flex items-center gap-6 text-sm font-medium">
             <Link href="/" className="text-white font-semibold transition">Home</Link>
-            <Link href="#templates" className="text-gray-300 hover:text-white transition">Templates</Link>
+            <Link href="/resume" className="text-gray-300 hover:text-white transition">Templates</Link>
             <Link href="/courses" className="text-gray-300 hover:text-white transition">Courses</Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] flex flex-col items-center justify-center bg-[#232136] text-white text-center px-4 py-32">
-        <div className="max-w-3xl mx-auto z-10">
-          <img src="/leadwise-logo.svg" alt="LeadWise Logo" className="mx-auto mb-6 h-16 w-16 bg-white/10 rounded-full p-2" />
-          <h1 className="text-5xl sm:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-           Bridging the Gap <span className="text-[#fac0ab]">Between</span><br />
-            Potential & <span className="text-[#fac0ab]">Opportunity</span>.
+      <section className="relative min-h-[75vh] flex flex-col items-center justify-center bg-[#232136] text-white text-center px-4 py-20">
+        <div className="max-w-5xl mx-auto z-10">
+          <img src="/leadwise-logo.svg" alt="LeadWise Logo" className="mx-auto mb-8 h-20 w-20 bg-white/10 rounded-2xl p-3 shadow-2xl" />
+          
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold mb-8 leading-tight drop-shadow-lg">
+           Turn Ambition into Action with <br/>
+           <span className="text-[#fac0ab]">Industry-Verified Technology</span>.
           </h1>
-          <p className="text-lg sm:text-2xl mb-10 text-indigo-100 font-light">
-           As a proud Google Cloud & Workspace Partner, LeadWise is dedicated to equipping individuals with the technical skills and career confidence needed to overcome challenges and confront inequities <br />
-            Our programs focus on providing the essential skills needed in today’s job market, fostering both personal and professional growth.  
+          
+          <p className="text-xl sm:text-2xl mb-10 text-indigo-100 font-light tracking-wide">
+           We don’t just teach skills; we build measurable economic pathways.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          
+          <div className="max-w-3xl mx-auto text-gray-300 text-lg leading-relaxed space-y-6 font-light">
+             <p>
+               At LeadWise Foundation, we believe talent is universal, but opportunity is not. As a proud Google Cloud and Workspace Partner, we exist to bridge that gap. We transform program participants into skilled catalysts for workforce transformation.
+             </p>
+             <p>
+               We move beyond the theory of "learning to code" and focus on the reality of "landing the job." By combining high-growth certifications with data-driven career tools, we provide the infrastructure you need to future-proof your career—completely free of charge.
+             </p>
+          </div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#232136]/50 to-[#232136] pointer-events-none"></div>
+      </section>
+
+      {/* Service 1: Technical Upskilling */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+           <div className="order-2 lg:order-1">
+             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 text-sm font-bold mb-8 border border-blue-100">
+               <Cloud size={18} /> Service 1: Technical Upskilling
+             </div>
+             <h2 className="text-4xl sm:text-5xl font-bold text-[#232136] mb-6 leading-tight">
+               Master the Cloud. <br/>Prove Your Expertise.
+             </h2>
+             <p className="text-lg text-gray-600 mb-10 leading-relaxed">
+               In today’s digital economy, validation matters. We provide access to Free Google Certification Courses that carry weight with top employers globally. Whether you are starting from scratch or leveling up, our curriculum is designed to make you job-ready from day one.
+             </p>
+             <div className="space-y-8">
+               {[
+                 { title: "Become a Google Cloud Pro", desc: "Gain hands-on experience with the infrastructure powering the modern web." },
+                 { title: "Google Workspace Mastery", desc: "Validate your proficiency in the essential collaboration tools used by Fortune 500 companies." },
+                 { title: "Industry-Recognized Credentials", desc: "Earn badges and certificates that act as a verifiable signal of your competence to hiring managers." }
+               ].map((item, i) => (
+                 <div key={i} className="flex gap-5">
+                   <div className="mt-1 bg-[#fac0ab]/20 rounded-full p-2 h-fit text-[#e08e6d]">
+                     <CheckCircle size={20} />
+                   </div>
+                   <div>
+                     <h3 className="font-bold text-[#232136] text-xl mb-2">{item.title}</h3>
+                     <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+                   </div>
+                 </div>
+               ))}
+             </div>
+             <div className="mt-12">
+               <Link href="/courses" className="inline-flex items-center gap-2 text-[#232136] font-bold text-lg border-b-2 border-[#fac0ab] hover:text-blue-600 hover:border-blue-600 transition-all pb-1">
+                 Explore Free Courses <ArrowRight size={20} />
+               </Link>
+             </div>
+           </div>
+           
+           <div className="order-1 lg:order-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-10 h-full min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden border border-blue-100 shadow-sm">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-200/20 rounded-full blur-3xl -ml-16 -mb-16"></div>
+              
+              <Cloud size={120} className="text-blue-600 mb-8 drop-shadow-xl" strokeWidth={1} />
+              <div className="text-center z-10">
+                 <div className="text-3xl font-bold text-[#232136] mb-2">Google Cloud</div>
+                 <div className="text-blue-600 font-medium tracking-widest uppercase text-sm">Partner Program</div>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* Service 2: Career Acceleration Tools */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-50 border-y border-gray-200">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+           <div className="bg-white rounded-3xl p-10 h-full min-h-[500px] flex flex-col items-center justify-center relative overflow-hidden border border-gray-200 shadow-lg lg:order-1">
+              <div className="relative w-full max-w-sm bg-white shadow-2xl border border-gray-100 rounded-lg overflow-hidden transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                 <div className="h-4 bg-[#232136] w-full"></div>
+                 <div className="p-6 space-y-4">
+                    <div className="flex gap-4 items-center border-b border-gray-100 pb-4">
+                       <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                       <div className="space-y-2 flex-1">
+                          <div className="h-3 bg-gray-800 w-3/4 rounded"></div>
+                          <div className="h-2 bg-gray-400 w-1/2 rounded"></div>
+                       </div>
+                    </div>
+                    <div className="space-y-2">
+                       <div className="h-2 bg-gray-200 w-full rounded"></div>
+                       <div className="h-2 bg-gray-200 w-full rounded"></div>
+                       <div className="h-2 bg-gray-200 w-5/6 rounded"></div>
+                    </div>
+                    <div className="pt-4">
+                       <div className="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">ATS Score: 98%</div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+
+           <div className="lg:order-2">
+             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-50 text-purple-700 text-sm font-bold mb-8 border border-purple-100">
+               <Cpu size={18} /> Service 2: Career Acceleration Tools
+             </div>
+             <h2 className="text-4xl sm:text-5xl font-bold text-[#232136] mb-6 leading-tight">
+               Beat the Bots. <br/>Get the Interview.
+             </h2>
+             <p className="text-lg text-gray-600 mb-10 leading-relaxed">
+               You have the skills; now ensure your application gets seen. In the modern hiring landscape, up to 75% of resumes are rejected by an Applicant Tracking System (ATS) before a human ever reads them. We arm you with the technology to bypass these digital gatekeepers.
+             </p>
+             <p className="text-gray-700 font-medium mb-8 text-lg">
+               Our Free ATS-Optimized Resume Builder is engineered to navigate hiring algorithms while showcasing your unique story.
+             </p>
+             
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+               {[
+                 { title: "Pass the Screen", desc: "Built-in formatting logic ensures your resume parses correctly by recruitment software." },
+                 { title: "6 Professional Templates", desc: "Choose from six distinct, polished designs that balance aesthetic appeal with keyword optimization." },
+                 { title: "Total Personalization", desc: "Customize every section to highlight your specific certifications and project experience." },
+                 { title: "Instant Cover Letters", desc: "Stop staring at a blank page. Generate persuasive, tailored cover letters that grab recruiter attention." }
+               ].map((item, i) => (
+                 <div key={i} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:border-purple-200 transition-colors">
+                   <h3 className="font-bold text-[#232136] mb-2 text-lg">{item.title}</h3>
+                   <p className="text-sm text-gray-600 leading-relaxed">{item.desc}</p>
+                 </div>
+               ))}
+             </div>
+
+             <div className="mt-12">
+               <Link href="/resume" className="inline-flex items-center gap-2 text-[#232136] font-bold text-lg border-b-2 border-[#fac0ab] hover:text-purple-600 hover:border-purple-600 transition-all pb-1">
+                 Build Your Resume <ArrowRight size={20} />
+               </Link>
+             </div>
+           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-32 px-4 bg-[#232136] text-center relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600 rounded-full blur-[100px]"></div>
+           <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600 rounded-full blur-[100px]"></div>
+        </div>
+        
+        <div className="max-w-4xl mx-auto relative z-10">
+          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-8">Your Pathway Starts Here.</h2>
+          <p className="text-xl sm:text-2xl text-indigo-100 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
+            Don't let a lack of resources stand between you and your future. Join a community dedicated to economic mobility and workforce transformation.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <Link
+              href="/courses"
+              className="bg-[#fac0ab] hover:bg-[#ffbca0] text-[#232136] font-bold px-10 py-5 rounded-xl shadow-xl transition transform hover:-translate-y-1 text-lg flex items-center justify-center gap-3"
+            >
+              <Cloud size={24} /> Start Your Free Google Certification
+            </Link>
             <Link
               href="/resume"
-              className="bg-[#fac0ab] hover:bg-opacity-90 text-[#232136] font-bold px-8 py-3 rounded shadow-lg transition text-lg flex items-center justify-center gap-2"
+              className="bg-white/10 hover:bg-white/20 text-white font-bold px-10 py-5 rounded-xl shadow-xl transition transform hover:-translate-y-1 text-lg flex items-center justify-center gap-3 backdrop-blur-md border border-white/20"
             >
-              <PenTool size={20} /> Build Resume
+              <FileText size={24} /> Build Your ATS-Ready Resume
             </Link>
-            <Link
-              href="/cover-letter"
-              className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3 rounded shadow-lg transition text-lg flex items-center justify-center gap-2"
-            >
-              <FileText size={20} /> Cover Letter
-            </Link>
-          </div>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-indigo-900 opacity-80 pointer-events-none"></div>
-      </section>
-
-      {/* Template Selection */}
-      <section id="templates" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#232136] mb-8 text-center">Take advantage of our free ATS resume and cover letter builders to equip yourself with the tools necessary for career success.</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {templates.map((template) => (
-              <div
-                key={template.id}
-                className="rounded-xl border-2 border-gray-200 bg-gray-50 p-6 flex flex-col items-center text-center transition hover:border-[#fac0ab] hover:shadow-lg"
-              >
-                <div className={`w-12 h-12 rounded-full mb-4 flex items-center justify-center ${template.color}`}>
-                  <Layout size={28} className="text-white" />
-                </div>
-                <h3 className="font-bold text-lg mb-2">{template.name}</h3>
-                <p className="text-gray-600 text-sm mb-4">{template.description}</p>
-                
-                <div className="flex gap-3 w-full mt-auto">
-                  <button onClick={() => setPreviewModalTemplate(template)} className="flex-1 border border-gray-300 hover:border-[#4b486c] hover:text-[#232136] text-gray-600 font-semibold py-2 px-4 rounded-lg transition-colors text-sm">Preview</button>
-                  <Link href={`/resume?template=${template.id}`} className="flex-1 bg-[#232136] hover:bg-[#3a3758] text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm flex items-center justify-center">Use</Link>
-                </div>
-                <div className="mt-3 grid grid-cols-2 gap-3 w-full">
-                   <Link href={`/resume?template=${template.id}`} className="text-xs text-center text-gray-500 hover:text-[#232136] hover:underline">Resume</Link>
-                   <Link href={`/cover-letter?template=${template.id}`} className="text-xs text-center text-gray-500 hover:text-[#232136] hover:underline">Cover Letter</Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#232136] mb-12 text-center">
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-6">
-            {[
-              {
-                q: "Can I get involved other than donating?",
-                a: "Yes! We welcome partners and mentors. You can join our community to connect with change-makers or subscribe to our newsletter for leadership insights.",
-              },
-              {
-                q: "Who are the programs designed for?",
-                a: "Our programs target a broad range of professionals, specifically focusing on women and marginalized voices seeking to advance their trajectories in STEM and corporate leadership.",
-              },
-              {
-                q: 'What is the "Leaky Pipeline"?',
-                a: "We address systemic barriers that cause talented individuals from marginalized backgrounds to drop out of STEM and leadership paths before reaching their full potential.",
-              },
-              {
-                q: "Do you offer customized training for organizations?",
-                a: "Yes. We partner with organizations to address glass ceilings through tailored workshops and consultancy.",
-              },
-            ].map((faq, index) => (
-              <div
-                key={index}
-                className="border border-gray-200 rounded-lg p-6 bg-white hover:shadow-md transition-shadow duration-200"
-              >
-              <h3 className="font-bold text-lg mb-3">{faq.q}</h3>
-                <p className="text-gray-700">{faq.a}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#232136] text-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="border-t border-primary/20 pt-8">
-            <p className="text-center text-sm">&copy; 2026 LeadWise Foundation.</p>
-          </div>
+      <footer className="bg-[#1a1829] text-gray-400 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+           <div className="flex items-center gap-2">
+              <img src="/leadwise-logo.svg" alt="LeadWise" className="w-8 h-8 rounded opacity-80" />
+              <span className="font-semibold text-gray-200">LeadWise Foundation</span>
+           </div>
+           <p className="text-sm">&copy; {new Date().getFullYear()} LeadWise Foundation. All rights reserved.</p>
         </div>
       </footer>
-
-      {previewModalTemplate && ModalComponent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-           <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
-              <div className="flex items-center justify-between p-4 border-b">
-                 <h2 className="text-xl font-bold">{previewModalTemplate.name}</h2>
-                 <button onClick={() => setPreviewModalTemplate(null)} className="p-2 hover:bg-gray-100 rounded-full">✕</button>
-              </div>
-              <div className="flex-1 overflow-auto bg-gray-100 p-8">
-                 <div className="mx-auto shadow-lg bg-white max-w-[210mm] min-h-[297mm]">
-                    <ModalComponent data={{ personalInfo: { fullName: "Alex Morgan", email: "alex@example.com", phone: "(555) 123-4567", location: "New York, NY", linkedIn: "linkedin.com/in/alex" }, professionalSummary: "Experienced professional...", experience: [], education: [], skills: [], template: previewModalTemplate.id, settings: { themeColor: 'blue', font: 'sans' } }} />
-                 </div>
-              </div>
-           </div>
-        </div>
-      )}
     </>
   );
 }
