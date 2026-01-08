@@ -997,31 +997,59 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
   return (
     <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
       {/* CRITICAL PRINT STYLES */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        @media print {
-          @page { 
-            margin: 0; 
-            size: auto; 
-          }
-          body { 
-            background: white; 
-            -webkit-print-color-adjust: exact; 
-            print-color-adjust: exact; 
-          }
-          .no-print { display: none !important; }
-          /* Reset the grid to basic block for printing */
-          .grid { display: block !important; padding: 0 !important; margin: 0 !important; }
-          /* Hide the editor column */
-          .grid > div:first-child { display: none !important; }
-          /* Force the preview column to take full width */
-          .grid > div:last-child { display: block !important; width: 100% !important; height: auto !important; position: absolute !important; top: 0 !important; left: 0 !important; margin: 0 !important; padding: 0 !important; }
-          /* Reset container styles */
-          .print-container { overflow: visible !important; height: auto !important; box-shadow: none !important; border: none !important; background: white !important; padding: 0 !important; }
-          /* Allow preview to expand naturally */
-          .print-scale { transform: none !important; width: 100% !important; min-height: auto !important; height: auto !important; box-shadow: none !important; }
+<style 
+  dangerouslySetInnerHTML={{ 
+    __html: `
+      @media print {
+        @page { 
+          margin: 0; 
+          size: auto; 
         }
-      `}} />
-      
+        body { 
+          background: white !important; 
+          -webkit-print-color-adjust: exact; 
+          color-adjust: exact;  /* Modern property (replaces print-color-adjust) */
+        }
+        .no-print { 
+          display: none !important; 
+        }
+        .grid { 
+          display: block !important; 
+          padding: 0 !important; 
+          margin: 0 !important; 
+        }
+        .grid > div:first-child { 
+          display: none !important; 
+        }
+        .grid > div:last-child { 
+          display: block !important; 
+          width: 100% !important; 
+          height: auto !important; 
+          position: absolute !important; 
+          top: 0 !important; 
+          left: 0 !important; 
+          margin: 0 !important; 
+          padding: 0 !important; 
+        }
+        .print-container { 
+          overflow: visible !important; 
+          height: auto !important; 
+          box-shadow: none !important; 
+          border: none !important; 
+          background: white !important; 
+          padding: 0 !important; 
+        }
+        .print-scale { 
+          transform: none !important; 
+          width: 100% !important; 
+          min-height: auto !important; 
+          height: auto !important; 
+          box-shadow: none !important; 
+        }
+      }
+    ` 
+  }} 
+/>
       <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
           <a href="https://letsleadwise.org" className="flex items-center gap-2">
