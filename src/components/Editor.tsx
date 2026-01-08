@@ -1025,7 +1025,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
   return (
     <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
       {/* CRITICAL PRINT STYLES */}
-      <style dangerouslySetInnerHTML={{ __html: printStyles }} />
+      <style>{printStyles}</style>
       
       <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
@@ -1218,7 +1218,7 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
 
     return (
         <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
-             <style dangerouslySetInnerHTML={{ __html: printStyles }} />
+             <style>{printStyles}</style>
              <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
                <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
                   <a href="https://letsleadwise.org" className="flex items-center gap-2">
