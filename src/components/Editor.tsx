@@ -999,8 +999,15 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
       {/* CRITICAL PRINT STYLES */}
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
-          @page { margin: 0; size: auto; }
-          body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          @page { 
+            margin: 0; 
+            size: auto; 
+          }
+          body { 
+            background: white; 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact; 
+          }
           .no-print { display: none !important; }
           /* Reset the grid to basic block for printing */
           .grid { display: block !important; padding: 0 !important; margin: 0 !important; }
@@ -1208,8 +1215,15 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
         <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
              <style dangerouslySetInnerHTML={{ __html: `
                 @media print {
-                  @page { margin: 0; size: auto; }
-                  body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                  @page { 
+                    margin: 0; 
+                    size: auto; 
+                  }
+                  body { 
+                    background: white; 
+                    -webkit-print-color-adjust: exact; 
+                    print-color-adjust: exact; 
+                  }
                   .no-print { display: none !important; }
                   .grid { display: block !important; padding: 0 !important; margin: 0 !important; }
                   .grid > div:first-child { display: none !important; }
