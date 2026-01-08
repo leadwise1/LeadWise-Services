@@ -1,15 +1,23 @@
 [build]
-  command = "npm run build:client"
+  command = "npm run build"
+  publish = ".next"
   functions = "netlify/functions"
-  publish = "dist/spa"
-
 
 [functions]
+  # Essential for your existing express server function to find 'express'
   external_node_modules = ["express"]
   node_bundler = "esbuild"
-  
-[[redirects]]
-  force = true
-  from = "/api/*"
-  status = 200
-  to = "/.netlify/functions/api/:splat"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# --- MIGRATION NOTE ---
+# Next.js handles API routes at /api/ natively. 
+# If you have NOT migrated your logic to Next.js yet and want to use 
+# your old 'netlify/functions/api.ts' for everything, uncomment the redirect below.
+
+# [[redirects]]
+#   force = true
+#   from = "/api/*"
+#   status = 200
+#   to = "/.netlify/functions/api/:splat"

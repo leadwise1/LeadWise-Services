@@ -74,7 +74,7 @@ export interface CoverLetterData {
   settings: DesignSettings;
 }
 
-export interface TemplateConfig {
+export interface Template {
   id: string;
   name: string;
   description: string;
@@ -802,7 +802,7 @@ const AcademicProfessionalCoverLetter: React.FC<{ data: CoverLetterData }> = ({ 
 // 4. CONFIGURATION MAP
 // ==========================================
 
-export const templates: TemplateConfig[] = [
+export const templates: Template[] = [
   {
     id: "modern-blue",
     name: "Modern Blue",
