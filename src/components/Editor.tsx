@@ -997,7 +997,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
   return (
     <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
       {/* CRITICAL PRINT STYLES */}
-      <style>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media print {
           @page { margin: 0; size: auto; }
           body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -1013,7 +1013,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
           /* Allow preview to expand naturally */
           .print-scale { transform: none !important; width: 100% !important; min-height: auto !important; height: auto !important; box-shadow: none !important; }
         }
-      `}</style>
+      `}} />
       
       <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
@@ -1206,7 +1206,7 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
 
     return (
         <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
-             <style>{`
+             <style dangerouslySetInnerHTML={{ __html: `
                 @media print {
                   @page { margin: 0; size: auto; }
                   body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -1217,7 +1217,7 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
                   .print-container { overflow: visible !important; height: auto !important; box-shadow: none !important; border: none !important; background: white !important; padding: 0 !important; }
                   .print-scale { transform: none !important; width: 100% !important; min-height: auto !important; height: auto !important; box-shadow: none !important; }
                 }
-              `}</style>
+              `}} />
              <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
                <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
                   <a href="https://letsleadwise.org" className="flex items-center gap-2">
