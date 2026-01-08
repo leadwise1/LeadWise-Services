@@ -1,11 +1,9 @@
 'use client';
 import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
 import { 
-  Trash2, Plus, Download, Layout, 
-  ChevronLeft, FileText, PenTool, 
-  Mail, Phone, MapPin, Linkedin, Printer,
-  Palette, Type, CheckCircle
+  Trash2, Plus, FileText, 
+  ChevronLeft, Mail, Phone, MapPin, Linkedin, Printer,
+  Palette, Layout
 } from "lucide-react";
 
 // ==========================================
@@ -586,9 +584,8 @@ const AcademicProfessionalTemplate: React.FC<{ data: ResumeData }> = ({ data }) 
 };
 
 // ==========================================
-// 3. COVER LETTER TEMPLATES (Matched Styles)
+// 3. COVER LETTER TEMPLATES
 // ==========================================
-
 const ModernBlueCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }) => {
   const theme = getTheme(data.settings?.themeColor || 'blue');
   const font = getFont(data.settings?.font || 'sans');
@@ -1036,7 +1033,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
           <div className="h-6 w-px bg-[#4b486c] hidden md:block"></div>
           <div className="flex items-center gap-4">
              <button onClick={onBack} className="flex items-center gap-1 text-gray-300 hover:text-white transition text-sm font-medium"><ChevronLeft size={16} /> Templates</button>
-             <Link href="/courses" className="text-gray-300 hover:text-white transition text-sm font-medium">Courses</Link>
+             <a href="/courses" className="text-gray-300 hover:text-white transition text-sm font-medium">Courses</a>
           </div>
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto justify-end">
@@ -1212,95 +1209,120 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
     const SelectedTemplate = templates.find(t => t.id === activeTemplateId)?.coverLetterComponent || ModernBlueCoverLetter;
     
     // Helpers
-    const updateRecipient = (f: keyof CoverLetterData['recipient'], v: string) => setData(p => ({...p, recipient: {...p.recipient, [f]: v}}));
-    const updateContent = (f: keyof CoverLetterData['content'], v: string) => setData(p => ({...p, content: {...p.content, [f]: v}}));
-    const updateSettings = (f: keyof DesignSettings, v: any) => setData(p => ({...p, settings: {...p.settings, [f]: v}}));
+   const updateRecipient = (f: keyof CoverLetterData['recipient'], v: string) => 
+      setData(p => ({ ...p, recipient: { ...p.recipient, [f]: v } }));
+   const updateContent = (f: keyof CoverLetterData['content'], v: string) => 
+      setData(p => ({ ...p, content: { ...p.content, [f]: v } }));
+   const updateSettings = (f: keyof DesignSettings, v: any) => 
+      setData(p => ({ ...p, settings: { ...p.settings, [f]: v } }));
 
-    return (
-        <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
-             <style dangerouslySetInnerHTML={{ __html: printStyles }} />
-             <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
-               <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
-                  <a href="https://letsleadwise.org" className="flex items-center gap-2">
-                    <img src="/leadwise-logo.svg" alt="LeadWise" className="w-10 h-10 rounded-lg" />
-                    <h1 className="font-bold text-lg hidden sm:inline">LeadWise</h1>
-                  </Link>
-                  <div className="h-6 w-px bg-[#4b486c] hidden md:block"></div>
-                  <div className="flex items-center gap-4">
-                     <button onClick={onBack} className="flex items-center gap-1 text-gray-300 hover:text-white transition text-sm font-medium"><ChevronLeft size={16} /> Templates</button>
-                     <Link href="/courses" className="text-gray-300 hover:text-white transition text-sm font-medium">Courses</Link>
-                  </div>
-               </div>
-               <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-                  <select value={activeTemplateId} onChange={(e) => setActiveTemplateId(e.target.value)} className="bg-[#3a3758] text-white text-sm rounded px-3 py-1 border border-[#4b486c]">
-                    {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                  </select>
-                  <button onClick={() => window.print()} className="bg-[#fac0ab] text-[#232136] px-3 py-1 rounded text-sm font-bold flex items-center gap-2">
-                    <Printer size={16}/> Save PDF
-                  </button>
-               </div>
-             </nav>
-
-             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 max-w-7xl mx-auto">
-               <div className="bg-white rounded-xl shadow-lg p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print">
-                  
-                  {/* DESIGN SETTINGS FOR COVER LETTER */}
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
-                    <div className="flex items-center gap-2 mb-3 text-[#232136] font-bold text-sm uppercase tracking-wider">
-                      <Palette size={16}/> Appearance
-                    </div>
-                    <div className="flex gap-4">
-                       <div className="flex gap-1">
-                          {['blue', 'green', 'purple', 'red', 'black'].map(c => (
-                            <button key={c} onClick={() => updateSettings('themeColor', c)} className={`w-5 h-5 rounded-full border ${data.settings?.themeColor === c ? 'border-gray-900 scale-125' : 'border-transparent'}`} style={{ backgroundColor: c }}/>
-                          ))}
-                       </div>
-                       <div className="h-5 w-px bg-gray-300"></div>
-                       <div className="flex gap-2 text-xs">
-                          {['sans', 'serif', 'mono'].map(f => (
-                            <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 rounded border ${data.settings?.font === f ? 'bg-[#fac0ab]/20 text-[#232136]' : 'bg-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
-                          ))}
-                       </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    <section>
-                      <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Recipient Details</h2>
-                      <div className="space-y-3">
-                        <input className="w-full p-2 border rounded" placeholder="Hiring Manager Name" value={data.recipient.name} onChange={e => updateRecipient('name', e.target.value)} />
-                        <input className="w-full p-2 border rounded" placeholder="Title" value={data.recipient.title} onChange={e => updateRecipient('title', e.target.value)} />
-                        <input className="w-full p-2 border rounded" placeholder="Company" value={data.recipient.company} onChange={e => updateRecipient('company', e.target.value)} />
-                        <textarea className="w-full p-2 border rounded h-20" placeholder="Address" value={data.recipient.address} onChange={e => updateRecipient('address', e.target.value)} />
-                      </div>
-                    </section>
-                    <section>
-                      <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Content</h2>
-                      <div className="space-y-3">
-                         <input className="w-full p-2 border rounded font-medium" placeholder="Greeting" value={data.content.greeting} onChange={e => updateContent('greeting', e.target.value)} />
-                         <textarea className="w-full p-3 border rounded min-h-[300px]" placeholder="Body..." value={data.content.body} onChange={e => updateContent('body', e.target.value)} />
-                         <input className="w-full p-2 border rounded font-medium" placeholder="Closing" value={data.content.closing} onChange={e => updateContent('closing', e.target.value)} />
-                      </div>
-                    </section>
-                  </div>
-               </div>
-
-               <div className="hidden lg:block relative">
-                 <div className="sticky top-24">
-                   <div className="bg-gray-800 text-white text-xs uppercase font-bold py-2 px-4 rounded-t-lg flex justify-between no-print">
-                     <span>Letter Preview</span>
-                     <span className="opacity-50">A4 Size</span>
-                   </div>
-                   <div className="bg-gray-300 p-8 rounded-b-lg shadow-2xl h-[calc(100vh-160px)] overflow-y-auto print-container">
-                      <div className="bg-white shadow-sm min-h-[297mm] w-[210mm] origin-top-left transform scale-[0.45] md:scale-[0.55] xl:scale-[0.65] print-scale">
-                         <SelectedTemplate data={data} />
-                      </div>
-                   </div>
-                 </div>
-               </div>
-             </div>
+return (
+  <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
+    <style dangerouslySetInnerHTML={{ __html: printStyles }} />
+    
+    <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
+        <a href="https://letsleadwise.org" className="flex items-center gap-2">
+          <img src="/leadwise-logo.svg" alt="LeadWise" className="w-10 h-10 rounded-lg" />
+          <h1 className="font-bold text-lg hidden sm:inline">LeadWise</h1>
+        </a>
+        
+        <div className="h-6 w-px bg-[#4b486c] hidden md:block"></div>
+        
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={onBack} 
+            className="flex items-center gap-1 text-gray-300 hover:text-white transition text-sm font-medium"
+          >
+            <ChevronLeft size={16} /> Templates
+          </button>
+          <a href="/courses" className="text-gray-300 hover:text-white transition text-sm font-medium">
+            Courses
+          </a>
         </div>
-    );
+      </div>
+      
+      <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+        <select 
+          value={activeTemplateId} 
+          onChange={(e) => setActiveTemplateId(e.target.value)} 
+          className="bg-[#3a3758] text-white text-sm rounded px-3 py-1 border border-[#4b486c]"
+        >
+          {templates.map(t => (
+            <option key={t.id} value={t.id}>{t.name}</option>
+          ))}
+        </select>
+        
+        <button 
+          onClick={() => window.print()} 
+          className="bg-[#fac0ab] text-[#232136] px-3 py-1 rounded text-sm font-bold flex items-center gap-2"
+        >
+          <Printer size={16} /> Save PDF
+        </button>
+      </div>
+    </nav>
+    
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 max-w-7xl mx-auto">
+      <div className="bg-white rounded-xl shadow-lg p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print">
+         
+         {/* DESIGN SETTINGS FOR COVER LETTER */}
+         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center gap-2 mb-3 text-[#232136] font-bold text-sm uppercase tracking-wider">
+               <Palette size={16}/> Appearance
+            </div>
+            <div className="flex gap-4">
+               <div className="flex gap-1">
+                  {['blue', 'green', 'purple', 'red', 'black'].map(c => (
+                  <button key={c} onClick={() => updateSettings('themeColor', c)} className={`w-5 h-5 rounded-full border ${data.settings?.themeColor === c ? 'border-gray-900 scale-125' : 'border-transparent'}`} style={{ backgroundColor: c }}/>
+                  ))}
+               </div>
+               <div className="h-5 w-px bg-gray-300"></div>
+               <div className="flex gap-2 text-xs">
+                  {['sans', 'serif', 'mono'].map(f => (
+                  <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 rounded border ${data.settings?.font === f ? 'bg-[#fac0ab]/20 text-[#232136]' : 'bg-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
+                  ))}
+               </div>
+            </div>
+         </div>
+
+         <div className="space-y-6">
+            <section>
+               <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Recipient Details</h2>
+               <div className="space-y-3">
+               <input className="w-full p-2 border rounded" placeholder="Hiring Manager Name" value={data.recipient.name} onChange={e => updateRecipient('name', e.target.value)} />
+               <input className="w-full p-2 border rounded" placeholder="Title" value={data.recipient.title} onChange={e => updateRecipient('title', e.target.value)} />
+               <input className="w-full p-2 border rounded" placeholder="Company" value={data.recipient.company} onChange={e => updateRecipient('company', e.target.value)} />
+               <textarea className="w-full p-2 border rounded h-20" placeholder="Address" value={data.recipient.address} onChange={e => updateRecipient('address', e.target.value)} />
+               </div>
+            </section>
+            <section>
+               <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Content</h2>
+               <div className="space-y-3">
+                  <input className="w-full p-2 border rounded font-medium" placeholder="Greeting" value={data.content.greeting} onChange={e => updateContent('greeting', e.target.value)} />
+                  <textarea className="w-full p-3 border rounded min-h-[300px]" placeholder="Body..." value={data.content.body} onChange={e => updateContent('body', e.target.value)} />
+                  <input className="w-full p-2 border rounded font-medium" placeholder="Closing" value={data.content.closing} onChange={e => updateContent('closing', e.target.value)} />
+               </div>
+            </section>
+         </div>
+
+      </div>
+
+      <div className="hidden lg:block relative">
+         <div className="sticky top-24">
+            <div className="bg-gray-800 text-white text-xs uppercase font-bold py-2 px-4 rounded-t-lg flex justify-between no-print">
+               <span>Letter Preview</span>
+               <span className="opacity-50">A4 Size</span>
+            </div>
+            <div className="bg-gray-300 p-8 rounded-b-lg shadow-2xl h-[calc(100vh-160px)] overflow-y-auto print-container">
+               <div className="bg-white shadow-sm min-h-[297mm] w-[210mm] origin-top-left transform scale-[0.45] md:scale-[0.55] xl:scale-[0.65] print-scale">
+                  <SelectedTemplate data={data} />
+               </div>
+            </div>
+         </div>
+      </div>
+    </div>
+  </div>
+);
 }
 
 // DEFAULT EXPORT (ResumeApp)
@@ -1337,7 +1359,7 @@ export default function ResumeApp() {
             <div className="flex items-center gap-6 text-sm font-medium">
               <a href="https://letsleadwise.org" className="text-gray-300 hover:text-white transition">Home</a>
               <button className="text-white">Templates</button>
-              <Link href="/courses" className="text-gray-300 hover:text-white transition">Courses</Link>
+              <a href="/courses" className="text-gray-300 hover:text-white transition">Courses</a>
               <a href="https://donation.letsleadwise.org" className="bg-[#fac0ab] hover:bg-[#ffbca0] text-[#232136] px-4 py-2 rounded-lg font-bold transition">Donate Now</a>
             </div>
           </div>
