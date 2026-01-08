@@ -1017,10 +1017,10 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
       
       <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
-          <Link href="/" className="flex items-center gap-2">
+          <a href="https://letsleadwise.org" className="flex items-center gap-2">
             <img src="/leadwise-logo.svg" alt="LeadWise" className="w-8 h-8 rounded-lg" />
             <h1 className="font-bold text-lg hidden sm:inline">LeadWise</h1>
-          </Link>
+          </a>
           <div className="h-6 w-px bg-[#4b486c] hidden md:block"></div>
           <div className="flex items-center gap-4">
              <button onClick={onBack} className="flex items-center gap-1 text-gray-300 hover:text-white transition text-sm font-medium"><ChevronLeft size={16} /> Templates</button>
@@ -1220,7 +1220,7 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
               `}</style>
              <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
                <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
-                  <Link href="/" className="flex items-center gap-2">
+                  <a href="https://letsleadwise.org" className="flex items-center gap-2">
                     <img src="/leadwise-logo.svg" alt="LeadWise" className="w-8 h-8 rounded-lg" />
                     <h1 className="font-bold text-lg hidden sm:inline">LeadWise</h1>
                   </Link>
@@ -1328,15 +1328,16 @@ export default function ResumeApp() {
         <nav className="bg-[#232136] sticky top-0 z-40 shadow-sm text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div className="flex items-center gap-8">
-              <Link href="/" className="flex items-center gap-2">
+              <a href="https://letsleadwise.org" className="flex items-center gap-2">
                 <img src="/leadwise-logo.svg" alt="LeadWise" className="w-10 h-10 rounded-lg" />
                 <span className="font-bold text-xl">LeadWise Foundation</span>
-              </Link>
+              </a>
             </div>
             <div className="flex items-center gap-6 text-sm font-medium">
-              <Link href="/" className="text-gray-300 hover:text-white transition">Home</Link>
+              <a href="https://letsleadwise.org" className="text-gray-300 hover:text-white transition">Home</a>
               <button className="text-white">Templates</button>
               <Link href="/courses" className="text-gray-300 hover:text-white transition">Courses</Link>
+              <a href="https://donation.letsleadwise.org" className="bg-[#fac0ab] hover:bg-[#ffbca0] text-[#232136] px-4 py-2 rounded-lg font-bold transition">Donate Now</a>
             </div>
           </div>
         </nav>

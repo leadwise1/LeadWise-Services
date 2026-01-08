@@ -18,9 +18,10 @@ export default function IndexPage() {
             <span className="font-bold text-xl">LeadWise Foundation</span>
           </Link>
           <div className="flex items-center gap-6 text-sm font-medium">
-            <Link href="/" className="text-white font-semibold transition">Home</Link>
+            <a href="https://letsleadwise.org" className="text-gray-300 hover:text-white transition">Home</a>
             <Link href="/resume" className="text-gray-300 hover:text-white transition">Templates</Link>
             <Link href="/courses" className="text-gray-300 hover:text-white transition">Courses</Link>
+            <a href="https://donation.letsleadwise.org" className="bg-[#fac0ab] hover:bg-[#ffbca0] text-[#232136] px-4 py-2 rounded-lg font-bold transition">Donate Now</a>
           </div>
         </div>
       </nav>
@@ -92,10 +93,9 @@ export default function IndexPage() {
               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-200/20 rounded-full blur-3xl -ml-16 -mb-16"></div>
               
-              <Cloud size={120} className="text-blue-600 mb-8 drop-shadow-xl" strokeWidth={1} />
-              <div className="text-center z-10">
-                 <div className="text-3xl font-bold text-[#232136] mb-2">Google Cloud</div>
-                 <div className="text-blue-600 font-medium tracking-widest uppercase text-sm">Partner Program</div>
+              <div className="z-10 flex flex-col items-center gap-12">
+                 <img src="/google-cloud.png" alt="Google Cloud Partner" className="w-64 object-contain" />
+                 <img src="/google-workspace.png" alt="Google Workspace Partner" className="w-64 object-contain" />
               </div>
            </div>
         </div>
