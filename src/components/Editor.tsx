@@ -1025,12 +1025,12 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
   return (
     <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
       {/* CRITICAL PRINT STYLES */}
-      <style>{printStyles}</style>
+      <style dangerouslySetInnerHTML={{ __html: printStyles }} />
       
       <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
           <a href="https://letsleadwise.org" className="flex items-center gap-2">
-            <img src="/leadwise-logo.svg" alt="LeadWise" className="w-8 h-8 rounded-lg" />
+            <img src="/leadwise-logo.svg" alt="LeadWise" className="w-10 h-10 rounded-lg" />
             <h1 className="font-bold text-lg hidden sm:inline">LeadWise</h1>
           </a>
           <div className="h-6 w-px bg-[#4b486c] hidden md:block"></div>
@@ -1218,11 +1218,11 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
 
     return (
         <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
-             <style>{printStyles}</style>
+             <style dangerouslySetInnerHTML={{ __html: printStyles }} />
              <nav className="bg-[#232136] text-white p-4 sticky top-0 z-40 shadow-md no-print flex flex-col md:flex-row justify-between items-center gap-4">
                <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-start">
                   <a href="https://letsleadwise.org" className="flex items-center gap-2">
-                    <img src="/leadwise-logo.svg" alt="LeadWise" className="w-8 h-8 rounded-lg" />
+                    <img src="/leadwise-logo.svg" alt="LeadWise" className="w-10 h-10 rounded-lg" />
                     <h1 className="font-bold text-lg hidden sm:inline">LeadWise</h1>
                   </Link>
                   <div className="h-6 w-px bg-[#4b486c] hidden md:block"></div>
