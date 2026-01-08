@@ -138,7 +138,7 @@ export default function IndexPage() {
                You have the skills; now ensure your application gets seen. In the modern hiring landscape, up to 75% of resumes are rejected by an Applicant Tracking System (ATS) before a human ever reads them. We arm you with the technology to bypass these digital gatekeepers.
              </p>
              <p className="text-gray-700 font-medium mb-8 text-lg">
-               Our Free ATS-Optimized Resume Builder is engineered to navigate hiring algorithms while showcasing your unique story.
+               Our Google-Verified, ATS-Optimized Resume Builder is engineered to navigate hiring algorithms while showcasing your unique story.
              </p>
              
              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
