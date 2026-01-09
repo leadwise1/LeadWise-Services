@@ -1,4 +1,6 @@
+'use client';
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { 
   Trash2, Plus, FileText, 
   ChevronLeft, Mail, Phone, MapPin, Linkedin, Printer,
@@ -124,7 +126,6 @@ const getFont = (font: string) => {
 // ==========================================
 // 3. DYNAMIC RESUME TEMPLATES
 // ==========================================
-// NOTE: These components render the actual Paper Document, so they MUST remain bg-white/text-black to print correctly.
 
 // Template 1: Modern Blue
 const ModernBlueTemplate: React.FC<{ data: ResumeData }> = ({ data }) => {
@@ -583,8 +584,9 @@ const AcademicProfessionalTemplate: React.FC<{ data: ResumeData }> = ({ data }) 
 };
 
 // ==========================================
-// 3. COVER LETTER TEMPLATES
+// 4. COVER LETTER TEMPLATES
 // ==========================================
+
 const ModernBlueCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }) => {
   const theme = getTheme(data.settings?.themeColor || 'blue');
   const font = getFont(data.settings?.font || 'sans');
@@ -789,7 +791,7 @@ const AcademicProfessionalCoverLetter: React.FC<{ data: CoverLetterData }> = ({ 
 );
 
 // ==========================================
-// 4. CONFIGURATION MAP
+// 5. CONFIGURATION MAP
 // ==========================================
 
 export const templates: Template[] = [
@@ -850,18 +852,11 @@ export const templates: Template[] = [
 ];
 
 // ==========================================
-// 5. STORAGE HELPERS
+// 6. HELPERS & STORAGE
 // ==========================================
+
 const RESUME_KEY = "user_resume_data_v2";
 const COVER_LETTER_KEY = "user_cover_letter_data_v2";
-
-const getStoredPersonalInfo = (): PersonalInfo => {
-    if (typeof window === "undefined") return { fullName: "", email: "", phone: "", location: "", linkedIn: "" };
-    try {
-        const resume = JSON.parse(localStorage.getItem(RESUME_KEY) || "{}");
-        return resume.personalInfo || { fullName: "", email: "", phone: "", location: "", linkedIn: "" };
-    } catch { return { fullName: "", email: "", phone: "", location: "", linkedIn: "" }; }
-}
 
 const getResumeFromStorage = (): ResumeData | null => {
   if (typeof window === "undefined") return null;
@@ -872,6 +867,14 @@ const getCoverLetterFromStorage = (): CoverLetterData | null => {
     if (typeof window === "undefined") return null;
     try { return JSON.parse(localStorage.getItem(COVER_LETTER_KEY) || ""); } catch { return null; }
 };
+
+const getStoredPersonalInfo = (): PersonalInfo => {
+    if (typeof window === "undefined") return { fullName: "", email: "", phone: "", location: "", linkedIn: "" };
+    try {
+        const resume = JSON.parse(localStorage.getItem(RESUME_KEY) || "{}");
+        return resume.personalInfo || { fullName: "", email: "", phone: "", location: "", linkedIn: "" };
+    } catch { return { fullName: "", email: "", phone: "", location: "", linkedIn: "" }; }
+}
 
 const saveResumeToStorage = (data: ResumeData) => {
   if (typeof window === "undefined") return;
@@ -891,12 +894,10 @@ const downloadATS = (data: ResumeData) => {
   text += `EMAIL: ${data.personalInfo?.email || ""} | PHONE: ${data.personalInfo?.phone || ""}\n`;
   text += `LOCATION: ${data.personalInfo?.location || ""} | LINKEDIN: ${data.personalInfo?.linkedIn || ""}\n\n`;
 
-  // Safe Access for Summary
   if (data.professionalSummary) {
     text += `--- PROFESSIONAL SUMMARY ---\n${data.professionalSummary}\n\n`;
   }
 
-  // Safe Access for Experience
   const expList = data.experience || [];
   if (expList.length > 0) {
     text += `--- EXPERIENCE ---\n`;
@@ -907,7 +908,6 @@ const downloadATS = (data: ResumeData) => {
     });
   }
 
-  // Safe Access for Education
   const eduList = data.education || [];
   if (eduList.length > 0) {
     text += `--- EDUCATION ---\n`;
@@ -917,7 +917,6 @@ const downloadATS = (data: ResumeData) => {
     });
   }
 
-  // Safe Access for Skills
   const skillsList = data.skills || [];
   if (skillsList.length > 0) {
     text += `--- SKILLS ---\n`;
@@ -933,36 +932,18 @@ const downloadATS = (data: ResumeData) => {
   URL.revokeObjectURL(url);
 };
 
-// ==========================================
-// 6. SHARED PRINT STYLES
-// ==========================================
 const printStyles = `
   @media print {
-    @page { 
-      margin: 0; 
-      size: auto; 
-    }
-    body { 
-      background: white; 
-      -webkit-print-color-adjust: exact; 
-      print-color-adjust: exact; 
-    }
+    @page { margin: 0; size: auto; }
+    body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .no-print { display: none !important; }
-    /* Reset the grid to basic block for printing */
-    .grid { display: block !important; padding: 0 !important; margin: 0 !important; }
-    /* Hide the editor column */
-    .grid > div:first-child { display: none !important; }
-    /* Force the preview column to take full width */
-    .grid > div:last-child { display: block !important; width: 100% !important; height: auto !important; position: absolute !important; top: 0 !important; left: 0 !important; margin: 0 !important; padding: 0 !important; }
-    /* Reset container styles */
     .print-container { overflow: visible !important; height: auto !important; box-shadow: none !important; border: none !important; background: white !important; padding: 0 !important; }
-    /* Allow preview to expand naturally */
     .print-scale { transform: none !important; width: 100% !important; min-height: auto !important; height: auto !important; box-shadow: none !important; }
   }
 `;
 
 // ==========================================
-// 7. EDITOR VIEWS (DARK MODE UPDATED)
+// 7. EDITOR VIEWS
 // ==========================================
 
 export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void }> = ({ templateId, onBack }) => {
@@ -1017,10 +998,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
 
   return (
     <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
-      {/* CRITICAL PRINT STYLES */}
       <style dangerouslySetInnerHTML={{ __html: printStyles }} />
-      
-      {/* EDITOR NAVBAR */}
       <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50 no-print">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
            <div className="flex items-center gap-6">
@@ -1037,42 +1015,22 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
               >
                 {templates.map(t => <option key={t.id} value={t.id} className="text-black">{t.name}</option>)}
               </select>
-              <button 
-                onClick={() => downloadATS(resume)} 
-                className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
-              >
-                <FileText size={16}/> ATS Text
-              </button>
-              <button 
-                onClick={() => window.print()} 
-                className="bg-[#FFBEA0] hover:bg-white text-[#1B2735] px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(255,190,160,0.3)]"
-              >
-                <Printer size={16}/> Save PDF
-              </button>
+              <button onClick={() => downloadATS(resume)} className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"><FileText size={16}/> ATS Text</button>
+              <button onClick={() => window.print()} className="bg-[#FFBEA0] hover:bg-white text-[#1B2735] px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(255,190,160,0.3)]"><Printer size={16}/> Save PDF</button>
            </div>
         </div>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 max-w-7xl mx-auto">
-        
-        {/* === LEFT COLUMN: EDITOR FORM === */}
         <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print custom-scrollbar">
-          
           <div className="bg-black/20 border border-white/5 rounded-xl p-4 mb-6">
-             <div className="flex items-center gap-2 mb-3 text-[#FFBEA0] font-bold text-sm uppercase tracking-wider">
-               <Palette size={16}/> Design Settings
-             </div>
+             <div className="flex items-center gap-2 mb-3 text-[#FFBEA0] font-bold text-sm uppercase tracking-wider"><Palette size={16}/> Design Settings</div>
              <div className="grid grid-cols-2 gap-6">
                <div>
                   <label className="text-xs font-semibold text-gray-400 mb-2 block">Accent Color</label>
                   <div className="flex gap-2">
                     {['blue', 'green', 'purple', 'red', 'black'].map(c => (
-                      <button 
-                        key={c}
-                        onClick={() => updateSettings('themeColor', c)} 
-                        className={`w-6 h-6 rounded-full border-2 ${resume.settings?.themeColor === c ? 'border-white scale-110 shadow-lg' : 'border-transparent opacity-50 hover:opacity-100'}`}
-                        style={{ backgroundColor: c }}
-                      />
+                      <button key={c} onClick={() => updateSettings('themeColor', c)} className={`w-6 h-6 rounded-full border-2 ${resume.settings?.themeColor === c ? 'border-white scale-110 shadow-lg' : 'border-transparent opacity-50 hover:opacity-100'}`} style={{ backgroundColor: c }}/>
                     ))}
                   </div>
                </div>
@@ -1080,13 +1038,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
                   <label className="text-xs font-semibold text-gray-400 mb-2 block">Font Style</label>
                   <div className="flex gap-2 text-xs">
                      {['sans', 'serif', 'mono'].map(f => (
-                       <button 
-                         key={f}
-                         onClick={() => updateSettings('font', f)}
-                         className={`px-2 py-1 rounded border transition-colors ${resume.settings?.font === f ? 'bg-[#FFBEA0] border-[#FFBEA0] text-[#1B2735] font-bold' : 'bg-transparent border-white/10 text-gray-400 hover:text-white'}`}
-                       >
-                         {f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}
-                       </button>
+                       <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 py-1 rounded border transition-colors ${resume.settings?.font === f ? 'bg-[#FFBEA0] border-[#FFBEA0] text-[#1B2735] font-bold' : 'bg-transparent border-white/10 text-gray-400 hover:text-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
                      ))}
                   </div>
                </div>
@@ -1167,14 +1119,12 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
           </div>
         </div>
 
-        {/* === RIGHT COLUMN: PREVIEW === */}
         <div className="hidden lg:block relative">
            <div className="sticky top-24">
               <div className="bg-[#1B2735] border border-white/10 border-b-0 text-white text-xs uppercase font-bold py-3 px-4 rounded-t-xl flex justify-between no-print items-center">
                  <span className="flex items-center gap-2"><Layout size={14}/> Live Preview</span>
                  <span className="opacity-50">A4 Size</span>
               </div>
-              {/* Added print-container class for targeting */}
               <div className="bg-black/40 border border-white/10 backdrop-blur-sm p-8 rounded-b-xl h-[calc(100vh-160px)] overflow-y-auto print-container custom-scrollbar">
                  <div ref={previewRef} className="bg-white shadow-2xl min-h-[297mm] w-[210mm] origin-top-left transform scale-[0.45] md:scale-[0.55] xl:scale-[0.65] print-scale">
                     <SelectedTemplate data={resume} />
@@ -1215,7 +1165,6 @@ export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () =>
     useEffect(() => { saveCoverLetterToStorage(data); }, [data]);
     const SelectedTemplate = templates.find(t => t.id === activeTemplateId)?.coverLetterComponent || ModernBlueCoverLetter;
     
-    // Helpers
    const updateRecipient = (f: keyof CoverLetterData['recipient'], v: string) => 
       setData(p => ({ ...p, recipient: { ...p.recipient, [f]: v } }));
    const updateContent = (f: keyof CoverLetterData['content'], v: string) => 
@@ -1255,8 +1204,6 @@ return (
     
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 max-w-7xl mx-auto">
       <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print custom-scrollbar">
-         
-         {/* DESIGN SETTINGS */}
          <div className="bg-black/20 border border-white/5 rounded-xl p-4 mb-6">
             <div className="flex items-center gap-2 mb-3 text-[#FFBEA0] font-bold text-sm uppercase tracking-wider">
                <Palette size={16}/> Appearance
@@ -1278,7 +1225,7 @@ return (
 
          <div className="space-y-6">
             <section>
-               <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Recipient Details</h2>
+               <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Recipient</h2>
                <div className="space-y-3">
                <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Hiring Manager Name" value={data.recipient.name} onChange={e => updateRecipient('name', e.target.value)} />
                <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Title" value={data.recipient.title} onChange={e => updateRecipient('title', e.target.value)} />
@@ -1295,14 +1242,12 @@ return (
                </div>
             </section>
          </div>
-
       </div>
 
       <div className="hidden lg:block relative">
          <div className="sticky top-24">
             <div className="bg-[#1B2735] border border-white/10 border-b-0 text-white text-xs uppercase font-bold py-3 px-4 rounded-t-xl flex justify-between no-print items-center">
-               <span className="flex items-center gap-2"><Layout size={14}/> Letter Preview</span>
-               <span className="opacity-50">A4 Size</span>
+               <span className="flex items-center gap-2"><Layout size={14}/> Preview</span>
             </div>
             <div className="bg-black/40 border border-white/10 backdrop-blur-sm p-8 rounded-b-xl h-[calc(100vh-160px)] overflow-y-auto print-container custom-scrollbar">
                <div className="bg-white shadow-2xl min-h-[297mm] w-[210mm] origin-top-left transform scale-[0.45] md:scale-[0.55] xl:scale-[0.65] print-scale">
@@ -1317,8 +1262,8 @@ return (
 }
 
 // DEFAULT EXPORT (ResumeApp)
-export default function ResumeApp() {
-  const [currentView, setCurrentView] = useState<"templates" | "editor" | "cover-letter">("templates");
+export default function Editor({ initialView = "templates" }) {
+  const [currentView, setCurrentView] = useState<"templates" | "editor" | "cover-letter">(initialView);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("modern-blue");
   const [previewModalTemplate, setPreviewModalTemplate] = useState<string | null>(null);
 
