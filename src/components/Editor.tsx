@@ -11,6 +11,14 @@ import {
 // 1. TYPES & DATA STRUCTURES
 // ==========================================
 
+// --- FIX: Added specific type for Views ---
+export type ViewType = "templates" | "editor" | "cover-letter";
+
+// --- FIX: Added Interface for Component Props ---
+interface EditorProps {
+  initialView?: ViewType;
+}
+
 export interface Experience {
   id: string;
   company: string;
@@ -716,8 +724,8 @@ const MinimalCleanCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }) 
          <div className="mb-6">{data.content.greeting}</div>
          <div className="whitespace-pre-wrap mb-10">{data.content.body}</div>
          <div>
-            <div>{data.content.closing}</div>
-            <div className="mt-8 border-t border-black w-24 pt-2 font-medium">{data.personalInfo.fullName}</div>
+           <div>{data.content.closing}</div>
+           <div className="mt-8 border-t border-black w-24 pt-2 font-medium">{data.personalInfo.fullName}</div>
          </div>
       </div>
     </div>
@@ -764,26 +772,26 @@ const AcademicProfessionalCoverLetter: React.FC<{ data: CoverLetterData }> = ({ 
         <div className="text-center border-b-2 border-gray-800 pb-6 mb-10">
            <h1 className="text-3xl font-bold">{data.personalInfo.fullName}</h1>
            <div className="text-sm mt-2 flex justify-center gap-4 text-gray-600">
-              <span>{data.personalInfo.email}</span>
-              <span>{data.personalInfo.phone}</span>
-              <span>{data.personalInfo.location}</span>
+             <span>{data.personalInfo.email}</span>
+             <span>{data.personalInfo.phone}</span>
+             <span>{data.personalInfo.location}</span>
            </div>
         </div>
         <div className="text-sm space-y-6 leading-relaxed">
            <div className="flex justify-between items-start">
-              <div>
-                 <div className="font-bold">{data.recipient.name}</div>
-                 <div>{data.recipient.title}</div>
-                 <div>{data.recipient.company}</div>
-              </div>
-              <div>{new Date().toLocaleDateString()}</div>
+             <div>
+                <div className="font-bold">{data.recipient.name}</div>
+                <div className="italic">{data.recipient.title}</div>
+                <div>{data.recipient.company}</div>
+             </div>
+             <div>{new Date().toLocaleDateString()}</div>
            </div>
            <div className="h-4"></div>
            <div>{data.content.greeting}</div>
            <div className="whitespace-pre-wrap text-justify">{data.content.body}</div>
            <div className="mt-8">
-              <div>{data.content.closing}</div>
-              <div className="mt-6 font-bold">{data.personalInfo.fullName}</div>
+             <div>{data.content.closing}</div>
+             <div className="mt-6 font-bold">{data.personalInfo.fullName}</div>
            </div>
         </div>
      </div>
@@ -1001,48 +1009,48 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
       <style dangerouslySetInnerHTML={{ __html: printStyles }} />
       <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50 no-print">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-           <div className="flex items-center gap-6">
-               <button onClick={onBack} className="flex items-center gap-2 text-gray-400 hover:text-white transition">
-                  <ChevronLeft size={20} />
-                  <span className="font-semibold">Back to Templates</span>
-               </button>
-           </div>
-           <div className="flex items-center gap-4">
-              <select 
-                 value={activeTemplateId} 
-                 onChange={(e) => setActiveTemplateId(e.target.value)} 
-                 className="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#FFBEA0]"
+            <div className="flex items-center gap-6">
+                <button onClick={onBack} className="flex items-center gap-2 text-gray-400 hover:text-white transition">
+                   <ChevronLeft size={20} />
+                   <span className="font-semibold">Back to Templates</span>
+                </button>
+            </div>
+            <div className="flex items-center gap-4">
+               <select 
+                  value={activeTemplateId} 
+                  onChange={(e) => setActiveTemplateId(e.target.value)} 
+                  className="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#FFBEA0]"
               >
                 {templates.map(t => <option key={t.id} value={t.id} className="text-black">{t.name}</option>)}
               </select>
               <button onClick={() => downloadATS(resume)} className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"><FileText size={16}/> ATS Text</button>
               <button onClick={() => window.print()} className="bg-[#FFBEA0] hover:bg-white text-[#1B2735] px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(255,190,160,0.3)]"><Printer size={16}/> Save PDF</button>
-           </div>
+            </div>
         </div>
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 max-w-7xl mx-auto">
         <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print custom-scrollbar">
           <div className="bg-black/20 border border-white/5 rounded-xl p-4 mb-6">
-             <div className="flex items-center gap-2 mb-3 text-[#FFBEA0] font-bold text-sm uppercase tracking-wider"><Palette size={16}/> Design Settings</div>
-             <div className="grid grid-cols-2 gap-6">
-               <div>
-                  <label className="text-xs font-semibold text-gray-400 mb-2 block">Accent Color</label>
-                  <div className="flex gap-2">
-                    {['blue', 'green', 'purple', 'red', 'black'].map(c => (
-                      <button key={c} onClick={() => updateSettings('themeColor', c)} className={`w-6 h-6 rounded-full border-2 ${resume.settings?.themeColor === c ? 'border-white scale-110 shadow-lg' : 'border-transparent opacity-50 hover:opacity-100'}`} style={{ backgroundColor: c }}/>
-                    ))}
-                  </div>
-               </div>
-               <div>
-                  <label className="text-xs font-semibold text-gray-400 mb-2 block">Font Style</label>
-                  <div className="flex gap-2 text-xs">
-                     {['sans', 'serif', 'mono'].map(f => (
-                       <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 py-1 rounded border transition-colors ${resume.settings?.font === f ? 'bg-[#FFBEA0] border-[#FFBEA0] text-[#1B2735] font-bold' : 'bg-transparent border-white/10 text-gray-400 hover:text-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
+              <div className="flex items-center gap-2 mb-3 text-[#FFBEA0] font-bold text-sm uppercase tracking-wider"><Palette size={16}/> Design Settings</div>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                   <label className="text-xs font-semibold text-gray-400 mb-2 block">Accent Color</label>
+                   <div className="flex gap-2">
+                     {['blue', 'green', 'purple', 'red', 'black'].map(c => (
+                       <button key={c} onClick={() => updateSettings('themeColor', c)} className={`w-6 h-6 rounded-full border-2 ${resume.settings?.themeColor === c ? 'border-white scale-110 shadow-lg' : 'border-transparent opacity-50 hover:opacity-100'}`} style={{ backgroundColor: c }}/>
                      ))}
-                  </div>
-               </div>
-             </div>
+                   </div>
+                </div>
+                <div>
+                   <label className="text-xs font-semibold text-gray-400 mb-2 block">Font Style</label>
+                   <div className="flex gap-2 text-xs">
+                      {['sans', 'serif', 'mono'].map(f => (
+                        <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 py-1 rounded border transition-colors ${resume.settings?.font === f ? 'bg-[#FFBEA0] border-[#FFBEA0] text-[#1B2735] font-bold' : 'bg-transparent border-white/10 text-gray-400 hover:text-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
+                      ))}
+                   </div>
+                </div>
+              </div>
           </div>
 
           <div className="space-y-8">
@@ -1262,8 +1270,9 @@ return (
 }
 
 // DEFAULT EXPORT (ResumeApp)
-export default function Editor({ initialView = "templates" }) {
-  const [currentView, setCurrentView] = useState<"templates" | "editor" | "cover-letter">(initialView);
+// --- FIX: Applied EditorProps here to satisfy TypeScript ---
+export default function Editor({ initialView = "templates" }: EditorProps) {
+  const [currentView, setCurrentView] = useState<ViewType>(initialView);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("modern-blue");
   const [previewModalTemplate, setPreviewModalTemplate] = useState<string | null>(null);
 
