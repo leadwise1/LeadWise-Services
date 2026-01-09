@@ -16,13 +16,45 @@ import {
   ChevronUp
 } from "lucide-react";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getAuth, signInAnonymously, onAuthStateChanged, Auth, User } from "firebase/auth";
+import { getFirestore, doc, setDoc, Firestore } from "firebase/firestore";
+
+// --- TYPESCRIPT INTERFACES ---
+// These definitions tell Next.js exactly what your data looks like.
+interface Resource {
+  title: string;
+  type: string;
+  platform: string;
+  url: string;
+}
+
+interface Lesson {
+  id: string;
+  title: string;
+  resources: Resource[];
+}
+
+interface Module {
+  id: string;
+  title: string;
+  duration: string;
+  lessons: Lesson[];
+}
+
+interface Course {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  duration: string;
+  level: string;
+  target: string;
+  tags: string[];
+  color: string;
+  modules: Module[];
+}
 
 // --- CONFIGURATION START ---
-// Note: We are using direct keys here because the build target (ES2015) 
-// does not support import.meta.env. Since you have Domain Restrictions 
-// set up in Google Cloud, this is safe for production.
 const firebaseConfig = {
   apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
   authDomain: "leadwise-platform.firebaseapp.com",
@@ -36,9 +68,10 @@ const firebaseConfig = {
 const appId = 'leadwise-default';
 // --- CONFIGURATION END ---
 
-// Initialize Firebase (Safely)
-let auth;
-let db;
+// Initialize Firebase (Safely Typed)
+// We explicitly say: "These variables might be the Auth service, or undefined"
+let auth: Auth | undefined;
+let db: Firestore | undefined;
 
 try {
   const app = initializeApp(firebaseConfig);
@@ -49,8 +82,8 @@ try {
   console.error("Firebase initialization failed:", e);
 }
 
-// --- DATA: Frontend Course (GOOGLE CURRICULUM) ---
-const frontendCourse = {
+// --- DATA: Frontend Course ---
+const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
   subtitle: "Build the visual internet. From landing pages to complex apps.",
@@ -129,7 +162,7 @@ const frontendCourse = {
 };
 
 // --- DATA: Analytics Course ---
-const dataAnalyticsCourse = {
+const dataAnalyticsCourse: Course = {
   id: "data-analytics",
   title: "Data Analytics Fundamentals",
   subtitle: "Decode the data. Drive business decisions.",
@@ -173,8 +206,15 @@ const dataAnalyticsCourse = {
 
 // --- COMPONENTS ---
 
-// 1. INTAKE MODAL (3-Step Form, Styled Dark)
-function IntakeModal({ isOpen, onClose, onComplete, targetCourse }) {
+// 1. INTAKE MODAL
+interface IntakeModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onComplete: () => void;
+  targetCourse: Course | null;
+}
+
+function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalProps) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -189,7 +229,7 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
@@ -225,7 +265,6 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }) {
       
       // 2. MOCK EMAIL TRIGGER
       console.log(`📧 EMAILING MENTOR: Sending automated intro email for student ${formData.email}...`);
-      console.log(`✅ EMAIL SENT: Mentor has been notified.`);
       
       // Always save local backup
       localStorage.setItem("leadwise_intake", JSON.stringify(intakeRecord));
@@ -355,8 +394,14 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }) {
 }
 
 // 2. RESOURCE LINK COMPONENT
-function ProtectedResource({ resource, isEnrolled, onTriggerIntake }) {
-  const handleClick = (e) => {
+interface ProtectedResourceProps {
+  resource: Resource;
+  isEnrolled: boolean;
+  onTriggerIntake: () => void;
+}
+
+function ProtectedResource({ resource, isEnrolled, onTriggerIntake }: ProtectedResourceProps) {
+  const handleClick = (e: React.MouseEvent) => {
     if (!isEnrolled) {
       e.preventDefault();
       onTriggerIntake();
@@ -393,7 +438,13 @@ function ProtectedResource({ resource, isEnrolled, onTriggerIntake }) {
 }
 
 // 3. EXPANDABLE MODULE COMPONENT
-function ExpandableModule({ module, isEnrolled, onTriggerIntake }) {
+interface ExpandableModuleProps {
+  module: Module;
+  isEnrolled: boolean;
+  onTriggerIntake: () => void;
+}
+
+function ExpandableModule({ module, isEnrolled, onTriggerIntake }: ExpandableModuleProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -432,7 +483,13 @@ function ExpandableModule({ module, isEnrolled, onTriggerIntake }) {
 }
 
 // 4. MAIN COURSE CARD COMPONENT
-function CourseCard({ course, isEnrolled, onTriggerIntake }) {
+interface CourseCardProps {
+  course: Course;
+  isEnrolled: boolean;
+  onTriggerIntake: () => void;
+}
+
+function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
   const [showModules, setShowModules] = useState(false);
   const Icon = course.color === 'blue' ? Terminal : BarChart3;
 
@@ -510,7 +567,7 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }) {
 // --- MAIN PAGE COMPONENT ---
 const CoursesPage = () => {
   const [intakeOpen, setIntakeOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
 
   // Check enrollment on load
@@ -529,7 +586,7 @@ const CoursesPage = () => {
     }
   }, []);
 
-  const openEnrollment = (course) => {
+  const openEnrollment = (course: Course) => {
     setSelectedCourse(course);
     setIntakeOpen(true);
   };
