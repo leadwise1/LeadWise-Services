@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect, useRef } from "react";
 import { 
   Trash2, Plus, FileText, 
@@ -6,11 +7,89 @@ import {
 } from "lucide-react";
 
 // ==========================================
-// 1. DATA STRUCTURES & HELPERS
+// 1. TYPES & INTERFACES (Fixes "Implicit Any" Errors)
 // ==========================================
 
-const getTheme = (color) => {
-  const themes = {
+export interface Experience {
+  id: string;
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  currentlyWorking: boolean;
+  description: string;
+}
+
+export interface Education {
+  id: string;
+  school: string;
+  degree: string;
+  field: string;
+  graduationDate: string;
+}
+
+export interface Skill {
+  id: string;
+  name: string;
+}
+
+export interface PersonalInfo {
+  fullName: string;
+  email: string;
+  phone: string;
+  location: string;
+  linkedIn: string;
+}
+
+export interface DesignSettings {
+  themeColor: 'blue' | 'green' | 'purple' | 'red' | 'black';
+  font: 'sans' | 'serif' | 'mono';
+}
+
+export interface ResumeData {
+  personalInfo: PersonalInfo;
+  professionalSummary: string;
+  experience: Experience[];
+  education: Education[];
+  skills: Skill[];
+  template: string;
+  settings: DesignSettings;
+}
+
+export interface CoverLetterData {
+  personalInfo: PersonalInfo;
+  recipient: {
+    name: string;
+    title: string;
+    company: string;
+    address: string;
+  };
+  content: {
+    greeting: string;
+    body: string;
+    closing: string;
+  };
+  template: string;
+  settings: DesignSettings;
+}
+
+export interface Template {
+  id: string;
+  name: string;
+  description: string;
+  resumeComponent: React.FC<{ data: ResumeData }>;
+  coverLetterComponent: React.FC<{ data: CoverLetterData }>;
+  category: string;
+  color: string;
+}
+
+// ==========================================
+// 2. THEME ENGINE & HELPERS
+// ==========================================
+
+// FIXED: Added explicit type string for color parameter
+const getTheme = (color: string) => {
+  const themes: Record<string, any> = {
     blue: { 
       primary: 'text-blue-900', secondary: 'text-blue-600', accent: 'bg-blue-600', 
       border: 'border-blue-600', light: 'bg-blue-50', borderLight: 'border-blue-100' 
@@ -35,8 +114,9 @@ const getTheme = (color) => {
   return themes[color] || themes.blue;
 };
 
-const getFont = (font) => {
-  const fonts = {
+// FIXED: Added explicit type string for font parameter
+const getFont = (font: string) => {
+  const fonts: Record<string, string> = {
     sans: 'font-sans',
     serif: 'font-serif',
     mono: 'font-mono',
@@ -45,11 +125,10 @@ const getFont = (font) => {
 };
 
 // ==========================================
-// 2. DYNAMIC RESUME TEMPLATES
+// 3. DYNAMIC RESUME TEMPLATES
 // ==========================================
 
-// Template 1: Modern Blue
-const ModernBlueTemplate = ({ data }) => {
+const ModernBlueTemplate: React.FC<{ data: ResumeData }> = ({ data }) => {
   const theme = getTheme(data.settings?.themeColor || 'blue');
   const font = getFont(data.settings?.font || 'sans');
   const experience = data.experience || [];
@@ -126,8 +205,7 @@ const ModernBlueTemplate = ({ data }) => {
   );
 };
 
-// Template 2: Elegant Classic
-const ElegantClassicTemplate = ({ data }) => {
+const ElegantClassicTemplate: React.FC<{ data: ResumeData }> = ({ data }) => {
   const theme = getTheme(data.settings?.themeColor || 'blue');
   const font = getFont(data.settings?.font || 'serif');
   const experience = data.experience || [];
@@ -195,8 +273,7 @@ const ElegantClassicTemplate = ({ data }) => {
   );
 };
 
-// Template 3: Creative Vibrant
-const CreativeVibrantTemplate = ({ data }) => {
+const CreativeVibrantTemplate: React.FC<{ data: ResumeData }> = ({ data }) => {
   const theme = getTheme(data.settings?.themeColor || 'blue');
   const font = getFont(data.settings?.font || 'sans');
   const colorKey = data.settings?.themeColor || 'blue';
@@ -282,7 +359,7 @@ const CreativeVibrantTemplate = ({ data }) => {
 };
 
 // Template 4: Minimal Clean
-const MinimalCleanTemplate = ({ data }) => {
+const MinimalCleanTemplate: React.FC<{ data: ResumeData }> = ({ data }) => {
   const font = getFont(data.settings?.font || 'sans');
   const experience = data.experience || [];
   const education = data.education || [];
@@ -349,7 +426,7 @@ const MinimalCleanTemplate = ({ data }) => {
 };
 
 // Template 5: Executive Bold
-const ExecutiveBoldTemplate = ({ data }) => {
+const ExecutiveBoldTemplate: React.FC<{ data: ResumeData }> = ({ data }) => {
   const [firstName, ...lastNameParts] = (data.personalInfo.fullName || "").split(" ");
   const lastName = lastNameParts.join(" ");
   const theme = getTheme(data.settings?.themeColor || 'red'); 
@@ -430,7 +507,7 @@ const ExecutiveBoldTemplate = ({ data }) => {
 };
 
 // Template 6: Academic Professional
-const AcademicProfessionalTemplate = ({ data }) => {
+const AcademicProfessionalTemplate: React.FC<{ data: ResumeData }> = ({ data }) => {
   const font = getFont(data.settings?.font || 'serif');
   const theme = getTheme(data.settings?.themeColor || 'green');
   const experience = data.experience || [];
@@ -507,7 +584,7 @@ const AcademicProfessionalTemplate = ({ data }) => {
 // ==========================================
 // 3. COVER LETTER TEMPLATES
 // ==========================================
-const ModernBlueCoverLetter = ({ data }) => {
+const ModernBlueCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }) => {
   const theme = getTheme(data.settings?.themeColor || 'blue');
   const font = getFont(data.settings?.font || 'sans');
 
@@ -545,7 +622,7 @@ const ModernBlueCoverLetter = ({ data }) => {
   );
 };
 
-const ElegantClassicCoverLetter = ({ data }) => (
+const ElegantClassicCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }) => (
   <div className="bg-white min-h-[1000px] p-16 font-serif text-gray-900 w-full">
     <div className="max-w-2xl mx-auto">
       <div className="text-center border-b-2 border-gray-800 pb-8 mb-12">
@@ -576,7 +653,7 @@ const ElegantClassicCoverLetter = ({ data }) => (
   </div>
 );
 
-const CreativeVibrantCoverLetter = ({ data }) => {
+const CreativeVibrantCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }) => {
   const theme = getTheme(data.settings?.themeColor || 'purple');
   const font = getFont(data.settings?.font || 'sans');
   return (
@@ -615,7 +692,7 @@ const CreativeVibrantCoverLetter = ({ data }) => {
   );
 };
 
-const MinimalCleanCoverLetter = ({ data }) => (
+const MinimalCleanCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }) => (
   <div className="bg-white min-h-[1000px] p-20 font-sans text-gray-900 w-full">
     <div className="max-w-2xl mx-auto">
       <header className="mb-16 border-b border-gray-200 pb-6 flex justify-between items-end">
@@ -644,7 +721,7 @@ const MinimalCleanCoverLetter = ({ data }) => (
   </div>
 );
 
-const ExecutiveBoldCoverLetter = ({ data }) => {
+const ExecutiveBoldCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }) => {
   const theme = getTheme(data.settings?.themeColor || 'blue');
   return (
     <div className="bg-slate-900 min-h-[1000px] p-12 font-sans w-full">
@@ -678,7 +755,7 @@ const ExecutiveBoldCoverLetter = ({ data }) => {
   );
 };
 
-const AcademicProfessionalCoverLetter = ({ data }) => (
+const AcademicProfessionalCoverLetter: React.FC<{ data: CoverLetterData }> = ({ data }) => (
   <div className="bg-white min-h-[1000px] p-12 font-serif text-gray-900 w-full">
      <div className="max-w-3xl mx-auto border border-gray-300 shadow-sm p-12 min-h-[900px]">
         <div className="text-center border-b-2 border-gray-800 pb-6 mb-10">
@@ -714,7 +791,7 @@ const AcademicProfessionalCoverLetter = ({ data }) => (
 // 4. CONFIGURATION MAP
 // ==========================================
 
-export const templates = [
+export const templates: Template[] = [
   {
     id: "modern-blue",
     name: "Modern Blue",
@@ -777,7 +854,7 @@ export const templates = [
 const RESUME_KEY = "user_resume_data_v2";
 const COVER_LETTER_KEY = "user_cover_letter_data_v2";
 
-const getStoredPersonalInfo = () => {
+const getStoredPersonalInfo = (): PersonalInfo => {
     if (typeof window === "undefined") return { fullName: "", email: "", phone: "", location: "", linkedIn: "" };
     try {
         const resume = JSON.parse(localStorage.getItem(RESUME_KEY) || "{}");
@@ -785,27 +862,27 @@ const getStoredPersonalInfo = () => {
     } catch { return { fullName: "", email: "", phone: "", location: "", linkedIn: "" }; }
 }
 
-const getResumeFromStorage = () => {
+const getResumeFromStorage = (): ResumeData | null => {
   if (typeof window === "undefined") return null;
   try { return JSON.parse(localStorage.getItem(RESUME_KEY) || ""); } catch { return null; }
 };
 
-const getCoverLetterFromStorage = () => {
+const getCoverLetterFromStorage = (): CoverLetterData | null => {
     if (typeof window === "undefined") return null;
     try { return JSON.parse(localStorage.getItem(COVER_LETTER_KEY) || ""); } catch { return null; }
 };
 
-const saveResumeToStorage = (data) => {
+const saveResumeToStorage = (data: ResumeData) => {
   if (typeof window === "undefined") return;
   localStorage.setItem(RESUME_KEY, JSON.stringify(data));
 };
 
-const saveCoverLetterToStorage = (data) => {
+const saveCoverLetterToStorage = (data: CoverLetterData) => {
     if (typeof window === "undefined") return;
     localStorage.setItem(COVER_LETTER_KEY, JSON.stringify(data));
 };
 
-const downloadATS = (data) => {
+const downloadATS = (data: ResumeData) => {
   let text = "";
   
   // Safe Access for Personal Info
@@ -913,12 +990,12 @@ const printStyles = `
 // 7. EDITOR VIEWS
 // ==========================================
 
-export const ResumeEditorView = ({ templateId, onBack }) => {
+export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void }> = ({ templateId, onBack }) => {
   const [activeTemplateId, setActiveTemplateId] = useState(templateId);
-  const previewRef = useRef(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   
   // Initial state with Safety Merge for old data
-  const [resume, setResume] = useState({
+  const [resume, setResume] = useState<ResumeData>({
     personalInfo: { fullName: "", email: "", phone: "", location: "", linkedIn: "" },
     professionalSummary: "",
     experience: [],
@@ -930,7 +1007,7 @@ export const ResumeEditorView = ({ templateId, onBack }) => {
 
   useEffect(() => {
     const saved = getResumeFromStorage();
-    const defaultSettings = { themeColor: 'blue', font: 'sans' };
+    const defaultSettings: DesignSettings = { themeColor: 'blue', font: 'sans' };
     
     if (saved) {
       setResume({
@@ -949,21 +1026,21 @@ export const ResumeEditorView = ({ templateId, onBack }) => {
 
   useEffect(() => { saveResumeToStorage(resume); }, [resume]);
 
-  const updateInfo = (f, v) => setResume(p => ({...p, personalInfo: {...p.personalInfo, [f]: v}}));
-  const updateSettings = (f, v) => setResume(p => ({...p, settings: {...p.settings, [f]: v}}));
+  const updateInfo = (f: keyof PersonalInfo, v: string) => setResume(p => ({...p, personalInfo: {...p.personalInfo, [f]: v}}));
+  const updateSettings = (f: keyof DesignSettings, v: any) => setResume(p => ({...p, settings: {...p.settings, [f]: v}}));
   
   // Basic list handlers
   const addExp = () => setResume(p => ({...p, experience: [...p.experience, { id: Date.now().toString(), company: "", position: "", startDate: "", endDate: "", currentlyWorking: false, description: "" }]}));
-  const updateExp = (id, f, v) => setResume(p => ({...p, experience: p.experience.map(e => e.id === id ? {...e, [f]: v} : e)}));
-  const delExp = (id) => setResume(p => ({...p, experience: p.experience.filter(e => e.id !== id)}));
+  const updateExp = (id: string, f: keyof Experience, v: any) => setResume(p => ({...p, experience: p.experience.map(e => e.id === id ? {...e, [f]: v} : e)}));
+  const delExp = (id: string) => setResume(p => ({...p, experience: p.experience.filter(e => e.id !== id)}));
   
   const addEdu = () => setResume(p => ({...p, education: [...p.education, { id: Date.now().toString(), school: "", degree: "", field: "", graduationDate: "" }]}));
-  const updateEdu = (id, f, v) => setResume(p => ({...p, education: p.education.map(e => e.id === id ? {...e, [f]: v} : e)}));
-  const delEdu = (id) => setResume(p => ({...p, education: p.education.filter(e => e.id !== id)}));
+  const updateEdu = (id: string, f: keyof Education, v: string) => setResume(p => ({...p, education: p.education.map(e => e.id === id ? {...e, [f]: v} : e)}));
+  const delEdu = (id: string) => setResume(p => ({...p, education: p.education.filter(e => e.id !== id)}));
   
   const addSkill = () => setResume(p => ({...p, skills: [...p.skills, { id: Date.now().toString(), name: "" }]}));
-  const updateSkill = (id, v) => setResume(p => ({...p, skills: p.skills.map(s => s.id === id ? {...s, name: v} : s)}));
-  const delSkill = (id) => setResume(p => ({...p, skills: p.skills.filter(s => s.id !== id)}));
+  const updateSkill = (id: string, v: string) => setResume(p => ({...p, skills: p.skills.map(s => s.id === id ? {...s, name: v} : s)}));
+  const delSkill = (id: string) => setResume(p => ({...p, skills: p.skills.filter(s => s.id !== id)}));
 
   return (
     <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
@@ -1128,9 +1205,9 @@ export const ResumeEditorView = ({ templateId, onBack }) => {
   );
 };
 
-export const CoverLetterEditorView = ({ templateId, onBack }) => {
+export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () => void }> = ({ templateId, onBack }) => {
     const [activeTemplateId, setActiveTemplateId] = useState(templateId);
-    const [data, setData] = useState({
+    const [data, setData] = useState<CoverLetterData>({
         personalInfo: { fullName: "", email: "", phone: "", location: "", linkedIn: "" },
         recipient: { name: "", title: "", company: "", address: "" },
         content: { greeting: "Dear Hiring Manager,", body: "I am writing...", closing: "Sincerely," },
@@ -1141,7 +1218,7 @@ export const CoverLetterEditorView = ({ templateId, onBack }) => {
     useEffect(() => {
         const saved = getCoverLetterFromStorage();
         const defaultInfo = getStoredPersonalInfo();
-        const defaultSettings = { themeColor: 'blue', font: 'sans' };
+        const defaultSettings: DesignSettings = { themeColor: 'blue', font: 'sans' };
 
         if (saved) {
               setData({
@@ -1157,11 +1234,11 @@ export const CoverLetterEditorView = ({ templateId, onBack }) => {
     const SelectedTemplate = templates.find(t => t.id === activeTemplateId)?.coverLetterComponent || ModernBlueCoverLetter;
     
     // Helpers
-   const updateRecipient = (f, v) => 
+   const updateRecipient = (f: keyof CoverLetterData['recipient'], v: string) => 
       setData(p => ({ ...p, recipient: { ...p.recipient, [f]: v } }));
-   const updateContent = (f, v) => 
+   const updateContent = (f: keyof CoverLetterData['content'], v: string) => 
       setData(p => ({ ...p, content: { ...p.content, [f]: v } }));
-   const updateSettings = (f, v) => 
+   const updateSettings = (f: keyof DesignSettings, v: any) => 
       setData(p => ({ ...p, settings: { ...p.settings, [f]: v } }));
 
 return (
@@ -1275,16 +1352,16 @@ return (
 
 // DEFAULT EXPORT (ResumeApp)
 export default function ResumeApp() {
-  const [currentView, setCurrentView] = useState("templates");
-  const [selectedTemplateId, setSelectedTemplateId] = useState("modern-blue");
-  const [previewModalTemplate, setPreviewModalTemplate] = useState(null);
+  const [currentView, setCurrentView] = useState<"templates" | "editor" | "cover-letter">("templates");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>("modern-blue");
+  const [previewModalTemplate, setPreviewModalTemplate] = useState<string | null>(null);
 
-  const navigateToEditor = (id) => {
+  const navigateToEditor = (id: string) => {
     setSelectedTemplateId(id);
     setCurrentView("editor");
     window.scrollTo(0,0);
   };
-  const navigateToCoverLetter = (id) => {
+  const navigateToCoverLetter = (id: string) => {
     setSelectedTemplateId(id);
     setCurrentView("cover-letter");
     window.scrollTo(0,0);
