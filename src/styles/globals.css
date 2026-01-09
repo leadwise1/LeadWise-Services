@@ -1,26 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --radius: 0.5rem;
-  }
-  
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --border: 217.2 32.6% 17.5%;
+    /* DEFAULT THEME: LeadWise Dark Mode */
+    
+    /* Main Background: #090A0F (Deep Dark Blue) */
+    --background: 232 25% 5%; 
+    
+    /* Main Text: White */
+    --foreground: 0 0% 100%;
+
+    /* Card Background: #1B2735 (Lighter Dark Blue) */
+    --card: 214 33% 16%;
+    --card-foreground: 0 0% 100%;
+    
+    /* Popover/Modal Background */
+    --popover: 214 33% 16%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Primary Accent: #FF9E80 (Peach) */
+    --primary: 14 100% 75%;
+    --primary-foreground: 232 25% 5%;
+
+    /* Secondary: #1B2735 */
+    --secondary: 214 33% 16%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted Text: Grayish */
+    --muted: 215 25% 27%;
+    --muted-foreground: 215 20% 65%;
+
+    /* Borders: #FFFFFF with 10% opacity equivalent */
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 14 100% 75%;
+
+    --radius: 0.75rem;
   }
 }
  
@@ -28,7 +45,32 @@
   html {
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
   body {
+    /* Apply the dark background by default */
     @apply bg-background text-foreground;
+    
+    /* Ensure the gradient covers the whole viewport */
+    min-height: 100vh;
+    background-color: #090A0F; /* Fallback hex */
   }
+}
+
+/* Custom Scrollbar for a polished feel */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090A0F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1B2735;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF9E80;
 }
