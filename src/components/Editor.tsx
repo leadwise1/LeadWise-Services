@@ -1008,147 +1008,149 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
   const delSkill = (id: string) => setResume(p => ({...p, skills: p.skills.filter(s => s.id !== id)}));
 
   return (
-    <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
-      <style dangerouslySetInnerHTML={{ __html: printStyles }} />
-      <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50 no-print">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-6">
-                <button onClick={onBack} className="flex items-center gap-2 text-gray-400 hover:text-white transition">
-                   <ChevronLeft size={20} />
-                   <span className="font-semibold">Back to Templates</span>
-                </button>
-            </div>
-            <div className="flex items-center gap-4">
-               <select 
-                  value={activeTemplateId} 
-                  onChange={(e) => setActiveTemplateId(e.target.value)} 
-                  className="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#FFBEA0]"
-              >
-                {templates.map(t => <option key={t.id} value={t.id} className="text-black">{t.name}</option>)}
-              </select>
-              <button onClick={() => downloadATS(resume)} className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"><FileText size={16}/> ATS Text</button>
-              <button onClick={() => window.print()} className="bg-[#FFBEA0] hover:bg-white text-[#1B2735] px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(255,190,160,0.3)]"><Printer size={16}/> Save PDF</button>
-            </div>
-        </div>
-      </nav>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 max-w-7xl mx-auto">
-        <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print custom-scrollbar">
-          <div className="bg-black/20 border border-white/5 rounded-xl p-4 mb-6">
-              <div className="flex items-center gap-2 mb-3 text-[#FFBEA0] font-bold text-sm uppercase tracking-wider"><Palette size={16}/> Design Settings</div>
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                   <label className="text-xs font-semibold text-gray-400 mb-2 block">Accent Color</label>
-                   <div className="flex gap-2">
-                     {['blue', 'green', 'purple', 'red', 'black'].map(c => (
-                       <button key={c} onClick={() => updateSettings('themeColor', c)} className={`w-6 h-6 rounded-full border-2 ${resume.settings?.themeColor === c ? 'border-white scale-110 shadow-lg' : 'border-transparent opacity-50 hover:opacity-100'}`} style={{ backgroundColor: c }}/>
-                     ))}
-                   </div>
-                </div>
-                <div>
-                   <label className="text-xs font-semibold text-gray-400 mb-2 block">Font Style</label>
-                   <div className="flex gap-2 text-xs">
-                      {['sans', 'serif', 'mono'].map(f => (
-                        <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 py-1 rounded border transition-colors ${resume.settings?.font === f ? 'bg-[#FFBEA0] border-[#FFBEA0] text-[#1B2735] font-bold' : 'bg-transparent border-white/10 text-gray-400 hover:text-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
-                      ))}
-                   </div>
-                </div>
+    <>
+      <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+        <style dangerouslySetInnerHTML={{ __html: printStyles }} />
+        <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50 no-print">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                  <button onClick={onBack} className="flex items-center gap-2 text-gray-400 hover:text-white transition">
+                    <ChevronLeft size={20} />
+                    <span className="font-semibold">Back to Builder</span>
+                  </button>
+              </div>
+              <div className="flex items-center gap-4">
+                 <select 
+                    value={activeTemplateId} 
+                    onChange={(e) => setActiveTemplateId(e.target.value)} 
+                    className="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#FFBEA0]"
+                >
+                  {templates.map(t => <option key={t.id} value={t.id} className="text-black">{t.name}</option>)}
+                </select>
+                <button onClick={() => downloadATS(resume)} className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"><FileText size={16}/> ATS Text</button>
+                <button onClick={() => window.print()} className="bg-[#FFBEA0] hover:bg-white text-[#1B2735] px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(255,190,160,0.3)]"><Printer size={16}/> Save PDF</button>
               </div>
           </div>
+        </nav>
 
-          <div className="space-y-8">
-            <section>
-              <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Personal Info</h2>
-              <div className="space-y-3">
-                <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Full Name" value={resume.personalInfo.fullName} onChange={e => updateInfo('fullName', e.target.value)} />
-                <div className="grid grid-cols-2 gap-3">
-                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Email" value={resume.personalInfo.email} onChange={e => updateInfo('email', e.target.value)} />
-                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Phone" value={resume.personalInfo.phone} onChange={e => updateInfo('phone', e.target.value)} />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Location" value={resume.personalInfo.location} onChange={e => updateInfo('location', e.target.value)} />
-                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="LinkedIn" value={resume.personalInfo.linkedIn} onChange={e => updateInfo('linkedIn', e.target.value)} />
-                </div>
-              </div>
-            </section>
-            
-            <section>
-              <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Summary</h2>
-              <textarea className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0] min-h-[120px]" placeholder="Brief professional summary..." value={resume.professionalSummary} onChange={e => setResume(p => ({...p, professionalSummary: e.target.value}))} />
-            </section>
-
-            <section>
-              <div className="flex justify-between mb-4 border-b border-white/10 pb-2">
-                <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider">Experience</h2>
-                <button onClick={addExp} className="text-white hover:text-[#FFBEA0] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add Position</button>
-              </div>
-              {resume.experience.map(exp => (
-                <div key={exp.id} className="p-4 bg-black/20 rounded-xl mb-4 border border-white/5 relative group hover:border-white/20 transition-colors">
-                  <button onClick={() => delExp(exp.id)} className="absolute top-2 right-2 text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16}/></button>
-                  <input className="w-full p-1 bg-transparent font-bold text-lg text-white mb-2 border-b border-transparent focus:border-[#FFBEA0] focus:outline-none" placeholder="Company Name" value={exp.company} onChange={e => updateExp(exp.id, 'company', e.target.value)} />
-                  <input className="w-full p-1 bg-transparent text-gray-300 text-sm mb-3 border-b border-transparent focus:border-[#FFBEA0] focus:outline-none" placeholder="Job Title" value={exp.position} onChange={e => updateExp(exp.id, 'position', e.target.value)} />
-                  <div className="flex gap-2 mb-3">
-                    <input className="w-1/2 p-2 bg-white/5 border border-white/10 rounded text-xs text-gray-300" placeholder="Start Date" value={exp.startDate} onChange={e => updateExp(exp.id, 'startDate', e.target.value)} />
-                    <input className="w-1/2 p-2 bg-white/5 border border-white/10 rounded text-xs text-gray-300" placeholder="End Date" value={exp.endDate} onChange={e => updateExp(exp.id, 'endDate', e.target.value)} disabled={exp.currentlyWorking}/>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 max-w-7xl mx-auto">
+          <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print custom-scrollbar">
+            <div className="bg-black/20 border border-white/5 rounded-xl p-4 mb-6">
+                <div className="flex items-center gap-2 mb-3 text-[#FFBEA0] font-bold text-sm uppercase tracking-wider"><Palette size={16}/> Design Settings</div>
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                     <label className="text-xs font-semibold text-gray-400 mb-2 block">Accent Color</label>
+                     <div className="flex gap-2">
+                       {['blue', 'green', 'purple', 'red', 'black'].map(c => (
+                         <button key={c} onClick={() => updateSettings('themeColor', c)} className={`w-6 h-6 rounded-full border-2 ${resume.settings?.themeColor === c ? 'border-white scale-110 shadow-lg' : 'border-transparent opacity-50 hover:opacity-100'}`} style={{ backgroundColor: c }}/>
+                       ))}
+                     </div>
                   </div>
-                  <textarea className="w-full p-2 bg-white/5 border border-white/10 rounded text-sm text-gray-300 min-h-[80px]" placeholder="Description of responsibilities..." value={exp.description} onChange={e => updateExp(exp.id, 'description', e.target.value)} />
-                </div>
-              ))}
-            </section>
-
-             <section>
-              <div className="flex justify-between mb-4 border-b border-white/10 pb-2">
-                <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider">Education</h2>
-                <button onClick={addEdu} className="text-white hover:text-[#FFBEA0] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add School</button>
-              </div>
-              {resume.education.map(edu => (
-                <div key={edu.id} className="p-4 bg-black/20 rounded-xl mb-3 border border-white/5 relative group hover:border-white/20 transition-colors">
-                  <button onClick={() => delEdu(edu.id)} className="absolute top-2 right-2 text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16}/></button>
-                  <input className="w-full p-1 bg-transparent font-bold text-white mb-1 focus:outline-none border-b border-transparent focus:border-[#FFBEA0]" placeholder="School Name" value={edu.school} onChange={e => updateEdu(edu.id, 'school', e.target.value)} />
-                  <div className="flex gap-2 mt-2">
-                    <input className="w-full p-2 bg-white/5 border border-white/10 rounded text-sm text-gray-300" placeholder="Degree / Certification" value={edu.degree} onChange={e => updateEdu(edu.id, 'degree', e.target.value)} />
-                    <input className="w-24 p-2 bg-white/5 border border-white/10 rounded text-sm text-gray-300" placeholder="Year" value={edu.graduationDate} onChange={e => updateEdu(edu.id, 'graduationDate', e.target.value)} />
+                  <div>
+                     <label className="text-xs font-semibold text-gray-400 mb-2 block">Font Style</label>
+                     <div className="flex gap-2 text-xs">
+                        {['sans', 'serif', 'mono'].map(f => (
+                          <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 py-1 rounded border transition-colors ${resume.settings?.font === f ? 'bg-[#FFBEA0] border-[#FFBEA0] text-[#1B2735] font-bold' : 'bg-transparent border-white/10 text-gray-400 hover:text-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
+                        ))}
+                     </div>
                   </div>
                 </div>
-              ))}
-            </section>
+            </div>
 
-             <section>
-              <div className="flex justify-between mb-4 border-b border-white/10 pb-2">
-                <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider">Skills</h2>
-                <button onClick={addSkill} className="text-white hover:text-[#FFBEA0] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add Skill</button>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {resume.skills.map(skill => (
-                  <div key={skill.id} className="flex items-center bg-white/10 rounded-full px-3 py-1 border border-white/10 group hover:border-[#FFBEA0]/50 transition-colors">
-                    <input className="bg-transparent text-sm w-24 text-white focus:outline-none" placeholder="Skill" value={skill.name} onChange={e => updateSkill(skill.id, e.target.value)} />
-                    <button onClick={() => delSkill(skill.id)} className="ml-1 text-gray-500 hover:text-red-400"><Trash2 size={12}/></button>
+            <div className="space-y-8">
+              <section>
+                <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Personal Info</h2>
+                <div className="space-y-3">
+                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Full Name" value={resume.personalInfo.fullName} onChange={e => updateInfo('fullName', e.target.value)} />
+                  <div className="grid grid-cols-2 gap-3">
+                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Email" value={resume.personalInfo.email} onChange={e => updateInfo('email', e.target.value)} />
+                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Phone" value={resume.personalInfo.phone} onChange={e => updateInfo('phone', e.target.value)} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Location" value={resume.personalInfo.location} onChange={e => updateInfo('location', e.target.value)} />
+                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="LinkedIn" value={resume.personalInfo.linkedIn} onChange={e => updateInfo('linkedIn', e.target.value)} />
+                  </div>
+                </div>
+              </section>
+              
+              <section>
+                <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Summary</h2>
+                <textarea className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0] min-h-[120px]" placeholder="Brief professional summary..." value={resume.professionalSummary} onChange={e => setResume(p => ({...p, professionalSummary: e.target.value}))} />
+              </section>
+
+              <section>
+                <div className="flex justify-between mb-4 border-b border-white/10 pb-2">
+                  <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider">Experience</h2>
+                  <button onClick={addExp} className="text-white hover:text-[#FFBEA0] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add Position</button>
+                </div>
+                {resume.experience.map(exp => (
+                  <div key={exp.id} className="p-4 bg-black/20 rounded-xl mb-4 border border-white/5 relative group hover:border-white/20 transition-colors">
+                    <button onClick={() => delExp(exp.id)} className="absolute top-2 right-2 text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16}/></button>
+                    <input className="w-full p-1 bg-transparent font-bold text-lg text-white mb-2 border-b border-transparent focus:border-[#FFBEA0] focus:outline-none" placeholder="Company Name" value={exp.company} onChange={e => updateExp(exp.id, 'company', e.target.value)} />
+                    <input className="w-full p-1 bg-transparent text-gray-300 text-sm mb-3 border-b border-transparent focus:border-[#FFBEA0] focus:outline-none" placeholder="Job Title" value={exp.position} onChange={e => updateExp(exp.id, 'position', e.target.value)} />
+                    <div className="flex gap-2 mb-3">
+                      <input className="w-1/2 p-2 bg-white/5 border border-white/10 rounded text-xs text-gray-300" placeholder="Start Date" value={exp.startDate} onChange={e => updateExp(exp.id, 'startDate', e.target.value)} />
+                      <input className="w-1/2 p-2 bg-white/5 border border-white/10 rounded text-xs text-gray-300" placeholder="End Date" value={exp.endDate} onChange={e => updateExp(exp.id, 'endDate', e.target.value)} disabled={exp.currentlyWorking}/>
+                    </div>
+                    <textarea className="w-full p-2 bg-white/5 border border-white/10 rounded text-sm text-gray-300 min-h-[80px]" placeholder="Description of responsibilities..." value={exp.description} onChange={e => updateExp(exp.id, 'description', e.target.value)} />
                   </div>
                 ))}
-              </div>
-            </section>
+              </section>
+
+               <section>
+                <div className="flex justify-between mb-4 border-b border-white/10 pb-2">
+                  <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider">Education</h2>
+                  <button onClick={addEdu} className="text-white hover:text-[#FFBEA0] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add School</button>
+                </div>
+                {resume.education.map(edu => (
+                  <div key={edu.id} className="p-4 bg-black/20 rounded-xl mb-3 border border-white/5 relative group hover:border-white/20 transition-colors">
+                    <button onClick={() => delEdu(edu.id)} className="absolute top-2 right-2 text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16}/></button>
+                    <input className="w-full p-1 bg-transparent font-bold text-white mb-1 focus:outline-none border-b border-transparent focus:border-[#FFBEA0]" placeholder="School Name" value={edu.school} onChange={e => updateEdu(edu.id, 'school', e.target.value)} />
+                    <div className="flex gap-2 mt-2">
+                      <input className="w-full p-2 bg-white/5 border border-white/10 rounded text-sm text-gray-300" placeholder="Degree / Certification" value={edu.degree} onChange={e => updateEdu(edu.id, 'degree', e.target.value)} />
+                      <input className="w-24 p-2 bg-white/5 border border-white/10 rounded text-sm text-gray-300" placeholder="Year" value={edu.graduationDate} onChange={e => updateEdu(edu.id, 'graduationDate', e.target.value)} />
+                    </div>
+                  </div>
+                ))}
+              </section>
+
+               <section>
+                <div className="flex justify-between mb-4 border-b border-white/10 pb-2">
+                  <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider">Skills</h2>
+                  <button onClick={addSkill} className="text-white hover:text-[#FFBEA0] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add Skill</button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {resume.skills.map(skill => (
+                    <div key={skill.id} className="flex items-center bg-white/10 rounded-full px-3 py-1 border border-white/10 group hover:border-[#FFBEA0]/50 transition-colors">
+                      <input className="bg-transparent text-sm w-24 text-white focus:outline-none" placeholder="Skill" value={skill.name} onChange={e => updateSkill(skill.id, e.target.value)} />
+                      <button onClick={() => delSkill(skill.id)} className="ml-1 text-gray-500 hover:text-red-400"><Trash2 size={12}/></button>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <div className="hidden lg:block relative">
+             <div className="sticky top-24">
+                <div className="bg-[#1B2735] border border-white/10 border-b-0 text-white text-xs uppercase font-bold py-3 px-4 rounded-t-xl flex justify-between no-print items-center">
+                   <span className="flex items-center gap-2"><Layout size={14}/> Live Preview</span>
+                   <span className="opacity-50">A4 Size</span>
+                </div>
+                <div className="bg-black/40 border border-white/10 backdrop-blur-sm p-8 rounded-b-xl h-[calc(100vh-160px)] overflow-y-auto print-container custom-scrollbar">
+                   <div ref={previewRef} className="bg-white shadow-2xl min-h-[297mm] w-[210mm] origin-top-left transform scale-[0.45] md:scale-[0.55] xl:scale-[0.65] print-scale">
+                      <SelectedTemplate data={resume} />
+                   </div>
+                </div>
+             </div>
           </div>
         </div>
-
-        <div className="hidden lg:block relative">
-           <div className="sticky top-24">
-              <div className="bg-[#1B2735] border border-white/10 border-b-0 text-white text-xs uppercase font-bold py-3 px-4 rounded-t-xl flex justify-between no-print items-center">
-                 <span className="flex items-center gap-2"><Layout size={14}/> Live Preview</span>
-                 <span className="opacity-50">A4 Size</span>
-              </div>
-              <div className="bg-black/40 border border-white/10 backdrop-blur-sm p-8 rounded-b-xl h-[calc(100vh-160px)] overflow-y-auto print-container custom-scrollbar">
-                 <div ref={previewRef} className="bg-white shadow-2xl min-h-[297mm] w-[210mm] origin-top-left transform scale-[0.45] md:scale-[0.55] xl:scale-[0.65] print-scale">
-                    <SelectedTemplate data={resume} />
-                 </div>
-              </div>
-           </div>
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export const CoverLetterEditorView: React.FC<EditorProps> = ({
+export const CoverLetterEditorView: React.FC<Omit<EditorProps, "initialView">> = ({
   templateId,
   switchLabel,
   switchHref,
@@ -1160,7 +1162,7 @@ export const CoverLetterEditorView: React.FC<EditorProps> = ({
         personalInfo: { fullName: "", email: "", phone: "", location: "", linkedIn: "" },
         recipient: { name: "", title: "", company: "", address: "" },
         content: { greeting: "Dear Hiring Manager,", body: "I am writing...", closing: "Sincerely," },
-        template: templateId,
+        template: templateId ?? "modern-blue",
         settings: { themeColor: 'blue', font: 'sans' }
     });
 
@@ -1189,7 +1191,11 @@ export const CoverLetterEditorView: React.FC<EditorProps> = ({
    const updateSettings = (f: keyof DesignSettings, v: any) => 
       setData(p => ({ ...p, settings: { ...p.settings, [f]: v } }));
 
+  // Determine the label and href for "Back" button, handle undefined safely
+  const backLabel: string = switchLabel ?? "Back to Resume";
+  const backHref: string = switchHref ?? "/resume";
 return (
+  <>
   <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
     <style dangerouslySetInnerHTML={{ __html: printStyles }} />
     
@@ -1197,11 +1203,11 @@ return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
          <div className="flex items-center gap-6">
              <button
-               onClick={() => onBack ? onBack() : (switchHref && router.push(switchHref))}
+               onClick={() => onBack ? onBack() : router.push(backHref)}
                className="flex items-center gap-2 text-gray-400 hover:text-white transition"
              >
                <ChevronLeft size={20} />
-               <span className="font-semibold">{switchLabel}</span>
+               <span className="font-semibold">{backLabel}</span>
              </button>
          </div>
          <div className="flex items-center gap-4">
@@ -1278,8 +1284,9 @@ return (
       </div>
     </div>
   </div>
+  </>
 );
-};
+}
 
 // DEFAULT EXPORT (ResumeApp)
 // --- FIX: Applied EditorProps here to satisfy TypeScript ---
@@ -1304,25 +1311,30 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
 
   if (currentView === "editor") {
     return (
-      <ResumeEditorView 
-        templateId={selectedTemplateId} 
-        onBack={() => setCurrentView("templates")}
-      />
+      <>
+        <ResumeEditorView
+          templateId={selectedTemplateId}
+          onBack={() => setCurrentView("templates")}
+        />
+      </>
     );
   }
 
   if (currentView === "cover-letter") {
     return (
-      <CoverLetterEditorView 
-        templateId={selectedTemplateId} 
-        switchLabel="Back to Templates" 
-        onBack={() => setCurrentView("templates")}
-      />
+      <>
+        <CoverLetterEditorView
+          templateId={selectedTemplateId}
+          switchLabel="Back to Builder"
+          onBack={() => setCurrentView("templates")}
+        />
+      </>
     );
   }
 
   if (currentView === "templates") {
     return (
+      <>
       <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
         
         {/* --- NAVBAR --- */}
@@ -1412,47 +1424,49 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
           </div>
         </div>
 
-       {/* --- PREVIEW MODAL --- */}
-{previewModalTemplate && ModalComponent && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-    <div className="bg-[#1B2735] border border-white/10 rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
-      
-      {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-white/10">
-        <div>
-          <h2 className="text-xl font-bold text-white">{selectedModalTemplateData?.name}</h2>
-          <p className="text-sm text-gray-400">{selectedModalTemplateData?.description}</p>
-        </div>
-        <button onClick={() => setPreviewModalTemplate(null)} className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">✕</button>
+        {/* --- PREVIEW MODAL --- */}
+        {previewModalTemplate && ModalComponent && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+            <div className="bg-[#1B2735] border border-white/10 rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-white/10">
+                <div>
+                  <h2 className="text-xl font-bold text-white">{selectedModalTemplateData?.name}</h2>
+                  <p className="text-sm text-gray-400">{selectedModalTemplateData?.description}</p>
+                </div>
+                <button onClick={() => setPreviewModalTemplate(null)} className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">✕</button>
+              </div>
+              {/* Preview */}
+              <div className="flex-1 overflow-auto bg-black/50 p-8 custom-scrollbar">
+                <div className="mx-auto shadow-2xl bg-white max-w-[210mm] min-h-[297mm] transform scale-90 origin-top">
+                  <ModalComponent data={{
+                    personalInfo: { fullName: "Alex Morgan", email: "alex@example.com", phone: "(555) 123-4567", location: "New York, NY", linkedIn: "linkedin.com/in/alex" },
+                    professionalSummary: "Experienced professional with a demonstrated history of working in the industry.",
+                    experience: [{ id: "1", company: "Tech Solutions Inc.", position: "Senior Manager", startDate: "2020", endDate: "Present", currentlyWorking: true, description: "Leading a team of 15 developers." }],
+                    education: [{ id: "1", school: "State University", degree: "Bachelor of Science", field: "Computer Science", graduationDate: "2018" }],
+                    skills: [{ id: "1", name: "Leadership" }, { id: "2", name: "Project Management" }],
+                    template: previewModalTemplate!,
+                    settings: { themeColor: 'blue', font: 'sans' }
+                  }} />
+                </div>
+              </div>
+              {/* Footer Buttons */}
+              <div className="p-6 border-t border-white/10 flex justify-end gap-3 bg-[#1B2735]">
+                <button onClick={() => setPreviewModalTemplate(null)} className="px-6 py-3 border border-white/10 rounded-xl hover:bg-white/5 text-white font-medium transition-colors">
+                  Close
+                </button>
+                <button onClick={() => { setPreviewModalTemplate(null); navigateToEditor(previewModalTemplate!); }} className="px-6 py-3 bg-[#FF9E80] text-[#1B2735] rounded-xl font-bold hover:bg-white transition-colors shadow-lg">
+                  Use for Resume
+                </button>
+                <button onClick={() => { setPreviewModalTemplate(null); navigateToCoverLetter(previewModalTemplate!); }} className="px-6 py-3 bg-[#6C5CE7] text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors shadow-lg">
+                  Use for Cover Letter
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Preview */}
-      <div className="flex-1 overflow-auto bg-black/50 p-8 custom-scrollbar">
-        <div className="mx-auto shadow-2xl bg-white max-w-[210mm] min-h-[297mm] transform scale-90 origin-top">
-          <ModalComponent data={{
-            personalInfo: { fullName: "Alex Morgan", email: "alex@example.com", phone: "(555) 123-4567", location: "New York, NY", linkedIn: "linkedin.com/in/alex" },
-            professionalSummary: "Experienced professional with a demonstrated history of working in the industry.",
-            experience: [{ id: "1", company: "Tech Solutions Inc.", position: "Senior Manager", startDate: "2020", endDate: "Present", currentlyWorking: true, description: "Leading a team of 15 developers." }],
-            education: [{ id: "1", school: "State University", degree: "Bachelor of Science", field: "Computer Science", graduationDate: "2018" }],
-            skills: [{id:"1", name:"Leadership"}, {id:"2", name:"Project Management"}],
-            template: previewModalTemplate,
-            settings: { themeColor: 'blue', font: 'sans' }
-          }} />
-        </div>
-      </div>
-
-      {/* Footer Buttons */}
-      <div className="p-6 border-t border-white/10 flex justify-end gap-3 bg-[#1B2735]">
-        <button onClick={() => setPreviewModalTemplate(null)} className="px-6 py-3 border border-white/10 rounded-xl hover:bg-white/5 text-white font-medium transition-colors">
-          Close
-        </button>
-        <button onClick={() => { setPreviewModalTemplate(null); navigateToEditor(previewModalTemplate!); }} className="px-6 py-3 bg-[#FF9E80] text-[#1B2735] rounded-xl font-bold hover:bg-white transition-colors shadow-lg">
-          Use for Resume
-        </button>
-        <button onClick={() => { setPreviewModalTemplate(null); navigateToCoverLetter(previewModalTemplate!); }} className="px-6 py-3 bg-[#6C5CE7] text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors shadow-lg">
-          Use for Cover Letter
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      </>
+    );
+  }
+}
