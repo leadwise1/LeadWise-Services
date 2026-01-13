@@ -15,9 +15,11 @@ import {
 export type ViewType = "templates" | "editor" | "cover-letter";
 
 interface EditorProps {
-  templateId: string;
-  switchLabel: string;
-  switchHref: string;
+  templateId?: string;
+  switchLabel?: string;
+  switchHref?: string;
+  initialView?: ViewType;
+  onBack?: () => void;
 }
 
 export interface Experience {
@@ -964,8 +966,8 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
     professionalSummary: "",
     experience: [],
     education: [],
-    skills: [],
-    template: templateId,
+    skills: [], 
+    template: templateId || "modern-blue",
     settings: { themeColor: 'blue', font: 'sans' }
   });
 
@@ -1146,11 +1148,12 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
   );
 };
 
-function CoverLetterEditorView({
+export const CoverLetterEditorView: React.FC<EditorProps> = ({
   templateId,
   switchLabel,
   switchHref,
-}: EditorProps) {
+  onBack,
+}) => {
     const router = useRouter();
     const [activeTemplateId, setActiveTemplateId] = useState(templateId);
     const [data, setData] = useState<CoverLetterData>({
@@ -1194,7 +1197,7 @@ return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
          <div className="flex items-center gap-6">
              <button
-               onClick={() => router.push(switchHref)}
+               onClick={() => onBack ? onBack() : (switchHref && router.push(switchHref))}
                className="flex items-center gap-2 text-gray-400 hover:text-white transition"
              >
                <ChevronLeft size={20} />
@@ -1276,7 +1279,7 @@ return (
     </div>
   </div>
 );
-}
+};
 
 // DEFAULT EXPORT (ResumeApp)
 // --- FIX: Applied EditorProps here to satisfy TypeScript ---
@@ -1298,6 +1301,25 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
 
   const selectedModalTemplateData = templates.find(t => t.id === previewModalTemplate);
   const ModalComponent = selectedModalTemplateData?.resumeComponent;
+
+  if (currentView === "editor") {
+    return (
+      <ResumeEditorView 
+        templateId={selectedTemplateId} 
+        onBack={() => setCurrentView("templates")}
+      />
+    );
+  }
+
+  if (currentView === "cover-letter") {
+    return (
+      <CoverLetterEditorView 
+        templateId={selectedTemplateId} 
+        switchLabel="Back to Templates" 
+        onBack={() => setCurrentView("templates")}
+      />
+    );
+  }
 
   if (currentView === "templates") {
     return (
@@ -1348,6 +1370,7 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {templates.map((template) => (
               <div key={template.id} className="group bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[#FFBEA0]/50 transition-all duration-300 overflow-hidden hover:-translate-y-1 shadow-lg hover:shadow-[0_0_30px_rgba(255,190,160,0.1)]">
+                {/* --- TEMPLATE CARD -- */}
                 
                 {/* Card Header / Preview */}
                 <div className="h-56 bg-[#1B2735]/50 relative overflow-hidden flex items-center justify-center p-8">

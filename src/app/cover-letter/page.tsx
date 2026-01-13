@@ -10,8 +10,9 @@ function CoverLetterEditorWrapper() {
 
   return (
     <CoverLetterEditorView 
-      templateId={templateId} 
-      onBack={() => router.push('/templates')} 
+      templateId={templateId}
+      switchLabel="Back to Home"
+      onBack={() => router.push('/')}
     />
   );
 }
