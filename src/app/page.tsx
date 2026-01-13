@@ -65,7 +65,6 @@ export default function HomePage() {
             </a>
             <a
               href="https://services.letsleadwise.org/cover-letter"
-              href="https://services.letsleadwise.org/resume"
               className="text-gray-400 hover:text-white transition"
             >
               Cover Letter
