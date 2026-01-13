@@ -2,6 +2,11 @@ import React from 'react';
 import type { Metadata } from "next";
 import ResumeBuilder from '@/components/Editor';
 
+// DEV TEMP WORKAROUND: Forces metadata to refresh on route change
+if (process.env.NODE_ENV === 'development') {
+  import('next/headers').then(({ headers }) => headers());
+}
+
 export const metadata: Metadata = {
   title: "Free ATS Resume Builder | LeadWise Foundation",
   description: "Create a professional, ATS-optimized resume in minutes. Choose from free templates designed to pass automated screenings and get you hired.",
