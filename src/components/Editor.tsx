@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { 
   Trash2, Plus, FileText, 
   ChevronLeft, Mail, Phone, MapPin, Linkedin, Printer,
@@ -14,9 +14,10 @@ import {
 // --- FIX: Added specific type for Views ---
 export type ViewType = "templates" | "editor" | "cover-letter";
 
-// --- FIX: Added Interface for Component Props ---
 interface EditorProps {
-  initialView?: ViewType;
+  templateId: string;
+  switchLabel: string;
+  switchHref: string;
 }
 
 export interface Experience {
@@ -1145,7 +1146,12 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
   );
 };
 
-export const CoverLetterEditorView: React.FC<{ templateId: string, onBack: () => void }> = ({ templateId, onBack }) => {
+function CoverLetterEditorView({
+  templateId,
+  switchLabel,
+  switchHref,
+}: EditorProps) {
+    const router = useRouter();
     const [activeTemplateId, setActiveTemplateId] = useState(templateId);
     const [data, setData] = useState<CoverLetterData>({
         personalInfo: { fullName: "", email: "", phone: "", location: "", linkedIn: "" },
@@ -1187,9 +1193,12 @@ return (
     <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50 no-print">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
          <div className="flex items-center gap-6">
-             <button onClick={onBack} className="flex items-center gap-2 text-gray-400 hover:text-white transition">
-                <ChevronLeft size={20} />
-                <span className="font-semibold">Back to Templates</span>
+             <button
+               onClick={() => router.push(switchHref)}
+               className="flex items-center gap-2 text-gray-400 hover:text-white transition"
+             >
+               <ChevronLeft size={20} />
+               <span className="font-semibold">{switchLabel}</span>
              </button>
          </div>
          <div className="flex items-center gap-4">
@@ -1380,44 +1389,47 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
           </div>
         </div>
 
-        {/* --- PREVIEW MODAL --- */}
-        {previewModalTemplate && ModalComponent && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-              <div className="bg-[#1B2735] border border-white/10 rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
-                <div className="flex items-center justify-between p-6 border-b border-white/10">
-                   <div>
-                      <h2 className="text-xl font-bold text-white">{selectedModalTemplateData?.name}</h2>
-                      <p className="text-sm text-gray-400">{selectedModalTemplateData?.description}</p>
-                   </div>
-                   <button onClick={() => setPreviewModalTemplate(null)} className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">✕</button>
-                </div>
-                <div className="flex-1 overflow-auto bg-black/50 p-8 custom-scrollbar">
-                   <div className="mx-auto shadow-2xl bg-white max-w-[210mm] min-h-[297mm] transform scale-90 origin-top">
-                      <ModalComponent data={{
-                        personalInfo: { fullName: "Alex Morgan", email: "alex@example.com", phone: "(555) 123-4567", location: "New York, NY", linkedIn: "linkedin.com/in/alex" },
-                        professionalSummary: "Experienced professional with a demonstrated history of working in the industry.",
-                        experience: [{ id: "1", company: "Tech Solutions Inc.", position: "Senior Manager", startDate: "2020", endDate: "Present", currentlyWorking: true, description: "Leading a team of 15 developers." }],
-                        education: [{ id: "1", school: "State University", degree: "Bachelor of Science", field: "Computer Science", graduationDate: "2018" }],
-                        skills: [{id:"1", name:"Leadership"}, {id:"2", name:"Project Management"}],
-                        template: previewModalTemplate,
-                        settings: { themeColor: 'blue', font: 'sans' }
-                      }} />
-                   </div>
-                </div>
-                <div className="p-6 border-t border-white/10 flex justify-end gap-3 bg-[#1B2735]">
-                   <button onClick={() => setPreviewModalTemplate(null)} className="px-6 py-3 border border-white/10 rounded-xl hover:bg-white/5 text-white font-medium transition-colors">Close</button>
-                   <button onClick={() => { setPreviewModalTemplate(null); navigateToEditor(previewModalTemplate); }} className="px-6 py-3 bg-[#FF9E80] text-[#1B2735] rounded-xl font-bold hover:bg-white transition-colors shadow-lg">Use This Template</button>
-                </div>
-              </div>
-          </div>
-        )}
+       {/* --- PREVIEW MODAL --- */}
+{previewModalTemplate && ModalComponent && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+    <div className="bg-[#1B2735] border border-white/10 rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+      
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b border-white/10">
+        <div>
+          <h2 className="text-xl font-bold text-white">{selectedModalTemplateData?.name}</h2>
+          <p className="text-sm text-gray-400">{selectedModalTemplateData?.description}</p>
+        </div>
+        <button onClick={() => setPreviewModalTemplate(null)} className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">✕</button>
       </div>
-    );
-  }
 
-  if (currentView === "cover-letter") {
-    return <CoverLetterEditorView templateId={selectedTemplateId} onBack={() => setCurrentView("templates")} />;
-  }
+      {/* Preview */}
+      <div className="flex-1 overflow-auto bg-black/50 p-8 custom-scrollbar">
+        <div className="mx-auto shadow-2xl bg-white max-w-[210mm] min-h-[297mm] transform scale-90 origin-top">
+          <ModalComponent data={{
+            personalInfo: { fullName: "Alex Morgan", email: "alex@example.com", phone: "(555) 123-4567", location: "New York, NY", linkedIn: "linkedin.com/in/alex" },
+            professionalSummary: "Experienced professional with a demonstrated history of working in the industry.",
+            experience: [{ id: "1", company: "Tech Solutions Inc.", position: "Senior Manager", startDate: "2020", endDate: "Present", currentlyWorking: true, description: "Leading a team of 15 developers." }],
+            education: [{ id: "1", school: "State University", degree: "Bachelor of Science", field: "Computer Science", graduationDate: "2018" }],
+            skills: [{id:"1", name:"Leadership"}, {id:"2", name:"Project Management"}],
+            template: previewModalTemplate,
+            settings: { themeColor: 'blue', font: 'sans' }
+          }} />
+        </div>
+      </div>
 
-  return <ResumeEditorView templateId={selectedTemplateId} onBack={() => setCurrentView("templates")} />;
-}
+      {/* Footer Buttons */}
+      <div className="p-6 border-t border-white/10 flex justify-end gap-3 bg-[#1B2735]">
+        <button onClick={() => setPreviewModalTemplate(null)} className="px-6 py-3 border border-white/10 rounded-xl hover:bg-white/5 text-white font-medium transition-colors">
+          Close
+        </button>
+        <button onClick={() => { setPreviewModalTemplate(null); navigateToEditor(previewModalTemplate!); }} className="px-6 py-3 bg-[#FF9E80] text-[#1B2735] rounded-xl font-bold hover:bg-white transition-colors shadow-lg">
+          Use for Resume
+        </button>
+        <button onClick={() => { setPreviewModalTemplate(null); navigateToCoverLetter(previewModalTemplate!); }} className="px-6 py-3 bg-[#6C5CE7] text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors shadow-lg">
+          Use for Cover Letter
+        </button>
+      </div>
+    </div>
+  </div>
+)}
