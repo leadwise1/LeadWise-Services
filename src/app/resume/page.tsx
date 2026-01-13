@@ -31,5 +31,11 @@ export const metadata: Metadata = {
 };
 
 export default function ResumePage() {
-  return <ResumeBuilder />;
+  return (
+    <ResumeBuilder
+      templateId="modern-blue"
+      switchLabel="Cover Letter"
+      switchHref="/cover-letter"
+    />
+  );
 }
