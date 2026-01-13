@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { 
   FileText, 
   Cloud, 
@@ -12,6 +13,37 @@ import {
 // Note: Switched from 'Link' to standard <a> tags to prevent "Router Context" errors 
 
 
+export const metadata: Metadata = {
+  title: "LeadWise Foundation | Free Google Certifications & Resume Builder",
+  description: "Empowering careers with free Google Cloud & Workspace certifications, ATS-optimized resume builder, and professional development tools.",
+  keywords: ["Google Certification", "Resume Builder", "ATS Resume", "Free Courses", "Career Development", "LeadWise Foundation", "Google Cloud", "Google Workspace"],
+  openGraph: {
+    title: "LeadWise Foundation | Turn Ambition into Action",
+    description: "Join a community dedicated to economic mobility. Get certified in Google Cloud & Workspace for free and build an ATS-ready resume.",
+    url: "https://services.letsleadwise.org",
+    siteName: "LeadWise Foundation",
+    images: [
+      {
+        url: "/logolw.jpg",
+        width: 800,
+        height: 600,
+        alt: "LeadWise Foundation Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LeadWise Foundation",
+    description: "Free Google Certifications & ATS Resume Builder.",
+    images: ["/logolw.jpg"],
+  },
+  icons: {
+    icon: "/logolw.jpg",
+  },
+};
+
 export default function HomePage() {
   return (
     <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
@@ -20,9 +52,7 @@ export default function HomePage() {
       <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-tr from-[#FF9E80] to-purple-500 rounded-lg flex items-center justify-center font-bold text-[#1B2735]">
-              L
-            </div>
+            <img src="/logolw.jpg" alt="LeadWise Logo" className="w-8 h-8 rounded-lg object-cover" />
             <span className="font-bold text-white text-lg tracking-tight">LeadWise Foundation</span>
           </a>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -33,9 +63,17 @@ export default function HomePage() {
             >
               Resume Builder
             </a>
+            <a
+              href="https://services.letsleadwise.org/cover-letter"
+              href="https://services.letsleadwise.org/resume"
+              className="text-gray-400 hover:text-white transition"
+            >
+              Cover Letter
+            </a>
             <a href="/courses" className="text-gray-400 hover:text-white transition">Courses</a>
+            <a href="https://letsleadwise.org/courses" className="text-gray-400 hover:text-white transition">Blog</a>
             <a 
-              href="/donate" 
+              href="https://donation.letsleadwise.org" 
               className="bg-[#FF9E80] text-[#1B2735] px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,190,160,0.4)]"
             >
               Donate Now
@@ -206,7 +244,7 @@ export default function HomePage() {
              </div>
 
              <div className="mt-12">
-               <a href="/templates" className="inline-flex items-center gap-2 text-[#FFBEA0] font-bold text-lg hover:text-white transition-all pb-1 border-b border-[#FFBEA0] hover:border-white">
+               <a href="https://services.letsleadwise.org/resume" className="inline-flex items-center gap-2 text-[#FFBEA0] font-bold text-lg hover:text-white transition-all pb-1 border-b border-[#FFBEA0] hover:border-white">
                  Build Your Resume <ArrowRight size={20} />
                </a>
              </div>
@@ -229,7 +267,7 @@ export default function HomePage() {
               <Cloud size={24} /> Get Certified
             </a>
             <a
-              href="/donate"
+              href="https://donation.letsleadwise.org"
               className="bg-white/10 hover:bg-white/20 text-white font-bold px-10 py-5 rounded-xl border border-white/20 hover:border-[#FFBEA0] transition transform hover:-translate-y-1 text-lg flex items-center justify-center gap-3 backdrop-blur-md"
             >
               <CheckCircle size={24} /> Support the Mission
@@ -242,7 +280,7 @@ export default function HomePage() {
       <footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center font-bold text-gray-300">L</div>
+              <img src="/logolw.jpg" alt="LeadWise Logo" className="w-8 h-8 rounded-lg object-cover" />
               <span className="font-semibold text-gray-300">LeadWise Foundation</span>
            </div>
            <p className="text-sm">&copy; {new Date().getFullYear()} LeadWise Foundation. All rights reserved.</p>

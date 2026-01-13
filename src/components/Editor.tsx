@@ -1298,9 +1298,7 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
         <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <a href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-tr from-[#FF9E80] to-purple-500 rounded-lg flex items-center justify-center font-bold text-[#1B2735]">
-                L
-              </div>
+              <img src="/logolw.jpg" alt="LeadWise Logo" className="w-8 h-8 rounded-lg object-cover" />
               <span className="font-bold text-white text-lg tracking-tight">LeadWise Foundation</span>
             </a>
             <div className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -1308,7 +1306,7 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
               <span className="text-[#FFBEA0]">Templates</span>
               <a href="/courses" className="text-gray-400 hover:text-white transition">Courses</a>
               <a 
-                href="/donate" 
+                href="https://donation.letsleadwise.org" 
                 className="bg-[#FF9E80] text-[#1B2735] px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,190,160,0.4)]"
               >
                 Donate Now

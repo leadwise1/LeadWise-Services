@@ -599,6 +599,39 @@ const CoursesPage = () => {
   return (
     <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
       
+      {/* --- NAVBAR --- */}
+      <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          <a href="/" className="flex items-center gap-2">
+            <img src="/logolw.jpg" alt="LeadWise Logo" className="w-8 h-8 rounded-lg object-cover" />
+            <span className="font-bold text-white text-lg tracking-tight">LeadWise Foundation</span>
+          </a>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="/" className="text-gray-400 hover:text-white transition">Home</a>
+            <a
+              href="https://services.letsleadwise.org/resume"
+              className="text-gray-400 hover:text-white transition"
+            >
+              Resume Builder
+            </a>
+            <a
+              href="https://services.letsleadwise.org/resume"
+              className="text-gray-400 hover:text-white transition"
+            >
+              Cover Letter
+            </a>
+            <span className="text-[#FFBEA0]">Courses</span>
+            <a href="https://blogletsleadwise.org/cover-letter" className="text-gray-400 hover:text-white transition">Blog</a>
+            <a 
+              href="https://donation.letsleadwise.org" 
+              className="bg-[#FF9E80] text-[#1B2735] px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,190,160,0.4)]"
+            >
+              Donate Now
+            </a>
+          </div>
+        </div>
+      </nav>
+
       {/* --- HERO SECTION --- */}
       <header className="relative pt-20 pb-16 px-4 text-center max-w-5xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-[#FFBEA0]/30 text-[#FFBEA0] text-sm font-semibold mb-6 animate-fade-in">
@@ -713,8 +746,14 @@ const CoursesPage = () => {
       />
 
       {/* --- FOOTER --- */}
-      <footer className="border-t border-white/10 py-12 text-center text-gray-500 text-sm">
-        <p>© 2024 LeadWise Foundation. Free learning for everyone.</p>
+      <footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+           <div className="flex items-center gap-2">
+              <img src="/logolw.jpg" alt="LeadWise Logo" className="w-8 h-8 rounded-lg object-cover" />
+              <span className="font-semibold text-gray-300">LeadWise Foundation</span>
+           </div>
+           <p className="text-sm">&copy; {new Date().getFullYear()} LeadWise Foundation. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );
