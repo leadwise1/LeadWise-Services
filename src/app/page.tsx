@@ -1,18 +1,20 @@
+// src/app/page.tsx
 import React from "react";
 import type { Metadata } from "next";
-import { 
-  FileText, 
-  Cloud, 
-  CheckCircle, 
-  ArrowRight, 
-  Cpu, 
+import {
+  FileText,
+  Cloud,
+  CheckCircle,
+  ArrowRight,
+  Cpu,
   ShieldCheck,
   Zap
 } from "lucide-react";
 
-// Note: Switched from 'Link' to standard <a> tags to prevent "Router Context" errors 
-
-
+export const metadata: Metadata = {
+  title: "LeadWise Foundation | Turn Ambition into Action",
+  description: "Join a community dedicated to economic mobility. Get certified in Google Cloud & Workspace for free and build an ATS-ready resume.",
+};
 
 export default function HomePage() {
   return (
