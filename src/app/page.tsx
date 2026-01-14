@@ -42,7 +42,7 @@ export default function HomePage() {
               Cover Letter
             </a>
             <a href="/courses" className="text-gray-400 hover:text-white transition">Courses</a>
-            <a href="https://letsleadwise.org/courses" className="text-gray-400 hover:text-white transition">Blog</a>
+            <a href="https://blog.letsleadwise.org" className="text-gray-400 hover:text-white transition">Blog</a>
             <a 
               href="https://donation.letsleadwise.org" 
               className="bg-[#FF9E80] text-[#1B2735] px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,190,160,0.4)]"
