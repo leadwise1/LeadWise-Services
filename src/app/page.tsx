@@ -52,6 +52,7 @@ export default function HomePage() {
           </div>
         </div>
       </nav>
+      <main id="main-content">
 
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-[85vh] flex flex-col items-center justify-center px-4 py-20 overflow-hidden">
@@ -119,7 +120,7 @@ export default function HomePage() {
                      <CheckCircle size={20} />
                    </div>
                    <div>
-                     <h3 className="font-bold text-white text-xl mb-2">{item.title}</h3>
+                     <p className="font-bold text-white text-xl mb-2">{item.title}</p>
                      <p className="text-gray-400 leading-relaxed text-sm">{item.desc}</p>
                    </div>
                  </div>
@@ -142,12 +143,12 @@ export default function HomePage() {
                    {/* Fallback layout if images aren't present */}
                    <div className="p-8 bg-white/10 rounded-2xl border border-white/10 w-full max-w-xs">
                       <Cloud size={64} className="mx-auto text-blue-300 mb-4" />
-                      <h3 className="text-2xl font-bold">Google Cloud</h3>
+                      <p className="text-2xl font-bold">Google Cloud</p>
                       <p className="text-sm text-gray-400">Build Partner</p>
                    </div>
                    <div className="p-8 bg-white/10 rounded-2xl border border-white/10 w-full max-w-xs">
                       <Zap size={64} className="mx-auto text-yellow-300 mb-4" />
-                      <h3 className="text-2xl font-bold">Workspace</h3>
+                      <p className="text-2xl font-bold">Workspace</p>
                       <p className="text-sm text-gray-400">Authorized Partner</p>
                    </div>
                 </div>
@@ -208,7 +209,7 @@ export default function HomePage() {
                  { title: "Instant Cover Letters", desc: "Generate persuasive, tailored cover letters that complement your resume." }
                ].map((item, i) => (
                  <div key={i} className="bg-white/5 p-5 rounded-2xl border border-white/5 hover:border-[#FFBEA0]/30 hover:bg-white/10 transition-colors">
-                   <h3 className="font-bold text-white mb-2 text-lg">{item.title}</h3>
+                   <p className="font-bold text-white mb-2 text-lg">{item.title}</p>
                    <p className="text-sm text-gray-400 leading-relaxed">{item.desc}</p>
                  </div>
                ))}
@@ -248,6 +249,7 @@ export default function HomePage() {
       </section>
 
       {/* --- FOOTER --- */}
+      </main>
       <footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
            <div className="flex items-center gap-2">
