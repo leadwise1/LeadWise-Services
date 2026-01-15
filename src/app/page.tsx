@@ -28,11 +28,15 @@ export default function HomePage() {
             <span className="font-bold text-white text-lg tracking-tight">LeadWise Foundation</span>
           </a>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="/" className="text-[#FFBEA0]">Home</a>
-           <a
+            <a href="https://www.letsleadwise.org"
+              className="text-[#FFBEA0]"
+              >
+              Home
+            </a>
+            <a
               href="https://services.letsleadwise.org/resume"
               className="text-gray-400 hover:text-white transition"
-            >
+             >
               Resume Builder
             </a>
             <a
@@ -41,8 +45,15 @@ export default function HomePage() {
             >
               Cover Letter
             </a>
-            <a href="/courses" className="text-gray-400 hover:text-white transition">Courses</a>
-            <a href="https://blog.letsleadwise.org" className="text-gray-400 hover:text-white transition">Blog</a>
+            <a href="/courses" className="text-gray-400 hover:text-white transition"
+              >
+              Courses
+            </a>
+            <a href="https://blog.letsleadwise.org" 
+              className="text-gray-400 hover:text-white transition"
+              >
+              Blog
+            </a>
             <a 
               href="https://donation.letsleadwise.org" 
               className="bg-[#FF9E80] text-[#1B2735] px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,190,160,0.4)]"
