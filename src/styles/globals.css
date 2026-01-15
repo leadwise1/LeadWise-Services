@@ -47,10 +47,8 @@
   }
   
   body {
-    /* Apply the dark background by default */
-    @apply bg-background text-foreground;
-    
-    /* Ensure the gradient covers the whole viewport */
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     min-height: 100vh;
     background-color: #090A0F; /* Fallback hex */
   }
