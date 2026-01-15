@@ -251,6 +251,7 @@ export default function HomePage() {
   {/* --- FOOTER --- */}
 </main>
 
+<<<<<<< HEAD
 <footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col items-center gap-8">
 
@@ -264,6 +265,19 @@ export default function HomePage() {
       <span className="font-semibold text-gray-300">
         LeadWise Foundation
       </span>
+=======
+      {/* --- FOOTER --- */}
+      </main>
+      <footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <img src="/logolw.jpg" alt="LeadWise Logo" className="w-8 h-8 rounded-lg object-cover" />
+            <span className="font-semibold text-gray-300">LeadWise Foundation</span>
+          </div>
+          <p className="text-sm text-center md:text-left">&copy; {new Date().getFullYear()} LeadWise Foundation. All rights reserved.</p>
+        </div>
+      </footer>
+>>>>>>> 1bd0460 (Fix footer in page.tsx)
     </div>
 
     {/* Large Logo */}
