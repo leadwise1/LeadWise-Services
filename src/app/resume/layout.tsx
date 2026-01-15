@@ -37,5 +37,12 @@ export const metadata = {
 };
 
 export default function ResumeLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+      <main id="main-content">
+        <h1 className="sr-only">ATS Resume Builder | LeadWise Foundation</h1>
+        {children}
+      </main>
+    </div>
+  );
 }

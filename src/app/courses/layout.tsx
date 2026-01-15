@@ -38,5 +38,11 @@ export const metadata = {
 };
 
 export default function CoursesLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+      <main id="main-content">
+        {children}
+      </main>
+    </div>
+  );
 }
