@@ -141,7 +141,7 @@ export default function AdminPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
                <ShieldAlert className="w-6 h-6 text-blue-600" />
-               <h1 className="text-2xl font-bold text-gray-900">LMI & Workforce Compliance Report</h1>
+               <h1 className="text-2xl font-bold text-gray-900">Beneficiary Demographic & Equity Audit</h1>
             </div>
             <p className="text-sm text-gray-500">Generated: {new Date().toLocaleDateString()} • LeadWise Foundation</p>
           </div>
