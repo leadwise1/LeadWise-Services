@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
 
-# Sitemap for services.letsleadwise.org
+Sitemap for services.letsleadwise.org
+
 Sitemap: https://services.letsleadwise.org/sitemap.xml
+Disallow: /admin
+Disallow: /editor
