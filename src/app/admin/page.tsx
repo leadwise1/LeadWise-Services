@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collectionGroup, getDocs, query } from "firebase/firestore";
-import { Loader2, Printer, Filter, ShieldAlert, Lock } from "lucide-react";
+import { Loader2, Printer, Filter, ShieldAlert, Lock, AlertCircle } from "lucide-react";
 
 // --- CONFIGURATION ---
-// ✅ Real Firebase Config (Hardcoded to ensure connection)
+// ✅ Real Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
   authDomain: "leadwise-platform.firebaseapp.com",
@@ -40,6 +40,8 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [statusMsg, setStatusMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [incomeFilter, setIncomeFilter] = useState("All");
 
@@ -56,27 +58,36 @@ export default function AdminPage() {
 
   // --- 2. DATA FETCHING ---
   const fetchData = async () => {
-    if (!db) return alert("Database not connected.");
+    if (!db) {
+        setErrorMsg("Database not initialized.");
+        return;
+    }
     
     setLoading(true);
+    setStatusMsg("Connecting to Firebase...");
+    setErrorMsg("");
+
     try {
       // Query ALL "profile" subcollections to find intake forms
       const q = query(collectionGroup(db, "profile"));
       const querySnapshot = await getDocs(q);
       
+      setStatusMsg(`Found ${querySnapshot.size} documents. Parsing...`);
+
       const fetchedStudents: StudentRecord[] = [];
       querySnapshot.forEach((doc) => {
         if (doc.id === 'intake') {
             const data = doc.data();
-            // We get the User ID from the parent document path
+            // path: artifacts/leadwise-default/users/{USER_ID}/profile/intake
+            // parent = profile, parent.parent = users/{USER_ID}
             const userId = doc.ref.parent.parent?.id || "unknown";
             
             fetchedStudents.push({
-              id: `user_${userId.substring(0, 6)}...`, // Anonymize ID for display
+              id: `user_${userId.substring(0, 6)}...`, 
               zipCode: data.zipCode || "N/A",
               householdIncome: data.householdIncome || "Unknown",
               employmentStatus: data.employmentStatus || "Unknown",
-              status: "Active", // Default status for enrolled students
+              status: "Active", 
               enrolledAt: data.enrolledAt ? new Date(data.enrolledAt).toLocaleDateString() : "N/A",
             });
         }
@@ -84,28 +95,27 @@ export default function AdminPage() {
       setStudents(fetchedStudents);
       
       if (fetchedStudents.length === 0) {
-        console.warn("Query returned 0 records. Check Firestore Rules.");
+        setStatusMsg("Query successful, but found 0 student records.");
+      } else {
+        setStatusMsg(""); // Clear status on success
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching data:", error);
-      alert("Failed to load data. This usually means Database Rules are blocking 'Read All'.");
+      setErrorMsg(`Error: ${error.message}. (Likely a Permission Issue - Check Firestore Rules)`);
     } finally {
       setLoading(false);
     }
   };
 
-  // --- 3. FILTER LOGIC ---
   const filteredStudents = incomeFilter === "All" 
     ? students 
     : students.filter(s => s.householdIncome === incomeFilter);
 
-  // --- 4. PRINT LOGIC ---
   const handlePrint = () => {
     window.print();
   };
 
-  // --- LOGIN SCREEN ---
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100 text-slate-900">
@@ -116,9 +126,12 @@ export default function AdminPage() {
           <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Compliance Portal</h2>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Access Code</label>
+              <label htmlFor="access-code" className="block text-sm font-medium text-gray-700 mb-1">Access Code</label>
               <input 
+                id="access-code"
+                name="accessCode"
                 type="password" 
+                autoComplete="current-password"
                 className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -134,7 +147,6 @@ export default function AdminPage() {
     );
   }
 
-  // --- DASHBOARD ---
   return (
     <div className="min-h-screen bg-gray-50 p-8 print:p-0 print:bg-white text-slate-900">
       <div className="max-w-7xl mx-auto">
@@ -161,13 +173,28 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* FILTERS (Hidden on Print) */}
+        {/* STATUS MESSAGES */}
+        {errorMsg && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 print:hidden">
+                <AlertCircle className="w-5 h-5" />
+                {errorMsg}
+            </div>
+        )}
+        {statusMsg && !errorMsg && (
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-sm font-mono print:hidden">
+                {statusMsg}
+            </div>
+        )}
+
+        {/* FILTERS */}
         <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6 print:hidden flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2 text-gray-700 font-medium">
               <Filter className="w-4 h-4" />
-              Filter Data:
+              <label htmlFor="income-filter" className="font-semibold text-gray-700">Filter by Income:</label>
             </div>
             <select 
+                id="income-filter"
+                name="incomeFilter"
                 className="p-2 border rounded bg-gray-50 text-sm"
                 value={incomeFilter}
                 onChange={(e) => setIncomeFilter(e.target.value)}
