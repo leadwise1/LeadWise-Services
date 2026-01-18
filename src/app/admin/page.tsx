@@ -6,24 +6,22 @@ import { getFirestore, collectionGroup, getDocs, query } from "firebase/firestor
 import { Loader2, Printer, Filter, ShieldAlert, Lock } from "lucide-react";
 
 // --- CONFIGURATION ---
-// In Next.js, use environment variables starting with NEXT_PUBLIC_
+// ✅ Real Firebase Config (Hardcoded to ensure connection bypasses Env Var issues)
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
+  authDomain: "leadwise-platform.firebaseapp.com",
+  projectId: "leadwise-platform",
+  storageBucket: "leadwise-platform.firebasestorage.app",
+  messagingSenderId: "423460758070",
+  appId: "1:423460758070:web:6ff12a230fc1e65b44ee97",
+  measurementId: "G-W5SVR52646"
 };
 
 // Initialize Firebase
 let db: any;
 try {
-  // Only initialize if config is present
-  if (firebaseConfig.apiKey) {
-    const app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-  }
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
 } catch (e) {
   console.error("Admin Page: Firebase init failed", e);
 }
