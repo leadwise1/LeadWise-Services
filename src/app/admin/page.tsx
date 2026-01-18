@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collectionGroup, getDocs, query } from "firebase/firestore";
-import { Loader2, Printer, Filter, ShieldAlert, Lock, AlertCircle } from "lucide-react";
+import { getFirestore, collection, getDocs, query, collectionGroup } from "firebase/firestore";
+import { Loader2, Printer, Filter, ShieldAlert, Lock, AlertTriangle } from "lucide-react";
 
 // --- CONFIGURATION ---
-// ✅ Real Firebase Config
+// ✅ Real Firebase Config (Hardcoded)
 const firebaseConfig = {
   apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
   authDomain: "leadwise-platform.firebaseapp.com",
@@ -26,7 +26,6 @@ try {
   console.error("Admin Page: Firebase init failed", e);
 }
 
-// --- TYPES ---
 interface StudentRecord {
   id: string; 
   zipCode: string;
@@ -40,12 +39,12 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [statusMsg, setStatusMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [incomeFilter, setIncomeFilter] = useState("All");
+  const [debugLog, setDebugLog] = useState<string[]>([]); // New On-Screen Log
 
-  // --- 1. LOGIN LOGIC ---
+  const addLog = (msg: string) => setDebugLog(prev => [...prev, `${new Date().toLocaleTimeString()}: ${msg}`]);
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === "LeadWise2024") { 
@@ -56,30 +55,30 @@ export default function AdminPage() {
     }
   };
 
-  // --- 2. DATA FETCHING ---
   const fetchData = async () => {
     if (!db) {
-        setErrorMsg("Database not initialized.");
+        addLog("Error: Database not initialized.");
         return;
     }
     
     setLoading(true);
-    setStatusMsg("Connecting to Firebase...");
-    setErrorMsg("");
+    setDebugLog([]); // Clear logs
+    addLog("Starting Data Fetch...");
 
     try {
-      // Query ALL "profile" subcollections to find intake forms
+      // 1. Try Collection Group Query (Best way)
+      addLog("Attempting Collection Group Query for 'profile'...");
       const q = query(collectionGroup(db, "profile"));
       const querySnapshot = await getDocs(q);
       
-      setStatusMsg(`Found ${querySnapshot.size} documents. Parsing...`);
+      addLog(`Query Complete. Found ${querySnapshot.size} documents.`);
 
       const fetchedStudents: StudentRecord[] = [];
       querySnapshot.forEach((doc) => {
+        addLog(`- Found Doc ID: ${doc.id} at path: ${doc.ref.path}`);
+        
         if (doc.id === 'intake') {
             const data = doc.data();
-            // path: artifacts/leadwise-default/users/{USER_ID}/profile/intake
-            // parent = profile, parent.parent = users/{USER_ID}
             const userId = doc.ref.parent.parent?.id || "unknown";
             
             fetchedStudents.push({
@@ -93,16 +92,16 @@ export default function AdminPage() {
         }
       });
       setStudents(fetchedStudents);
-      
-      if (fetchedStudents.length === 0) {
-        setStatusMsg("Query successful, but found 0 student records.");
-      } else {
-        setStatusMsg(""); // Clear status on success
-      }
 
     } catch (error: any) {
-      console.error("Error fetching data:", error);
-      setErrorMsg(`Error: ${error.message}. (Likely a Permission Issue - Check Firestore Rules)`);
+      console.error("Error:", error);
+      addLog(`CRITICAL ERROR: ${error.message}`);
+      if (error.message.includes("requires an index")) {
+        addLog("HINT: You might need to create an index in Firebase Console.");
+      }
+      if (error.message.includes("permission")) {
+         addLog("HINT: Database Rules are blocking this. Did you publish 'allow read: if true;'?");
+      }
     } finally {
       setLoading(false);
     }
@@ -120,27 +119,14 @@ export default function AdminPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100 text-slate-900">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm border border-gray-200">
-          <div className="flex justify-center mb-4">
-            <Lock className="w-12 h-12 text-blue-600" />
-          </div>
+          <div className="flex justify-center mb-4"><Lock className="w-12 h-12 text-blue-600" /></div>
           <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Compliance Portal</h2>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label htmlFor="access-code" className="block text-sm font-medium text-gray-700 mb-1">Access Code</label>
-              <input 
-                id="access-code"
-                name="accessCode"
-                type="password" 
-                autoComplete="current-password"
-                className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter code..."
-              />
+              <input id="access-code" type="password" className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter code..." />
             </div>
-            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-opacity-90 font-bold transition-colors">
-              Access Reports
-            </button>
+            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-opacity-90 font-bold transition-colors">Access Reports</button>
           </form>
         </div>
       </div>
@@ -151,54 +137,35 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50 p-8 print:p-0 print:bg-white text-slate-900">
       <div className="max-w-7xl mx-auto">
         
-        {/* HEADER */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 print:mb-6 border-b print:border-none pb-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
                <ShieldAlert className="w-6 h-6 text-blue-600" />
                <h1 className="text-2xl font-bold text-gray-900">LMI & Workforce Compliance Report</h1>
             </div>
-            <p className="text-sm text-gray-500">
-              Generated: {new Date().toLocaleDateString()} • LeadWise Foundation
-            </p>
+            <p className="text-sm text-gray-500">Generated: {new Date().toLocaleDateString()} • LeadWise Foundation</p>
           </div>
-          
           <div className="flex gap-4 mt-4 md:mt-0 print:hidden">
-            <button 
-              onClick={handlePrint}
-              className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition shadow-sm"
-            >
+            <button onClick={handlePrint} className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition shadow-sm">
               <Printer className="w-4 h-4" /> Print PDF
             </button>
           </div>
         </div>
 
-        {/* STATUS MESSAGES */}
-        {errorMsg && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700 print:hidden">
-                <AlertCircle className="w-5 h-5" />
-                {errorMsg}
+        {/* DEBUG LOG - VISIBLE ONLY TO ADMIN */}
+        <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6 text-xs font-mono text-yellow-800 print:hidden">
+            <h3 className="font-bold flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4"/> System Logs</h3>
+            <div className="space-y-1 max-h-32 overflow-y-auto">
+                {debugLog.length === 0 ? "Waiting for action..." : debugLog.map((log, i) => <div key={i}>{log}</div>)}
             </div>
-        )}
-        {statusMsg && !errorMsg && (
-            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-sm font-mono print:hidden">
-                {statusMsg}
-            </div>
-        )}
+        </div>
 
-        {/* FILTERS */}
         <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6 print:hidden flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2 text-gray-700 font-medium">
               <Filter className="w-4 h-4" />
               <label htmlFor="income-filter" className="font-semibold text-gray-700">Filter by Income:</label>
             </div>
-            <select 
-                id="income-filter"
-                name="incomeFilter"
-                className="p-2 border rounded bg-gray-50 text-sm"
-                value={incomeFilter}
-                onChange={(e) => setIncomeFilter(e.target.value)}
-            >
+            <select id="income-filter" className="p-2 border rounded bg-gray-50 text-sm" value={incomeFilter} onChange={(e) => setIncomeFilter(e.target.value)}>
                 <option value="All">All Income Ranges</option>
                 <option value="0-25k">$0 - $25,000 (Very Low)</option>
                 <option value="25-50k">$25,001 - $50,000 (Low)</option>
@@ -210,12 +177,9 @@ export default function AdminPage() {
             </div>
         </div>
 
-        {/* DATA TABLE */}
         <div className="bg-white shadow-lg rounded-lg overflow-hidden print:shadow-none print:border-2 print:border-gray-900">
             {loading ? (
-                <div className="p-12 flex justify-center text-gray-500">
-                    <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-                </div>
+                <div className="p-12 flex justify-center text-gray-500"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
@@ -253,9 +217,7 @@ export default function AdminPage() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={5} className="p-12 text-center text-gray-500 italic">
-                                        No student records found matching this criteria.
-                                    </td>
+                                    <td colSpan={5} className="p-12 text-center text-gray-500 italic">No student records found matching this criteria.</td>
                                 </tr>
                             )}
                         </tbody>
@@ -263,15 +225,6 @@ export default function AdminPage() {
                 </div>
             )}
         </div>
-
-        {/* PRINT FOOTER */}
-        <div className="hidden print:block mt-8 border-t pt-4">
-            <div className="flex justify-between text-xs text-gray-500">
-                <span>Confidential: For Grant & Audit Use Only</span>
-                <span>Verified by LeadWise Foundation Data Systems</span>
-            </div>
-        </div>
-
       </div>
     </div>
   );
