@@ -6,7 +6,7 @@ import { getFirestore, collectionGroup, getDocs, query } from "firebase/firestor
 import { Loader2, Printer, Filter, ShieldAlert, Lock } from "lucide-react";
 
 // --- CONFIGURATION ---
-// ✅ Real Firebase Config (Hardcoded to ensure connection bypasses Env Var issues)
+// ✅ Real Firebase Config (Hardcoded to ensure connection)
 const firebaseConfig = {
   apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
   authDomain: "leadwise-platform.firebaseapp.com",
@@ -56,7 +56,7 @@ export default function AdminPage() {
 
   // --- 2. DATA FETCHING ---
   const fetchData = async () => {
-    if (!db) return alert("Database not connected. Check API Keys in .env or Vercel Settings.");
+    if (!db) return alert("Database not connected.");
     
     setLoading(true);
     try {
@@ -69,7 +69,6 @@ export default function AdminPage() {
         if (doc.id === 'intake') {
             const data = doc.data();
             // We get the User ID from the parent document path
-            // path: artifacts/leadwise-default/users/{USER_ID}/profile/intake
             const userId = doc.ref.parent.parent?.id || "unknown";
             
             fetchedStudents.push({
@@ -83,9 +82,14 @@ export default function AdminPage() {
         }
       });
       setStudents(fetchedStudents);
+      
+      if (fetchedStudents.length === 0) {
+        console.warn("Query returned 0 records. Check Firestore Rules.");
+      }
+
     } catch (error) {
       console.error("Error fetching data:", error);
-      alert("Failed to load data. Ensure Firestore Rules allow read access.");
+      alert("Failed to load data. This usually means Database Rules are blocking 'Read All'.");
     } finally {
       setLoading(false);
     }
