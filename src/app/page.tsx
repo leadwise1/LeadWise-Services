@@ -498,7 +498,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
         
 import React from 'react';
 import Image from 'next/image';
@@ -515,7 +514,13 @@ const Footer: React.FC = () => {
 
       <div className="text-center mb-6">
         <a href="/" aria-label="LeadWise Foundation Home">
-          <Image src="/images/logo.svg" alt="LeadWise Foundation Logo" width={180} height={45} className="mx-auto" />
+          <Image
+            src="/logolw.jpg"
+            alt="LeadWise Foundation Logo"
+            width={180}
+            height={45}
+            className="mx-auto"
+          />
         </a>
       </div>
 
