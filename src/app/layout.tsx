@@ -1,6 +1,6 @@
+import Script from 'next/script'
 import type { Metadata } from "next";
 import React from "react";
-import Script from "next/script";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
@@ -42,15 +42,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        {/* Google Analytics */}
+        {/* Fonts, meta tags, etc. */}
+      </head>
+      <body>
+        {children}
+
+        {/* Google Analytics / Ad Grant Tag */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-730C30SNVM"
+          src="https://www.googletagmanager.com/gtag/js?id=G-T9GJJL0N2V"
           strategy="afterInteractive"
         />
         <Script id="gtag-init" strategy="afterInteractive">
@@ -58,15 +61,10 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-730C30SNVM');
+            gtag('config', 'G-T9GJJL0N2V');
           `}
         </Script>
-      </head>
-      <body>
-        <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
-          <main id="main-content">{children}</main>
-        </div>
       </body>
     </html>
-  );
+  )
 }
