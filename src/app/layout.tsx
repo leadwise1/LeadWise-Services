@@ -2,7 +2,7 @@ import Script from 'next/script'
 import type { Metadata } from "next";
 import React from "react";
 import "../styles/globals.css";
-import Footer from '../components/Footer';
+
 
 export const metadata: Metadata = {
   title: "LeadWise Foundation | Free Google Certifications & Resume Builder",
@@ -65,7 +65,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {children}
-        <Footer />
       </body>
     </html>
   )

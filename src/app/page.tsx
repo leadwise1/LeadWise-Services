@@ -251,8 +251,8 @@ export default function HomePage() {
 
       </main>
 
-{/* --- FOOTER --- */}
-<footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
+     {/* --- FOOTER --- */}
+      <footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col items-center gap-8">
           {/* Compact Logo + Name Section */}
           <div className="flex items-center gap-2">
