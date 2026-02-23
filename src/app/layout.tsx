@@ -2,6 +2,7 @@ import Script from 'next/script'
 import type { Metadata } from "next";
 import React from "react";
 import "../styles/globals.css";
+import Footer from '../components/Footer';
 
 export const metadata: Metadata = {
   title: "LeadWise Foundation | Free Google Certifications & Resume Builder",
@@ -46,11 +47,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        {/* Fonts, meta tags, etc. */}
-      </head>
-      <body>
-        {children}
-
         {/* Google Analytics / Ad Grant Tag */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-T9GJJL0N2V"
@@ -64,6 +60,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gtag('config', 'G-T9GJJL0N2V');
           `}
         </Script>
+
+        {/* Fonts, meta tags, etc. */}
+      </head>
+      <body>
+        {children}
+        <Footer />
       </body>
     </html>
   )
