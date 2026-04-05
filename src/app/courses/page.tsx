@@ -208,55 +208,57 @@ const dataAnalyticsCourse: Course = {
 // --- DATA: Cyber Security Course ---
 const cyberSecurityCourse: Course = {
   id: "cyber-security",
-  title: "Cyber Security Essentials",
-  subtitle: "Protect the cloud. Secure the future.",
-  description: "Learn to identify, prevent, and mitigate security threats in the cloud. Leverage official Google Cloud Security training and GDG community resources.",
-  duration: "10-12 weeks",
-  level: "Intermediate",
-  target: "Aspiring security analysts, cloud engineers",
-  tags: ["Security", "Google Cloud", "GDG"],
+  title: "Introduction to Security Principles in Cloud Computing",
+  subtitle: "Part of the Google Cloud Cybersecurity Certificate",
+  description: "Explore the essentials of cybersecurity, including the security lifecycle, digital transformation, and key cloud computing concepts. Identify common tools used by entry-level cloud security analysts to automate tasks.",
+  duration: "5 hours",
+  level: "Introductory",
+  target: "Aspiring cloud security analysts, IT professionals",
+  tags: ["Security", "Google Cloud", "Certificate"],
   color: "red",
   modules: [
     {
-      id: "sec-fundamentals",
-      title: "Module 1: Security Fundamentals",
-      duration: "2 weeks",
+      id: "m1",
+      title: "Introduction to cloud computing",
+      duration: "1 hour",
       lessons: [
-        {
-          id: "intro-sec",
-          title: "Introduction to Cloud Security",
-          resources: [
-            { title: "Google Cloud Security Foundations", type: "documentation", platform: "Google Cloud", url: "https://cloud.google.com/learn/training/security" }
-          ]
-        }
+        { id: "l1", title: "Welcome to the Google Cloud Cybersecurity Certificate", resources: [] },
+        { id: "l2", title: "Composition of the cloud", resources: [] },
+        { id: "l3", title: "Cloud deployment models", resources: [] },
+        { id: "l4", title: "Cloud benefits and considerations", resources: [] }
       ]
     },
     {
-      id: "iam-security",
-      title: "Module 2: Identity & Access Management",
-      duration: "2-3 weeks",
+      id: "m2",
+      title: "Security in the cloud",
+      duration: "1.5 hours",
       lessons: [
-        {
-          id: "iam-basics",
-          title: "IAM Best Practices",
-          resources: [
-            { title: "IAM Documentation", type: "documentation", platform: "Google Cloud", url: "https://cloud.google.com/iam/docs" }
-          ]
-        }
+        { id: "l5", title: "Cloud defense in depth", resources: [] },
+        { id: "l6", title: "The shared responsibility model", resources: [] },
+        { id: "l7", title: "The shared fate model", resources: [] },
+        { id: "l8", title: "Security in IaaS, PaaS, and SaaS", resources: [] }
       ]
     },
     {
-      id: "network-sec",
-      title: "Module 3: Network Security",
-      duration: "3-4 weeks",
+      id: "m3",
+      title: "The security lifecycle",
+      duration: "1.5 hours",
       lessons: [
-        {
-          id: "vpc-security",
-          title: "Securing Your VPC",
-          resources: [
-            { title: "VPC Security Guide", type: "documentation", platform: "Google Cloud", url: "https://cloud.google.com/vpc/docs/security" }
-          ]
-        }
+        { id: "l9", title: "An overview of DevSecOps", resources: [] },
+        { id: "l10", title: "The CI/CD pipeline", resources: [] },
+        { id: "l11", title: "Infrastructure as code (IaC) in the cloud", resources: [] },
+        { id: "l12", title: "Software supply chain security", resources: [] }
+      ]
+    },
+    {
+      id: "m4",
+      title: "Cloud security analyst roles",
+      duration: "1 hour",
+      lessons: [
+        { id: "l13", title: "Introduction to the cloud security analyst's role", resources: [] },
+        { id: "l14", title: "Cloud security analyst job responsibilities", resources: [] },
+        { id: "l15", title: "The security ecosystem", resources: [] },
+        { id: "l16", title: "Create a VPC using Cloud Shell", resources: [] }
       ]
     }
   ]
