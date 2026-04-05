@@ -8,6 +8,7 @@ import {
   ArrowRight, 
   Terminal, 
   BarChart3,
+  ShieldCheck,
   X,
   Loader2,
   Lock,
@@ -203,6 +204,65 @@ const dataAnalyticsCourse: Course = {
     }
   ]
 };
+
+// --- DATA: Cyber Security Course ---
+const cyberSecurityCourse: Course = {
+  id: "cyber-security",
+  title: "Cyber Security Essentials",
+  subtitle: "Protect the cloud. Secure the future.",
+  description: "Learn to identify, prevent, and mitigate security threats in the cloud. Leverage official Google Cloud Security training and GDG community resources.",
+  duration: "10-12 weeks",
+  level: "Intermediate",
+  target: "Aspiring security analysts, cloud engineers",
+  tags: ["Security", "Google Cloud", "GDG"],
+  color: "red",
+  modules: [
+    {
+      id: "sec-fundamentals",
+      title: "Module 1: Security Fundamentals",
+      duration: "2 weeks",
+      lessons: [
+        {
+          id: "intro-sec",
+          title: "Introduction to Cloud Security",
+          resources: [
+            { title: "Google Cloud Security Foundations", type: "documentation", platform: "Google Cloud", url: "https://cloud.google.com/learn/training/security" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "iam-security",
+      title: "Module 2: Identity & Access Management",
+      duration: "2-3 weeks",
+      lessons: [
+        {
+          id: "iam-basics",
+          title: "IAM Best Practices",
+          resources: [
+            { title: "IAM Documentation", type: "documentation", platform: "Google Cloud", url: "https://cloud.google.com/iam/docs" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "network-sec",
+      title: "Module 3: Network Security",
+      duration: "3-4 weeks",
+      lessons: [
+        {
+          id: "vpc-security",
+          title: "Securing Your VPC",
+          resources: [
+            { title: "VPC Security Guide", type: "documentation", platform: "Google Cloud", url: "https://cloud.google.com/vpc/docs/security" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse];
 
 // --- COMPONENTS ---
 
@@ -491,13 +551,26 @@ interface CourseCardProps {
 
 function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
   const [showModules, setShowModules] = useState(false);
-  const Icon = course.color === 'blue' ? Terminal : BarChart3;
+  const getIcon = () => {
+    switch (course.color) {
+      case 'blue': return Terminal;
+      case 'purple': return BarChart3;
+      case 'red': return ShieldCheck;
+      default: return Terminal;
+    }
+  };
+  const Icon = getIcon();
+  const colorClasses = {
+    blue: "bg-blue-500/20 text-blue-300",
+    purple: "bg-purple-500/20 text-purple-300",
+    red: "bg-red-500/20 text-red-300"
+  };
 
   return (
     <div className="group relative bg-white/5 border border-white/10 hover:border-[#FFBEA0]/30 rounded-[2rem] overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-10px_rgba(255,190,160,0.1)]">
       <div className="p-8">
         <div className="flex items-start justify-between mb-6">
-          <div className={`p-3 rounded-2xl ${course.color === 'blue' ? 'bg-blue-500/20 text-blue-300' : 'bg-purple-500/20 text-purple-300'}`}>
+          <div className={`p-3 rounded-2xl ${colorClasses[course.color as keyof typeof colorClasses] || "bg-blue-500/20 text-blue-300"}`}>
             <Icon size={32} />
           </div>
           <div className="flex gap-2">
@@ -723,18 +796,15 @@ const CoursesPage = () => {
           Choose Your <span className="text-[#FFBEA0]">Economic Pathway</span>
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <CourseCard 
-            course={frontendCourse}
-            isEnrolled={isEnrolled}
-            onTriggerIntake={() => openEnrollment(frontendCourse)}
-          />
-
-          <CourseCard 
-             course={dataAnalyticsCourse}
-             isEnrolled={isEnrolled}
-             onTriggerIntake={() => openEnrollment(dataAnalyticsCourse)}
-          />
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {COURSES.map(course => (
+            <CourseCard 
+              key={course.id}
+              course={course}
+              isEnrolled={isEnrolled}
+              onTriggerIntake={() => openEnrollment(course)}
+            />
+          ))}
         </div>
       </section>
 
