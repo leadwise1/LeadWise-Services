@@ -225,7 +225,8 @@ const cyberSecurityCourse: Course = {
         { id: "l1", title: "Welcome to the Google Cloud Cybersecurity Certificate", resources: [] },
         { id: "l2", title: "Composition of the cloud", resources: [] },
         { id: "l3", title: "Cloud deployment models", resources: [] },
-        { id: "l4", title: "Cloud benefits and considerations", resources: [] }
+        { id: "l4", title: "Google's trusted infrastructure", resources: [] },
+        { id: "l5", title: "Cloud benefits and considerations", resources: [] }
       ]
     },
     {
@@ -233,10 +234,11 @@ const cyberSecurityCourse: Course = {
       title: "Security in the cloud",
       duration: "1.5 hours",
       lessons: [
-        { id: "l5", title: "Cloud defense in depth", resources: [] },
-        { id: "l6", title: "The shared responsibility model", resources: [] },
-        { id: "l7", title: "The shared fate model", resources: [] },
-        { id: "l8", title: "Security in IaaS, PaaS, and SaaS", resources: [] }
+        { id: "l6", title: "Cloud defense in depth", resources: [] },
+        { id: "l7", title: "The shared responsibility model", resources: [] },
+        { id: "l8", title: "The shared fate model", resources: [] },
+        { id: "l9", title: "Identity and Access Management (IAM)", resources: [] },
+        { id: "l10", title: "Security in IaaS, PaaS, and SaaS", resources: [] }
       ]
     },
     {
@@ -244,10 +246,11 @@ const cyberSecurityCourse: Course = {
       title: "The security lifecycle",
       duration: "1.5 hours",
       lessons: [
-        { id: "l9", title: "An overview of DevSecOps", resources: [] },
-        { id: "l10", title: "The CI/CD pipeline", resources: [] },
-        { id: "l11", title: "Infrastructure as code (IaC) in the cloud", resources: [] },
-        { id: "l12", title: "Software supply chain security", resources: [] }
+        { id: "l11", title: "An overview of DevSecOps", resources: [] },
+        { id: "l12", title: "The CI/CD pipeline", resources: [] },
+        { id: "l13", title: "Infrastructure as code (IaC) with Terraform", resources: [] },
+        { id: "l14", title: "IaC in the GitOps framework", resources: [] },
+        { id: "l15", title: "Software supply chain security", resources: [] }
       ]
     },
     {
@@ -255,10 +258,11 @@ const cyberSecurityCourse: Course = {
       title: "Cloud security analyst roles",
       duration: "1 hour",
       lessons: [
-        { id: "l13", title: "Introduction to the cloud security analyst's role", resources: [] },
-        { id: "l14", title: "Cloud security analyst job responsibilities", resources: [] },
-        { id: "l15", title: "The security ecosystem", resources: [] },
-        { id: "l16", title: "Create a VPC using Cloud Shell", resources: [] }
+        { id: "l16", title: "Introduction to the cloud security analyst's role", resources: [] },
+        { id: "l17", title: "Cloud security analyst job responsibilities", resources: [] },
+        { id: "l18", title: "Introduction to artificial intelligence", resources: [] },
+        { id: "l19", title: "Workplace communication and collaboration", resources: [] },
+        { id: "l20", title: "Create a VPC using Cloud Shell", resources: [] }
       ]
     }
   ]
