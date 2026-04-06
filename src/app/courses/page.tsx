@@ -435,7 +435,62 @@ const linuxSqlCourse: Course = {
   ]
 };
 
-const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse, manageSecurityRisksCourse, networksSecurityCourse, linuxSqlCourse];
+// --- DATA: Capstone and Job Prep Course ---
+const capstoneJobPrepCourse: Course = {
+  id: "capstone-job-prep",
+  title: "Put It All Together: Prepare for a Cloud Security Analyst Job",
+  subtitle: "Capstone Course of the Google Cloud Cybersecurity Certificate",
+  description: "Combine all skills to solve practical scenarios. Finalize your job search materials including resume updates and interview preparation tailored for cloud security analyst roles.",
+  duration: "10 hours",
+  level: "Intermediate (Capstone)",
+  target: "Career seekers, cloud security analysts",
+  tags: ["Career", "Capstone", "Incident Response"],
+  color: "rose",
+  modules: [
+    {
+      id: "m1",
+      title: "Analyze a security scenario",
+      duration: "3 hours",
+      lessons: [
+        { id: "l1", title: "Interactive Capstone Project Scenario", resources: [] },
+        { id: "l2", title: "Applying Cloud Security Principles", resources: [] },
+        { id: "l3", title: "Risk and Vulnerability Assessment", resources: [] }
+      ]
+    },
+    {
+      id: "m2",
+      title: "Detect and manage security incidents",
+      duration: "2 hours",
+      lessons: [
+        { id: "l4", title: "Threat Detection in Cloud Environments", resources: [] },
+        { id: "l5", title: "Incident Management Best Practices", resources: [] },
+        { id: "l6", title: "Using Detection Tools", resources: [] }
+      ]
+    },
+    {
+      id: "m3",
+      title: "Contain, recover, and communicate",
+      duration: "2 hours",
+      lessons: [
+        { id: "l7", title: "Containment and Eradication Strategies", resources: [] },
+        { id: "l8", title: "Recovery Procedures in the Cloud", resources: [] },
+        { id: "l9", title: "Crisis Communication and Escalation", resources: [] }
+      ]
+    },
+    {
+      id: "m4",
+      title: "Prepare for your cloud security analyst career",
+      duration: "3 hours",
+      lessons: [
+        { id: "l10", title: "Resume and Portfolio Tailoring", resources: [] },
+        { id: "l11", title: "Interviewing for Cloud Security Roles", resources: [] },
+        { id: "l12", title: "Continuing Professional Development", resources: [] }
+      ]
+    }
+  ]
+};
+
+const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse, manageSecurityRisksCourse, networksSecurityCourse, linuxSqlCourse, capstoneJobPrepCourse];
 
 // --- COMPONENTS ---
 
@@ -732,6 +787,7 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
       case 'orange': return ShieldAlert;
       case 'teal': return Activity;
       case 'indigo': return Database;
+      case 'rose': return Briefcase;
       default: return Terminal;
     }
   };
@@ -742,7 +798,8 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
     red: "bg-red-500/20 text-red-300",
     orange: "bg-orange-500/20 text-orange-300",
     teal: "bg-teal-500/20 text-teal-300",
-    indigo: "bg-indigo-500/20 text-indigo-300"
+    indigo: "bg-indigo-500/20 text-indigo-300",
+    rose: "bg-rose-500/20 text-rose-300"
   };
 
   return (
