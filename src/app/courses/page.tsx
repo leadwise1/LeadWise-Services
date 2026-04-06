@@ -380,7 +380,62 @@ const networksSecurityCourse: Course = {
   ]
 };
 
-const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse, manageSecurityRisksCourse, networksSecurityCourse];
+// --- DATA: Linux and SQL Course ---
+const linuxSqlCourse: Course = {
+  id: "linux-sql",
+  title: "Tools of the Trade: Linux and SQL",
+  subtitle: "Part of the Google Cloud Cybersecurity Certificate",
+  description: "Foundational computing skills for cybersecurity analysts. Mastering Linux shell, file management, and SQL database querying for security investigations.",
+  duration: "15 hours",
+  level: "Introductory",
+  target: "Aspiring cybersecurity analysts, data investigators",
+  tags: ["Linux", "SQL", "Bash"],
+  color: "indigo",
+  modules: [
+    {
+      id: "m1",
+      title: "Introduction to Operating Systems",
+      duration: "3 hours",
+      lessons: [
+        { id: "l1", title: "Relationship Between OS, Apps, and Hardware", resources: [] },
+        { id: "l2", title: "OS Functions and Resource Management", resources: [] },
+        { id: "l3", title: "Comparing GUI and CLI Interfaces", resources: [] }
+      ]
+    },
+    {
+      id: "m2",
+      title: "The Linux Operating System",
+      duration: "4 hours",
+      lessons: [
+        { id: "l4", title: "Linux Architecture and Distributions", resources: [] },
+        { id: "l5", title: "Bash Shell: The OS Interface", resources: [] },
+        { id: "l6", title: "File System Navigation and Management", resources: [] }
+      ]
+    },
+    {
+      id: "m3",
+      title: "Using Linux in a Security Context",
+      duration: "4 hours",
+      lessons: [
+        { id: "l7", title: "User Authentication and Authorization", resources: [] },
+        { id: "l8", title: "Managing File Permissions and Group Access", resources: [] },
+        { id: "l9", title: "Command-Line Security Operations", resources: [] }
+      ]
+    },
+    {
+      id: "m4",
+      title: "Introduction to SQL and Databases",
+      duration: "4 hours",
+      lessons: [
+        { id: "l10", title: "Relational Database Foundations", resources: [] },
+        { id: "l11", title: "SQL Queries for Security Investigations", resources: [] },
+        { id: "l12", title: "Filtering and Joining Data Tables", resources: [] }
+      ]
+    }
+  ]
+};
+
+const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse, manageSecurityRisksCourse, networksSecurityCourse, linuxSqlCourse];
 
 // --- COMPONENTS ---
 
@@ -676,6 +731,7 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
       case 'red': return ShieldCheck;
       case 'orange': return ShieldAlert;
       case 'teal': return Activity;
+      case 'indigo': return Database;
       default: return Terminal;
     }
   };
@@ -685,7 +741,8 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
     purple: "bg-purple-500/20 text-purple-300",
     red: "bg-red-500/20 text-red-300",
     orange: "bg-orange-500/20 text-orange-300",
-    teal: "bg-teal-500/20 text-teal-300"
+    teal: "bg-teal-500/20 text-teal-300",
+    indigo: "bg-indigo-500/20 text-indigo-300"
   };
 
   return (
