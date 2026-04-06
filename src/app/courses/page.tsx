@@ -226,11 +226,11 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 1: Introduction to Cloud Computing",
       duration: "1 hour",
       lessons: [
-        { id: "l1", title: "Welcome to the Google Cloud Cybersecurity Certificate", resources: [] },
-        { id: "l2", title: "Composition of the cloud", resources: [] },
-        { id: "l3", title: "Cloud deployment models", resources: [] },
-        { id: "l4", title: "Google's trusted infrastructure", resources: [] },
-        { id: "l5", title: "Cloud benefits and considerations", resources: [] }
+        { id: "l1", title: "Welcome to the Google Cloud Cybersecurity Certificate", resources: [{ title: "Introduction Video", type: "video", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300/video/609047" }] },
+        { id: "l2", title: "Composition of the cloud", resources: [{ title: "Clound Fundamentals", type: "documentation", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l3", title: "Cloud deployment models", resources: [{ title: "Deployment Guide", type: "documentation", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l4", title: "Google's trusted infrastructure", resources: [{ title: "Infrastructure Overview", type: "video", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l5", title: "Cloud benefits and considerations", resources: [{ title: "Benefits Analysis", type: "article", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] }
       ]
     },
     {
@@ -238,11 +238,11 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 2: Security in the Cloud",
       duration: "1.5 hours",
       lessons: [
-        { id: "l6", title: "Cloud defense in depth", resources: [] },
-        { id: "l7", title: "The shared responsibility model", resources: [] },
-        { id: "l8", title: "The shared fate model", resources: [] },
-        { id: "l9", title: "Identity and Access Management (IAM)", resources: [] },
-        { id: "l10", title: "Security in IaaS, PaaS, and SaaS", resources: [] }
+        { id: "l6", title: "Cloud defense in depth", resources: [{ title: "Defense Strategies", type: "video", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l7", title: "The shared responsibility model", resources: [{ title: "Responsibility Lab", type: "interactive", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l8", title: "The shared fate model", resources: [{ title: "Shared Fate Guide", type: "documentation", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l9", title: "Identity and Access Management (IAM)", resources: [{ title: "IAM Basics", type: "video", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l10", title: "Security in IaaS, PaaS, and SaaS", resources: [{ title: "Service Security", type: "article", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] }
       ]
     },
     {
@@ -250,11 +250,11 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 3: The Security Lifecycle",
       duration: "1.5 hours",
       lessons: [
-        { id: "l11", title: "An overview of DevSecOps", resources: [] },
-        { id: "l12", title: "The CI/CD pipeline", resources: [] },
-        { id: "l13", title: "Infrastructure as code (IaC) with Terraform", resources: [] },
-        { id: "l14", title: "IaC in the GitOps framework", resources: [] },
-        { id: "l15", title: "Software supply chain security", resources: [] }
+        { id: "l11", title: "An overview of DevSecOps", resources: [{ title: "DevSecOps Intro", type: "video", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l12", title: "The CI/CD pipeline", resources: [{ title: "Pipeline Security", type: "documentation", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l13", title: "Infrastructure as code (IaC) with Terraform", resources: [{ title: "Terraform Lab", type: "interactive", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l14", title: "IaC in the GitOps framework", resources: [{ title: "GitOps Overview", type: "article", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l15", title: "Software supply chain security", resources: [{ title: "Supply Chain Guide", type: "documentation", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] }
       ]
     },
     {
@@ -262,11 +262,11 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 4: Cloud Security Analyst Roles",
       duration: "1 hour",
       lessons: [
-        { id: "l16", title: "Introduction to the cloud security analyst's role", resources: [] },
-        { id: "l17", title: "Cloud security analyst job responsibilities", resources: [] },
-        { id: "l18", title: "Introduction to artificial intelligence", resources: [] },
-        { id: "l19", title: "Workplace communication and collaboration", resources: [] },
-        { id: "l20", title: "Create a VPC using Cloud Shell", resources: [] }
+        { id: "l16", title: "Introduction to the cloud security analyst's role", resources: [{ title: "Role Overview", type: "video", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l17", title: "Cloud security analyst job responsibilities", resources: [{ title: "Responsibility List", type: "article", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l18", title: "Introduction to artificial intelligence", resources: [{ title: "AI in Security", type: "video", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l19", title: "Workplace communication and collaboration", resources: [{ title: "Collaboration Tips", type: "article", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] },
+        { id: "l20", title: "Create a VPC using Cloud Shell", resources: [{ title: "VPC Lab", type: "interactive", platform: "Google Cloud", url: "https://partner.skills.google/course_templates/1300" }] }
       ]
     },
     {
@@ -274,9 +274,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 5: Security Domains",
       duration: "3 hours",
       lessons: [
-        { id: "l1", title: "CISSP Eight Security Domains", resources: [] },
-        { id: "l2", title: "Primary Threats, Risks, and Vulnerabilities", resources: [] },
-        { id: "l3", title: "NIST Risk Management Framework (RMF)", resources: [] }
+        { id: "l1", title: "CISSP Eight Security Domains", resources: [{ title: "Domains Guide", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] },
+        { id: "l2", title: "Primary Threats, Risks, and Vulnerabilities", resources: [{ title: "Threat Analysis", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] },
+        { id: "l3", title: "NIST Risk Management Framework (RMF)", resources: [{ title: "NIST RMF Overview", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] }
       ]
     },
     {
@@ -284,9 +284,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 6: Security Frameworks and Controls",
       duration: "3 hours",
       lessons: [
-        { id: "l4", title: "The CIA Triad (Confidentiality, Integrity, Availability)", resources: [] },
-        { id: "l5", title: "NIST Cybersecurity Framework", resources: [] },
-        { id: "l6", title: "OWASP Security Principles", resources: [] }
+        { id: "l4", title: "The CIA Triad (Confidentiality, Integrity, Availability)", resources: [{ title: "CIA Triad Video", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] },
+        { id: "l5", title: "NIST Cybersecurity Framework", resources: [{ title: "CSF Guide", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] },
+        { id: "l6", title: "OWASP Security Principles", resources: [{ title: "OWASP Overview", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] }
       ]
     },
     {
@@ -294,9 +294,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 7: Security Tools (SIEM)",
       duration: "3 hours",
       lessons: [
-        { id: "l7", title: "Introduction to SIEM Tools", resources: [] },
-        { id: "l8", title: "Analyzing SIEM Data", resources: [] },
-        { id: "l9", title: "Monitoring and Managing Security Events", resources: [] }
+        { id: "l7", title: "Introduction to SIEM Tools", resources: [{ title: "SIEM Intro", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] },
+        { id: "l8", title: "Analyzing SIEM Data", resources: [{ title: "Data Analysis Lab", type: "interactive", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] },
+        { id: "l9", title: "Monitoring and Managing Security Events", resources: [{ title: "Event Management", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] }
       ]
     },
     {
@@ -304,9 +304,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 8: Incident Response and Auditing",
       duration: "3 hours",
       lessons: [
-        { id: "l10", title: "Phases of Incident Response", resources: [] },
-        { id: "l11", title: "Using Playbooks for Threat Response", resources: [] },
-        { id: "l12", title: "Hands-on Security Audit Practice", resources: [] }
+        { id: "l10", title: "Phases of Incident Response", resources: [{ title: "Response Phases", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] },
+        { id: "l11", title: "Using Playbooks for Threat Response", resources: [{ title: "Playbook Guide", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] },
+        { id: "l12", title: "Hands-on Security Audit Practice", resources: [{ title: "Audit Lab", type: "interactive", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks" }] }
       ]
     },
     {
@@ -314,9 +314,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 9: Network Architecture",
       duration: "3 hours",
       lessons: [
-        { id: "l1", title: "Network Architecture and Components", resources: [] },
-        { id: "l2", title: "Ongoing Security Threats and Vulnerabilities", resources: [] },
-        { id: "l3", title: "TCP/IP Model Communication", resources: [] }
+        { id: "l1", title: "Network Architecture and Components", resources: [{ title: "Architecture Video", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] },
+        { id: "l2", title: "Ongoing Security Threats and Vulnerabilities", resources: [{ title: "Threat Overview", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] },
+        { id: "l3", title: "TCP/IP Model Communication", resources: [{ title: "TCP/IP Guide", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] }
       ]
     },
     {
@@ -324,9 +324,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 10: Network Communications and Protocols",
       duration: "3 hours",
       lessons: [
-        { id: "l4", title: "Common Network Protocols Deep Dive", resources: [] },
-        { id: "l5", title: "Data Transmission Across Network Types", resources: [] },
-        { id: "l6", title: "Local Networks vs Cloud Environments", resources: [] }
+        { id: "l4", title: "Common Network Protocols Deep Dive", resources: [{ title: "Protocols Video", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] },
+        { id: "l5", title: "Data Transmission Across Network Types", resources: [{ title: "Transmission Lab", type: "interactive", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] },
+        { id: "l6", title: "Local Networks vs Cloud Environments", resources: [{ title: "Cloud Networking", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] }
       ]
     },
     {
@@ -334,9 +334,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 11: Network Security Measures",
       duration: "3 hours",
       lessons: [
-        { id: "l7", title: "Security Tools for Network Infrastructure", resources: [] },
-        { id: "l8", title: "Firewalls and Virtual Private Networks (VPNs)", resources: [] },
-        { id: "l9", title: "Network-level Defensive Measures", resources: [] }
+        { id: "l7", title: "Security Tools for Network Infrastructure", resources: [{ title: "Security Tools", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] },
+        { id: "l8", title: "Firewalls and Virtual Private Networks (VPNs)", resources: [{ title: "Firewall/VPN Guide", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] },
+        { id: "l9", title: "Network-level Defensive Measures", resources: [{ title: "Defensive Strategies", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] }
       ]
     },
     {
@@ -344,9 +344,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 12: Securing Against Network Intrusions",
       duration: "3 hours",
       lessons: [
-        { id: "l10", title: "Network Attacks and Tactics", resources: [] },
-        { id: "l11", title: "System Hardening Techniques", resources: [] },
-        { id: "l12", title: "Practical Application of Security Best Practices", resources: [] }
+        { id: "l10", title: "Network Attacks and Tactics", resources: [{ title: "Attack Tactics", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] },
+        { id: "l11", title: "System Hardening Techniques", resources: [{ title: "Hardening Guide", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] },
+        { id: "l12", title: "Practical Application of Security Best Practices", resources: [{ title: "Security Best Practices", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security" }] }
       ]
     },
     {
@@ -354,9 +354,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 13: Introduction to Operating Systems",
       duration: "3 hours",
       lessons: [
-        { id: "l1", title: "Relationship Between OS, Apps, and Hardware", resources: [] },
-        { id: "l2", title: "OS Functions and Resource Management", resources: [] },
-        { id: "l3", title: "Comparing GUI and CLI Interfaces", resources: [] }
+        { id: "l1", title: "Relationship Between OS, Apps, and Hardware", resources: [{ title: "OS Intro Video", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] },
+        { id: "l2", title: "OS Functions and Resource Management", resources: [{ title: "OS Functions", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] },
+        { id: "l3", title: "Comparing GUI and CLI Interfaces", resources: [{ title: "GUI vs CLI", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] }
       ]
     },
     {
@@ -364,9 +364,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 14: The Linux Operating System",
       duration: "4 hours",
       lessons: [
-        { id: "l4", title: "Linux Architecture and Distributions", resources: [] },
-        { id: "l5", title: "Bash Shell: The OS Interface", resources: [] },
-        { id: "l6", title: "File System Navigation and Management", resources: [] }
+        { id: "l4", title: "Linux Architecture and Distributions", resources: [{ title: "Linux Intro", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] },
+        { id: "l5", title: "Bash Shell: The OS Interface", resources: [{ title: "Bash Basics", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] },
+        { id: "l6", title: "File System Navigation and Management", resources: [{ title: "Navigation Lab", type: "interactive", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] }
       ]
     },
     {
@@ -374,9 +374,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 15: Using Linux in a Security Context",
       duration: "4 hours",
       lessons: [
-        { id: "l7", title: "User Authentication and Authorization", resources: [] },
-        { id: "l8", title: "Managing File Permissions and Group Access", resources: [] },
-        { id: "l9", title: "Command-Line Security Operations", resources: [] }
+        { id: "l7", title: "User Authentication and Authorization", resources: [{ title: "Auth Video", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] },
+        { id: "l8", title: "Managing File Permissions and Group Access", resources: [{ title: "Permissions Lab", type: "interactive", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] },
+        { id: "l9", title: "Command-Line Security Operations", resources: [{ title: "CLI Security", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] }
       ]
     },
     {
@@ -384,9 +384,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 16: Introduction to SQL and Databases",
       duration: "4 hours",
       lessons: [
-        { id: "l10", title: "Relational Database Foundations", resources: [] },
-        { id: "l11", title: "SQL Queries for Security Investigations", resources: [] },
-        { id: "l12", title: "Filtering and Joining Data Tables", resources: [] }
+        { id: "l10", title: "Relational Database Foundations", resources: [{ title: "SQL Intro", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] },
+        { id: "l11", title: "SQL Queries for Security Investigations", resources: [{ title: "SQL Lab", type: "interactive", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] },
+        { id: "l12", title: "Filtering and Joining Data Tables", resources: [{ title: "Advanced SQL", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql" }] }
       ]
     },
     {
@@ -394,9 +394,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 17: Analyze a Security Scenario (Capstone)",
       duration: "3 hours",
       lessons: [
-        { id: "l1", title: "Interactive Capstone Project Scenario", resources: [] },
-        { id: "l2", title: "Applying Cloud Security Principles", resources: [] },
-        { id: "l3", title: "Risk and Vulnerability Assessment", resources: [] }
+        { id: "l1", title: "Interactive Capstone Project Scenario", resources: [{ title: "Capstone Intro", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] },
+        { id: "l2", title: "Applying Cloud Security Principles", resources: [{ title: "Practical Application", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] },
+        { id: "l3", title: "Risk and Vulnerability Assessment", resources: [{ title: "Assessment Lab", type: "interactive", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] }
       ]
     },
     {
@@ -404,9 +404,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 18: Detect and Manage Security Incidents",
       duration: "2 hours",
       lessons: [
-        { id: "l4", title: "Threat Detection in Cloud Environments", resources: [] },
-        { id: "l5", title: "Incident Management Best Practices", resources: [] },
-        { id: "l6", title: "Using Detection Tools", resources: [] }
+        { id: "l4", title: "Threat Detection in Cloud Environments", resources: [{ title: "Detection Video", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] },
+        { id: "l5", title: "Incident Management Best Practices", resources: [{ title: "Incident Guide", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] },
+        { id: "l6", title: "Using Detection Tools", resources: [{ title: "Detection Tools Lab", type: "interactive", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] }
       ]
     },
     {
@@ -414,9 +414,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 19: Contain, Recover, and Communicate",
       duration: "2 hours",
       lessons: [
-        { id: "l7", title: "Containment and Eradication Strategies", resources: [] },
-        { id: "l8", title: "Recovery Procedures in the Cloud", resources: [] },
-        { id: "l9", title: "Crisis Communication and Escalation", resources: [] }
+        { id: "l7", title: "Containment and Eradication Strategies", resources: [{ title: "Containment Video", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] },
+        { id: "l8", title: "Recovery Procedures in the Cloud", resources: [{ title: "Recovery Guide", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] },
+        { id: "l9", title: "Crisis Communication and Escalation", resources: [{ title: "Communication Tips", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] }
       ]
     },
     {
@@ -424,9 +424,9 @@ const googleCloudCybersecurityCourse: Course = {
       title: "Module 20: Career Readiness",
       duration: "3 hours",
       lessons: [
-        { id: "l10", title: "Resume and Portfolio Tailoring", resources: [] },
-        { id: "l11", title: "Interviewing for Cloud Security Roles", resources: [] },
-        { id: "l12", title: "Continuing Professional Development", resources: [] }
+        { id: "l10", title: "Resume and Portfolio Tailoring", resources: [{ title: "Career Prep Video", type: "video", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] },
+        { id: "l11", title: "Interviewing for Cloud Security Roles", resources: [{ title: "Interview Guide", type: "documentation", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] },
+        { id: "l12", title: "Continuing Professional Development", resources: [{ title: "Learning Path", type: "article", platform: "Coursera", url: "https://www.coursera.org/learn/cloud-security-analyst-job-prep" }] }
       ]
     }
   ]
