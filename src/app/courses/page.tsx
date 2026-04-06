@@ -10,6 +10,7 @@ import {
   BarChart3,
   ShieldCheck,
   ShieldAlert,
+  Activity,
   X,
   Loader2,
   Lock,
@@ -324,7 +325,62 @@ const manageSecurityRisksCourse: Course = {
   ]
 };
 
-const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse, manageSecurityRisksCourse];
+// --- DATA: Networks and Network Security Course ---
+const networksSecurityCourse: Course = {
+  id: "networks-security",
+  title: "Connect and Protect: Networks and Network Security",
+  subtitle: "Part of the Google Cloud Cybersecurity Certificate",
+  description: "Introduction to network security, how data is sent and received, and how cybersecurity analysts protect networks against intrusion tactics. Master TCP/IP and firewalls.",
+  duration: "12 hours",
+  level: "Introductory",
+  target: "Aspiring network security analysts, IT professionals",
+  tags: ["Networking", "Firewalls", "VPNs"],
+  color: "teal",
+  modules: [
+    {
+      id: "m1",
+      title: "Network Architecture",
+      duration: "3 hours",
+      lessons: [
+        { id: "l1", title: "Network Architecture and Components", resources: [] },
+        { id: "l2", title: "Ongoing Security Threats and Vulnerabilities", resources: [] },
+        { id: "l3", title: "TCP/IP Model Communication", resources: [] }
+      ]
+    },
+    {
+      id: "m2",
+      title: "Network Communications and Protocols",
+      duration: "3 hours",
+      lessons: [
+        { id: "l4", title: "Common Network Protocols Deep Dive", resources: [] },
+        { id: "l5", title: "Data Transmission Across Network Types", resources: [] },
+        { id: "l6", title: "Local Networks vs Cloud Environments", resources: [] }
+      ]
+    },
+    {
+      id: "m3",
+      title: "Network Security Measures",
+      duration: "3 hours",
+      lessons: [
+        { id: "l7", title: "Security Tools for Network Infrastructure", resources: [] },
+        { id: "l8", title: "Firewalls and Virtual Private Networks (VPNs)", resources: [] },
+        { id: "l9", title: "Network-level Defensive Measures", resources: [] }
+      ]
+    },
+    {
+      id: "m4",
+      title: "Securing Against Network Intrusions",
+      duration: "3 hours",
+      lessons: [
+        { id: "l10", title: "Network Attacks and Tactics", resources: [] },
+        { id: "l11", title: "System Hardening Techniques", resources: [] },
+        { id: "l12", title: "Practical Application of Security Best Practices", resources: [] }
+      ]
+    }
+  ]
+};
+
+const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse, manageSecurityRisksCourse, networksSecurityCourse];
 
 // --- COMPONENTS ---
 
@@ -619,6 +675,7 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
       case 'purple': return BarChart3;
       case 'red': return ShieldCheck;
       case 'orange': return ShieldAlert;
+      case 'teal': return Activity;
       default: return Terminal;
     }
   };
@@ -627,7 +684,8 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
     blue: "bg-blue-500/20 text-blue-300",
     purple: "bg-purple-500/20 text-purple-300",
     red: "bg-red-500/20 text-red-300",
-    orange: "bg-orange-500/20 text-orange-300"
+    orange: "bg-orange-500/20 text-orange-300",
+    teal: "bg-teal-500/20 text-teal-300"
   };
 
   return (
