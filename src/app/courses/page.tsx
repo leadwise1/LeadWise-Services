@@ -55,6 +55,7 @@ interface Course {
   tags: string[];
   color: string;
   modules: Module[];
+  salaryHook?: string;
 }
 
 // --- CONFIGURATION START ---
@@ -207,21 +208,22 @@ const dataAnalyticsCourse: Course = {
   ]
 };
 
-// --- DATA: Cyber Security Course ---
-const cyberSecurityCourse: Course = {
-  id: "cyber-security",
-  title: "Introduction to Security Principles in Cloud Computing",
-  subtitle: "Part of the Google Cloud Cybersecurity Certificate",
-  description: "Explore the essentials of cybersecurity, including the security lifecycle, digital transformation, and key cloud computing concepts. Identify common tools used by entry-level cloud security analysts to automate tasks.",
-  duration: "5 hours",
-  level: "Introductory",
+// --- DATA: Google Cloud Cybersecurity Certificate (Consolidated) ---
+const googleCloudCybersecurityCourse: Course = {
+  id: "google-cloud-cybersecurity",
+  title: "Google Cloud Cybersecurity Certificate",
+  subtitle: "Become a Digital Guardian. Master threat detection and incident response.",
+  salaryHook: "$103,000 average starting salary",
+  description: "Gain foundational skills for a cloud security analyst role. Master threat detection, incident response, and cybersecurity tools like Linux and SQL. This comprehensive path combines five industry-standard modules into one professional credential.",
+  duration: "45-50 hours",
+  level: "Beginner to Intermediate",
   target: "Aspiring cloud security analysts, IT professionals",
-  tags: ["Security", "Google Cloud", "Certificate"],
+  tags: ["Cybersecurity", "Google Cloud", "Certificate"],
   color: "red",
   modules: [
     {
-      id: "m1",
-      title: "Introduction to cloud computing",
+      id: "cyber-m1",
+      title: "Module 1: Introduction to Cloud Computing",
       duration: "1 hour",
       lessons: [
         { id: "l1", title: "Welcome to the Google Cloud Cybersecurity Certificate", resources: [] },
@@ -232,8 +234,8 @@ const cyberSecurityCourse: Course = {
       ]
     },
     {
-      id: "m2",
-      title: "Security in the cloud",
+      id: "cyber-m2",
+      title: "Module 2: Security in the Cloud",
       duration: "1.5 hours",
       lessons: [
         { id: "l6", title: "Cloud defense in depth", resources: [] },
@@ -244,8 +246,8 @@ const cyberSecurityCourse: Course = {
       ]
     },
     {
-      id: "m3",
-      title: "The security lifecycle",
+      id: "cyber-m3",
+      title: "Module 3: The Security Lifecycle",
       duration: "1.5 hours",
       lessons: [
         { id: "l11", title: "An overview of DevSecOps", resources: [] },
@@ -256,8 +258,8 @@ const cyberSecurityCourse: Course = {
       ]
     },
     {
-      id: "m4",
-      title: "Cloud security analyst roles",
+      id: "cyber-m4",
+      title: "Module 4: Cloud Security Analyst Roles",
       duration: "1 hour",
       lessons: [
         { id: "l16", title: "Introduction to the cloud security analyst's role", resources: [] },
@@ -266,25 +268,10 @@ const cyberSecurityCourse: Course = {
         { id: "l19", title: "Workplace communication and collaboration", resources: [] },
         { id: "l20", title: "Create a VPC using Cloud Shell", resources: [] }
       ]
-    }
-  ]
-};
-
-// --- DATA: Manage Security Risks Course ---
-const manageSecurityRisksCourse: Course = {
-  id: "manage-security-risks",
-  title: "Play It Safe: Manage Security Risks",
-  subtitle: "Part of the Google Cloud Cybersecurity Certificate",
-  description: "Learn to application of frameworks, risk management, and the identification of threats. Master SIEM tools and incident response playbooks.",
-  duration: "12 hours",
-  level: "Introductory",
-  target: "Aspiring security analysts, risk managers",
-  tags: ["Risk Management", "NIST", "SIEM"],
-  color: "orange",
-  modules: [
+    },
     {
-      id: "m1",
-      title: "Security Domains",
+      id: "cyber-m5",
+      title: "Module 5: Security Domains",
       duration: "3 hours",
       lessons: [
         { id: "l1", title: "CISSP Eight Security Domains", resources: [] },
@@ -293,8 +280,8 @@ const manageSecurityRisksCourse: Course = {
       ]
     },
     {
-      id: "m2",
-      title: "Security Frameworks and Controls",
+      id: "cyber-m6",
+      title: "Module 6: Security Frameworks and Controls",
       duration: "3 hours",
       lessons: [
         { id: "l4", title: "The CIA Triad (Confidentiality, Integrity, Availability)", resources: [] },
@@ -303,8 +290,8 @@ const manageSecurityRisksCourse: Course = {
       ]
     },
     {
-      id: "m3",
-      title: "Security Tools (SIEM)",
+      id: "cyber-m7",
+      title: "Module 7: Security Tools (SIEM)",
       duration: "3 hours",
       lessons: [
         { id: "l7", title: "Introduction to SIEM Tools", resources: [] },
@@ -313,33 +300,18 @@ const manageSecurityRisksCourse: Course = {
       ]
     },
     {
-      id: "m4",
-      title: "Incident Response and Auditing",
+      id: "cyber-m8",
+      title: "Module 8: Incident Response and Auditing",
       duration: "3 hours",
       lessons: [
         { id: "l10", title: "Phases of Incident Response", resources: [] },
         { id: "l11", title: "Using Playbooks for Threat Response", resources: [] },
         { id: "l12", title: "Hands-on Security Audit Practice", resources: [] }
       ]
-    }
-  ]
-};
-
-// --- DATA: Networks and Network Security Course ---
-const networksSecurityCourse: Course = {
-  id: "networks-security",
-  title: "Connect and Protect: Networks and Network Security",
-  subtitle: "Part of the Google Cloud Cybersecurity Certificate",
-  description: "Introduction to network security, how data is sent and received, and how cybersecurity analysts protect networks against intrusion tactics. Master TCP/IP and firewalls.",
-  duration: "12 hours",
-  level: "Introductory",
-  target: "Aspiring network security analysts, IT professionals",
-  tags: ["Networking", "Firewalls", "VPNs"],
-  color: "teal",
-  modules: [
+    },
     {
-      id: "m1",
-      title: "Network Architecture",
+      id: "cyber-m9",
+      title: "Module 9: Network Architecture",
       duration: "3 hours",
       lessons: [
         { id: "l1", title: "Network Architecture and Components", resources: [] },
@@ -348,8 +320,8 @@ const networksSecurityCourse: Course = {
       ]
     },
     {
-      id: "m2",
-      title: "Network Communications and Protocols",
+      id: "cyber-m10",
+      title: "Module 10: Network Communications and Protocols",
       duration: "3 hours",
       lessons: [
         { id: "l4", title: "Common Network Protocols Deep Dive", resources: [] },
@@ -358,8 +330,8 @@ const networksSecurityCourse: Course = {
       ]
     },
     {
-      id: "m3",
-      title: "Network Security Measures",
+      id: "cyber-m11",
+      title: "Module 11: Network Security Measures",
       duration: "3 hours",
       lessons: [
         { id: "l7", title: "Security Tools for Network Infrastructure", resources: [] },
@@ -368,33 +340,18 @@ const networksSecurityCourse: Course = {
       ]
     },
     {
-      id: "m4",
-      title: "Securing Against Network Intrusions",
+      id: "cyber-m12",
+      title: "Module 12: Securing Against Network Intrusions",
       duration: "3 hours",
       lessons: [
         { id: "l10", title: "Network Attacks and Tactics", resources: [] },
         { id: "l11", title: "System Hardening Techniques", resources: [] },
         { id: "l12", title: "Practical Application of Security Best Practices", resources: [] }
       ]
-    }
-  ]
-};
-
-// --- DATA: Linux and SQL Course ---
-const linuxSqlCourse: Course = {
-  id: "linux-sql",
-  title: "Tools of the Trade: Linux and SQL",
-  subtitle: "Part of the Google Cloud Cybersecurity Certificate",
-  description: "Foundational computing skills for cybersecurity analysts. Mastering Linux shell, file management, and SQL database querying for security investigations.",
-  duration: "15 hours",
-  level: "Introductory",
-  target: "Aspiring cybersecurity analysts, data investigators",
-  tags: ["Linux", "SQL", "Bash"],
-  color: "indigo",
-  modules: [
+    },
     {
-      id: "m1",
-      title: "Introduction to Operating Systems",
+      id: "cyber-m13",
+      title: "Module 13: Introduction to Operating Systems",
       duration: "3 hours",
       lessons: [
         { id: "l1", title: "Relationship Between OS, Apps, and Hardware", resources: [] },
@@ -403,8 +360,8 @@ const linuxSqlCourse: Course = {
       ]
     },
     {
-      id: "m2",
-      title: "The Linux Operating System",
+      id: "cyber-m14",
+      title: "Module 14: The Linux Operating System",
       duration: "4 hours",
       lessons: [
         { id: "l4", title: "Linux Architecture and Distributions", resources: [] },
@@ -413,8 +370,8 @@ const linuxSqlCourse: Course = {
       ]
     },
     {
-      id: "m3",
-      title: "Using Linux in a Security Context",
+      id: "cyber-m15",
+      title: "Module 15: Using Linux in a Security Context",
       duration: "4 hours",
       lessons: [
         { id: "l7", title: "User Authentication and Authorization", resources: [] },
@@ -423,33 +380,18 @@ const linuxSqlCourse: Course = {
       ]
     },
     {
-      id: "m4",
-      title: "Introduction to SQL and Databases",
+      id: "cyber-m16",
+      title: "Module 16: Introduction to SQL and Databases",
       duration: "4 hours",
       lessons: [
         { id: "l10", title: "Relational Database Foundations", resources: [] },
         { id: "l11", title: "SQL Queries for Security Investigations", resources: [] },
         { id: "l12", title: "Filtering and Joining Data Tables", resources: [] }
       ]
-    }
-  ]
-};
-
-// --- DATA: Capstone and Job Prep Course ---
-const capstoneJobPrepCourse: Course = {
-  id: "capstone-job-prep",
-  title: "Put It All Together: Prepare for a Cloud Security Analyst Job",
-  subtitle: "Capstone Course of the Google Cloud Cybersecurity Certificate",
-  description: "Combine all skills to solve practical scenarios. Finalize your job search materials including resume updates and interview preparation tailored for cloud security analyst roles.",
-  duration: "10 hours",
-  level: "Intermediate (Capstone)",
-  target: "Career seekers, cloud security analysts",
-  tags: ["Career", "Capstone", "Incident Response"],
-  color: "rose",
-  modules: [
+    },
     {
-      id: "m1",
-      title: "Analyze a security scenario",
+      id: "cyber-m17",
+      title: "Module 17: Analyze a Security Scenario (Capstone)",
       duration: "3 hours",
       lessons: [
         { id: "l1", title: "Interactive Capstone Project Scenario", resources: [] },
@@ -458,8 +400,8 @@ const capstoneJobPrepCourse: Course = {
       ]
     },
     {
-      id: "m2",
-      title: "Detect and manage security incidents",
+      id: "cyber-m18",
+      title: "Module 18: Detect and Manage Security Incidents",
       duration: "2 hours",
       lessons: [
         { id: "l4", title: "Threat Detection in Cloud Environments", resources: [] },
@@ -468,8 +410,8 @@ const capstoneJobPrepCourse: Course = {
       ]
     },
     {
-      id: "m3",
-      title: "Contain, recover, and communicate",
+      id: "cyber-m19",
+      title: "Module 19: Contain, Recover, and Communicate",
       duration: "2 hours",
       lessons: [
         { id: "l7", title: "Containment and Eradication Strategies", resources: [] },
@@ -478,8 +420,8 @@ const capstoneJobPrepCourse: Course = {
       ]
     },
     {
-      id: "m4",
-      title: "Prepare for your cloud security analyst career",
+      id: "cyber-m20",
+      title: "Module 20: Career Readiness",
       duration: "3 hours",
       lessons: [
         { id: "l10", title: "Resume and Portfolio Tailoring", resources: [] },
@@ -490,7 +432,7 @@ const capstoneJobPrepCourse: Course = {
   ]
 };
 
-const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse, manageSecurityRisksCourse, networksSecurityCourse, linuxSqlCourse, capstoneJobPrepCourse];
+const COURSES = [frontendCourse, dataAnalyticsCourse, googleCloudCybersecurityCourse];
 
 // --- COMPONENTS ---
 
@@ -821,6 +763,12 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
         <h3 className="text-3xl font-bold mb-2 text-white">{course.title}</h3>
         <p className="text-[#FFBEA0] font-medium mb-4">{course.subtitle}</p>
         
+        {course.salaryHook && (
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#FF9E80]/10 border border-[#FF9E80]/20 text-[#FFBEA0] text-sm font-bold mb-4">
+             <Briefcase size={14} /> {course.salaryHook}
+          </div>
+        )}
+
         <p className="text-gray-300 leading-relaxed mb-8">
           {course.description}
         </p>
