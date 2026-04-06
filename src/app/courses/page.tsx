@@ -9,6 +9,7 @@ import {
   Terminal, 
   BarChart3,
   ShieldCheck,
+  ShieldAlert,
   X,
   Loader2,
   Lock,
@@ -268,7 +269,62 @@ const cyberSecurityCourse: Course = {
   ]
 };
 
-const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse];
+// --- DATA: Manage Security Risks Course ---
+const manageSecurityRisksCourse: Course = {
+  id: "manage-security-risks",
+  title: "Play It Safe: Manage Security Risks",
+  subtitle: "Part of the Google Cloud Cybersecurity Certificate",
+  description: "Learn to application of frameworks, risk management, and the identification of threats. Master SIEM tools and incident response playbooks.",
+  duration: "12 hours",
+  level: "Introductory",
+  target: "Aspiring security analysts, risk managers",
+  tags: ["Risk Management", "NIST", "SIEM"],
+  color: "orange",
+  modules: [
+    {
+      id: "m1",
+      title: "Security Domains",
+      duration: "3 hours",
+      lessons: [
+        { id: "l1", title: "CISSP Eight Security Domains", resources: [] },
+        { id: "l2", title: "Primary Threats, Risks, and Vulnerabilities", resources: [] },
+        { id: "l3", title: "NIST Risk Management Framework (RMF)", resources: [] }
+      ]
+    },
+    {
+      id: "m2",
+      title: "Security Frameworks and Controls",
+      duration: "3 hours",
+      lessons: [
+        { id: "l4", title: "The CIA Triad (Confidentiality, Integrity, Availability)", resources: [] },
+        { id: "l5", title: "NIST Cybersecurity Framework", resources: [] },
+        { id: "l6", title: "OWASP Security Principles", resources: [] }
+      ]
+    },
+    {
+      id: "m3",
+      title: "Security Tools (SIEM)",
+      duration: "3 hours",
+      lessons: [
+        { id: "l7", title: "Introduction to SIEM Tools", resources: [] },
+        { id: "l8", title: "Analyzing SIEM Data", resources: [] },
+        { id: "l9", title: "Monitoring and Managing Security Events", resources: [] }
+      ]
+    },
+    {
+      id: "m4",
+      title: "Incident Response and Auditing",
+      duration: "3 hours",
+      lessons: [
+        { id: "l10", title: "Phases of Incident Response", resources: [] },
+        { id: "l11", title: "Using Playbooks for Threat Response", resources: [] },
+        { id: "l12", title: "Hands-on Security Audit Practice", resources: [] }
+      ]
+    }
+  ]
+};
+
+const COURSES = [frontendCourse, dataAnalyticsCourse, cyberSecurityCourse, manageSecurityRisksCourse];
 
 // --- COMPONENTS ---
 
@@ -562,6 +618,7 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
       case 'blue': return Terminal;
       case 'purple': return BarChart3;
       case 'red': return ShieldCheck;
+      case 'orange': return ShieldAlert;
       default: return Terminal;
     }
   };
@@ -569,7 +626,8 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
   const colorClasses = {
     blue: "bg-blue-500/20 text-blue-300",
     purple: "bg-purple-500/20 text-purple-300",
-    red: "bg-red-500/20 text-red-300"
+    red: "bg-red-500/20 text-red-300",
+    orange: "bg-orange-500/20 text-orange-300"
   };
 
   return (
