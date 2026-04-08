@@ -8,6 +8,9 @@ import {
   ArrowRight, 
   Terminal, 
   BarChart3,
+  ShieldCheck,
+  ShieldAlert,
+  Activity,
   X,
   Loader2,
   Lock,
@@ -54,6 +57,7 @@ interface Course {
   tags: string[];
   color: string;
   modules: Module[];
+  salaryHook?: string;
 }
 
 // --- CONFIGURATION START ---
@@ -727,6 +731,12 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
         <h3 className="text-3xl font-bold mb-2 text-white">{course.title}</h3>
         <p className="text-[#FFBEA0] font-medium mb-4">{course.subtitle}</p>
         
+        {course.salaryHook && (
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#FF9E80]/10 border border-[#FF9E80]/20 text-[#FFBEA0] text-sm font-bold mb-4">
+             <Briefcase size={14} /> {course.salaryHook}
+          </div>
+        )}
+
         <p className="text-gray-300 leading-relaxed mb-8">
           {course.description}
         </p>
@@ -983,18 +993,15 @@ const CoursesPage = () => {
           More <span className="text-[#FFBEA0]">Economic Pathways</span>
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <CourseCard 
-            course={frontendCourse}
-            isEnrolled={isEnrolled}
-            onTriggerIntake={() => openEnrollment(frontendCourse)}
-          />
-
-          <CourseCard 
-             course={dataAnalyticsCourse}
-             isEnrolled={isEnrolled}
-             onTriggerIntake={() => openEnrollment(dataAnalyticsCourse)}
-          />
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {COURSES.map(course => (
+            <CourseCard 
+              key={course.id}
+              course={course}
+              isEnrolled={isEnrolled}
+              onTriggerIntake={() => openEnrollment(course)}
+            />
+          ))}
         </div>
       </section>
 
