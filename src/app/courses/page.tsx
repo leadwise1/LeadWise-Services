@@ -13,7 +13,9 @@ import {
   Lock,
   ExternalLink,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  ShieldCheck,
+  Globe
 } from "lucide-react";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged, Auth, User } from "firebase/auth";
@@ -197,6 +199,219 @@ const dataAnalyticsCourse: Course = {
           title: "SQL Fundamentals",
           resources: [
             { title: "SQL Tutorial", type: "interactive", platform: "W3Schools", url: "https://www.w3schools.com/sql/" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+// --- DATA: Google Cybersecurity Professional Certificate (Coursera / Grow with Google) ---
+const cybersecurityCourse: Course = {
+  id: "google-cybersecurity-cert",
+  title: "Google Cybersecurity Professional Certificate",
+  subtitle: "Get on the fast track to a career in cybersecurity — powered by Coursera.",
+  description: "A 9-course series by Google. Learn Python, Linux, SQL, SIEM tools & more. Earn an industry-recognized credential and prepare for the CompTIA Security+ exam. 100% free through LeadWise Foundation's Grow with Google partnership.",
+  duration: "~6 months (10 hrs/week)",
+  level: "Beginner — No experience required",
+  target: "Career changers, job seekers, aspiring cybersecurity analysts",
+  tags: ["Google Career Certificate", "CompTIA Security+", "Cybersecurity"],
+  color: "emerald",
+  modules: [
+    {
+      id: "cyber-1-foundations",
+      title: "Course 1: Foundations of Cybersecurity",
+      duration: "~14 hours",
+      lessons: [
+        {
+          id: "cyber-1-overview",
+          title: "Welcome to the Exciting World of Cybersecurity",
+          resources: [
+            { title: "Foundations of Cybersecurity — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/foundations-of-cybersecurity?specialization=google-cybersecurity" }
+          ]
+        },
+        {
+          id: "cyber-1-skills",
+          title: "Core Skills & Knowledge",
+          resources: [
+            { title: "Recognize core skills needed to become a cybersecurity analyst", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/foundations-of-cybersecurity?specialization=google-cybersecurity" },
+            { title: "Identify how security attacks impact business operations", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/foundations-of-cybersecurity?specialization=google-cybersecurity" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "cyber-2-security-risks",
+      title: "Course 2: Play It Safe — Manage Security Risks",
+      duration: "~11 hours",
+      lessons: [
+        {
+          id: "cyber-2-overview",
+          title: "Threats, Risks & Vulnerabilities",
+          resources: [
+            { title: "Manage Security Risks — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/manage-security-risks?specialization=google-cybersecurity" }
+          ]
+        },
+        {
+          id: "cyber-2-siem",
+          title: "Security Frameworks & SIEM Tools",
+          resources: [
+            { title: "Define commonly used SIEM tools", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks?specialization=google-cybersecurity" },
+            { title: "Use a playbook to respond to threats", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks?specialization=google-cybersecurity" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "cyber-3-networks",
+      title: "Course 3: Connect and Protect — Networks & Network Security",
+      duration: "~14 hours",
+      lessons: [
+        {
+          id: "cyber-3-overview",
+          title: "Network Architecture & Security",
+          resources: [
+            { title: "Networks and Network Security — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/networks-and-network-security?specialization=google-cybersecurity" }
+          ]
+        },
+        {
+          id: "cyber-3-hardening",
+          title: "System Hardening & Intrusion Prevention",
+          resources: [
+            { title: "Secure networks against intrusion tactics", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security?specialization=google-cybersecurity" },
+            { title: "Describe system hardening techniques", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security?specialization=google-cybersecurity" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "cyber-4-linux-sql",
+      title: "Course 4: Tools of the Trade — Linux and SQL",
+      duration: "~21 hours",
+      lessons: [
+        {
+          id: "cyber-4-overview",
+          title: "Operating Systems, Linux & SQL",
+          resources: [
+            { title: "Linux and SQL — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/linux-and-sql?specialization=google-cybersecurity" }
+          ]
+        },
+        {
+          id: "cyber-4-cli",
+          title: "Command Line & Database Queries",
+          resources: [
+            { title: "Navigate the file system using Linux commands via Bash", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql?specialization=google-cybersecurity" },
+            { title: "Use SQL to retrieve information from a database", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql?specialization=google-cybersecurity" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "cyber-5-assets",
+      title: "Course 5: Assets, Threats, and Vulnerabilities",
+      duration: "~20 hours",
+      lessons: [
+        {
+          id: "cyber-5-overview",
+          title: "Asset Classification & Threat Modeling",
+          resources: [
+            { title: "Assets, Threats, and Vulnerabilities — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/assets-threats-and-vulnerabilities?specialization=google-cybersecurity" }
+          ]
+        },
+        {
+          id: "cyber-5-threats",
+          title: "Social Engineering, Malware & Web Exploits",
+          resources: [
+            { title: "Analyze an attack surface to find risks", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/assets-threats-and-vulnerabilities?specialization=google-cybersecurity" },
+            { title: "Summarize the threat modeling process", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/assets-threats-and-vulnerabilities?specialization=google-cybersecurity" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "cyber-6-detection",
+      title: "Course 6: Sound the Alarm — Detection and Response",
+      duration: "~18 hours",
+      lessons: [
+        {
+          id: "cyber-6-overview",
+          title: "Incident Response & SIEM Analysis",
+          resources: [
+            { title: "Detection and Response — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/detection-and-response?specialization=google-cybersecurity" }
+          ]
+        },
+        {
+          id: "cyber-6-ids",
+          title: "IDS Tools & Packet Analysis",
+          resources: [
+            { title: "Analyze packets to interpret network communications", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/detection-and-response?specialization=google-cybersecurity" },
+            { title: "Perform queries in SIEM tools to investigate events", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/detection-and-response?specialization=google-cybersecurity" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "cyber-7-python",
+      title: "Course 7: Automate Cybersecurity Tasks with Python",
+      duration: "~25 hours",
+      lessons: [
+        {
+          id: "cyber-7-overview",
+          title: "Python for Cybersecurity",
+          resources: [
+            { title: "Automate Cybersecurity Tasks with Python — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/automate-cybersecurity-tasks-with-python?specialization=google-cybersecurity" }
+          ]
+        },
+        {
+          id: "cyber-7-scripting",
+          title: "Functions, Regex & Debugging",
+          resources: [
+            { title: "Create user-defined Python functions", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/automate-cybersecurity-tasks-with-python?specialization=google-cybersecurity" },
+            { title: "Use regular expressions to extract information", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/automate-cybersecurity-tasks-with-python?specialization=google-cybersecurity" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "cyber-8-jobs",
+      title: "Course 8: Put It to Work — Prepare for Cybersecurity Jobs",
+      duration: "~13 hours",
+      lessons: [
+        {
+          id: "cyber-8-overview",
+          title: "Incident Escalation & Career Prep",
+          resources: [
+            { title: "Prepare for Cybersecurity Jobs — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/prepare-for-cybersecurity-jobs?specialization=google-cybersecurity" }
+          ]
+        },
+        {
+          id: "cyber-8-ai",
+          title: "AI Skills for Cybersecurity",
+          resources: [
+            { title: "Use AI to identify bugs and refine code", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/prepare-for-cybersecurity-jobs?specialization=google-cybersecurity" },
+            { title: "Prioritize security alerts with AI", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/prepare-for-cybersecurity-jobs?specialization=google-cybersecurity" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "cyber-9-job-search-ai",
+      title: "Course 9: Accelerate Your Job Search with AI",
+      duration: "~10 hours",
+      lessons: [
+        {
+          id: "cyber-9-overview",
+          title: "AI-Powered Job Search",
+          resources: [
+            { title: "Accelerate Your Job Search with AI — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/accelerate-your-job-search-with-ai?specialization=google-cybersecurity" }
+          ]
+        },
+        {
+          id: "cyber-9-tools",
+          title: "Resume, Interview Prep & Career Dreamer",
+          resources: [
+            { title: "Build a stand-out resume with help from Gemini", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/accelerate-your-job-search-with-ai?specialization=google-cybersecurity" },
+            { title: "Practice interview responses using NotebookLM", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/accelerate-your-job-search-with-ai?specialization=google-cybersecurity" }
           ]
         }
       ]
@@ -491,13 +706,13 @@ interface CourseCardProps {
 
 function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
   const [showModules, setShowModules] = useState(false);
-  const Icon = course.color === 'blue' ? Terminal : BarChart3;
+  const Icon = course.color === 'blue' ? Terminal : course.color === 'emerald' ? ShieldCheck : BarChart3;
 
   return (
     <div className="group relative bg-white/5 border border-white/10 hover:border-[#FFBEA0]/30 rounded-[2rem] overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-10px_rgba(255,190,160,0.1)]">
       <div className="p-8">
         <div className="flex items-start justify-between mb-6">
-          <div className={`p-3 rounded-2xl ${course.color === 'blue' ? 'bg-blue-500/20 text-blue-300' : 'bg-purple-500/20 text-purple-300'}`}>
+          <div className={`p-3 rounded-2xl ${course.color === 'blue' ? 'bg-blue-500/20 text-blue-300' : course.color === 'emerald' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-purple-500/20 text-purple-300'}`}>
             <Icon size={32} />
           </div>
           <div className="flex gap-2">
@@ -662,6 +877,11 @@ const CoursesPage = () => {
             <div className="h-6 w-px bg-gray-500/50 mx-2"></div>
             <div className="text-sm uppercase tracking-widest text-gray-400">Authorized Partner</div>
           </div>
+          <div className="flex items-center gap-3">
+            <div className="font-bold text-2xl tracking-tighter">Coursera</div>
+            <div className="h-6 w-px bg-gray-500/50 mx-2"></div>
+            <div className="text-sm uppercase tracking-widest text-gray-400">Grow with Google</div>
+          </div>
         </div>
       </div>
 
@@ -717,10 +937,50 @@ const CoursesPage = () => {
         </div>
       </section>
 
-      {/* --- LEARNING PATHS --- */}
+      {/* --- FEATURED: CYBERSECURITY CERTIFICATE --- */}
+      <section className="max-w-7xl mx-auto px-6 pb-16">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-sm font-bold mb-6">
+            <ShieldCheck size={16} /> Featured: Google Career Certificate • 500 Free Seats via Coursera
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold">
+            <span className="text-emerald-300">Cybersecurity</span> Professional Certificate
+          </h2>
+          <p className="text-gray-400 mt-3 max-w-2xl mx-auto">Powered by Google × Coursera — 100% free through our Grow with Google partnership. No degree or experience required.</p>
+        </div>
+
+        <div className="max-w-4xl mx-auto">
+          <CourseCard 
+            course={cybersecurityCourse}
+            isEnrolled={isEnrolled}
+            onTriggerIntake={() => openEnrollment(cybersecurityCourse)}
+          />
+        </div>
+
+        {/* Direct Coursera Enrollment CTA */}
+        <div className="max-w-4xl mx-auto mt-8 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Globe className="text-emerald-300" size={28} />
+            <div>
+              <p className="text-white font-bold">Ready to start? Enroll directly on Coursera — FREE.</p>
+              <p className="text-sm text-gray-400">Access all 9 courses through LeadWise Foundation's Grow with Google program.</p>
+            </div>
+          </div>
+          <a 
+            href="https://www.coursera.org/programs/leadwise-foundation-google-learning-program-6tugh" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+          >
+            <ExternalLink size={18} /> Open Coursera Program
+          </a>
+        </div>
+      </section>
+
+      {/* --- MORE LEARNING PATHS --- */}
       <section className="max-w-7xl mx-auto px-6 pb-24">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-          Choose Your <span className="text-[#FFBEA0]">Economic Pathway</span>
+          More <span className="text-[#FFBEA0]">Economic Pathways</span>
         </h2>
 
         <div className="grid md:grid-cols-2 gap-8">

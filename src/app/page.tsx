@@ -63,7 +63,7 @@ export default function HomePage() {
 
         <div className="max-w-5xl mx-auto z-10 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-[#FFBEA0]/30 text-[#FFBEA0] text-sm font-semibold mb-8 animate-fade-in">
-            <ShieldCheck size={16} /> Proud Google Cloud & Workspace Partner
+            <ShieldCheck size={16} /> Google Cloud Partner • Coursera × Grow with Google
           </div>
           
           <h1 className="text-5xl md:text-7xl font-extrabold mb-8 leading-tight tracking-tight">
@@ -112,8 +112,8 @@ export default function HomePage() {
              </p>
              <div className="space-y-6">
                {[
+                 { title: "Google Cybersecurity Certificate", desc: "Earn a professional credential through Coursera — 100% free via our Grow with Google partnership." },
                  { title: "Become a Google Cloud Pro", desc: "Gain hands-on experience with the infrastructure powering the modern web." },
-                 { title: "Google Workspace Mastery", desc: "Validate your proficiency in the essential collaboration tools used by Fortune 500 companies." },
                  { title: "Industry-Recognized Credentials", desc: "Earn verifiable digital badges that signal competence to hiring managers." }
                ].map((item, i) => (
                  <div key={i} className="flex gap-5 p-4 rounded-2xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
