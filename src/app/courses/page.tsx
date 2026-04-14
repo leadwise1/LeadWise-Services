@@ -17,7 +17,6 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
-  ShieldCheck,
   Globe
 } from "lucide-react";
 import { initializeApp } from "firebase/app";
@@ -425,6 +424,8 @@ const cybersecurityCourse: Course = {
     }
   ]
 };
+
+const COURSES = [frontendCourse, dataAnalyticsCourse];
 
 // --- COMPONENTS ---
 
