@@ -31,10 +31,13 @@ export async function GET(request: NextRequest) {
     // In a real app, use a more secure session management system
     response.cookies.set('coursera_token', tokenData.access_token, {
       httpOnly: true,
-      secure: process.env.NODE_VERSION === 'production',
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      path: '/',
       maxAge: tokenData.expires_in
     });
+
+    console.log('Successfully set coursera_token cookie for the session.');
 
     return response;
   } catch (error) {
