@@ -23,6 +23,7 @@ import {
 import { initializeApp } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged, Auth, User } from "firebase/auth";
 import { getFirestore, doc, setDoc, Firestore } from "firebase/firestore";
+import * as Progress from "@radix-ui/react-progress";
 
 // --- TYPESCRIPT INTERFACES ---
 // These definitions tell Next.js exactly what your data looks like.
@@ -58,6 +59,7 @@ interface Course {
   color: string;
   modules: Module[];
   salaryHook?: string;
+  externalProgramId?: string; // ID of the program on Coursera
 }
 
 // --- CONFIGURATION START ---
@@ -214,6 +216,7 @@ const dataAnalyticsCourse: Course = {
 const cybersecurityCourse: Course = {
   id: "google-cybersecurity-cert",
   title: "Google Cybersecurity Professional Certificate",
+  externalProgramId: "google-cybersecurity",
   subtitle: "Get on the fast track to a career in cybersecurity — powered by Coursera.",
   description: "A 9-course series by Google. Learn Python, Linux, SQL, SIEM tools & more. Earn an industry-recognized credential and prepare for the CompTIA Security+ exam. 100% free through LeadWise Foundation's Grow with Google partnership.",
   duration: "~6 months (10 hrs/week)",
@@ -706,6 +709,9 @@ interface CourseCardProps {
   course: Course;
   isEnrolled: boolean;
   onTriggerIntake: () => void;
+  progressPercentage?: number;
+  progressText?: string;
+  certificateUrl?: string;
 }
 
 function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
@@ -741,9 +747,28 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
           {course.description}
         </p>
 
-        <div className="flex items-center gap-4 text-sm text-gray-400 mb-8 pb-8 border-b border-white/10">
+        <div className="flex items-center gap-4 text-sm text-gray-400 mb-6 pb-6 border-b border-white/10">
           <span>{course.duration}</span> • <span>{course.level}</span>
         </div>
+
+        {/* Progress Display */}
+        {isEnrolled && progressPercentage !== undefined && (
+          <div className="mb-8 p-6 bg-white/5 rounded-2xl border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="flex justify-between items-end mb-3">
+               <div>
+                 <p className="text-xs uppercase tracking-widest text-[#FFBEA0] font-bold mb-1">Your Progress</p>
+                 <p className="text-white font-bold">{progressText || `${progressPercentage}% Complete`}</p>
+               </div>
+               <p className="text-2xl font-black text-white">{progressPercentage}%</p>
+            </div>
+            <Progress.Root className="relative h-3 w-full overflow-hidden rounded-full bg-white/5 border border-white/10">
+              <Progress.Indicator
+                className="h-full w-full flex-1 bg-gradient-to-r from-[#FF9E80] to-[#FFBEA0] transition-all duration-1000 ease-out"
+                style={{ transform: `translateX(-${100 - progressPercentage}%)` }}
+              />
+            </Progress.Root>
+          </div>
+        )}
 
         {/* Action Area */}
         <div className="space-y-4">
@@ -756,9 +781,20 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
             </button>
           ) : (
             <>
-              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-3 text-green-400 mb-4">
-                 <CheckCircle size={20} />
-                 <span className="font-semibold text-sm">Enrolled & Tracking</span>
+              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex flex-col gap-3 mb-4">
+                 <div className="flex items-center gap-3 text-green-400">
+                    <CheckCircle size={20} />
+                    <span className="font-semibold text-sm">Enrolled & Syncing with Coursera</span>
+                 </div>
+                 {progressPercentage === 100 && (
+                   <a 
+                    href={certificateUrl || "https://www.coursera.org/accomplishments"} 
+                    target="_blank" 
+                    className="w-full py-3 bg-green-500 text-white rounded-lg font-bold text-center hover:bg-green-400 transition-colors shadow-[0_0_20px_rgba(34,197,94,0.4)] flex items-center justify-center gap-2"
+                   >
+                     <Globe size={18} /> Download Verified Certificate
+                   </a>
+                 )}
               </div>
               <button 
                 onClick={() => setShowModules(!showModules)}
@@ -767,6 +803,14 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
                 {showModules ? "Hide Curriculum" : "View Curriculum & Modules"}
                 {showModules ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </button>
+              {!progressPercentage && (
+                <a 
+                  href="/api/auth/login"
+                  className="w-full py-3 rounded-xl bg-blue-500/10 text-blue-300 border border-blue-500/20 font-bold hover:bg-blue-500/20 transition-colors flex items-center justify-center gap-2 text-sm"
+                >
+                  <Globe size={16} /> Sync Coursera Progress
+                </a>
+              )}
             </>
           )}
         </div>
@@ -794,6 +838,27 @@ const CoursesPage = () => {
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [courseraProgress, setCourseraProgress] = useState<{ percentage: number; text: string } | null>(null);
+  const [isLoadingProgress, setIsLoadingProgress] = useState(false);
+
+  // Fetch progress from our new API route
+  const fetchProgress = async () => {
+    setIsLoadingProgress(true);
+    try {
+      const res = await fetch('/api/coursera/progress');
+      if (res.ok) {
+        const data = await res.json();
+        setCourseraProgress({
+          percentage: data.percentage,
+          text: `${data.completed} of ${data.total} courses completed`
+        });
+      }
+    } catch (err) {
+      console.error("Failed to fetch Coursera progress:", err);
+    } finally {
+      setIsLoadingProgress(false);
+    }
+  };
 
   // Check enrollment on load
   useEffect(() => {
@@ -803,11 +868,18 @@ const CoursesPage = () => {
     }
     // Auth Listener
     if (auth) {
-      return onAuthStateChanged(auth, (u) => {
+      onAuthStateChanged(auth, (u) => {
         if (localStorage.getItem("leadwise_intake")) {
           setIsEnrolled(true);
+          fetchProgress(); // Try fetching progress when user is detected
         }
       });
+    }
+
+    // Check for auth success in URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('auth_success') === 'true') {
+      fetchProgress();
     }
   }, []);
 
@@ -964,6 +1036,8 @@ const CoursesPage = () => {
             course={cybersecurityCourse}
             isEnrolled={isEnrolled}
             onTriggerIntake={() => openEnrollment(cybersecurityCourse)}
+            progressPercentage={courseraProgress?.percentage}
+            progressText={courseraProgress?.text}
           />
         </div>
 
