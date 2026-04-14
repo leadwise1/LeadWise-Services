@@ -713,6 +713,7 @@ interface CourseCardProps {
   progressPercentage?: number;
   progressText?: string;
   certificateUrl?: string;
+  isVerified?: boolean;
 }
 
 function CourseCard({ 
@@ -721,7 +722,8 @@ function CourseCard({
   onTriggerIntake, 
   progressPercentage, 
   progressText, 
-  certificateUrl 
+  certificateUrl,
+  isVerified
 }: CourseCardProps) {
   const [showModules, setShowModules] = useState(false);
   const Icon = course.color === 'blue' ? Terminal : course.color === 'emerald' ? ShieldCheck : BarChart3;
@@ -767,7 +769,14 @@ function CourseCard({
                  <p className="text-xs uppercase tracking-widest text-[#FFBEA0] font-bold mb-1">Your Progress</p>
                  <p className="text-white font-bold">{progressText || `${progressPercentage}% Complete`}</p>
                </div>
-               <p className="text-2xl font-black text-white">{progressPercentage}%</p>
+               <div className="flex flex-col items-end">
+                 {isVerified && (
+                   <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-[10px] font-bold text-emerald-300 uppercase tracking-wider mb-2 animate-pulse">
+                     <ShieldCheck size={10} /> Verified
+                   </div>
+                 )}
+                 <p className="text-2xl font-black text-white">{progressPercentage}%</p>
+               </div>
             </div>
             <Progress.Root className="relative h-3 w-full overflow-hidden rounded-full bg-white/5 border border-white/10">
               <Progress.Indicator
@@ -846,7 +855,7 @@ const CoursesPage = () => {
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const [courseraProgress, setCourseraProgress] = useState<{ percentage: number; text: string } | null>(null);
+  const [courseraProgress, setCourseraProgress] = useState<{ percentage: number; text: string; isVerified: boolean } | null>(null);
   const [isLoadingProgress, setIsLoadingProgress] = useState(false);
 
   // Fetch progress from our new API route
@@ -858,7 +867,8 @@ const CoursesPage = () => {
         const data = await res.json();
         setCourseraProgress({
           percentage: data.percentage,
-          text: `${data.completed} of ${data.total} courses completed`
+          text: `${data.completed} of ${data.total} courses completed`,
+          isVerified: !!data.isVerified
         });
       }
     } catch (err) {
@@ -1046,6 +1056,7 @@ const CoursesPage = () => {
             onTriggerIntake={() => openEnrollment(cybersecurityCourse)}
             progressPercentage={courseraProgress?.percentage}
             progressText={courseraProgress?.text}
+            isVerified={courseraProgress?.isVerified}
           />
         </div>
 
