@@ -715,7 +715,14 @@ interface CourseCardProps {
   certificateUrl?: string;
 }
 
-function CourseCard({ course, isEnrolled, onTriggerIntake }: CourseCardProps) {
+function CourseCard({ 
+  course, 
+  isEnrolled, 
+  onTriggerIntake, 
+  progressPercentage, 
+  progressText, 
+  certificateUrl 
+}: CourseCardProps) {
   const [showModules, setShowModules] = useState(false);
   const Icon = course.color === 'blue' ? Terminal : course.color === 'emerald' ? ShieldCheck : BarChart3;
 
