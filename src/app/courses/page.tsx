@@ -1061,23 +1061,25 @@ const CoursesPage = () => {
         </div>
 
         {/* Direct Coursera Enrollment CTA */}
-        <div className="max-w-4xl mx-auto mt-8 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <Globe className="text-emerald-300" size={28} />
-            <div>
-              <p className="text-white font-bold">Ready to start? Enroll directly on Coursera — FREE.</p>
-              <p className="text-sm text-gray-400">Access all 9 courses through LeadWise Foundation's Grow with Google program.</p>
+        {isEnrolled && (
+          <div className="max-w-4xl mx-auto mt-8 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <Globe className="text-emerald-300" size={28} />
+              <div>
+                <p className="text-white font-bold">Ready to start? Enroll directly on Coursera — FREE.</p>
+                <p className="text-sm text-gray-400">Access all 9 courses through LeadWise Foundation's Grow with Google program.</p>
+              </div>
             </div>
+            <a 
+              href="https://www.coursera.org/programs/leadwise-foundation-google-learning-program-6tugh" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+            >
+              <ExternalLink size={18} /> Open Coursera Program
+            </a>
           </div>
-          <a 
-            href="https://www.coursera.org/programs/leadwise-foundation-google-learning-program-6tugh" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-          >
-            <ExternalLink size={18} /> Open Coursera Program
-          </a>
-        </div>
+        )}
       </section>
 
       {/* --- MORE LEARNING PATHS --- */}
