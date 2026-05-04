@@ -72,7 +72,7 @@ const firebaseConfig = {
   measurementId: "G-W5SVR52646"
 };
 
-const appId = 'leadwise-default';
+const appId = 'leadwise-platform';
 // --- CONFIGURATION END ---
 
 // Initialize Firebase (Safely Typed)
@@ -478,10 +478,40 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalP
         lmiVerified: true, 
       };
 
+      console.log("INTAKE ATTEMPT:", intakeRecord);
+
       // 1. SAVE TO CLOUD (If connected)
-      if (db && auth?.currentUser) {
-        await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord);
-        console.log("SUCCESS: Data saved to Firebase Cloud.");
+      if (db) {
+        let finalUid = uid;
+        
+        // If auth is available but not signed in, try to sign in anonymously
+        if (auth && !auth.currentUser) {
+          try {
+            const cred = await signInAnonymously(auth);
+            finalUid = cred.user.uid;
+            console.log("Anonymous sign-in successful. UID:", finalUid);
+          } catch (authError: any) {
+            console.warn("Anonymous sign-in failed. Proceeding as guest.", authError);
+            // If anonymous auth is disabled, we'll still have the 'demo-xxx' UID
+          }
+        } else if (auth?.currentUser) {
+          finalUid = auth.currentUser.uid;
+        }
+
+        intakeRecord.participantId = finalUid;
+
+        try {
+          // Note: Using 'artifacts' as the top-level collection to match Admin Portal structure
+          await setDoc(doc(db, "artifacts", appId, "users", finalUid, "profile", "intake"), intakeRecord);
+          console.log("SUCCESS: Data saved to Firebase Cloud.");
+        } catch (dbError: any) {
+          console.error("Firestore Save Error:", dbError);
+          // If we have a permission error, it's likely rules or auth related
+          if (dbError.code === 'permission-denied') {
+             throw new Error("Permission Denied: Please check if 'Anonymous Sign-in' is enabled in Firebase Console and ensure Firestore rules allow writes to 'artifacts/leadwise-platform/users/...'");
+          }
+          throw dbError;
+        }
       } else {
         console.warn("WARNING: Firebase not connected. Saving locally only.");
       }
@@ -497,9 +527,9 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalP
         onComplete();
       }, 1500);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Intake failed:", error);
-      alert("Error saving intake. Please try again.");
+      alert(`Error saving intake: ${error.message || "Please try again."}`);
     } finally {
       setLoading(false);
     }
