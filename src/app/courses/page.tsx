@@ -59,6 +59,7 @@ interface Course {
   modules: Module[];
   salaryHook?: string;
   externalProgramId?: string; // ID of the program on Coursera
+  externalUrl?: string; // Redirect URL after intake
 }
 
 // --- CONFIGURATION START ---
@@ -216,6 +217,7 @@ const cybersecurityCourse: Course = {
   id: "google-cybersecurity-cert",
   title: "Google Cybersecurity Professional Certificate",
   externalProgramId: "google-cybersecurity",
+  externalUrl: "https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
   subtitle: "Get on the fast track to a career in cybersecurity — powered by Coursera.",
   description: "A 9-course series by Google. Learn Python, Linux, SQL, SIEM tools & more. Earn an industry-recognized credential and prepare for the CompTIA Security+ exam. 100% free through LeadWise Foundation's Grow with Google partnership.",
   duration: "~6 months (10 hrs/week)",
@@ -939,6 +941,11 @@ const CoursesPage = () => {
   const handleEnrollmentComplete = () => {
     setIsEnrolled(true);
     setIntakeOpen(false);
+    
+    // If the course has an external URL (like Coursera), redirect the user after intake
+    if (selectedCourse?.externalUrl) {
+      window.open(selectedCourse.externalUrl, '_blank');
+    }
   };
 
   return (
@@ -1101,7 +1108,7 @@ const CoursesPage = () => {
           </div>
           {isEnrolled ? (
             <a 
-              href="https://www.coursera.org/programs/leadwise-foundation-google-learning-program-6tugh" 
+              href="https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc" 
               target="_blank" 
               rel="noopener noreferrer"
               className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shadow-[0_0_20px_rgba(16,185,129,0.3)]"
