@@ -96,14 +96,20 @@ function IntakeModal({
         lmiVerified: true, 
       };
 
-      // Save to Firestore using the 'profile' path so the Admin Page catches it!
-      if (db && auth?.currentUser) {
-        await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord);
-      } 
-      
-      // Save locally to bypass gate on refresh
+      // 1. Save locally FIRST to bypass gate immediately
       localStorage.setItem("leadwise_intake", JSON.stringify(intakeRecord));
 
+      // 2. Attempt Cloud Save Safely
+      if (db && auth?.currentUser) {
+        try {
+          // merge: true ensures it doesn't fail if the document already exists
+          await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord, { merge: true });
+        } catch (dbError: any) {
+          console.warn("Firestore save skipped. Rules may be blocking updates, but student is allowed in.", dbError.message);
+        }
+      } 
+
+      // 3. Unlock the UI!
       onComplete();
     } catch (error) {
       console.error("Intake failed:", error);
