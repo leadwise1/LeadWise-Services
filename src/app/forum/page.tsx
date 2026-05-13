@@ -50,6 +50,7 @@ function IntakeModal({
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log("Intake form submission started...");
     e.preventDefault();
     setLoading(true);
 
@@ -107,20 +108,20 @@ function IntakeModal({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                  <input required className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+                  <input name="firstName" required className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                  <input required className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
+                  <input name="lastName" required className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                <input type="email" required className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+                <input name="email" type="email" required className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Zip Code</label>
-                <input required maxLength={5} className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g. 75001" value={formData.zipCode} onChange={(e) => setFormData({...formData, zipCode: e.target.value})} />
+                <input name="zipCode" required maxLength={5} className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g. 75001" value={formData.zipCode} onChange={(e) => setFormData({...formData, zipCode: e.target.value})} />
                 <p className="text-xs text-gray-500 mt-1">Used for LMI census tract verification.</p>
               </div>
             </div>
@@ -133,7 +134,7 @@ function IntakeModal({
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Annual Household Income</label>
-                <select required className="w-full p-2 border border-gray-300 rounded-md" value={formData.householdIncome} onChange={(e) => setFormData({...formData, householdIncome: e.target.value})}>
+                <select name="householdIncome" required className="w-full p-2 border border-gray-300 rounded-md" value={formData.householdIncome} onChange={(e) => setFormData({...formData, householdIncome: e.target.value})}>
                   <option value="">Select Range...</option>
                   <option value="0-25k">$0 - $25,000</option>
                   <option value="25-50k">$25,001 - $50,000</option>
@@ -143,7 +144,7 @@ function IntakeModal({
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Household Size</label>
-                <select required className="w-full p-2 border border-gray-300 rounded-md" value={formData.householdSize} onChange={(e) => setFormData({...formData, householdSize: e.target.value})}>
+                <select name="householdSize" required className="w-full p-2 border border-gray-300 rounded-md" value={formData.householdSize} onChange={(e) => setFormData({...formData, householdSize: e.target.value})}>
                   <option value="">Select Size...</option>
                   <option value="1">1 Person</option>
                   <option value="2">2 People</option>
@@ -153,7 +154,7 @@ function IntakeModal({
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Employment Status</label>
-                <select required className="w-full p-2 border border-gray-300 rounded-md" value={formData.employmentStatus} onChange={(e) => setFormData({...formData, employmentStatus: e.target.value})}>
+                <select name="employmentStatus" required className="w-full p-2 border border-gray-300 rounded-md" value={formData.employmentStatus} onChange={(e) => setFormData({...formData, employmentStatus: e.target.value})}>
                   <option value="">Select Status...</option>
                   <option value="unemployed">Unemployed</option>
                   <option value="part-time">Part-Time</option>
@@ -172,7 +173,7 @@ function IntakeModal({
                  <p>I agree to follow the community guidelines and participate respectfully in the forum.</p>
                </div>
                <label className="flex items-start gap-3 p-2 cursor-pointer hover:bg-gray-100 rounded-md">
-                 <input type="checkbox" required className="mt-1" checked={formData.consent} onChange={(e) => setFormData({...formData, consent: e.target.checked})} />
+                 <input name="consent" type="checkbox" required className="mt-1" checked={formData.consent} onChange={(e) => setFormData({...formData, consent: e.target.checked})} />
                  <span className="text-sm font-medium text-gray-700">I Agree to the terms.</span>
                </label>
             </div>
@@ -298,6 +299,7 @@ function ForumPageContent() {
   };
 
   const handleCreatePost = async (e: React.FormEvent) => {
+    console.log("New post submission started...");
     e.preventDefault();
     if (!newTitle.trim() || !db) return;
     
@@ -525,7 +527,7 @@ function ForumPageContent() {
             <form onSubmit={handleCreatePost} className="flex flex-col gap-5">
               <div>
                 <label className="block text-sm font-medium text-neutral-300 mb-2">Course Channel</label>
-                <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-xl p-3.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow appearance-none">
+                <select name="category" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-xl p-3.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow appearance-none">
                   <option value="General Discussion">General Discussion</option>
                   <option value="Foundations of Cybersecurity">Foundations of Cybersecurity</option>
                   <option value="Networks and Network Security">Networks and Network Security</option>
@@ -534,7 +536,7 @@ function ForumPageContent() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-neutral-300 mb-2">Your Question or Topic</label>
-                <textarea value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="e.g., Stuck on Week 3 Linux Permissions Lab - Help?" className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-xl p-4 min-h-[140px] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none transition-shadow placeholder:text-neutral-600" required />
+                <textarea name="title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="e.g., Stuck on Week 3 Linux Permissions Lab - Help?" className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-xl p-4 min-h-[140px] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none transition-shadow placeholder:text-neutral-600" required />
               </div>
               <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-neutral-800">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg font-medium transition-colors">Cancel</button>
