@@ -64,16 +64,18 @@ interface Course {
 
 // --- CONFIGURATION START ---
 const firebaseConfig = {
-  apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
-  authDomain: "leadwise-platform.firebaseapp.com",
-  projectId: "leadwise-platform",
-  storageBucket: "leadwise-platform.firebasestorage.app",
-  messagingSenderId: "423460758070",
-  appId: "1:423460758070:web:6ff12a230fc1e65b44ee97",
-  measurementId: "G-W5SVR52646"
+  apiKey: "AIzaSyAhPL7NMbpHzbHN9kXKG_UKynyl7MNsJnw",
+  authDomain: "leadwise-services-rule.firebaseapp.com",
+  projectId: "leadwise-services-rule",
+  storageBucket: "leadwise-services-rule.firebasestorage.app",
+  messagingSenderId: "172388746691",
+  appId: "1:172388746691:web:98e02ee0f8cdc4c390a976",
+  measurementId: "G-FNP78P4T9L"
 };
 
-const appId = 'leadwise-platform';
+
+
+const appId = 'leadwise-services-rule';
 // --- CONFIGURATION END ---
 
 // Initialize Firebase (Safely Typed)
