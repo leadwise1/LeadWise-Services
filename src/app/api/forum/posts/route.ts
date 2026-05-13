@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, FieldValue } from '@/lib/firebase-admin';
+import { adminDb, admin } from '@/lib/firebase-admin';
 
 // GET all forum posts
 export async function GET() {
   try {
-    const postsRef = db.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("forumPosts");
+    const postsRef = adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("forumPosts");
     // Sort by newest first
     const snapshot = await postsRef
       .orderBy("createdAt", "desc")
@@ -44,14 +44,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const postsRef = db.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("forumPosts");
+    const postsRef = adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("forumPosts");
     const newPost = {
       title,
       category,
       author: author || "Anonymous Learner",
       replies: 0,
       upvotes: 1,
-      createdAt: FieldValue.serverTimestamp()
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
     };
 
     const docRef = await postsRef.add(newPost);

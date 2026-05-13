@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase-admin';
+import { adminDb } from '@/lib/firebase-admin';
 
 export async function GET() {
   try {
     // 1. Fallback for missing database (Admin SDK not initialized)
-    if (!db) {
+    if (!adminDb) {
       console.warn("Leaderboard API: Database not initialized. Returning mock data.");
       return NextResponse.json({ 
         success: true, 
@@ -13,7 +13,7 @@ export async function GET() {
       });
     }
 
-    const leaderboardRef = db.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard");
+    const leaderboardRef = adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard");
     
     // 2. Fetch real data
     try {

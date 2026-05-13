@@ -16,12 +16,10 @@ if (!admin.apps.length) {
         privateKey,
       }),
     });
-  } else {
-    console.warn("Firebase Admin credentials missing. Skipping initialization. This is expected during some build phases if environment variables are not provided.");
   }
 }
 
-export const db = admin.apps.length ? admin.firestore() : null as unknown as admin.firestore.Firestore;
-export const auth = admin.apps.length ? admin.auth() : null as unknown as admin.auth.Auth;
-export const FieldValue = admin.firestore.FieldValue;
-export { admin };
+const adminDb = admin.apps.length ? admin.firestore() : null as unknown as admin.firestore.Firestore;
+const adminAuth = admin.apps.length ? admin.auth() : null as unknown as admin.auth.Auth;
+
+export { adminDb, adminAuth, admin };

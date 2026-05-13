@@ -3,21 +3,18 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY,
-  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.VITE_FIREBASE_APP_ID,
-  measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyAhPL7NMbpHzbHN9kXKG_UKynyl7MNsJnw",
+  authDomain: "leadwise-services-rule.firebaseapp.com",
+  projectId: "leadwise-services-rule",
+  storageBucket: "leadwise-services-rule.firebasestorage.app",
+  messagingSenderId: "172388746691",
+  appId: "1:172388746691:web:98e02ee0f8cdc4c390a976",
+  measurementId: "G-FNP78P4T9L"
 };
 
-// Initialize Firebase only once, but only if we have an API key (prevents build-time crashes)
-const app = (getApps().length === 0 && firebaseConfig.apiKey) 
-  ? initializeApp(firebaseConfig) 
-  : (getApps().length > 0 ? getApps()[0] : null);
-
-const db = app ? getFirestore(app) : null as any;
-const auth = app ? getAuth(app) : null as any;
+// Initialize Firebase only if it hasn't been initialized already
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 export { db, auth, app };
