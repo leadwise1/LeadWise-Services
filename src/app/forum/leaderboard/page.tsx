@@ -17,13 +17,15 @@ export default function LeaderboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchLeaderboard() {
-      try {
-        const res = await fetch('/api/forum/leaderboard');
-        const data = await res.json();
-        if (data.success) {
-          setLeaderboard(data.data);
-        }
+  // 1. Point to your specific Firestore path
+  const leaderboardRef = collection(
+    db, 
+    "artifacts", 
+    "leadwise-services-rule", 
+    "public", 
+    "data", 
+    "leaderboard"
+  );
       } catch (error) {
         console.error("Failed to fetch leaderboard:", error);
       } finally {
