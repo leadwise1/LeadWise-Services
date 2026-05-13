@@ -5,17 +5,18 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, query, collectionGroup } from "firebase/firestore";
 import { Loader2, Printer, Filter, ShieldAlert, Lock, AlertTriangle } from "lucide-react";
 
-// --- CONFIGURATION ---
-// ✅ Real Firebase Config (Hardcoded)
+// --
 const firebaseConfig = {
-  apiKey: "AIzaSyChVyvbgj61JDzB9Pk1O0zrE-HoP07uHWs",
-  authDomain: "leadwise-platform.firebaseapp.com",
-  projectId: "leadwise-platform",
-  storageBucket: "leadwise-platform.firebasestorage.app",
-  messagingSenderId: "423460758070",
-  appId: "1:423460758070:web:6ff12a230fc1e65b44ee97",
-  measurementId: "G-W5SVR52646"
+  apiKey: "AIzaSyAhPL7NMbpHzbHN9kXKG_UKynyl7MNsJnw",
+  authDomain: "leadwise-services-rule.firebaseapp.com",
+  projectId: "leadwise-services-rule",
+  storageBucket: "leadwise-services-rule.firebasestorage.app",
+  messagingSenderId: "172388746691",
+  appId: "1:172388746691:web:98e02ee0f8cdc4c390a976",
+  measurementId: "G-FNP78P4T9L"
 };
+
+
 
 // Initialize Firebase
 let db: any;
