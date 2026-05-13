@@ -23,7 +23,9 @@ export async function GET(request: NextRequest) {
       // For this implementation, we use a placeholder or decode their JWT token.
       const userId = token.substring(0, 15); // Hash/mock ID based on token
       
-      await db.collection("leaderboard").doc(userId).set({
+      const leaderboardRef = db.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard");
+      
+      await leaderboardRef.doc(userId).set({
         userId: userId,
         name: "Coursera Learner", // You would replace this with actual profile name
         points: progress.percentage * 100, // XP = percentage * 100

@@ -3,7 +3,7 @@ import { db } from '@/lib/firebase-admin';
 
 export async function GET() {
   try {
-    const leaderboardRef = db.collection("leaderboard");
+    const leaderboardRef = db.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard");
     // Get top 20 learners ordered by points descending
     const snapshot = await leaderboardRef
       .orderBy("points", "desc")

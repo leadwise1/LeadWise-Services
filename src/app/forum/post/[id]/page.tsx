@@ -7,6 +7,8 @@ import { db } from "@/lib/firebase";
 import { doc, onSnapshot, updateDoc, increment, collection, query, orderBy, addDoc, serverTimestamp } from "firebase/firestore";
 import Link from 'next/link';
 
+const appId = "leadwise-web";
+
 interface Comment {
   id: string;
   author: string;
@@ -39,7 +41,7 @@ export default function PostDetailsPage() {
     if (!id || !db) return;
 
     // Listen to post details
-    const postRef = doc(db, 'forum_posts', id as string);
+    const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string);
     const unsubscribePost = onSnapshot(postRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -60,7 +62,7 @@ export default function PostDetailsPage() {
     });
 
     // Listen to comments
-    const commentsRef = collection(db, 'forum_posts', id as string, 'comments');
+    const commentsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string, 'comments');
     const q = query(commentsRef, orderBy("createdAt", "asc"));
     const unsubscribeComments = onSnapshot(q, (snapshot) => {
       const fetchedComments: Comment[] = [];
@@ -86,7 +88,7 @@ export default function PostDetailsPage() {
     if (!id || !db || upvoting) return;
     setUpvoting(true);
     try {
-      const postRef = doc(db, 'forum_posts', id as string);
+      const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string);
       await updateDoc(postRef, { upvotes: increment(1) });
     } catch (error) {
       console.error("Failed to upvote:", error);
@@ -102,7 +104,7 @@ export default function PostDetailsPage() {
     setIsSubmitting(true);
     try {
       // 1. Add the comment
-      const commentsRef = collection(db, 'forum_posts', id as string, 'comments');
+      const commentsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string, 'comments');
       await addDoc(commentsRef, {
         author: "Anonymous Learner", // In a real app, use the actual user's name
         content: newComment,
@@ -110,7 +112,7 @@ export default function PostDetailsPage() {
       });
 
       // 2. Increment reply count on the post
-      const postRef = doc(db, 'forum_posts', id as string);
+      const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string);
       await updateDoc(postRef, { replies: increment(1) });
 
       setNewComment("");

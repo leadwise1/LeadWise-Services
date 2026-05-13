@@ -4,7 +4,7 @@ import { db, FieldValue } from '@/lib/firebase-admin';
 // GET all forum posts
 export async function GET() {
   try {
-    const postsRef = db.collection("forum_posts");
+    const postsRef = db.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("forumPosts");
     // Sort by newest first
     const snapshot = await postsRef
       .orderBy("createdAt", "desc")
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const postsRef = db.collection("forum_posts");
+    const postsRef = db.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("forumPosts");
     const newPost = {
       title,
       category,

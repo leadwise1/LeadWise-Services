@@ -8,7 +8,7 @@ import { collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc, increm
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-const appId = "leadwise-default";
+const appId = "leadwise-web";
 
 interface Post {
   id: string;
@@ -77,7 +77,7 @@ function IntakeModal({
       if (db && auth?.currentUser) {
         try {
           // merge: true ensures it doesn't fail if the document already exists
-          await setDoc(doc(db, "users", uid, "profile", "intake"), intakeRecord, { merge: true });
+          await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord, { merge: true });
         } catch (dbError: any) {
           console.warn("Firestore save skipped. Rules may be blocking updates, but student is allowed in.", dbError.message);
         }
@@ -247,7 +247,7 @@ function ForumPageContent() {
   useEffect(() => {
     if (!db || isEnrolled === false) return; // Only fetch if enrolled or loading
 
-    const postsRef = collection(db, 'forum_posts');
+    const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts');
     const q = query(postsRef, orderBy(activeFilter === "Trending" ? "upvotes" : "createdAt", "desc"));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -284,7 +284,7 @@ function ForumPageContent() {
     setUpvotingIds(prev => new Set(prev).add(postId));
 
     try {
-      const postRef = doc(db, 'forum_posts', postId);
+      const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', postId);
       await updateDoc(postRef, { upvotes: increment(1) });
     } catch (error) {
       console.error("Failed to upvote:", error);
@@ -303,7 +303,7 @@ function ForumPageContent() {
     
     setIsSubmitting(true);
     try {
-      const postsRef = collection(db, 'forum_posts');
+      const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts');
       await addDoc(postsRef, {
         title: newTitle,
         category: newCategory,
