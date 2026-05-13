@@ -1,31 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, query, collectionGroup } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, query, collectionGroup } from "firebase/firestore";
 import { Loader2, Printer, Filter, ShieldAlert, Lock, AlertTriangle } from "lucide-react";
-
-// --
-const firebaseConfig = {
-  apiKey: "AIzaSyAhPL7NMbpHzbHN9kXKG_UKynyl7MNsJnw",
-  authDomain: "leadwise-services-rule.firebaseapp.com",
-  projectId: "leadwise-services-rule",
-  storageBucket: "leadwise-services-rule.firebasestorage.app",
-  messagingSenderId: "172388746691",
-  appId: "1:172388746691:web:98e02ee0f8cdc4c390a976",
-  measurementId: "G-FNP78P4T9L"
-};
-
-
-
-// Initialize Firebase
-let db: any;
-try {
-  const app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-} catch (e) {
-  console.error("Admin Page: Firebase init failed", e);
-}
 
 interface StudentRecord {
   id: string; 
@@ -42,7 +20,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [incomeFilter, setIncomeFilter] = useState("All");
-  const [debugLog, setDebugLog] = useState<string[]>([]); // New On-Screen Log
+  const [debugLog, setDebugLog] = useState<string[]>([]);
 
   const addLog = (msg: string) => setDebugLog(prev => [...prev, `${new Date().toLocaleTimeString()}: ${msg}`]);
 
@@ -63,11 +41,11 @@ export default function AdminPage() {
     }
     
     setLoading(true);
-    setDebugLog([]); // Clear logs
+    setDebugLog([]);
     addLog("Starting Data Fetch...");
 
     try {
-      // 1. Try Collection Group Query (Best way)
+      // Query collectionGroup "profile" to find all intake documents across the hierarchical structure
       addLog("Attempting Collection Group Query for 'profile'...");
       const q = query(collectionGroup(db, "profile"));
       const querySnapshot = await getDocs(q);
@@ -76,8 +54,7 @@ export default function AdminPage() {
 
       const fetchedStudents: StudentRecord[] = [];
       querySnapshot.forEach((doc) => {
-        addLog(`- Found Doc ID: ${doc.id} at path: ${doc.ref.path}`);
-        
+        // We only care about the 'intake' document in the 'profile' collection
         if (doc.id === 'intake') {
             const data = doc.data();
             const userId = doc.ref.parent.parent?.id || "unknown";
@@ -97,12 +74,6 @@ export default function AdminPage() {
     } catch (error: any) {
       console.error("Error:", error);
       addLog(`CRITICAL ERROR: ${error.message}`);
-      if (error.message.includes("requires an index")) {
-        addLog("HINT: You might need to create an index in Firebase Console.");
-      }
-      if (error.message.includes("permission")) {
-         addLog("HINT: Database Rules are blocking this. Did you publish 'allow read: if true;'?");
-      }
     } finally {
       setLoading(false);
     }
@@ -125,7 +96,7 @@ export default function AdminPage() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label htmlFor="access-code" className="block text-sm font-medium text-gray-700 mb-1">Access Code</label>
-              <input id="access-code" type="password" className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter code..." />
+              <input id="access-code" type="password" required className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter code..." />
             </div>
             <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-opacity-90 font-bold transition-colors">Access Reports</button>
           </form>

@@ -19,13 +19,12 @@ import {
   ChevronUp,
   Globe
 } from "lucide-react";
-import { initializeApp } from "firebase/app";
-import { getAuth, signInAnonymously, onAuthStateChanged, Auth, User } from "firebase/auth";
-import { getFirestore, doc, setDoc, Firestore } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import { signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import * as Progress from "@radix-ui/react-progress";
 
 // --- TYPESCRIPT INTERFACES ---
-// These definitions tell Next.js exactly what your data looks like.
 interface Resource {
   title: string;
   type: string;
@@ -58,39 +57,12 @@ interface Course {
   color: string;
   modules: Module[];
   salaryHook?: string;
-  externalProgramId?: string; // ID of the program on Coursera
-  externalUrl?: string; // Redirect URL after intake
+  externalProgramId?: string; 
+  externalUrl?: string; 
 }
 
-// --- CONFIGURATION START ---
-const firebaseConfig = {
-  apiKey: "AIzaSyAhPL7NMbpHzbHN9kXKG_UKynyl7MNsJnw",
-  authDomain: "leadwise-services-rule.firebaseapp.com",
-  projectId: "leadwise-services-rule",
-  storageBucket: "leadwise-services-rule.firebasestorage.app",
-  messagingSenderId: "172388746691",
-  appId: "1:172388746691:web:98e02ee0f8cdc4c390a976",
-  measurementId: "G-FNP78P4T9L"
-};
-
-
-
-const appId = 'leadwise-services-rule';
-// --- CONFIGURATION END ---
-
-// Initialize Firebase (Safely Typed)
-// We explicitly say: "These variables might be the Auth service, or undefined"
-let auth: Auth | undefined;
-let db: Firestore | undefined;
-
-try {
-  const app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
-  console.log("Firebase initialized: Data will be saved to Cloud.");
-} catch (e) {
-  console.error("Firebase initialization failed:", e);
-}
+// --- CONFIGURATION ---
+const appId = 'leadwise-web';
 
 // --- DATA: Frontend Course ---
 const frontendCourse: Course = {
@@ -271,160 +243,6 @@ const cybersecurityCourse: Course = {
           ]
         }
       ]
-    },
-    {
-      id: "cyber-3-networks",
-      title: "Course 3: Connect and Protect — Networks & Network Security",
-      duration: "~14 hours",
-      lessons: [
-        {
-          id: "cyber-3-overview",
-          title: "Network Architecture & Security",
-          resources: [
-            { title: "Networks and Network Security — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/networks-and-network-security?specialization=google-cybersecurity" }
-          ]
-        },
-        {
-          id: "cyber-3-hardening",
-          title: "System Hardening & Intrusion Prevention",
-          resources: [
-            { title: "Secure networks against intrusion tactics", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security?specialization=google-cybersecurity" },
-            { title: "Describe system hardening techniques", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/networks-and-network-security?specialization=google-cybersecurity" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "cyber-4-linux-sql",
-      title: "Course 4: Tools of the Trade — Linux and SQL",
-      duration: "~21 hours",
-      lessons: [
-        {
-          id: "cyber-4-overview",
-          title: "Operating Systems, Linux & SQL",
-          resources: [
-            { title: "Linux and SQL — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/linux-and-sql?specialization=google-cybersecurity" }
-          ]
-        },
-        {
-          id: "cyber-4-cli",
-          title: "Command Line & Database Queries",
-          resources: [
-            { title: "Navigate the file system using Linux commands via Bash", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql?specialization=google-cybersecurity" },
-            { title: "Use SQL to retrieve information from a database", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/linux-and-sql?specialization=google-cybersecurity" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "cyber-5-assets",
-      title: "Course 5: Assets, Threats, and Vulnerabilities",
-      duration: "~20 hours",
-      lessons: [
-        {
-          id: "cyber-5-overview",
-          title: "Asset Classification & Threat Modeling",
-          resources: [
-            { title: "Assets, Threats, and Vulnerabilities — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/assets-threats-and-vulnerabilities?specialization=google-cybersecurity" }
-          ]
-        },
-        {
-          id: "cyber-5-threats",
-          title: "Social Engineering, Malware & Web Exploits",
-          resources: [
-            { title: "Analyze an attack surface to find risks", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/assets-threats-and-vulnerabilities?specialization=google-cybersecurity" },
-            { title: "Summarize the threat modeling process", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/assets-threats-and-vulnerabilities?specialization=google-cybersecurity" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "cyber-6-detection",
-      title: "Course 6: Sound the Alarm — Detection and Response",
-      duration: "~18 hours",
-      lessons: [
-        {
-          id: "cyber-6-overview",
-          title: "Incident Response & SIEM Analysis",
-          resources: [
-            { title: "Detection and Response — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/detection-and-response?specialization=google-cybersecurity" }
-          ]
-        },
-        {
-          id: "cyber-6-ids",
-          title: "IDS Tools & Packet Analysis",
-          resources: [
-            { title: "Analyze packets to interpret network communications", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/detection-and-response?specialization=google-cybersecurity" },
-            { title: "Perform queries in SIEM tools to investigate events", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/detection-and-response?specialization=google-cybersecurity" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "cyber-7-python",
-      title: "Course 7: Automate Cybersecurity Tasks with Python",
-      duration: "~25 hours",
-      lessons: [
-        {
-          id: "cyber-7-overview",
-          title: "Python for Cybersecurity",
-          resources: [
-            { title: "Automate Cybersecurity Tasks with Python — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/automate-cybersecurity-tasks-with-python?specialization=google-cybersecurity" }
-          ]
-        },
-        {
-          id: "cyber-7-scripting",
-          title: "Functions, Regex & Debugging",
-          resources: [
-            { title: "Create user-defined Python functions", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/automate-cybersecurity-tasks-with-python?specialization=google-cybersecurity" },
-            { title: "Use regular expressions to extract information", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/automate-cybersecurity-tasks-with-python?specialization=google-cybersecurity" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "cyber-8-jobs",
-      title: "Course 8: Put It to Work — Prepare for Cybersecurity Jobs",
-      duration: "~13 hours",
-      lessons: [
-        {
-          id: "cyber-8-overview",
-          title: "Incident Escalation & Career Prep",
-          resources: [
-            { title: "Prepare for Cybersecurity Jobs — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/prepare-for-cybersecurity-jobs?specialization=google-cybersecurity" }
-          ]
-        },
-        {
-          id: "cyber-8-ai",
-          title: "AI Skills for Cybersecurity",
-          resources: [
-            { title: "Use AI to identify bugs and refine code", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/prepare-for-cybersecurity-jobs?specialization=google-cybersecurity" },
-            { title: "Prioritize security alerts with AI", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/prepare-for-cybersecurity-jobs?specialization=google-cybersecurity" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "cyber-9-job-search-ai",
-      title: "Course 9: Accelerate Your Job Search with AI",
-      duration: "~10 hours",
-      lessons: [
-        {
-          id: "cyber-9-overview",
-          title: "AI-Powered Job Search",
-          resources: [
-            { title: "Accelerate Your Job Search with AI — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/accelerate-your-job-search-with-ai?specialization=google-cybersecurity" }
-          ]
-        },
-        {
-          id: "cyber-9-tools",
-          title: "Resume, Interview Prep & Career Dreamer",
-          resources: [
-            { title: "Build a stand-out resume with help from Gemini", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/accelerate-your-job-search-with-ai?specialization=google-cybersecurity" },
-            { title: "Practice interview responses using NotebookLM", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/accelerate-your-job-search-with-ai?specialization=google-cybersecurity" }
-          ]
-        }
-      ]
     }
   ]
 };
@@ -482,54 +300,33 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalP
         lmiVerified: true, 
       };
 
-      console.log("INTAKE ATTEMPT:", intakeRecord);
-
       // 1. SAVE TO CLOUD (If connected)
       if (db) {
         let finalUid = uid;
-        
-        // If auth is available but not signed in, try to sign in anonymously
-        if (auth && !auth.currentUser) {
-          try {
-            const cred = await signInAnonymously(auth);
-            finalUid = cred.user.uid;
-            console.log("Anonymous sign-in successful. UID:", finalUid);
-          } catch (authError: any) {
-            console.warn("Anonymous sign-in failed. Proceeding as guest.", authError);
-            // If anonymous auth is disabled, we'll still have the 'demo-xxx' UID
-          }
-        } else if (auth?.currentUser) {
+        if (auth?.currentUser) {
           finalUid = auth.currentUser.uid;
         }
-
         intakeRecord.participantId = finalUid;
 
         try {
-          // Note: Using 'artifacts' as the top-level collection to match Admin Portal structure
+          // Point to project hierarchical structure: artifacts/{appId}/users/{userId}/profile/intake
           await setDoc(doc(db, "artifacts", appId, "users", finalUid, "profile", "intake"), intakeRecord);
           console.log("SUCCESS: Data saved to Firebase Cloud.");
         } catch (dbError: any) {
           console.error("Firestore Save Error:", dbError);
-          // If we have a permission error, it's likely rules or auth related
           if (dbError.code === 'permission-denied') {
-             throw new Error("Permission Denied: Please check if 'Anonymous Sign-in' is enabled in Firebase Console and ensure Firestore rules allow writes to 'artifacts/leadwise-platform/users/...'");
+             throw new Error("Permission Denied: Ensure Firestore rules allow writes to 'artifacts/leadwise-web/users/...'");
           }
           throw dbError;
         }
-      } else {
-        console.warn("WARNING: Firebase not connected. Saving locally only.");
-      }
+      } 
       
-      // 2. MOCK EMAIL TRIGGER
-      console.log(`📧 EMAILING MENTOR: Sending automated intro email for student ${formData.email}...`);
-      
-      // Always save local backup
+      // Store local backup
       localStorage.setItem("leadwise_intake", JSON.stringify(intakeRecord));
 
-      // Simulate delay for effect
       setTimeout(() => {
         onComplete();
-      }, 1500);
+      }, 1000);
 
     } catch (error: any) {
       console.error("Intake failed:", error);
@@ -565,21 +362,21 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalP
               <div className="space-y-4 animate-in slide-in-from-right duration-200">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">First Name</label>
-                    <input required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+                    <label htmlFor="firstName" className="block text-xs uppercase tracking-wider text-gray-500 mb-1">First Name</label>
+                    <input id="firstName" name="firstName" required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Last Name</label>
-                    <input required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
+                    <label htmlFor="lastName" className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Last Name</label>
+                    <input id="lastName" name="lastName" required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Email</label>
-                  <input type="email" required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+                  <label htmlFor="email" className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Email</label>
+                  <input id="email" name="email" type="email" required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Zip Code</label>
-                  <input required maxLength={5} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" placeholder="e.g. 75001" value={formData.zipCode} onChange={(e) => setFormData({...formData, zipCode: e.target.value})} />
+                  <label htmlFor="zipCode" className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Zip Code</label>
+                  <input id="zipCode" name="zipCode" required maxLength={5} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" placeholder="e.g. 75001" value={formData.zipCode} onChange={(e) => setFormData({...formData, zipCode: e.target.value})} />
                 </div>
               </div>
             )}
@@ -587,11 +384,11 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalP
             {step === 2 && (
               <div className="space-y-4 animate-in slide-in-from-right duration-200">
                 <div className="bg-[#FF9E80]/10 border border-[#FF9E80]/20 p-3 rounded-xl text-sm text-[#FFBEA0] mb-4">
-                  This information is required for our grant funding and allows us to keep this course <strong>100% free</strong>.
+                  This information is required for our grant funding and allows us to keep this course 100% free.
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Household Income</label>
-                  <select required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.householdIncome} onChange={(e) => setFormData({...formData, householdIncome: e.target.value})}>
+                  <label htmlFor="householdIncome" className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Household Income</label>
+                  <select id="householdIncome" name="householdIncome" required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.householdIncome} onChange={(e) => setFormData({...formData, householdIncome: e.target.value})}>
                     <option value="">Select Range...</option>
                     <option value="0-25k">$0 - $25,000</option>
                     <option value="25-50k">$25,001 - $50,000</option>
@@ -600,8 +397,8 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalP
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Employment Status</label>
-                  <select required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.employmentStatus} onChange={(e) => setFormData({...formData, employmentStatus: e.target.value})}>
+                  <label htmlFor="employmentStatus" className="block text-xs uppercase tracking-wider text-gray-500 mb-1">Employment Status</label>
+                  <select id="employmentStatus" name="employmentStatus" required className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#FFBEA0]" value={formData.employmentStatus} onChange={(e) => setFormData({...formData, employmentStatus: e.target.value})}>
                     <option value="">Select Status...</option>
                     <option value="unemployed">Unemployed</option>
                     <option value="part-time">Part-Time</option>
@@ -618,8 +415,8 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalP
                    <h3 className="font-bold text-white">Program Participation Agreement</h3>
                    <p>By clicking "Submit", I certify that the information provided is true. I understand that LeadWise Foundation is a non-profit and will use this data in aggregate form for grant reporting purposes.</p>
                  </div>
-                 <label className="flex items-start gap-3 p-3 cursor-pointer hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 transition">
-                   <input type="checkbox" required className="mt-1 w-4 h-4 accent-[#FF9E80]" checked={formData.consent} onChange={(e) => setFormData({...formData, consent: e.target.checked})} />
+                 <label htmlFor="consent" className="flex items-start gap-3 p-3 cursor-pointer hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 transition">
+                   <input id="consent" name="consent" type="checkbox" required className="mt-1 w-4 h-4 accent-[#FF9E80]" checked={formData.consent} onChange={(e) => setFormData({...formData, consent: e.target.checked})} />
                    <span className="text-sm font-medium text-gray-300">I Agree and wish to enroll.</span>
                  </label>
               </div>
@@ -798,26 +595,26 @@ function CourseCard({
         {/* Progress Display */}
         {isEnrolled && progressPercentage !== undefined && (
           <div className="mb-8 p-6 bg-white/5 rounded-2xl border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <div className="flex justify-between items-end mb-3">
-               <div>
-                 <p className="text-xs uppercase tracking-widest text-[#FFBEA0] font-bold mb-1">Your Progress</p>
-                 <p className="text-white font-bold">{progressText || `${progressPercentage}% Complete`}</p>
-               </div>
-               <div className="flex flex-col items-end">
-                 {isVerified && (
-                   <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-[10px] font-bold text-emerald-300 uppercase tracking-wider mb-2 animate-pulse">
-                     <ShieldCheck size={10} /> Verified
-                   </div>
-                 )}
-                 <p className="text-2xl font-black text-white">{progressPercentage}%</p>
-               </div>
-            </div>
-            <Progress.Root className="relative h-3 w-full overflow-hidden rounded-full bg-white/5 border border-white/10">
-              <Progress.Indicator
-                className="h-full w-full flex-1 bg-gradient-to-r from-[#FF9E80] to-[#FFBEA0] transition-all duration-1000 ease-out"
-                style={{ transform: `translateX(-${100 - progressPercentage}%)` }}
-              />
-            </Progress.Root>
+             <div className="flex justify-between items-end mb-3">
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-[#FFBEA0] font-bold mb-1">Your Progress</p>
+                  <p className="text-white font-bold">{progressText || `${progressPercentage}% Complete`}</p>
+                </div>
+                <div className="flex flex-col items-end">
+                  {isVerified && (
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-[10px] font-bold text-emerald-300 uppercase tracking-wider mb-2 animate-pulse">
+                      <ShieldCheck size={10} /> Verified
+                    </div>
+                  )}
+                  <p className="text-2xl font-black text-white">{progressPercentage}%</p>
+                </div>
+             </div>
+             <Progress.Root className="relative h-3 w-full overflow-hidden rounded-full bg-white/5 border border-white/10">
+               <Progress.Indicator
+                 className="h-full w-full flex-1 bg-gradient-to-r from-[#FF9E80] to-[#FFBEA0] transition-all duration-1000 ease-out"
+                 style={{ transform: `translateX(-${100 - progressPercentage}%)` }}
+               />
+             </Progress.Root>
           </div>
         )}
 
@@ -914,21 +711,18 @@ const CoursesPage = () => {
 
   // Check enrollment on load
   useEffect(() => {
-    // Check local storage first for instant UI update
     if (localStorage.getItem("leadwise_intake")) {
       setIsEnrolled(true);
     }
-    // Auth Listener
     if (auth) {
       onAuthStateChanged(auth, (u) => {
         if (localStorage.getItem("leadwise_intake")) {
           setIsEnrolled(true);
-          fetchProgress(); // Try fetching progress when user is detected
+          fetchProgress(); 
         }
       });
     }
 
-    // Check for auth success in URL
     const params = new URLSearchParams(window.location.search);
     if (params.get('auth_success') === 'true') {
       fetchProgress();
@@ -943,8 +737,6 @@ const CoursesPage = () => {
   const handleEnrollmentComplete = () => {
     setIsEnrolled(true);
     setIntakeOpen(false);
-    
-    // If the course has an external URL (like Coursera), redirect the user after intake
     if (selectedCourse?.externalUrl) {
       window.open(selectedCourse.externalUrl, '_blank');
     }
@@ -962,18 +754,8 @@ const CoursesPage = () => {
           </a>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
             <a href="/" className="text-gray-400 hover:text-white transition">Home</a>
-            <a
-              href="https://services.letsleadwise.org/resume"
-              className="text-gray-400 hover:text-white transition"
-            >
-              Resume Builder
-            </a>
-            <a
-              href="https://services.letsleadwise.org/resume"
-              className="text-gray-400 hover:text-white transition"
-            >
-              Cover Letter
-            </a>
+            <a href="https://services.letsleadwise.org/resume" className="text-gray-400 hover:text-white transition">Resume Builder</a>
+            <a href="https://services.letsleadwise.org/resume" className="text-gray-400 hover:text-white transition">Cover Letter</a>
             <span className="text-[#FFBEA0]">Courses</span>
             <a href="https://blogletsleadwise.org/cover-letter" className="text-gray-400 hover:text-white transition">Blog</a>
             <a 
@@ -1024,71 +806,13 @@ const CoursesPage = () => {
         </div>
       </div>
 
-      {/* --- THE BRIDGE SECTION --- */}
-      <section className="max-w-7xl mx-auto px-6 mb-24">
-        <div className="grid md:grid-cols-2 gap-12 items-center bg-gradient-to-br from-white/5 to-transparent border border-[#FFBEA0]/20 rounded-[2.5rem] p-8 md:p-12">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              The Bridge to Your <span className="text-[#FFBEA0]">Next Job</span>
-            </h2>
-            <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-              Most free courses leave you stranded at 'Hello World.' We connect the dots. 
-              Our ecosystem is engineered for workforce transformation.
-            </p>
-            
-            <ul className="space-y-4 mb-8">
-              {[
-                { title: "Step 1: Learn", desc: "Master the skills in our self-paced paths." },
-                { title: "Step 2: Build", desc: "Use our Free ATS-Optimized Resume Builder." },
-                { title: "Step 3: Launch", desc: "Apply with confidence using verified credentials." }
-              ].map((step, i) => (
-                <li key={i} className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-full bg-[#FF9E80]/20 text-[#FFBEA0] flex items-center justify-center font-bold text-sm mt-1">
-                    {i + 1}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white">{step.title}</h4>
-                    <p className="text-sm text-gray-400">{step.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div className="relative group">
-            <div className="absolute inset-0 bg-[#FF9E80] rounded-2xl blur-[60px] opacity-20 group-hover:opacity-30 transition duration-500"></div>
-            <div className="relative bg-[#090A0F]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 transform rotate-2 hover:rotate-0 transition duration-500">
-              <div className="flex items-center gap-3 mb-6">
-                <Briefcase className="text-[#FFBEA0]" size={28} />
-                <span className="font-semibold text-lg">Career Tools Unlocked</span>
-              </div>
-              <div className="space-y-3">
-                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full w-3/4 bg-[#FF9E80]"></div>
-                </div>
-                <div className="flex justify-between text-xs text-gray-400">
-                  <span>Skills Acquired</span>
-                  <span>75% Match for "Junior Dev"</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* --- MORE LEARNING PATHS --- */}
+      <section className="max-w-7xl mx-auto px-6 pb-24">
+        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
+          Available <span className="text-[#FFBEA0]">Learning Paths</span>
+        </h2>
 
-      {/* --- FEATURED: CYBERSECURITY CERTIFICATE --- */}
-      <section className="max-w-7xl mx-auto px-6 pb-16">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-sm font-bold mb-6">
-            <ShieldCheck size={16} /> Featured: Google Career Certificate • 500 Free Seats via Coursera
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold">
-            <span className="text-emerald-300">Cybersecurity</span> Professional Certificate
-          </h2>
-          <p className="text-gray-400 mt-3 max-w-2xl mx-auto">Powered by Google × Coursera — 100% free through our Grow with Google partnership. No degree or experience required.</p>
-        </div>
-
-        <div className="max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <CourseCard 
             course={cybersecurityCourse}
             isEnrolled={isEnrolled}
@@ -1097,44 +821,6 @@ const CoursesPage = () => {
             progressText={courseraProgress?.text}
             isVerified={courseraProgress?.isVerified}
           />
-        </div>
-
-        {/* Direct Coursera Enrollment CTA */}
-        <div className="max-w-4xl mx-auto mt-8 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <Globe className="text-emerald-300" size={28} />
-            <div>
-              <p className="text-white font-bold">Ready to start? Enroll directly on Coursera — FREE.</p>
-              <p className="text-sm text-gray-400">Access all 9 courses through LeadWise Foundation's Grow with Google program.</p>
-            </div>
-          </div>
-          {isEnrolled ? (
-            <a 
-              href="https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-            >
-              <ExternalLink size={18} /> Open Coursera Program
-            </a>
-          ) : (
-            <button 
-              onClick={() => openEnrollment(cybersecurityCourse)}
-              className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-6 py-3 rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-            >
-              <ExternalLink size={18} /> Open Coursera Program
-            </button>
-          )}
-        </div>
-      </section>
-
-      {/* --- MORE LEARNING PATHS --- */}
-      <section className="max-w-7xl mx-auto px-6 pb-24">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-          More <span className="text-[#FFBEA0]">Economic Pathways</span>
-        </h2>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {COURSES.map(course => (
             <CourseCard 
               key={course.id}
