@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { collection, query, orderBy, limit, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db, FieldValue } from '@/lib/firebase-admin';
 
 // GET all forum posts
 export async function GET() {
   try {
-    const postsRef = collection(db, "forum_posts");
+    const postsRef = db.collection("forum_posts");
     // Sort by newest first
-    const q = query(postsRef, orderBy("createdAt", "desc"), limit(50));
-    const snapshot = await getDocs(q);
+    const snapshot = await postsRef
+      .orderBy("createdAt", "desc")
+      .limit(50)
+      .get();
     
     const posts = snapshot.docs.map(doc => {
       const data = doc.data();
@@ -43,17 +44,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const postsRef = collection(db, "forum_posts");
+    const postsRef = db.collection("forum_posts");
     const newPost = {
       title,
       category,
       author: author || "Anonymous Learner",
       replies: 0,
       upvotes: 1,
-      createdAt: serverTimestamp()
+      createdAt: FieldValue.serverTimestamp()
     };
 
-    const docRef = await addDoc(postsRef, newPost);
+    const docRef = await postsRef.add(newPost);
 
     return NextResponse.json({ 
       success: true, 

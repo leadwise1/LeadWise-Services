@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStudentProgress, calculateProgress } from '@/lib/coursera';
-import { db } from '@/lib/firebase';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db, FieldValue } from '@/lib/firebase-admin';
 
 export async function GET(request: NextRequest) {
   const token = request.cookies.get('coursera_token')?.value;
@@ -24,13 +23,13 @@ export async function GET(request: NextRequest) {
       // For this implementation, we use a placeholder or decode their JWT token.
       const userId = token.substring(0, 15); // Hash/mock ID based on token
       
-      await setDoc(doc(db, "leaderboard", userId), {
+      await db.collection("leaderboard").doc(userId).set({
         userId: userId,
         name: "Coursera Learner", // You would replace this with actual profile name
         points: progress.percentage * 100, // XP = percentage * 100
         coursesCompleted: progress.completed,
         totalCourses: progress.total,
-        lastUpdated: serverTimestamp()
+        lastUpdated: FieldValue.serverTimestamp()
       }, { merge: true });
       
       console.log('/api/coursera/progress: Synced to Leaderboard!');

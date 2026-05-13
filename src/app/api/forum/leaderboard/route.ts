@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase-admin';
 
 export async function GET() {
   try {
-    const leaderboardRef = collection(db, "leaderboard");
+    const leaderboardRef = db.collection("leaderboard");
     // Get top 20 learners ordered by points descending
-    const q = query(leaderboardRef, orderBy("points", "desc"), limit(20));
-    
-    const snapshot = await getDocs(q);
+    const snapshot = await leaderboardRef
+      .orderBy("points", "desc")
+      .limit(20)
+      .get();
     
     const leaderboardData = snapshot.docs.map((doc, index) => {
       const data = doc.data();

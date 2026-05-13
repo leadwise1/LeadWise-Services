@@ -1,40 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Search, PlusCircle, Flame, Clock, MessageCircle, ArrowUp, Loader2, X, Lock } from 'lucide-react';
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, signInAnonymously } from "firebase/auth";
-import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc, increment, query, orderBy, setDoc } from "firebase/firestore";
+import { Search, PlusCircle, Flame, Clock, MessageCircle, ArrowUp, Loader2, X, Lock, Filter } from 'lucide-react';
+import { db, auth } from "@/lib/firebase";
+import { signInAnonymously } from "firebase/auth";
+import { collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc, increment, query, orderBy, setDoc } from "firebase/firestore";
 import Link from 'next/link';
-
-// --- CONFIGURATION ---
-const firebaseConfig = {
-  apiKey: "AIzaSyAhPL7NMbpHzbHN9kXKG_UKynyl7MNsJnw",
-  authDomain: "leadwise-services-rule.firebaseapp.com",
-  projectId: "leadwise-services-rule",
-  storageBucket: "leadwise-services-rule.firebasestorage.app",
-  messagingSenderId: "172388746691",
-  appId: "1:172388746691:web:98e02ee0f8cdc4c390a976",
-  measurementId: "G-FNP78P4T9L"
-};
-
-
-
-// --- INITIALIZE FIREBASE ---
-let app: any;
-let db: any;
-let auth: any;
-try {
-  if (getApps().length > 0) {
-    app = getApp();
-  } else {
-    app = initializeApp(firebaseConfig);
-  }
-  db = getFirestore(app);
-  auth = getAuth(app);
-} catch (e) {
-  console.error("Firebase init failed", e);
-}
+import { useSearchParams } from 'next/navigation';
 
 const appId = "leadwise-default";
 
@@ -105,7 +77,7 @@ function IntakeModal({
       if (db && auth?.currentUser) {
         try {
           // merge: true ensures it doesn't fail if the document already exists
-          await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord, { merge: true });
+          await setDoc(doc(db, "users", uid, "profile", "intake"), intakeRecord, { merge: true });
         } catch (dbError: any) {
           console.warn("Firestore save skipped. Rules may be blocking updates, but student is allowed in.", dbError.message);
         }
@@ -233,6 +205,9 @@ function IntakeModal({
 
 // --- MAIN FORUM PAGE ---
 export default function ForumPage() {
+  const searchParams = useSearchParams();
+  const categoryFilter = searchParams.get('category');
+  
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -272,7 +247,7 @@ export default function ForumPage() {
   useEffect(() => {
     if (!db || isEnrolled === false) return; // Only fetch if enrolled or loading
 
-    const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts');
+    const postsRef = collection(db, 'forum_posts');
     const q = query(postsRef, orderBy(activeFilter === "Trending" ? "upvotes" : "createdAt", "desc"));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -309,7 +284,7 @@ export default function ForumPage() {
     setUpvotingIds(prev => new Set(prev).add(postId));
 
     try {
-      const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', postId);
+      const postRef = doc(db, 'forum_posts', postId);
       await updateDoc(postRef, { upvotes: increment(1) });
     } catch (error) {
       console.error("Failed to upvote:", error);
@@ -328,7 +303,7 @@ export default function ForumPage() {
     
     setIsSubmitting(true);
     try {
-      const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts');
+      const postsRef = collection(db, 'forum_posts');
       await addDoc(postsRef, {
         title: newTitle,
         category: newCategory,
@@ -348,10 +323,12 @@ export default function ForumPage() {
     }
   };
 
-  const displayedPosts = posts.filter(post => 
-    post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    post.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const displayedPosts = posts.filter(post => {
+    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         post.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = !categoryFilter || post.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
 
   // Show a blank screen briefly while checking enrollment status to prevent flash
   if (isEnrolled === null) return <div className="min-h-screen bg-[#090A0F]"></div>;
@@ -372,6 +349,24 @@ export default function ForumPage() {
           New Post
         </button>
       </div>
+
+      {/* Category Indicator (if active) */}
+      {categoryFilter && (
+        <div className="flex items-center justify-between bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 mb-8 animate-in slide-in-from-top-2 duration-300">
+          <div className="flex items-center gap-3">
+            <div className="bg-blue-500 p-2 rounded-lg">
+              <Filter className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-blue-400 font-bold uppercase tracking-wider">Filtered by Category</p>
+              <p className="text-lg font-bold text-white">{categoryFilter}</p>
+            </div>
+          </div>
+          <Link href="/forum" className="flex items-center gap-2 bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <X className="w-4 h-4" /> Clear Filter
+          </Link>
+        </div>
+      )}
 
       {/* Filters & Search */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">

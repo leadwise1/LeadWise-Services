@@ -37,15 +37,15 @@ export default function ForumLayout({ children }: { children: React.ReactNode })
             Course Channels
           </h3>
           <div className="flex flex-col gap-1">
-            <Link href="/forum/foundations" className="flex items-center gap-3 px-3 py-2 rounded-lg text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors">
+            <Link href="/forum?category=Foundations of Cybersecurity" className="flex items-center gap-3 px-3 py-2 rounded-lg text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors">
               <BookOpen className="w-4 h-4" />
               <span className="text-sm">Foundations of Cyber</span>
             </Link>
-            <Link href="/forum/networks" className="flex items-center gap-3 px-3 py-2 rounded-lg text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors">
+            <Link href="/forum?category=Networks and Network Security" className="flex items-center gap-3 px-3 py-2 rounded-lg text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors">
               <BookOpen className="w-4 h-4" />
               <span className="text-sm">Networks & Security</span>
             </Link>
-            <Link href="/forum/python" className="flex items-center gap-3 px-3 py-2 rounded-lg text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors">
+            <Link href="/forum?category=Automate Cybersecurity Tasks with Python" className="flex items-center gap-3 px-3 py-2 rounded-lg text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors">
               <BookOpen className="w-4 h-4" />
               <span className="text-sm">Automate with Python</span>
             </Link>
