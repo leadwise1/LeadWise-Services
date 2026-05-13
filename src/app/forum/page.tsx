@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Search, PlusCircle, Flame, Clock, MessageCircle, ArrowUp, Loader2, X, Lock, Filter } from 'lucide-react';
 import { db, auth } from "@/lib/firebase";
 import { signInAnonymously } from "firebase/auth";
@@ -203,8 +203,8 @@ function IntakeModal({
   );
 }
 
-// --- MAIN FORUM PAGE ---
-export default function ForumPage() {
+// --- MAIN FORUM PAGE CONTENT ---
+function ForumPageContent() {
   const searchParams = useSearchParams();
   const categoryFilter = searchParams.get('category');
   
@@ -548,5 +548,14 @@ export default function ForumPage() {
         </div>
       )}
     </div>
+  );
+}
+
+// --- MAIN FORUM PAGE WRAPPER ---
+export default function ForumPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#090A0F] flex items-center justify-center text-white"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>}>
+      <ForumPageContent />
+    </Suspense>
   );
 }
