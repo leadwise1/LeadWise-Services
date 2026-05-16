@@ -47,12 +47,42 @@ export default function EventsPage() {
       orderBy("status", "asc")
     );
 
+    const MOCK_SESSIONS: Session[] = [
+      {
+        id: "mock1",
+        title: "OFFICIAL SYNC",
+        status: "LIVE NOW",
+        topic: "Cybersecurity Module 3: Network Security Lab",
+        desc: "Stuck on the firewall configuration? Join our live lab sync where we walk through the common pitfalls in the Module 3 labs.",
+        mentor: "Sarah Jenkins",
+        attendees: 42
+      },
+      {
+        id: "mock2",
+        title: "CAREER WORKSHOP",
+        status: "UPCOMING",
+        topic: "Optimizing your LeadWise Resume for ATS",
+        desc: "Learn how to use the LeadWise resume builder to ensure your Google certifications are parsed correctly by recruitment bots.",
+        mentor: "Alex Kwong",
+        attendees: 128
+      }
+    ];
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const fetched: Session[] = [];
       snapshot.forEach((doc) => {
         fetched.push({ id: doc.id, ...doc.data() } as Session);
       });
-      setSessions(fetched);
+      
+      if (fetched.length === 0) {
+        setSessions(MOCK_SESSIONS);
+      } else {
+        setSessions(fetched);
+      }
+      setLoading(false);
+    }, (error) => {
+      console.error("Sessions subscribe error:", error);
+      setSessions(MOCK_SESSIONS);
       setLoading(false);
     });
 

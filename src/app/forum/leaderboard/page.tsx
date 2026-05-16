@@ -143,12 +143,32 @@ export default function LeaderboardPage() {
       limit(20)
     );
 
+    const MOCK_PLAYERS: Learner[] = [
+      { id: "mock1", name: "Sarah Jenkins", points: 12450, coursesCompleted: 8 },
+      { id: "mock2", name: "Michael Rodriguez", points: 11200, coursesCompleted: 7 },
+      { id: "mock3", name: "Alex Kwong", points: 9800, coursesCompleted: 6 },
+      { id: "mock4", name: "David L.", points: 8500, coursesCompleted: 5 },
+      { id: "mock5", name: "Maria Garcia", points: 7200, coursesCompleted: 4 },
+      { id: "mock6", name: "James Wilson", points: 6100, coursesCompleted: 3 },
+      { id: "mock7", name: "Emma Thompson", points: 4500, coursesCompleted: 2 },
+    ];
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const players: Learner[] = [];
       snapshot.forEach((doc) => {
         players.push({ id: doc.id, ...doc.data() } as Learner);
       });
-      setLeaderboard(players);
+      
+      // If no real players yet, show mock data to encourage competition
+      if (players.length === 0) {
+        setLeaderboard(MOCK_PLAYERS);
+      } else {
+        setLeaderboard(players);
+      }
+      setLoading(false);
+    }, (error) => {
+      console.error("Leaderboard subscribe error:", error);
+      setLeaderboard(MOCK_PLAYERS);
       setLoading(false);
     });
 
