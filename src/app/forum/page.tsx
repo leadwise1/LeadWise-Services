@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { Search, PlusCircle, Flame, Clock, MessageCircle, ArrowUp, Loader2, X, Lock, Filter } from 'lucide-react';
+import { Search, PlusCircle, Flame, Clock, MessageCircle, ArrowUp, Loader2, X, Lock, Filter, Trash2, Shield, Zap } from 'lucide-react';
 import { db, auth } from "@/lib/firebase";
 import { signInAnonymously } from "firebase/auth";
-import { collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc, increment, query, orderBy, setDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc, increment, query, orderBy, setDoc, deleteDoc, where } from "firebase/firestore";
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -14,6 +14,7 @@ interface Post {
   id: string;
   title: string;
   author: string;
+  authorId?: string;
   category: string;
   replies: number;
   upvotes: number;
@@ -249,7 +250,18 @@ function ForumPageContent() {
     if (!db || isEnrolled === false) return; // Only fetch if enrolled or loading
 
     const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts');
-    const q = query(postsRef, orderBy(activeFilter === "Trending" ? "upvotes" : "createdAt", "desc"));
+    
+    // 1. DYNAMIC CHANNEL FILTERING: Connects the sidebar tabs to the feed
+    let q;
+    if (categoryFilter) {
+      q = query(
+        postsRef, 
+        where("category", "==", categoryFilter),
+        orderBy(activeFilter === "Trending" ? "upvotes" : "createdAt", "desc")
+      );
+    } else {
+      q = query(postsRef, orderBy(activeFilter === "Trending" ? "upvotes" : "createdAt", "desc"));
+    }
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const fetchedPosts: Post[] = [];
@@ -259,6 +271,7 @@ function ForumPageContent() {
           id: doc.id,
           title: data.title || "Untitled",
           author: data.author || "Anonymous Student",
+          authorId: data.authorId || "",
           category: data.category || "General",
           replies: data.replies || 0,
           upvotes: data.upvotes || 0,
@@ -270,12 +283,17 @@ function ForumPageContent() {
       setPosts(fetchedPosts);
       setLoading(false);
     }, (error) => {
-      console.error("Live feed error:", error);
+      // More detailed error logging to catch the "Missing Index" link
+      if (error.code === 'failed-precondition') {
+        console.error("Firestore Index Required: Check the following URL to create it:", error.message);
+      } else {
+        console.error("Live feed error:", error.code, error.message);
+      }
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, [activeFilter, isEnrolled]);
+  }, [activeFilter, isEnrolled, categoryFilter]);
 
   const handleUpvote = async (e: React.MouseEvent, postId: string) => {
     e.preventDefault(); 
@@ -298,6 +316,21 @@ function ForumPageContent() {
     }
   };
 
+  const handleDeletePost = async (e: React.MouseEvent, postId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+
+    try {
+      const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', postId);
+      await deleteDoc(postRef);
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+      alert("Delete failed. You likely need to update your Firestore Rules to allow deletions.");
+    }
+  };
+
   const handleCreatePost = async (e: React.FormEvent) => {
     console.log("New post submission started...");
     e.preventDefault();
@@ -306,10 +339,12 @@ function ForumPageContent() {
     setIsSubmitting(true);
     try {
       const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts');
+      const currentAuthorId = auth?.currentUser?.uid || "anonymous";
       await addDoc(postsRef, {
         title: newTitle,
         category: newCategory,
         author: currentUserName, 
+        authorId: currentAuthorId, // Attach channel tag and author UID
         replies: 0,
         upvotes: 0,
         createdAt: serverTimestamp(),
@@ -389,8 +424,10 @@ function ForumPageContent() {
         
         <div className="relative w-full sm:w-72">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-          <input 
-            type="text" 
+          <input
+            id="forum-search"
+            name="forum-search"
+            type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search discussions..." 
@@ -398,6 +435,29 @@ function ForumPageContent() {
           />
         </div>
       </div>
+
+      {/* 3. ACCOUNTABILITY SYNC BANNER: Urgent anchor to prevent dropouts */}
+      {isEnrolled && (
+        <div className="bg-gradient-to-r from-blue-600/20 to-emerald-600/20 border border-blue-500/30 rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
+          <div className="flex items-center gap-4 text-center md:text-left">
+            <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-500/20">
+              <Zap className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h4 className="font-bold text-lg text-white mb-1">💡 Stuck on a lab module?</h4>
+              <p className="text-sm text-neutral-300 font-medium">Don't struggle alone. Grab your weekly 15-minute sync with your mentor to clear any roadblocks!</p>
+            </div>
+          </div>
+          <a 
+            href="https://calendar.google.com/calendar/appointments/schedules" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="whitespace-nowrap bg-white text-blue-600 px-6 py-2.5 rounded-xl font-black hover:bg-[#FFBEA0] transition-all hover:scale-105 shadow-lg shadow-black/20"
+          >
+            👉 Book Check-in Room
+          </a>
+        </div>
+      )}
 
       {/* Post Feed / GATED VIEW */}
       {!isEnrolled ? (
@@ -470,13 +530,28 @@ function ForumPageContent() {
                           {post.category}
                         </span>
                         <span className="text-xs text-neutral-500">•</span>
-                        <span className="text-xs text-neutral-400 font-medium">Posted by {post.author}</span>
+                        <span className="text-xs text-neutral-400 font-medium flex items-center gap-1">
+                          Posted by {post.author}
+                          {/* 2. ADMIN SHIELD BADGE: Stylized visual confirmation for students */}
+                          {post.authorId === process.env.NEXT_PUBLIC_ADMIN_UID && (
+                            <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black ml-1 flex items-center gap-1 uppercase tracking-tighter shadow-sm shadow-blue-500/50">
+                              Admin <Shield size={10} />
+                            </span>
+                          )}
+                        </span>
                         <span className="text-xs text-neutral-500">{post.timeAgo}</span>
                         {post.hot && (
                           <span className="flex items-center gap-1 text-[10px] uppercase font-bold text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded border border-orange-400/20 ml-auto sm:ml-2">
                             <Flame className="w-3 h-3" /> Trending
                           </span>
                         )}
+                        <button 
+                          onClick={(e) => handleDeletePost(e, post.id)}
+                          className="ml-2 text-neutral-600 hover:text-red-400 transition-colors p-1"
+                          title="Delete post"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </div>
                       
                       <h3 className="text-lg font-semibold text-neutral-100 group-hover:text-blue-400 transition-colors mb-2 leading-snug">
@@ -531,6 +606,7 @@ function ForumPageContent() {
                   <option value="General Discussion">General Discussion</option>
                   <option value="Foundations of Cybersecurity">Foundations of Cybersecurity</option>
                   <option value="Networks and Network Security">Networks and Network Security</option>
+                  <option value="Automate Cybersecurity Tasks with Python">Automate Cybersecurity Tasks with Python</option>
                   <option value="Tools of the Trade: Linux and SQL">Tools of the Trade: Linux and SQL</option>
                 </select>
               </div>

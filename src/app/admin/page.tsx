@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, collectionGroup } from "firebase/firestore";
 import { Loader2, Printer, Filter, ShieldAlert, Lock, AlertTriangle } from "lucide-react";
 
 interface StudentRecord {
@@ -26,51 +25,41 @@ export default function AdminPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "LeadWise2024") { 
-      setIsAuthenticated(true);
-      fetchData();
-    } else {
-      alert("Incorrect Access Code");
-    }
+    // We no longer check the password here. 
+    // We attempt to fetch the data; if the password is wrong, 
+    // the server will return a 401 Unauthorized.
+    fetchData();
   };
 
   const fetchData = async () => {
-    if (!db) {
-        addLog("Error: Database not initialized.");
-        return;
-    }
-    
     setLoading(true);
     setDebugLog([]);
-    addLog("Starting Data Fetch...");
+    addLog("Starting Data Fetch via Admin API...");
 
     try {
-      // Query collectionGroup "profile" to find all intake documents across the hierarchical structure
-      addLog("Attempting Collection Group Query for 'profile'...");
-      const q = query(collectionGroup(db, "profile"));
-      const querySnapshot = await getDocs(q);
-      
-      addLog(`Query Complete. Found ${querySnapshot.size} documents.`);
-
-      const fetchedStudents: StudentRecord[] = [];
-      querySnapshot.forEach((doc) => {
-        // We only care about the 'intake' document in the 'profile' collection
-        if (doc.id === 'intake') {
-            const data = doc.data();
-            const userId = doc.ref.parent.parent?.id || "unknown";
-            
-            fetchedStudents.push({
-              id: `user_${userId.substring(0, 6)}...`, 
-              zipCode: data.zipCode || "N/A",
-              householdIncome: data.householdIncome || "Unknown",
-              employmentStatus: data.employmentStatus || "Unknown",
-              status: "Active", 
-              enrolledAt: data.enrolledAt ? new Date(data.enrolledAt).toLocaleDateString() : "N/A",
-            });
-        }
+      // Call the new Next.js API route to securely fetch all intake data
+      const response = await fetch('/api/admin/intake-data', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${password}`
+        },
       });
-      setStudents(fetchedStudents);
 
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('Invalid Access Code. Access Denied.');
+        }
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch admin data from API.');
+      }
+
+      // If we reach here, the password was correct
+      setIsAuthenticated(true);
+      
+      const data: StudentRecord[] = await response.json();
+      addLog(`API Fetch Complete. Found ${data.length} documents.`);
+      setStudents(data);
     } catch (error: any) {
       console.error("Error:", error);
       addLog(`CRITICAL ERROR: ${error.message}`);

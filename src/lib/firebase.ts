@@ -1,9 +1,13 @@
 import { initializeApp, getApps } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
+if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+  console.warn("Firebase configuration: NEXT_PUBLIC_FIREBASE_API_KEY is missing.");
+}
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAhPL7NMbpHzbHN9kXKG_UKynyl7MNsJnw",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY, 
   authDomain: "leadwise-services-rule.firebaseapp.com",
   projectId: "leadwise-services-rule",
   storageBucket: "leadwise-services-rule.firebasestorage.app",
@@ -13,8 +17,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase only if it hasn't been initialized already
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-const db = getFirestore(app);
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]; 
+const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true, // Add this line if you experience persistent WebChannel errors
+});
 const auth = getAuth(app);
 
 export { db, auth, app };

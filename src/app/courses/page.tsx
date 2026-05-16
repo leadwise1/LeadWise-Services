@@ -64,6 +64,13 @@ interface Course {
 // --- CONFIGURATION ---
 const appId = 'leadwise-web';
 
+// LeadWise Coursera Partnership Configuration
+const COURSERA_ORG = {
+  name: "LeadWise Foundation",
+  slug: "gwg-ent-leadwise-foundation",
+  id: "PHXqt_bBMgu9thbuJnsLvQ"
+};
+
 // --- DATA: Frontend Course ---
 const frontendCourse: Course = {
   id: "frontend-web-dev",
@@ -191,7 +198,7 @@ const cybersecurityCourse: Course = {
   id: "google-cybersecurity-cert",
   title: "Google Cybersecurity Professional Certificate",
   externalProgramId: "google-cybersecurity",
-  externalUrl: "https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
+  externalUrl: `https://coursera.org/programs/${COURSERA_ORG.slug}?utm_source=leadwise`,
   subtitle: "Get on the fast track to a career in cybersecurity — powered by Coursera.",
   description: "A 9-course series by Google. Learn Python, Linux, SQL, SIEM tools & more. Earn an industry-recognized credential and prepare for the CompTIA Security+ exam. 100% free through LeadWise Foundation's Grow with Google partnership.",
   duration: "~6 months (10 hrs/week)",
@@ -755,9 +762,9 @@ const CoursesPage = () => {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
             <a href="/" className="text-gray-400 hover:text-white transition">Home</a>
             <a href="https://services.letsleadwise.org/resume" className="text-gray-400 hover:text-white transition">Resume Builder</a>
-            <a href="https://services.letsleadwise.org/resume" className="text-gray-400 hover:text-white transition">Cover Letter</a>
+            <a href="https://services.letsleadwise.org/cover-letter" className="text-gray-400 hover:text-white transition">Cover Letter</a>
             <span className="text-[#FFBEA0]">Courses</span>
-            <a href="https://blogletsleadwise.org/cover-letter" className="text-gray-400 hover:text-white transition">Blog</a>
+            <a href="https://blog.letsleadwise.org" className="text-gray-400 hover:text-white transition">Blog</a>
             <a 
               href="https://donation.letsleadwise.org" 
               className="bg-[#FF9E80] text-[#1B2735] px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,190,160,0.4)]"
@@ -773,9 +780,10 @@ const CoursesPage = () => {
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-[#FFBEA0]/30 text-[#FFBEA0] text-sm font-semibold mb-6 animate-fade-in">
           <CheckCircle size={16} /> 100% Free • Self-Paced • Industry-Relevant
         </div>
+        <p className="text-[#FFBEA0] text-xs font-mono mb-2 opacity-50 uppercase tracking-widest">Partner Portal: {COURSERA_ORG.slug}</p>
         
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-[#FFBEA0]">
-          Don't Just Learn to Code. <br />
+          Don't Just Learn Skills. <br />
           <span className="text-[#FFBEA0]">Learn to Get Hired.</span>
         </h1>
         
