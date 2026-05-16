@@ -1,17 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStudentProgress, calculateProgress } from '@/lib/coursera';
+import { getStudentProgress, calculateProgress, getClientCredentialsToken } from '@/lib/coursera';
 import { adminDb, admin } from '@/lib/firebase-admin';
 
 export async function GET(request: NextRequest) {
-  const token = request.cookies.get('coursera_token')?.value;
+  let token = request.cookies.get('coursera_token')?.value;
 
   if (!token) {
-    console.warn('/api/coursera/progress: No coursera_token found in request cookies.');
-    return NextResponse.json({ error: 'Not authenticated with Coursera' }, { status: 401 });
+    console.info('/api/coursera/progress: No coursera_token found in cookies. Fetching Client Credentials token.');
+    try {
+      token = await getClientCredentialsToken();
+    } catch (tokenError) {
+      console.error('Failed to get Client Credentials token:', tokenError);
+      return NextResponse.json({ error: 'Failed to authenticate with Coursera' }, { status: 401 });
+    }
+  }
+
+  if (!token) {
+    return NextResponse.json({ error: 'Failed to authenticate with Coursera' }, { status: 401 });
   }
 
   try {
-    console.log('/api/coursera/progress: Attempting to fetch progress with token.');
+    console.log('/api/coursera/progress: Attempting to fetch progress.');
     const data = await getStudentProgress(token);
     
     // The Coursera Reporting API returns a list of enrollments.
@@ -19,16 +28,16 @@ export async function GET(request: NextRequest) {
     
     // 🔥 THE SYNC ENGINE: Save to Firestore Leaderboard
     try {
-      // In a full app, we would query Coursera for the user's name. 
-      // For this implementation, we use a placeholder or decode their JWT token.
-      const userId = token.substring(0, 15); // Hash/mock ID based on token
+      // For Client Credentials, we might be fetching organizational data.
+      // If data contains a specific user, use that. Otherwise use a fallback.
+      const userId = data.userId || "system_sync"; 
       
       const leaderboardRef = adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard");
       
       await leaderboardRef.doc(userId).set({
         userId: userId,
-        name: "Coursera Learner", // You would replace this with actual profile name
-        points: progress.percentage * 100, // XP = percentage * 100
+        name: data.userName || "Coursera Learner",
+        points: progress.percentage * 100,
         coursesCompleted: progress.completed,
         totalCourses: progress.total,
         lastUpdated: admin.firestore.FieldValue.serverTimestamp()
@@ -39,8 +48,6 @@ export async function GET(request: NextRequest) {
       console.error('Failed to sync leaderboard data:', dbError);
     }
     
-    console.log('/api/coursera/progress: Successfully retrieved and calculated progress.');
-
     return NextResponse.json({
       success: true,
       ...progress

@@ -8,8 +8,8 @@ export default function ForumLayout({ children }: { children: React.ReactNode })
       {/* Sidebar Navigation */}
       <aside className="w-full md:w-64 border-r border-neutral-800 bg-neutral-900/50 p-6 flex flex-col gap-6">
         <div>
-          <Link href="/admin" className="text-sm text-neutral-400 hover:text-white flex items-center gap-2 mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Back to Dashboard
+          <Link href="/courses" className="text-sm text-neutral-400 hover:text-white flex items-center gap-2 mb-6 transition-colors">
+            <ArrowLeft className="w-4 h-4" /> Back to Platform
           </Link>
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
             LeadWise Hub

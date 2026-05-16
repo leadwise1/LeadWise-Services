@@ -12,7 +12,7 @@ export async function getCourseraAuthUrl() {
     response_type: 'code',
     client_id: CLIENT_ID!,
     redirect_uri: REDIRECT_URI,
-    scope: 'view_profile view_enrollments', // Adjust scopes as needed
+    scope: 'view_profile view_enrollments',
   });
   return `${AUTH_URL}?${params.toString()}`;
 }
@@ -40,8 +40,33 @@ export async function exchangeCodeForToken(code: string) {
   return await response.json();
 }
 
+/**
+ * Gets an access token using Client Credentials grant.
+ * Used for server-to-server communication.
+ */
+export async function getClientCredentialsToken(): Promise<string> {
+  const response = await fetch(TOKEN_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: CLIENT_ID!,
+      client_secret: CLIENT_SECRET!,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Client credentials token fetch failed: ${JSON.stringify(error)}`);
+  }
+
+  const data = await response.json();
+  return data.access_token;
+}
+
 export async function getStudentProgress(accessToken: string) {
-  // Fetch specific Learning Path data for the authenticated learner
   const response = await fetch(`https://api.coursera.org/api/enterpriseLearningPaths.v1/${LEARNING_PATH_ID}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -57,18 +82,11 @@ export async function getStudentProgress(accessToken: string) {
   return await response.json();
 }
 
-// Helper to check if progress is verified and calculate percent
 export function calculateProgress(data: any) {
-  // The Enterprise Learning Path response includes curriculum and potentially progress
-  // We look for 'completedCount' or similar fields in the response elements
-  
-  // Based on the roadmap, we also check for 'integrityStatus'
   const isVerified = data.integrityStatus === 'PASSED';
-  
-  // Mocking the completion calculation based on elements if not directly provided
   const courses = data.elements || [];
   const completed = courses.filter((c: any) => c.status === 'COMPLETED').length;
-  const total = courses.length || 9; // Fallback to 9 as defined in curriculum
+  const total = courses.length || 9;
 
   return {
     completed,
