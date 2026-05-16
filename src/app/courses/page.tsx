@@ -17,7 +17,9 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
-  Globe
+  Globe,
+  Users,
+  Trophy
 } from "lucide-react";
 import { auth, db } from "@/lib/firebase";
 import { signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
@@ -814,7 +816,7 @@ const CoursesPage = () => {
         </div>
       </div>
 
-      {/* --- MORE LEARNING PATHS --- */}
+      {/* --- AVAILABLE LEARNING PATHS --- */}
       <section className="max-w-7xl mx-auto px-6 pb-24">
         <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
           Available <span className="text-[#FFBEA0]">Learning Paths</span>
@@ -837,6 +839,63 @@ const CoursesPage = () => {
               onTriggerIntake={() => openEnrollment(course)}
             />
           ))}
+        </div>
+      </section>
+
+      {/* --- COMMUNITY CALL TO ACTION --- */}
+      <section className="max-w-7xl mx-auto px-6 pb-24">
+        <div className="bg-gradient-to-br from-[#1B2735] to-black border border-white/10 rounded-[3rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -mr-48 -mt-48 transition-all group-hover:bg-blue-500/20" />
+          
+          <div className="flex-1 relative z-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-bold mb-6 uppercase tracking-widest">
+              <Users size={16} /> Digital Guardians Community
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white text-left">
+              Don't Learn in <span className="text-[#FFBEA0]">Isolation.</span>
+            </h2>
+            <p className="text-xl text-gray-400 mb-8 max-w-xl leading-relaxed text-left">
+              Join the Hub to connect with other learners, attend weekly sync sessions, and track your progress on the global leaderboard.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <a 
+                href="/forum" 
+                className="bg-white text-[#1B2735] px-8 py-4 rounded-2xl font-black hover:bg-[#FFBEA0] transition-all transform hover:scale-105 flex items-center gap-3 shadow-xl"
+              >
+                Enter Community Hub <ArrowRight size={20} />
+              </a>
+              <a 
+                href="/forum/leaderboard" 
+                className="bg-white/5 border border-white/10 text-white px-8 py-4 rounded-2xl font-bold hover:bg-white/10 transition-all flex items-center gap-3"
+              >
+                <Trophy size={20} className="text-yellow-400" /> View Leaderboard
+              </a>
+            </div>
+          </div>
+          
+          <div className="flex-1 w-full max-w-sm relative z-10 hidden lg:block">
+            <div className="bg-neutral-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 transform rotate-2 group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white">SJ</div>
+                <div className="flex-1 text-left">
+                  <div className="h-3 bg-white/20 w-3/4 rounded mb-2"></div>
+                  <div className="h-2 bg-white/10 w-1/2 rounded"></div>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="h-2 bg-white/10 w-full rounded"></div>
+                <div className="h-2 bg-white/10 w-5/6 rounded"></div>
+                <div className="h-2 bg-white/10 w-4/6 rounded"></div>
+              </div>
+              <div className="mt-8 flex justify-between items-center">
+                <div className="flex -space-x-3">
+                  {[1,2,3,4].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-[#1B2735] bg-neutral-800" />)}
+                  <div className="w-8 h-8 rounded-full border-2 border-[#1B2735] bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">+12</div>
+                </div>
+                <div className="text-blue-400 text-xs font-bold uppercase tracking-widest">Live Syncing...</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
