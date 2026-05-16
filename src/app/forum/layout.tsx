@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { MessageSquare, Trophy, Calendar, BookOpen, Users, ArrowLeft } from 'lucide-react';
+import { MessageSquare, Trophy, Calendar, BookOpen, Users, ArrowLeft, Shield } from 'lucide-react';
 
 export default function ForumLayout({ children }: { children: React.ReactNode }) {
   return (
