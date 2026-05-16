@@ -30,6 +30,10 @@ export default function ForumLayout({ children }: { children: React.ReactNode })
             <Calendar className="w-5 h-5" />
             <span className="font-medium">Weekly Syncs</span>
           </Link>
+          <Link href="/forum/rules" className="flex items-center gap-3 px-3 py-2 rounded-lg text-neutral-400 hover:bg-neutral-800 hover:text-white transition-colors">
+            <Shield className="w-5 h-5" />
+            <span className="font-medium">Community Charter</span>
+          </Link>
         </nav>
 
         <div className="mt-4">
