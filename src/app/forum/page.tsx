@@ -8,7 +8,8 @@ import { collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc, increm
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-const appId = "leadwise-web";
+// Define a constant for the collection path to ensure consistency across the forum
+const FORUM_COLLECTION_PATH = ['artifacts', 'leadwise-web', 'public', 'data', 'forumPosts'] as const;
 
 interface Post {
   id: string;
@@ -79,7 +80,7 @@ function IntakeModal({
       if (db && auth?.currentUser) {
         try {
           // merge: true ensures it doesn't fail if the document already exists
-          await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord, { merge: true });
+          await setDoc(doc(db, "artifacts", "leadwise-web", "users", uid, "profile", "intake"), intakeRecord, { merge: true });
         } catch (dbError: any) {
           console.warn("Firestore save skipped. Rules may be blocking updates, but student is allowed in.", dbError.message);
         }
@@ -249,7 +250,7 @@ function ForumPageContent() {
   useEffect(() => {
     if (!db || isEnrolled === false) return; // Only fetch if enrolled or loading
 
-    const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts');
+    const postsRef = collection(db, ...FORUM_COLLECTION_PATH);
     
     // 1. DYNAMIC CHANNEL FILTERING: Connects the sidebar tabs to the feed
     let q;
@@ -303,7 +304,7 @@ function ForumPageContent() {
     setUpvotingIds(prev => new Set(prev).add(postId));
 
     try {
-      const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', postId);
+      const postRef = doc(db, ...FORUM_COLLECTION_PATH, postId);
       await updateDoc(postRef, { upvotes: increment(1) });
     } catch (error) {
       console.error("Failed to upvote:", error);
@@ -323,7 +324,7 @@ function ForumPageContent() {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', postId);
+      const postRef = doc(db, ...FORUM_COLLECTION_PATH, postId);
       await deleteDoc(postRef);
     } catch (error) {
       console.error("Failed to delete post:", error);
@@ -338,7 +339,7 @@ function ForumPageContent() {
     
     setIsSubmitting(true);
     try {
-      const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts');
+      const postsRef = collection(db, ...FORUM_COLLECTION_PATH);
       const currentAuthorId = auth?.currentUser?.uid || "anonymous";
       await addDoc(postsRef, {
         title: newTitle,
