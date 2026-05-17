@@ -1,17 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Trophy, Star, Loader2, MessageSquare, TrendingUp, Medal, Crown } from 'lucide-react';
-import { db } from "@/lib/firebase";
-import { 
-  collection, 
-  query, 
-  orderBy, 
-  limit, 
-  onSnapshot 
-} from "firebase/firestore";
+import { Trophy, Star, Loader2, TrendingUp, Crown, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { cn } from "../../../lib/utils";
 
 interface Learner {
@@ -19,6 +11,7 @@ interface Learner {
   name: string;
   points: number;
   coursesCompleted: number;
+  totalCourses?: number;
 }
 
 const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay: number }) => {
@@ -134,45 +127,51 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
 export default function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<Learner[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
-    const q = query(
-      collection(db, "artifacts", "leadwise-web", "public", "data", "leaderboard"),
-      orderBy("points", "desc"),
-      limit(20)
-    );
+    let isMounted = true;
 
-    const MOCK_PLAYERS: Learner[] = [
-      { id: "mock1", name: "Sarah Jenkins", points: 12450, coursesCompleted: 8 },
-      { id: "mock2", name: "Michael Rodriguez", points: 11200, coursesCompleted: 7 },
-      { id: "mock3", name: "Alex Kwong", points: 9800, coursesCompleted: 6 },
-      { id: "mock4", name: "David L.", points: 8500, coursesCompleted: 5 },
-      { id: "mock5", name: "Maria Garcia", points: 7200, coursesCompleted: 4 },
-      { id: "mock6", name: "James Wilson", points: 6100, coursesCompleted: 3 },
-      { id: "mock7", name: "Emma Thompson", points: 4500, coursesCompleted: 2 },
-    ];
+    async function fetchLeaderboard() {
+      try {
+        setLoading(true);
+        setError(null);
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const players: Learner[] = [];
-      snapshot.forEach((doc) => {
-        players.push({ id: doc.id, ...doc.data() } as Learner);
-      });
-      
-      // If no real players yet, show mock data to encourage competition
-      if (players.length === 0) {
-        setLeaderboard(MOCK_PLAYERS);
-      } else {
-        setLeaderboard(players);
+        const response = await fetch('/api/forum/leaderboard', { cache: 'no-store' });
+        const payload = await response.json();
+
+        if (!response.ok || !payload.success) {
+          if (isMounted) {
+            setError(payload.error || 'Unable to load Coursera learner data.');
+            setLeaderboard([]);
+          }
+          return;
+        }
+
+        if (isMounted) {
+          setLeaderboard(payload.data || []);
+        }
+      } catch (err) {
+        console.error("Leaderboard fetch error:", err);
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : 'Unable to load Coursera learner data.');
+          setLeaderboard([]);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
-      setLoading(false);
-    }, (error) => {
-      console.error("Leaderboard subscribe error:", error);
-      setLeaderboard(MOCK_PLAYERS);
-      setLoading(false);
-    });
+    }
 
-    return () => unsubscribe();
+    fetchLeaderboard();
+    const interval = window.setInterval(fetchLeaderboard, 15 * 60 * 1000);
+
+    return () => {
+      isMounted = false;
+      window.clearInterval(interval);
+    };
   }, []);
 
   const topThree = leaderboard.slice(0, 3);
@@ -227,6 +226,20 @@ export default function LeaderboardPage() {
               <Loader2 className="w-12 h-12 text-blue-500" />
             </motion.div>
             <p className="text-lg font-medium animate-pulse">Syncing Coursera ledger data...</p>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center h-96 text-neutral-400 gap-4 text-center">
+            <AlertTriangle className="w-12 h-12 text-amber-400" />
+            <div>
+              <p className="text-lg font-bold text-white">Coursera learner sync failed</p>
+              <p className="text-sm text-neutral-500 max-w-xl mt-2">{error}</p>
+            </div>
+          </div>
+        ) : leaderboard.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-96 text-neutral-400 gap-3 text-center">
+            <Trophy className="w-12 h-12 text-neutral-700" />
+            <p className="text-lg font-bold text-white">No current Coursera enrollments found</p>
+            <p className="text-sm text-neutral-500">The leaderboard will populate as enrolled learners appear in Coursera.</p>
           </div>
         ) : (
           <>
@@ -289,7 +302,7 @@ export default function LeaderboardPage() {
                         <div className="overflow-hidden">
                           <h4 className="font-bold text-neutral-100 truncate text-sm md:text-base">{user.name}</h4>
                           <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-tight">
-                            {user.coursesCompleted} / 8 Modules Complete
+                            {user.coursesCompleted} / {user.totalCourses || 8} Modules Complete
                           </p>
                         </div>
                       </div>

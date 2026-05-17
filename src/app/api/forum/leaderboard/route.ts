@@ -1,67 +1,148 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
+import { getEnrollmentReports, type CourseraEnrollmentReport } from '@/lib/coursera';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // 1. Fallback for missing database (Admin SDK not initialized)
-    if (!adminDb) {
-      console.warn("Leaderboard API: Database not initialized. Returning mock data.");
-      return NextResponse.json({ 
-        success: true, 
-        data: getMockLeaderboard(),
-        isMock: true 
-      });
+    let token =
+      request.cookies.get('coursera_token')?.value ||
+      process.env.COURSERA_ACCESS_TOKEN ||
+      process.env.COURSERA_BEARER_TOKEN ||
+      process.env.COURSERA_API_KEY;
+
+    if (!token) {
+      return NextResponse.json(
+        {
+          success: false,
+          data: [],
+          needsAuth: true,
+          error: 'Coursera requires an API key or bearer token for enrollment reports. Add COURSERA_API_KEY, COURSERA_ACCESS_TOKEN, or COURSERA_BEARER_TOKEN on the server.',
+        },
+        { status: 401 }
+      );
     }
 
-    const leaderboardRef = adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard");
-    
-    // 2. Fetch real data
-    try {
-      // Get top 20 learners ordered by points descending
-      const snapshot = await leaderboardRef
-        .orderBy("points", "desc")
-        .limit(20)
-        .get();
-      
-      if (snapshot.empty) {
-        return NextResponse.json({ success: true, data: [] });
-      }
+    const enrollments = await getEnrollmentReports(token);
+    const leaderboardData = buildLeaderboard(enrollments);
 
-      const leaderboardData = snapshot.docs.map((doc, index) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          rank: index + 1,
-          name: data.name || "Anonymous Learner",
-          points: data.points || 0,
-          coursesCompleted: data.coursesCompleted || 0,
-          trend: index % 2 === 0 ? "up" : "same",
-        };
+    if (adminDb && leaderboardData.length > 0) {
+      const leaderboardRef = adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard");
+      const batch = adminDb.batch();
+
+      leaderboardData.forEach((learner) => {
+        batch.set(leaderboardRef.doc(learner.id), {
+          userId: learner.id,
+          name: learner.name,
+          points: learner.points,
+          coursesCompleted: learner.coursesCompleted,
+          totalCourses: learner.totalCourses,
+          lastUpdated: new Date(),
+        }, { merge: true });
       });
 
-      return NextResponse.json({ success: true, data: leaderboardData });
-    } catch (dbError: any) {
-      console.error("Firestore Leaderboard Error:", dbError.message);
-      // Fallback to mock if index is missing or other Firestore issues occur
-      return NextResponse.json({ 
-        success: true, 
-        data: getMockLeaderboard(),
-        isMock: true,
-        error: dbError.message 
-      });
+      await batch.commit();
     }
+
+    return NextResponse.json({
+      success: true,
+      data: leaderboardData.slice(0, 20),
+      source: 'coursera',
+      totalLearners: leaderboardData.length,
+    });
   } catch (error) {
     console.error('Failed to fetch leaderboard:', error);
-    return NextResponse.json({ error: 'Failed to load leaderboard' }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        data: [],
+        error: error instanceof Error ? error.message : 'Failed to load Coursera learners',
+      },
+      { status: 500 }
+    );
   }
 }
 
-function getMockLeaderboard() {
-  return [
-    { id: "1", rank: 1, name: "Sarah J.", points: 12500, coursesCompleted: 8, trend: "up" },
-    { id: "2", rank: 2, name: "Michael R.", points: 11200, coursesCompleted: 7, trend: "same" },
-    { id: "3", rank: 3, name: "Alex K.", points: 9800, coursesCompleted: 6, trend: "up" },
-    { id: "4", rank: 4, name: "David L.", points: 8500, coursesCompleted: 5, trend: "same" },
-    { id: "5", rank: 5, name: "Maria G.", points: 7200, coursesCompleted: 4, trend: "up" },
-  ];
+function buildLeaderboard(enrollments: CourseraEnrollmentReport[]) {
+  const learners = new Map<string, {
+    id: string;
+    name: string;
+    points: number;
+    coursesCompleted: number;
+    totalCourses: number;
+  }>();
+
+  for (const enrollment of enrollments) {
+    if (isInactiveEnrollment(enrollment)) continue;
+
+    const id = getLearnerId(enrollment);
+    const current = learners.get(id) || {
+      id,
+      name: getLearnerName(enrollment),
+      points: 0,
+      coursesCompleted: 0,
+      totalCourses: 0,
+    };
+
+    const progress = getEnrollmentProgress(enrollment);
+    current.totalCourses += 1;
+    current.points += Math.round(progress * 100);
+    if (isCompletedEnrollment(enrollment, progress)) {
+      current.coursesCompleted += 1;
+    }
+
+    learners.set(id, current);
+  }
+
+  return Array.from(learners.values())
+    .sort((a, b) => b.points - a.points)
+    .map((learner, index) => ({
+      ...learner,
+      rank: index + 1,
+      trend: 'same',
+    }));
+}
+
+function getLearnerId(enrollment: CourseraEnrollmentReport) {
+  return String(
+    enrollment.learnerId ||
+    enrollment.userId ||
+    enrollment.externalId ||
+    enrollment.email ||
+    enrollment.id
+  );
+}
+
+function getLearnerName(enrollment: CourseraEnrollmentReport) {
+  return String(
+    enrollment.name ||
+    enrollment.userName ||
+    enrollment.fullName ||
+    enrollment.email ||
+    'Anonymous Learner'
+  );
+}
+
+function getEnrollmentProgress(enrollment: CourseraEnrollmentReport) {
+  const rawProgress =
+    enrollment.progress ??
+    enrollment.overallProgress ??
+    enrollment.grade ??
+    0;
+
+  const progress = Number(rawProgress);
+  if (!Number.isFinite(progress)) return 0;
+  return progress > 1 ? progress : progress * 100;
+}
+
+function isCompletedEnrollment(enrollment: CourseraEnrollmentReport, progress: number) {
+  const status = String(enrollment.status || enrollment.enrollmentStatus || '').toLowerCase();
+  return Boolean(enrollment.completedAt) || status.includes('complete') || progress >= 100;
+}
+
+function isInactiveEnrollment(enrollment: CourseraEnrollmentReport) {
+  const status = String(enrollment.status || enrollment.enrollmentStatus || '').toLowerCase();
+  return Boolean(enrollment.deletedAt || enrollment.isDeleted) ||
+    status.includes('deleted') ||
+    status.includes('unenrolled') ||
+    status.includes('dropped');
 }
