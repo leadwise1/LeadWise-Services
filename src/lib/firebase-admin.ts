@@ -1,25 +1,24 @@
-import admin from 'firebase-admin';
-
-// Helper to clean environment variables that might have been wrapped in quotes
-const cleanEnvVar = (name: string) => process.env[name]?.replace(/^["']|["']$/g, '');
-
-const projectId = cleanEnvVar('FIREBASE_PROJECT_ID');
-const clientEmail = cleanEnvVar('FIREBASE_CLIENT_EMAIL');
-const privateKey = cleanEnvVar('FIREBASE_PRIVATE_KEY')?.replace(/\\n/g, '\n');
+import * as admin from 'firebase-admin';
 
 if (!admin.apps.length) {
-  if (projectId && clientEmail && privateKey) {
+  try {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN_SDK_CONFIG || '{}');
+    
     admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId,
-        clientEmail,
-        privateKey,
-      }),
+      credential: admin.credential.cert(serviceAccount),
+      // Use the project ID from your firebase config
+      projectId: "leadwise-services-rule"
     });
+    console.log('Firebase Admin initialized successfully');
+  } catch (error) {
+    console.error('Firebase Admin init error:', error);
   }
 }
 
-const adminDb = admin.apps.length ? admin.firestore() : null as unknown as admin.firestore.Firestore;
-const adminAuth = admin.apps.length ? admin.auth() : null as unknown as admin.auth.Auth;
+const adminDb = admin.firestore();
+// Enable long polling for admin as well to avoid timeout issues in serverless functions
+adminDb.settings({ ignoreUndefinedProperties: true });
+
+const adminAuth = admin.auth();
 
 export { adminDb, adminAuth, admin };

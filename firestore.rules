@@ -1,13 +1,54 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public access to the leaderboard and forum data
-    match /artifacts/leadwise-web/public/data/{document=**} {
+
+    // =====================================================
+    // SECURE LMI INTAKE DATA
+    // Path: artifacts/leadwise-web/users/{userId}/profile/intake
+    // =====================================================
+    match /artifacts/leadwise-web/users/{userId}/profile/intake {
+      // Users can read/create/update their own entry. Admin can read all for reporting.
+      allow read: if request.auth != null && (request.auth.uid == userId || request.auth.uid == "YOUR_ACTUAL_ADMIN_UID");
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+      
+      // Prevent deletion to maintain audit integrity for grant compliance
+      allow delete: if false;
+    }
+
+    // =====================================================
+    // FORUM POSTS
+    // =====================================================
+    match /artifacts/leadwise-web/public/data/forumPosts/{postId} { 
       allow read: if true;
-      allow write: if true;
+      
+      // Allow authenticated students to post and upvote
+      allow create, update: if request.auth != null;
+      
+      // Only the verified Admin can delete posts to keep the community safe
+      allow delete: if request.auth != null && request.auth.uid == "YOUR_ACTUAL_ADMIN_UID";
     }
     
-    // Default: block everything else
+    // =====================================================
+    // LEADERBOARD
+    // =====================================================
+    match /artifacts/leadwise-web/public/data/leaderboard/{docId} {
+      allow read: if true;
+      // XP and rankings should only be written by system functions or Admin.
+      allow write: if false;
+    }
+
+    // =====================================================
+    // SESSIONS / WEEKLY SYNCS
+    // =====================================================
+    match /artifacts/leadwise-web/public/data/sessions/{sessionId} {
+      allow read: if true;
+      // Sessions are managed via Admin SDK/Firebase Console
+      allow write: if false;
+    }
+
+    // =====================================================
+    // DEFAULT DENY
+    // =====================================================
     match /{document=**} {
       allow read, write: if false;
     }

@@ -115,8 +115,9 @@ export default function EventsPage() {
         {/* Sessions Section */}
         <section>
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold flex items-center gap-3">
+            <h2 className="text-3xl font-bold flex items-center gap-3 relative">
               <CalendarDays className="text-[#FFBEA0]" /> Weekly Syncs
+              {!loading && <span className="absolute -top-1 -right-2 w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Live Connection Active" />}
             </h2>
             <a 
               href={`https://www.coursera.org/programs/${COURSERA_ORG.slug}`}

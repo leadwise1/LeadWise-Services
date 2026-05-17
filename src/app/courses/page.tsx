@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { 
   Code, 
   Database, 
@@ -24,6 +24,7 @@ import {
 import { auth, db } from "@/lib/firebase";
 import { signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { useSearchParams } from 'next/navigation';
 import * as Progress from "@radix-ui/react-progress";
 
 // --- TYPESCRIPT INTERFACES ---
@@ -84,6 +85,7 @@ const frontendCourse: Course = {
   target: "Aspiring web developers, career changers",
   tags: ["Web Dev", "Freelancing", "Creative"],
   color: "blue",
+  salaryHook: "$65k - $95k avg. starting salary",
   modules: [
     {
       id: "html-basics",
@@ -163,6 +165,7 @@ const dataAnalyticsCourse: Course = {
   target: "Career changers, business professionals",
   tags: ["SQL", "Business Intelligence", "Growth"],
   color: "purple",
+  salaryHook: "$70k - $110k avg. starting salary",
   modules: [
     {
       id: "data-analytics-intro",
@@ -200,7 +203,7 @@ const cybersecurityCourse: Course = {
   id: "google-cybersecurity-cert",
   title: "Google Cybersecurity Professional Certificate",
   externalProgramId: "google-cybersecurity",
-  externalUrl: `https://coursera.org/programs/${COURSERA_ORG.slug}?utm_source=leadwise`,
+  externalUrl: `https://www.coursera.org/programs/${COURSERA_ORG.slug}?currentTab=CATALOG`,
   subtitle: "Get on the fast track to a career in cybersecurity — powered by Coursera.",
   description: "A 9-course series by Google. Learn Python, Linux, SQL, SIEM tools & more. Earn an industry-recognized credential and prepare for the CompTIA Security+ exam. 100% free through LeadWise Foundation's Grow with Google partnership.",
   duration: "~6 months (10 hrs/week)",
@@ -319,7 +322,7 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalP
 
         try {
           // Point to project hierarchical structure: artifacts/{appId}/users/{userId}/profile/intake
-          await setDoc(doc(db, "artifacts", appId, "users", finalUid, "profile", "intake"), intakeRecord);
+          await setDoc(doc(db, "artifacts", appId, "users", finalUid, "profile", "intake"), intakeRecord, { merge: true });
           console.log("SUCCESS: Data saved to Firebase Cloud.");
         } catch (dbError: any) {
           console.error("Firestore Save Error:", dbError);
@@ -692,6 +695,7 @@ function CourseCard({
 
 // --- MAIN PAGE COMPONENT ---
 const CoursesPage = () => {
+  const searchParams = useSearchParams();
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
@@ -732,11 +736,10 @@ const CoursesPage = () => {
       });
     }
 
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('auth_success') === 'true') {
+    if (searchParams.get('auth_success') === 'true') {
       fetchProgress();
     }
-  }, []);
+  }, [searchParams]);
 
   const openEnrollment = (course: Course) => {
     setSelectedCourse(course);
@@ -920,4 +923,10 @@ const CoursesPage = () => {
   );
 };
 
-export default CoursesPage;
+export default function CoursesPageWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#090A0F] flex items-center justify-center"><Loader2 className="animate-spin text-white" /></div>}>
+      <CoursesPage />
+    </Suspense>
+  );
+}

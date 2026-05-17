@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 // Define a constant for the collection path to ensure consistency across the forum
+const appId = "leadwise-web";
 const FORUM_COLLECTION_PATH = ['artifacts', 'leadwise-web', 'public', 'data', 'forumPosts'] as const;
 
 interface Post {
@@ -80,7 +81,7 @@ function IntakeModal({
       if (db && auth?.currentUser) {
         try {
           // merge: true ensures it doesn't fail if the document already exists
-          await setDoc(doc(db, "artifacts", "leadwise-web", "users", uid, "profile", "intake"), intakeRecord, { merge: true });
+          await setDoc(doc(db, "artifacts", appId, "users", uid, "profile", "intake"), intakeRecord, { merge: true });
         } catch (dbError: any) {
           console.warn("Firestore save skipped. Rules may be blocking updates, but student is allowed in.", dbError.message);
         }
@@ -546,13 +547,15 @@ function ForumPageContent() {
                             <Flame className="w-3 h-3" /> Trending
                           </span>
                         )}
-                        <button 
-                          onClick={(e) => handleDeletePost(e, post.id)}
-                          className="ml-2 text-neutral-600 hover:text-red-400 transition-colors p-1"
-                          title="Delete post"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+                        {auth?.currentUser?.uid === process.env.NEXT_PUBLIC_ADMIN_UID && (
+                          <button 
+                            onClick={(e) => handleDeletePost(e, post.id)}
+                            className="ml-2 text-neutral-600 hover:text-red-400 transition-colors p-1"
+                            title="Delete post"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
                       </div>
                       
                       <h3 className="text-lg font-semibold text-neutral-100 group-hover:text-blue-400 transition-colors mb-2 leading-snug">
