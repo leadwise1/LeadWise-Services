@@ -8,7 +8,7 @@ service cloud.firestore {
     // =====================================================
     match /artifacts/leadwise-web/users/{userId}/profile/intake {
       // Users can read/create/update their own entry. Admin can read all for reporting.
-      allow read: if request.auth != null && (request.auth.uid == userId || request.auth.uid == "YOUR_ACTUAL_ADMIN_UID");
+      allow read: if request.auth != null && (request.auth.uid == userId || request.auth.uid == "YOUR_ADMIN_UID_HERE");
       allow create, update: if request.auth != null && request.auth.uid == userId;
       
       // Prevent deletion to maintain audit integrity for grant compliance
@@ -25,7 +25,7 @@ service cloud.firestore {
       allow create, update: if request.auth != null;
       
       // Only the verified Admin can delete posts to keep the community safe
-      allow delete: if request.auth != null && request.auth.uid == "YOUR_ACTUAL_ADMIN_UID";
+      allow delete: if request.auth != null && request.auth.uid == "YOUR_ADMIN_UID_HERE";
     }
     
     // =====================================================

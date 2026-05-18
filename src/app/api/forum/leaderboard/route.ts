@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebase-admin';
-import { getEnrollmentReports, type CourseraEnrollmentReport } from '@/lib/coursera';
+import { adminDb, admin } from '@/lib/firebase-admin';
+import { getEnrollmentReports, getClientCredentialsToken, type CourseraEnrollmentReport, getEnterpriseUsageV2 } from '@/lib/coursera';
 
 export async function GET(request: NextRequest) {
   try {
-    let token =
-      request.cookies.get('coursera_token')?.value ||
-      process.env.COURSERA_ACCESS_TOKEN ||
-      process.env.COURSERA_BEARER_TOKEN ||
-      process.env.COURSERA_API_KEY;
+    // Use System Token (Client Credentials) for bulk leaderboard sync.
+    // This avoids user-scoped token limitations and prevents 401/403 errors during bulk operations.
+    const token = await getClientCredentialsToken();
 
     if (!token) {
       return NextResponse.json(
@@ -22,11 +20,31 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const enrollments = await getEnrollmentReports(token);
+    let enrollments: CourseraEnrollmentReport[] = [];
+    let syncError = null;
+
+    try {
+      // Attempt to fetch fresh data from Coursera
+      enrollments = await getEnrollmentReports(token);
+    } catch (err: any) {
+      console.warn('Coursera Sync Warning: Fetch failed, falling back to Firestore cache.', err.message);
+      syncError = err.message;
+      
+      // If fetch fails, we skip the Firestore write but still attempt to read 
+      // from the existing leaderboard collection below.
+    }
+
     const leaderboardData = buildLeaderboard(enrollments);
 
+    // Only attempt write if we actually fetched new data
     if (adminDb && leaderboardData.length > 0) {
-      const leaderboardRef = adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard");
+      // Path Alignment: artifacts -> leadwise-web -> public -> data -> leaderboard
+      const leaderboardRef = adminDb.collection("artifacts")
+        .doc("leadwise-web")
+        .collection("public")
+        .doc("data")
+        .collection("leaderboard");
+        
       const batch = adminDb.batch();
 
       leaderboardData.forEach((learner) => {
@@ -36,18 +54,31 @@ export async function GET(request: NextRequest) {
           points: learner.points,
           coursesCompleted: learner.coursesCompleted,
           totalCourses: learner.totalCourses,
-          lastUpdated: new Date(),
+          estimatedHours: learner.estimatedHours || 0,
+          lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
         }, { merge: true });
       });
 
       await batch.commit();
     }
 
+    // Fallback: If no new data was fetched, read the current rankings from Firestore
+    let finalData = leaderboardData;
+    if (leaderboardData.length === 0 && adminDb) {
+      const snapshot = await adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard")
+        .orderBy("points", "desc")
+        .limit(20)
+        .get();
+      
+      finalData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+    }
+
     return NextResponse.json({
       success: true,
-      data: leaderboardData.slice(0, 20),
+      data: finalData.slice(0, 20),
       source: 'coursera',
-      totalLearners: leaderboardData.length,
+      syncError: syncError,
+      totalLearners: finalData.length,
     });
   } catch (error) {
     console.error('Failed to fetch leaderboard:', error);
@@ -69,6 +100,7 @@ function buildLeaderboard(enrollments: CourseraEnrollmentReport[]) {
     points: number;
     coursesCompleted: number;
     totalCourses: number;
+    estimatedHours: number;
   }>();
 
   for (const enrollment of enrollments) {
@@ -81,11 +113,13 @@ function buildLeaderboard(enrollments: CourseraEnrollmentReport[]) {
       points: 0,
       coursesCompleted: 0,
       totalCourses: 0,
+      estimatedHours: 0,
     };
 
     const progress = getEnrollmentProgress(enrollment);
     current.totalCourses += 1;
     current.points += Math.round(progress * 100);
+    current.estimatedHours += Number(enrollment.estimatedLearningHours || 0);
     if (isCompletedEnrollment(enrollment, progress)) {
       current.coursesCompleted += 1;
     }

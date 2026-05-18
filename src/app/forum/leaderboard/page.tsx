@@ -12,6 +12,7 @@ interface Learner {
   points: number;
   coursesCompleted: number;
   totalCourses?: number;
+  estimatedHours?: number;
 }
 
 const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay: number }) => {
@@ -107,7 +108,7 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
       {/* The Pedestal */}
       <motion.div
         initial={{ height: 0 }}
-        animate={{ height: Number(rankConfig.height.split(' ')[0].replace('h-', '')) * 4 }} // Simple hack for height animation if needed, but Tailwind classes are better
+        animate={{ height: "auto" }} 
         className={cn(
           "w-24 md:w-40 bg-gradient-to-b border-t-2 rounded-t-2xl shadow-[0_-10px_30px_-10px_rgba(0,0,0,0.5)] flex flex-col items-center pt-4",
           rankConfig.bg.replace('from-', 'from-').replace('to-transparent', 'to-neutral-900/40'),
@@ -119,6 +120,11 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
         <span className="text-[10px] md:text-xs text-neutral-500 font-bold uppercase tracking-widest">
           {user.coursesCompleted} Courses
         </span>
+        {user.estimatedHours ? (
+          <span className="text-[9px] text-blue-400/80 font-bold uppercase tracking-tighter mt-1">
+            {Math.round(user.estimatedHours)} Hours Invested
+          </span>
+        ) : null}
       </motion.div>
     </motion.div>
   );
@@ -179,6 +185,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="min-h-screen bg-[#090A0F] text-white selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+      {/* Navigation */}
       <div className="border-b border-white/5 bg-black/20 sticky top-0 z-50 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-6">
           <div className="flex gap-8">
@@ -266,51 +273,43 @@ export default function LeaderboardPage() {
               </div>
 
               <div className="flex flex-col divide-y divide-neutral-800/30">
-                {leaderboard.map((user, index) => {
-                  const isTopThree = index < 3;
+                {remaining.map((user, index) => {
+                  const pos = index + 4;
                   return (
                     <motion.div 
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
-                      transition={{ delay: index * 0.05 }}
+                      transition={{ delay: (index) * 0.05 }}
                       key={user.id} 
-                      className={cn(
-                        "grid grid-cols-12 gap-4 p-5 items-center transition-all hover:bg-white/5",
-                        isTopThree ? "bg-white/2" : ""
-                      )}
+                      className="grid grid-cols-12 gap-4 p-5 items-center transition-all hover:bg-white/5"
                     >
                       <div className="col-span-2 flex justify-center">
                         <div className={cn(
                           "w-8 h-8 rounded-full flex items-center justify-center font-black text-xs border",
-                          index === 0 ? "border-yellow-500/50 text-yellow-500 bg-yellow-500/10 shadow-[0_0_10px_rgba(234,179,8,0.2)]" :
-                          index === 1 ? "border-slate-400/50 text-slate-300 bg-slate-400/10" :
-                          index === 2 ? "border-amber-700/50 text-amber-600 bg-amber-700/10" :
                           "border-neutral-800 text-neutral-500"
                         )}>
-                          {index + 1}
+                          {pos}
                         </div>
                       </div>
                       <div className="col-span-6 flex items-center gap-4">
-                        <div className={cn(
-                          "w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm shrink-0 border-2",
-                          index === 0 ? "border-yellow-500/30 bg-yellow-900/40" : 
-                          "border-neutral-800 bg-neutral-800"
-                        )}>
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-sm shrink-0 border-2 border-neutral-800 bg-neutral-800">
                           {user.name?.split(' ').map(n => n[0]).join('') || "U"}
                         </div>
                         <div className="overflow-hidden">
-                          <h4 className="font-bold text-neutral-100 truncate text-sm md:text-base">{user.name}</h4>
+                          <h4 className="font-bold text-neutral-100 truncate text-sm md:text-base">{user.name || "Anonymous Learner"}</h4>
                           <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-tight">
-                            {user.coursesCompleted} / {user.totalCourses || 8} Modules Complete
+                            {user.coursesCompleted} / {user.totalCourses || 9} Courses Complete
                           </p>
                         </div>
+                      {user.estimatedHours ? (
+                        <div className="hidden md:flex ml-auto px-3 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold text-blue-400 uppercase">
+                          {Math.round(user.estimatedHours)}h Spent
+                        </div>
+                      ) : null}
                       </div>
                       <div className="col-span-4 flex flex-col items-end pr-4">
-                        <span className={cn(
-                          "font-black text-base md:text-lg",
-                          index === 0 ? "text-yellow-400" : "text-white"
-                        )}>
+                        <span className="font-black text-base md:text-lg text-white">
                           {user.points.toLocaleString()}
                         </span>
                         <span className="text-[9px] text-neutral-500 font-bold uppercase tracking-widest -mt-1">XP Points</span>

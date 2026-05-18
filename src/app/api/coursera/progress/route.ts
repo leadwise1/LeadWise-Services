@@ -22,22 +22,38 @@ export async function GET(request: NextRequest) {
   try {
     console.log('/api/coursera/progress: Attempting to fetch progress.');
     const data = await getStudentProgress(token);
+    console.log('/api/coursera/progress: Syncing individual student ledger.');
     
     // The Coursera Reporting API returns a list of enrollments.
     const progress = calculateProgress(data);
     
     // 🔥 THE SYNC ENGINE: Save to Firestore Leaderboard
     try {
-      // For Client Credentials, we might be fetching organizational data.
-      // If data contains a specific user, use that. Otherwise use a fallback.
-      const userId = data.userId || "system_sync"; 
+      if (!adminDb) {
+        console.warn('/api/coursera/progress: Skipping Firestore sync as adminDb is not initialized.');
+        throw new Error('Database connection unavailable');
+      }
+
+      // DATA MAPPING PER ARCHITECTURAL GUIDANCE:
+      // User ID: Prioritize externalId or Coursera userId
+      const userId = data.externalId || data.userId || data.learnerId || "anonymous_learner";
       
-      const leaderboardRef = adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("leaderboard");
+      // Name: Map to learnerName or definition.name (aliased here for resilience)
+      const userName = data.learnerName || data.definition?.name || data.userName || data.fullName || data.name || "Coursera Learner";
+      
+      // Path Alignment: artifacts -> leadwise-web -> public -> data -> leaderboard
+      const leaderboardRef = adminDb.collection("artifacts")
+        .doc("leadwise-web")
+        .collection("public")
+        .doc("data")
+        .collection("leaderboard");
       
       await leaderboardRef.doc(userId).set({
         userId: userId,
-        name: data.userName || "Coursera Learner",
-        points: progress.percentage * 100,
+        name: userName,
+        // Points Calculation: Based on percentage completion
+        points: (progress.percentage || 0) * 100, 
+        estimatedHours: progress.estimatedHours || 0,
         coursesCompleted: progress.completed,
         totalCourses: progress.total,
         lastUpdated: admin.firestore.FieldValue.serverTimestamp()

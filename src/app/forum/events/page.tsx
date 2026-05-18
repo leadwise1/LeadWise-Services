@@ -136,27 +136,27 @@ export default function EventsPage() {
           ) : (
             <div className="grid gap-6">
               {sessions.map((session) => (
-                <div key={session.id} className={`bg-neutral-900/80 border ${session.status === 'LIVE NOW' ? 'border-red-500/50' : 'border-neutral-800'} rounded-2xl p-6 transition-all hover:border-neutral-700`}>
+                <div key={session.id} className={`bg-neutral-900/80 border ${session.status?.toUpperCase() === 'LIVE NOW' ? 'border-red-500/50' : 'border-neutral-800'} rounded-2xl p-6 transition-all hover:border-neutral-700`}>
                   <div className="flex justify-between items-start mb-4">
-                    <div className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ${session.status === 'LIVE NOW' ? 'bg-red-500/20 text-red-400 animate-pulse' : 'bg-blue-500/20 text-blue-400'}`}>
-                      {session.status}
+                    <div className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ${session.status?.toUpperCase() === 'LIVE NOW' ? 'bg-red-500/20 text-red-400 animate-pulse' : 'bg-blue-500/20 text-blue-400'}`}>
+                      {session.status || "Upcoming"}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-neutral-500">
-                      <Users size={14} /> {session.attendees} Attending
+                      <Users size={14} /> {session.attendees || 0} Attending
                     </div>
                   </div>
-                  <h3 className="text-xs font-bold text-neutral-500 uppercase mb-1">{session.title}</h3>
-                  <h4 className="text-xl font-bold mb-3">{session.topic}</h4>
-                  <p className="text-sm text-neutral-400 mb-6">{session.desc}</p>
+                  <h3 className="text-xs font-bold text-neutral-500 uppercase mb-1">{session.title || "Special Session"}</h3>
+                  <h4 className="text-xl font-bold mb-3">{session.topic || "Topic TBD"}</h4>
+                  <p className="text-sm text-neutral-400 mb-6">{session.desc || "No description provided for this session."}</p>
                   <div className="flex items-center justify-between mt-auto">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[10px] font-bold">
-                        {session.mentor?.split(' ').map(n => n[0]).join('') || "LR"}
+                        {(session.mentor || "LeadWise Admin").split(' ').map(n => n[0]).join('')}
                       </div>
-                      <span className="text-xs text-neutral-300">By {session.mentor}</span>
+                      <span className="text-xs text-neutral-300">By {session.mentor || "LeadWise Admin"}</span>
                     </div>
-                    <button className={`flex items-center gap-2 px-6 py-2 rounded-xl font-bold text-sm transition ${session.status === 'LIVE NOW' ? 'bg-red-600 hover:bg-red-700' : 'bg-[#FFBEA0] text-[#1B2735] hover:bg-white'}`}>
-                      {session.status === 'LIVE NOW' ? <><Radio size={16}/> Join Meeting</> : 'RSVP'}
+                    <button className={`flex items-center gap-2 px-6 py-2 rounded-xl font-bold text-sm transition ${session.status?.toUpperCase() === 'LIVE NOW' ? 'bg-red-600 hover:bg-red-700' : 'bg-[#FFBEA0] text-[#1B2735] hover:bg-white'}`}>
+                      {session.status?.toUpperCase() === 'LIVE NOW' ? <><Radio size={16}/> Join Meeting</> : 'RSVP'}
                     </button>
                   </div>
                 </div>
