@@ -214,8 +214,8 @@ export async function getEnrollmentReports(accessToken: string) {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'X-Coursera-Org-Id': ORG_ID,
-          'X-Coursera-Organization-Id': ORG_ID,
+          'X-Coursera-Org-Id': ORG_ID!,
+          'X-Coursera-Organization-Id': ORG_ID!,
         },
         cache: 'no-store',
       }
