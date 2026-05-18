@@ -21,9 +21,9 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
   const isThird = rank === 3;
 
   const rankConfig = {
-    1: { color: "text-yellow-400", border: "border-yellow-500/50", bg: "from-yellow-500/20 to-transparent", height: "h-48 md:h-64", scale: 1.1 },
-    2: { color: "text-slate-300", border: "border-slate-400/50", bg: "from-slate-400/10 to-transparent", height: "h-40 md:h-52", scale: 1.0 },
-    3: { color: "text-amber-600", border: "border-amber-700/50", bg: "from-amber-700/10 to-transparent", height: "h-36 md:h-44", scale: 0.95 },
+    1: { color: "text-yellow-400", border: "border-yellow-500/50", bg: "from-yellow-500/20 to-transparent", height: "h-64 md:h-80", scale: 1.1 },
+    2: { color: "text-slate-300", border: "border-slate-400/50", bg: "from-slate-400/10 to-transparent", height: "h-48 md:h-64", scale: 1.0 },
+    3: { color: "text-amber-600", border: "border-amber-700/50", bg: "from-amber-700/10 to-transparent", height: "h-36 md:h-48", scale: 0.95 },
   }[rank as 1 | 2 | 3];
 
   return (
