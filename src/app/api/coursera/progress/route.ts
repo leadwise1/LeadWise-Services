@@ -56,12 +56,13 @@ export async function GET(request: NextRequest) {
       await leaderboardRef.doc(userId).set({
         userId: userId,
         name: userName,
-        // Points Calculation: Based on percentage completion
-        points: (progress.percentage || 0) * 100, 
+        // Polling sync ensures the completion count is accurate, 
+        // but we keep the points incremental to allow for xAPI bonuses.
         estimatedHours: progress.estimatedHours || 0,
         coursesCompleted: progress.completed,
         totalCourses: progress.total,
-        lastUpdated: admin.firestore.FieldValue.serverTimestamp()
+        lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+        syncMethod: 'polling'
       }, { merge: true });
       
       console.log('/api/coursera/progress: Synced to Leaderboard!');
