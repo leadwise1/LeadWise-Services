@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Trophy, Star, Loader2, TrendingUp, Crown, AlertTriangle } from 'lucide-react';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { cn } from "../../../lib/utils";
 
@@ -16,19 +16,14 @@ interface Learner {
 }
 
 const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay: number }) => {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const isFirst = rank === 1;
   const isSecond = rank === 2;
   const isThird = rank === 3;
 
   const rankConfig = {
-    1: { color: "text-yellow-400", border: "border-yellow-500/50", bg: "from-yellow-500/20 to-transparent", height: "h-[320px] md:h-[420px]", scale: 1.1 },
-    2: { color: "text-slate-300", border: "border-slate-400/50", bg: "from-slate-400/10 to-transparent", height: "h-[260px] md:h-[340px]", scale: 1.0 },
-    3: { color: "text-amber-600", border: "border-amber-700/50", bg: "from-amber-700/10 to-transparent", height: "h-[220px] md:h-[280px]", scale: 0.95 },
+    1: { color: "text-yellow-400", border: "border-yellow-500/50", bg: "from-yellow-500/20 to-transparent", height: "h-64 md:h-80", scale: 1.1 },
+    2: { color: "text-slate-300", border: "border-slate-400/50", bg: "from-slate-400/10 to-transparent", height: "h-48 md:h-64", scale: 1.0 },
+    3: { color: "text-amber-600", border: "border-amber-700/50", bg: "from-amber-700/10 to-transparent", height: "h-36 md:h-48", scale: 0.95 },
   }[rank as 1 | 2 | 3];
 
   return (
@@ -47,7 +42,7 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
         className="relative mb-4"
       >
-        {isFirst && mounted && (
+        {isFirst && (
           <>
             <motion.div
               initial={{ rotate: -10, scale: 0 }}
@@ -112,11 +107,10 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
 
       {/* The Pedestal */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay }}
+        initial={{ height: 0 }}
+        animate={{ height: "auto" }} 
         className={cn(
-          "w-24 md:w-40 bg-gradient-to-b border-t-2 rounded-t-2xl shadow-[0_-10px_30px_-10px_rgba(0,0,0,0.5)] flex flex-col items-center pt-4 overflow-hidden",
+          "w-24 md:w-40 bg-gradient-to-b border-t-2 rounded-t-2xl shadow-[0_-10px_30px_-10px_rgba(0,0,0,0.5)] flex flex-col items-center pt-4",
           rankConfig.bg.replace('from-', 'from-').replace('to-transparent', 'to-neutral-900/40'),
           rankConfig.border,
           rankConfig.height
@@ -195,19 +189,19 @@ export default function LeaderboardPage() {
       <div className="border-b border-white/5 bg-black/20 sticky top-0 z-50 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-6">
           <div className="flex gap-8">
-              <Link 
-                href="/forum/leaderboard"
-                className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname.includes('/forum/leaderboard') ? 'border-[#FFBEA0] text-[#FFBEA0]' : 'border-transparent text-gray-500 hover:text-white'}`}
-              >
-                Leaderboard
-              </Link>
-              <Link 
-                href="/forum/events"
-                className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname.includes('/forum/events') ? 'border-[#FFBEA0] text-[#FFBEA0]' : 'border-transparent text-gray-500 hover:text-white'}`}
-              >
-                Weekly Sync
-              </Link>
-            </div>
+            <Link 
+              href="/forum/leaderboard"
+              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/leaderboard' ? 'border-[#FFBEA0] text-[#FFBEA0]' : 'border-transparent text-gray-500 hover:text-white'}`}
+            >
+              Leaderboard
+            </Link>
+            <Link 
+              href="/forum/events"
+              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/events' ? 'border-[#FFBEA0] text-[#FFBEA0]' : 'border-transparent text-gray-500 hover:text-white'}`}
+            >
+              Weekly Sync
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -257,7 +251,7 @@ export default function LeaderboardPage() {
         ) : (
           <>
             {/* Podium Section */}
-            <div className="grid grid-cols-3 items-end justify-center mb-20 gap-3 md:gap-8 px-2 min-h-[500px] md:min-h-[650px]">
+            <div className="grid grid-cols-3 items-end justify-center mb-16 gap-2 md:gap-6 px-2">
               {topThree[1] && <PodiumItem user={topThree[1]} rank={2} delay={0.2} />}
               {topThree[0] && <PodiumItem user={topThree[0]} rank={1} delay={0} />}
               {topThree[2] && <PodiumItem user={topThree[2]} rank={3} delay={0.4} />}
