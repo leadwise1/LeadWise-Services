@@ -106,9 +106,7 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
       </div>
 
       {/* The Pedestal */}
-      <motion.div
-        initial={{ height: 0 }}
-        animate={{ height: "auto" }} 
+      <div
         className={cn(
           "w-24 md:w-40 bg-gradient-to-b border-t-2 rounded-t-2xl shadow-[0_-10px_30px_-10px_rgba(0,0,0,0.5)] flex flex-col items-center pt-4",
           rankConfig.bg.replace('from-', 'from-').replace('to-transparent', 'to-neutral-900/40'),
@@ -125,7 +123,7 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
             {Math.round(user.estimatedHours)} Hours Invested
           </span>
         ) : null}
-      </motion.div>
+      </div>
     </motion.div>
   );
 };

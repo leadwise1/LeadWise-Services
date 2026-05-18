@@ -11,6 +11,7 @@ import { useSearchParams } from 'next/navigation';
 // Define a constant for the collection path to ensure consistency across the forum
 const appId = "leadwise-web";
 const FORUM_COLLECTION_PATH = ['artifacts', 'leadwise-web', 'public', 'data', 'forumPosts'] as const;
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Post {
   id: string;
@@ -23,6 +24,8 @@ interface Post {
   timeAgo: string;
   hot: boolean;
   createdAt?: any;
+  badges?: string[];
+  isAdmin?: boolean;
 }
 
 // --- INTAKE FORM COMPONENT (Gated Access) ---
@@ -279,7 +282,9 @@ function ForumPageContent() {
           upvotes: data.upvotes || 0,
           timeAgo: data.createdAt ? new Date(data.createdAt.toMillis()).toLocaleDateString() : "Just now",
           hot: data.upvotes > 5,
-          createdAt: data.createdAt
+          createdAt: data.createdAt,
+          badges: data.badges || [],
+          isAdmin: data.isAdmin || false
         });
       });
       setPosts(fetchedPosts);
@@ -451,7 +456,7 @@ function ForumPageContent() {
             </div>
           </div>
           <a 
-            href="https://calendar.google.com/calendar/appointments/schedules" 
+            href={process.env.NEXT_PUBLIC_CALENDAR_LINK || "https://calendar.google.com/calendar/appointments/schedules"} 
             target="_blank"
             rel="noopener noreferrer"
             className="whitespace-nowrap bg-white text-blue-600 px-6 py-2.5 rounded-xl font-black hover:bg-[#FFBEA0] transition-all hover:scale-105 shadow-lg shadow-black/20"
@@ -508,71 +513,89 @@ function ForumPageContent() {
               </button>
             </div>
           ) : (
-            displayedPosts.map((post) => (
-              <Link href={`/forum/post/${post.id}`} key={post.id} className="block group">
-                <div className="bg-neutral-900 border border-neutral-800 hover:border-neutral-700 p-5 rounded-2xl transition-all hover:shadow-lg hover:shadow-black/50 hover:-translate-y-0.5 cursor-pointer">
-                  <div className="flex gap-4">
-                    <div className="flex flex-col items-center gap-1 min-w-[40px]">
-                      <button 
-                        onClick={(e) => handleUpvote(e, post.id)}
-                        disabled={upvotingIds.has(post.id)}
-                        className="text-neutral-500 hover:text-emerald-400 transition-colors p-1.5 rounded-lg hover:bg-emerald-400/10 active:scale-90 disabled:opacity-50"
-                        title="Upvote this post"
-                      >
-                        <ArrowUp className="w-5 h-5" />
-                      </button>
-                      <span className={`font-semibold text-sm transition-colors ${post.hot ? 'text-orange-400' : 'text-neutral-300'}`}>
-                        {post.upvotes}
-                      </span>
-                    </div>
-                    
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-neutral-800/80 border border-neutral-700/50 text-neutral-300">
-                          {post.category}
-                        </span>
-                        <span className="text-xs text-neutral-500">•</span>
-                        <span className="text-xs text-neutral-400 font-medium flex items-center gap-1">
-                          Posted by {post.author}
-                          {/* 2. ADMIN SHIELD BADGE: Stylized visual confirmation for students */}
-                          {post.authorId === process.env.NEXT_PUBLIC_ADMIN_UID && (
-                            <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black ml-1 flex items-center gap-1 uppercase tracking-tighter shadow-sm shadow-blue-500/50">
-                              Admin <Shield size={10} />
-                            </span>
-                          )}
-                        </span>
-                        <span className="text-xs text-neutral-500">{post.timeAgo}</span>
-                        {post.hot && (
-                          <span className="flex items-center gap-1 text-[10px] uppercase font-bold text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded border border-orange-400/20 ml-auto sm:ml-2">
-                            <Flame className="w-3 h-3" /> Trending
-                          </span>
-                        )}
-                        {auth?.currentUser?.uid === process.env.NEXT_PUBLIC_ADMIN_UID && (
-                          <button 
-                            onClick={(e) => handleDeletePost(e, post.id)}
-                            className="ml-2 text-neutral-600 hover:text-red-400 transition-colors p-1"
-                            title="Delete post"
+            <AnimatePresence>
+              {displayedPosts.map((post, i) => (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ delay: i * 0.05 }}
+                  key={post.id}
+                >
+                  <Link href={`/forum/post/${post.id}`} className="block group">
+                    <div className="bg-neutral-900 border border-neutral-800 hover:border-neutral-700 p-5 rounded-2xl transition-all hover:shadow-lg hover:shadow-black/50 hover:-translate-y-0.5 cursor-pointer">
+                      <div className="flex gap-4">
+                        <div className="flex flex-col items-center gap-1 min-w-[40px]">
+                          <motion.button 
+                            whileTap={{ scale: 0.8 }}
+                            whileHover={{ scale: 1.1 }}
+                            onClick={(e) => handleUpvote(e, post.id)}
+                            disabled={upvotingIds.has(post.id)}
+                            className="text-neutral-500 hover:text-emerald-400 transition-colors p-1.5 rounded-lg hover:bg-emerald-400/10 active:scale-90 disabled:opacity-50"
+                            title="Upvote this post"
                           >
-                            <Trash2 size={14} />
-                          </button>
-                        )}
-                      </div>
-                      
-                      <h3 className="text-lg font-semibold text-neutral-100 group-hover:text-blue-400 transition-colors mb-2 leading-snug">
-                        {post.title}
-                      </h3>
-                      
-                      <div className="flex items-center gap-4 mt-4">
-                        <div className="flex items-center gap-1.5 text-neutral-500 text-sm group-hover:text-neutral-400 transition-colors">
-                          <MessageCircle className="w-4 h-4" />
-                          <span className="font-medium">{post.replies} Replies</span>
+                            <ArrowUp className="w-5 h-5" />
+                          </motion.button>
+                          <span className={`font-semibold text-sm transition-colors ${post.hot ? 'text-orange-400' : 'text-neutral-300'}`}>
+                            {post.upvotes}
+                          </span>
+                        </div>
+                        
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2 flex-wrap">
+                            <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-neutral-800/80 border border-neutral-700/50 text-neutral-300">
+                              {post.category}
+                            </span>
+                            <span className="text-xs text-neutral-500">•</span>
+                            <span className="text-xs text-neutral-400 font-medium flex items-center gap-1">
+                              Posted by {post.author}
+                              {/* Admin badge */}
+                              {(post.isAdmin || post.authorId === process.env.NEXT_PUBLIC_ADMIN_UID) && (
+                                <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black ml-1 flex items-center gap-1 uppercase tracking-tighter shadow-sm shadow-blue-500/50">
+                                  Admin <Shield size={10} />
+                                </span>
+                              )}
+                              {/* Custom Badges */}
+                              {post.badges && post.badges.map((badge, idx) => (
+                                <span key={idx} className="bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold ml-1 uppercase tracking-tighter shadow-sm">
+                                  {badge}
+                                </span>
+                              ))}
+                            </span>
+                            <span className="text-xs text-neutral-500">{post.timeAgo}</span>
+                            {post.hot && (
+                              <span className="flex items-center gap-1 text-[10px] uppercase font-bold text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded border border-orange-400/20 ml-auto sm:ml-2">
+                                <Flame className="w-3 h-3" /> Trending
+                              </span>
+                            )}
+                            {auth?.currentUser?.uid === process.env.NEXT_PUBLIC_ADMIN_UID && (
+                              <button 
+                                onClick={(e) => handleDeletePost(e, post.id)}
+                                className="ml-2 text-neutral-600 hover:text-red-400 transition-colors p-1"
+                                title="Delete post"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            )}
+                          </div>
+                          
+                          <h3 className="text-lg font-semibold text-neutral-100 group-hover:text-blue-400 transition-colors mb-2 leading-snug">
+                            {post.title}
+                          </h3>
+                          
+                          <div className="flex items-center gap-4 mt-4">
+                            <div className="flex items-center gap-1.5 text-neutral-500 text-sm group-hover:text-neutral-400 transition-colors">
+                              <MessageCircle className="w-4 h-4" />
+                              <span className="font-medium">{post.replies} Replies</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </Link>
-            ))
+                  </Link>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           )}
         </div>
       )}
