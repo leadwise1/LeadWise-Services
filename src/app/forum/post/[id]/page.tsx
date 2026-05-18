@@ -110,14 +110,25 @@ export default function PostDetailsPage() {
     try {
       const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string);
       const commentsRef = collection(postRef, 'comments');
-      const currentUser = auth.currentUser;
+      const currentUser = auth?.currentUser;
+      
+      let authorName = currentUser?.displayName;
+      if (!authorName) {
+        const intakeData = localStorage.getItem("leadwise_intake");
+        if (intakeData) {
+           const parsed = JSON.parse(intakeData);
+           authorName = `${parsed.firstName} ${parsed.lastName.charAt(0)}.`;
+        } else {
+           authorName = "LeadWise Student";
+        }
+      }
       
       // Use a transaction to atomically add comment and increment reply count
       await runTransaction(db, async (transaction) => {
         const commentDocRef = doc(commentsRef);
         transaction.set(commentDocRef, {
-          author: currentUser?.displayName || "LeadWise Student",
-          authorId: currentUser?.uid,
+          author: authorName,
+          authorId: currentUser?.uid || "anonymous",
           content: newComment,
           createdAt: serverTimestamp()
         });
