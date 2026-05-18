@@ -8,7 +8,7 @@ service cloud.firestore {
     // =====================================================
     match /artifacts/leadwise-web/users/{userId}/profile/intake {
       // Users can read/create/update their own entry. Admin can read all for reporting.
-      allow read: if request.auth != null && (request.auth.uid == userId || request.auth.uid == "YOUR_ADMIN_UID_HERE");
+      allow read: if request.auth != null && (request.auth.uid == userId || request.auth.uid == "SJZjDTO19IbOC5wxFleA7koMITx1");
       allow create, update: if request.auth != null && request.auth.uid == userId;
       
       // Prevent deletion to maintain audit integrity for grant compliance
@@ -21,11 +21,17 @@ service cloud.firestore {
     match /artifacts/leadwise-web/public/data/forumPosts/{postId} { 
       allow read: if true;
       
-      // Allow authenticated students to post and upvote
-      allow create, update: if request.auth != null;
+      // Allow students (even those just passing the local intake gate) to post and upvote
+      allow create, update: if true;
       
       // Only the verified Admin can delete posts to keep the community safe
-      allow delete: if request.auth != null && request.auth.uid == "YOUR_ADMIN_UID_HERE";
+      allow delete: if request.auth != null && request.auth.uid == "SJZjDTO19IbOC5wxFleA7koMITx1";
+
+      // Explicitly allow comments subcollection (otherwise default deny blocks it)
+      match /comments/{commentId} {
+        allow read, create, update: if true;
+        allow delete: if request.auth != null && request.auth.uid == "SJZjDTO19IbOC5wxFleA7koMITx1";
+      }
     }
     
     // =====================================================
