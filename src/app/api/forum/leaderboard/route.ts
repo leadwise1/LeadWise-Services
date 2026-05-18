@@ -1,23 +1,21 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { Request, Response } from 'express';
 import { adminDb, admin } from '@/lib/firebase-admin';
 import { getEnrollmentReports, getClientCredentialsToken, type CourseraEnrollmentReport, getEnterpriseUsageV2 } from '@/lib/coursera';
 
-export async function GET(request: NextRequest) {
+// Express route handler for GET /api/forum/leaderboard
+export const getLeaderboard = async (req: Request, res: Response) => {
   try {
     // Use System Token (Client Credentials) for bulk leaderboard sync.
     // This avoids user-scoped token limitations and prevents 401/403 errors during bulk operations.
     const token = await getClientCredentialsToken();
 
     if (!token) {
-      return NextResponse.json(
-        {
-          success: false,
-          data: [],
-          needsAuth: true,
-          error: 'Coursera requires an API key or bearer token for enrollment reports. Add COURSERA_API_KEY, COURSERA_ACCESS_TOKEN, or COURSERA_BEARER_TOKEN on the server.',
-        },
-        { status: 401 }
-      );
+      return res.status(401).json({
+        success: false,
+        data: [],
+        needsAuth: true,
+        error: 'Coursera requires an API key or bearer token for enrollment reports. Add COURSERA_API_KEY, COURSERA_ACCESS_TOKEN, or COURSERA_BEARER_TOKEN on the server.',
+      });
     }
 
     let enrollments: CourseraEnrollmentReport[] = [];
@@ -73,7 +71,7 @@ export async function GET(request: NextRequest) {
       finalData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
     }
 
-    return NextResponse.json({
+    return res.json({
       success: true,
       data: finalData.slice(0, 20),
       source: 'coursera',
@@ -82,16 +80,13 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Failed to fetch leaderboard:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        data: [],
-        error: error instanceof Error ? error.message : 'Failed to load Coursera learners',
-      },
-      { status: 500 }
-    );
+    return res.status(500).json({
+      success: false,
+      data: [],
+      error: error instanceof Error ? error.message : 'Failed to load Coursera learners',
+    });
   }
-}
+};
 
 function buildLeaderboard(enrollments: CourseraEnrollmentReport[]) {
   const learners = new Map<string, {
