@@ -35,8 +35,13 @@ export async function GET(request: NextRequest) {
       }
 
       // DATA MAPPING PER ARCHITECTURAL GUIDANCE:
-      // User ID: Prioritize externalId or Coursera userId
-      const userId = data.externalId || data.userId || data.learnerId || "anonymous_learner";
+      // Use the same ID logic as xAPI (Email-based) for consistency.
+      const rawEmail = data.learnerEmail || data.email;
+      let userId = data.externalId || data.userId || data.learnerId || "anonymous_learner";
+      
+      if (rawEmail) {
+        userId = rawEmail.replace(/[.#$[\]]/g, '_');
+      }
       
       // Name: Map to learnerName or definition.name (aliased here for resilience)
       const userName = data.learnerName || data.definition?.name || data.userName || data.fullName || data.name || "Coursera Learner";

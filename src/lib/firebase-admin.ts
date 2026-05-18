@@ -1,39 +1,57 @@
 import * as admin from 'firebase-admin';
 
-if (!admin.apps.length) {
-  try {
+/**
+ * Robust Firebase Admin Initialization
+ * 
+ * CRITICAL: FIREBASE_ADMIN_SDK_CONFIG must be a single-line JSON string 
+ * in your .env.local wrapped in single quotes.
+ * Ensures only one instance of the app exists even with HMR (Hot Module Replacement)
+ */
+try {
+  if (admin.apps.length === 0) {
     const configString = process.env.FIREBASE_ADMIN_SDK_CONFIG;
-    
-    if (!configString) {
-      console.warn("Firebase Admin: FIREBASE_ADMIN_SDK_CONFIG is missing. Admin features will be disabled.");
+    const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+    const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+
+    if (configString || (clientEmail && privateKey)) {
+      // Handle potentially escaped JSON from environment variables
+         const serviceAccount = configString 
+        ? JSON.parse(configString.trim()) 
+        : {
+            projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "leadwise-services-rule",
+            clientEmail: clientEmail,
+            privateKey: privateKey
+          };
+
+
+      
+           // Normalize private key newlines (handles both JSON and individual variable formats)
+           if (serviceAccount.privateKey) serviceAccount.privateKey = serviceAccount.privateKey.replace(/\\n/g, '\n');
+           if (serviceAccount.private_key) serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+
+
+           admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+            projectId: serviceAccount.project_id || serviceAccount.projectId || "leadwise-services-rule"
+         });
+      console.log('✅ Firebase Admin initialized successfully');
     } else {
-      // Parse the JSON string. Vercel environment variables often need 
-      // specific handling if they contain newlines or escaped characters.
-      const serviceAccount = typeof configString === 'string' ? JSON.parse(configString) : configString;
-      
-      // Ensure private key newlines are handled correctly
-      if (serviceAccount.private_key) {
-        serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
-      }
-      
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        projectId: serviceAccount.project_id || "leadwise-services-rule"
-      });
-      
-      console.log('Firebase Admin initialized successfully');
+      console.warn("⚠️ Firebase Admin: FIREBASE_ADMIN_SDK_CONFIG is missing from environment.");
     }
-  } catch (error) {
-    console.error('Firebase Admin init error:', error);
   }
+} catch (error: any) {
+  console.error('❌ Firebase Admin initialization error:', error.message);
 }
 
-// Safely export instances; these will be undefined if initialization failed
-// instead of throwing a top-level error that kills the route.
-const adminDb = admin.apps.length ? admin.firestore() : null;
-// Enable long polling for admin as well to avoid timeout issues in serverless functions
-if (adminDb) adminDb.settings({ ignoreUndefinedProperties: true });
+/**
+ * Safely export service instances.
+ * Using getters ensures we don't call service methods before the app is ready.
+ */
+export const adminDb = admin.apps.length > 0 ? admin.firestore() : null;
+export const adminAuth = admin.apps.length > 0 ? admin.auth() : null;
 
-const adminAuth = admin.apps.length ? admin.auth() : null;
+if (adminDb) {
+  adminDb.settings({ ignoreUndefinedProperties: true });
+}
 
-export { adminDb, adminAuth, admin };
+export { admin };
