@@ -120,8 +120,9 @@ export default function EventsPage() {
               {!loading && <span className="absolute -top-1 -right-2 w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Live Connection Active" />}
             </h2>
             <a 
-              href={`https://www.coursera.org/programs/${COURSERA_ORG.slug}`}
+              href={process.env.NEXT_PUBLIC_CALENDAR_LINK || "https://calendar.app.google/1AXYeyfAXczZ2wi1A"}
               target="_blank"
+              rel="noopener noreferrer"
               className="text-xs font-bold uppercase tracking-widest bg-white/5 border border-white/10 px-4 py-2 rounded-full hover:bg-white/10 transition text-gray-400 hover:text-[#FFBEA0] flex items-center justify-center"
             >
               Sync to Google Calendar
@@ -177,7 +178,7 @@ export default function EventsPage() {
               Need dedicated support? Learners can now book a live sync with a LeadWise admin to unblock technical hurdles or discuss career goals.
             </p>
             <a 
-              href="https://calendar.google.com/calendar/appointments/schedules" 
+              href={process.env.NEXT_PUBLIC_CALENDAR_LINK || "https://calendar.app.google/1AXYeyfAXczZ2wi1A"} 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-white text-[#1B2735] px-10 py-5 rounded-2xl font-black hover:bg-[#FFBEA0] transition-all transform hover:scale-[1.02] shadow-2xl hover:shadow-[#FFBEA0]/20 group"
