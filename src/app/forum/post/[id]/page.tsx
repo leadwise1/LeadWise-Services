@@ -2,28 +2,31 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, MessageCircle, ArrowUp, Flame, Loader2, User, Clock } from 'lucide-react';
-import { db } from "@/lib/firebase";
-import { doc, onSnapshot, updateDoc, increment, collection, query, orderBy, addDoc, serverTimestamp } from "firebase/firestore";
+import { ArrowLeft, MessageCircle, ArrowUp, Loader2, User, Clock, ShieldCheck } from 'lucide-react';
+import { db, auth } from "@/lib/firebase";
+import { doc, onSnapshot, updateDoc, increment, collection, query, orderBy, serverTimestamp, runTransaction, Timestamp } from "firebase/firestore";
 import Link from 'next/link';
 
 const appId = "leadwise-web";
+const ADMIN_UID = process.env.NEXT_PUBLIC_ADMIN_UID;
 
 interface Comment {
   id: string;
   author: string;
+  authorId?: string;
   content: string;
-  createdAt: any;
+  createdAt: Timestamp | null;
 }
 
 interface Post {
   id: string;
   title: string;
   author: string;
+  authorId?: string;
   category: string;
   replies: number;
   upvotes: number;
-  createdAt: any;
+  createdAt: Timestamp | null;
   content?: string;
 }
 
@@ -49,6 +52,7 @@ export default function PostDetailsPage() {
           id: docSnap.id,
           title: data.title,
           author: data.author,
+          authorId: data.authorId,
           category: data.category,
           replies: data.replies || 0,
           upvotes: data.upvotes || 0,
@@ -71,6 +75,7 @@ export default function PostDetailsPage() {
         fetchedComments.push({
           id: doc.id,
           author: data.author || "Anonymous",
+          authorId: data.authorId,
           content: data.content || "",
           createdAt: data.createdAt
         });
@@ -99,21 +104,28 @@ export default function PostDetailsPage() {
 
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newComment.trim() || !id || !db) return;
+    if (!newComment.trim() || !id || !db || isSubmitting) return;
 
     setIsSubmitting(true);
     try {
-      // 1. Add the comment
-      const commentsRef = collection(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string, 'comments');
-      await addDoc(commentsRef, {
-        author: "Anonymous Learner", // In a real app, use the actual user's name
-        content: newComment,
-        createdAt: serverTimestamp()
-      });
-
-      // 2. Increment reply count on the post
       const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string);
-      await updateDoc(postRef, { replies: increment(1) });
+      const commentsRef = collection(postRef, 'comments');
+      const currentUser = auth.currentUser;
+      
+      // Use a transaction to atomically add comment and increment reply count
+      await runTransaction(db, async (transaction) => {
+        const commentDocRef = doc(commentsRef);
+        transaction.set(commentDocRef, {
+          author: currentUser?.displayName || "LeadWise Student",
+          authorId: currentUser?.uid,
+          content: newComment,
+          createdAt: serverTimestamp()
+        });
+        
+        transaction.update(postRef, { 
+          replies: increment(1) 
+        });
+      });
 
       setNewComment("");
     } catch (error) {
@@ -176,8 +188,12 @@ export default function PostDetailsPage() {
                 </span>
                 <span className="text-xs text-neutral-500">•</span>
                 <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-                  <User className="w-3.5 h-3.5" />
-                  {post.author}
+                  {post.authorId === ADMIN_UID ? (
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                  ) : (
+                    <User className="w-3.5 h-3.5" />
+                  )}
+                  <span className={post.authorId === ADMIN_UID ? "text-blue-400 font-bold" : ""}>{post.author}</span>
                 </div>
                 <span className="text-xs text-neutral-500">•</span>
                 <div className="flex items-center gap-1.5 text-xs text-neutral-500">
@@ -234,9 +250,12 @@ export default function PostDetailsPage() {
                 <div key={comment.id} className="bg-neutral-900/30 border border-neutral-800/50 rounded-2xl p-6 transition-colors hover:bg-neutral-900/50">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neutral-700 to-neutral-800 flex items-center justify-center text-[10px] font-bold">
-                      {comment.author.split(' ').map(n => n[0]).join('')}
+                      {comment.authorId === ADMIN_UID ? <ShieldCheck className="w-4 h-4 text-blue-400" /> : comment.author.split(' ').map(n => n[0]).join('')}
                     </div>
-                    <span className="font-semibold text-sm">{comment.author}</span>
+                    <span className={`text-sm font-bold ${comment.authorId === ADMIN_UID ? "text-blue-400" : "text-white"}`}>
+                      {comment.author}
+                      {comment.authorId === ADMIN_UID && " (Admin)"}
+                    </span>
                     <span className="text-xs text-neutral-600">
                       {comment.createdAt ? new Date(comment.createdAt.toMillis()).toLocaleDateString() : "Just now"}
                     </span>

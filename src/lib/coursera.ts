@@ -104,7 +104,7 @@ async function readCourseraError(response: Response) {
 }
 
 export async function getStudentProgress(accessToken: string) {
-  const response = await fetch(`https://api.coursera.org/api/enterpriseLearningPaths.v1/${LEARNING_PATH_ID}`, {
+  const response = await fetch(`https://api.coursera.com/ent/api/enterpriseLearningPaths.v1/${LEARNING_PATH_ID}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'X-Coursera-Org-Id': ORG_ID!,
@@ -129,7 +129,7 @@ export async function getEnterpriseUsageV2(accessToken: string) {
     orgId: ORG_ID!,
   });
 
-  const response = await fetch(`https://api.coursera.com/api/enterpriseUsageEvents.v2?${params.toString()}`, {
+  const response = await fetch(`https://api.coursera.com/ent/api/enterpriseUsageEvents.v2?${params.toString()}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'X-Coursera-Org-Id': ORG_ID!,
@@ -210,7 +210,7 @@ export async function getEnrollmentReports(accessToken: string) {
     }
 
     const response = await fetch(
-      `https://api.coursera.org/api/businesses.v1/${ORG_ID}/enrollmentReports?${params.toString()}`,
+      `https://api.coursera.com/ent/api/businesses.v1/${ORG_ID}/enrollmentReports?${params.toString()}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
