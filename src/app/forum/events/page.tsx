@@ -12,7 +12,8 @@ import {
   Video,
   ArrowRight,
   PlusCircle,
-  Loader2
+  Loader2,
+  Pin
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -147,8 +148,81 @@ export default function EventsPage() {
                     </div>
                   </div>
                   <h3 className="text-xs font-bold text-neutral-500 uppercase mb-1">{session.title || "Special Session"}</h3>
-                  <h4 className="text-xl font-bold mb-3">{session.topic || "Topic TBD"}</h4>
-                  <p className="text-sm text-neutral-400 mb-6">{session.desc || "No description provided for this session."}</p>
+                  <h4 className="text-xl font-bold mb-3">{session.topic || "Cybersecurity Progress & Open Q&A"}</h4>
+                  {session.desc ? (
+                    <p className="text-sm text-neutral-400 mb-6">{session.desc}</p>
+                  ) : (
+                    <div className="text-sm text-neutral-400 mb-6 bg-[#0B0C10] p-6 rounded-xl border-2 border-dashed border-neutral-700 relative overflow-hidden space-y-6 shadow-inner">
+                      
+                      <div className="flex items-center justify-center -mt-2 mb-4">
+                        <div className="bg-[#FFBEA0] text-[#1B2735] px-4 py-1.5 font-black transform -rotate-2 shadow-lg shadow-[#FFBEA0]/10 uppercase tracking-widest text-xs flex items-center gap-2">
+                          <Pin size={14} className="text-[#1B2735]" /> Virtual Bulletin Board
+                        </div>
+                      </div>
+
+                      <div className="text-center bg-white/5 border border-white/10 rounded-lg p-4 transform rotate-1">
+                        <h5 className="font-bold text-white text-base">Resources for U.S. Graduates</h5>
+                        <p className="text-xs mt-1 text-neutral-300">Advance your job search with these tools at <a href="https://careercircle.com/google" className="text-blue-400 hover:text-blue-300 font-bold underline decoration-blue-500/50" target="_blank" rel="noopener noreferrer">careercircle.com/google</a></p>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                        {/* Note 1 */}
+                        <div className="bg-yellow-500/10 border border-yellow-500/20 p-5 rounded shadow-lg transform -rotate-2 hover:rotate-0 transition-transform relative hover:z-10 group">
+                          <div className="w-3 h-3 rounded-full bg-red-500 shadow-sm mx-auto absolute -top-1.5 left-1/2 -translate-x-1/2 border border-red-700 group-hover:scale-110 transition-transform"></div>
+                          <h6 className="text-yellow-200 font-bold text-sm mb-1.5 mt-1">Employer Connections</h6>
+                          <p className="text-xs text-yellow-100/70 leading-relaxed">Access the Employer Consortium and connect directly with partners like Gartner, Verizon, and Siemens.</p>
+                        </div>
+
+                        {/* Note 2 */}
+                        <div className="bg-blue-500/10 border border-blue-500/20 p-5 rounded shadow-lg transform rotate-2 hover:rotate-0 transition-transform relative hover:z-10 group">
+                          <div className="w-3 h-3 rounded-full bg-yellow-400 shadow-sm mx-auto absolute -top-1.5 left-1/2 -translate-x-1/2 border border-yellow-600 group-hover:scale-110 transition-transform"></div>
+                          <h6 className="text-blue-200 font-bold text-sm mb-1.5 mt-1">360° Profiles</h6>
+                          <p className="text-xs text-blue-100/70 leading-relaxed">Showcase your skills, lessons, and enrich your profile with career assessments to stand out to employers.</p>
+                        </div>
+
+                        {/* Note 3 */}
+                        <div className="bg-emerald-500/10 border border-emerald-500/20 p-5 rounded shadow-lg transform -rotate-1 hover:rotate-0 transition-transform relative hover:z-10 group">
+                          <div className="w-3 h-3 rounded-full bg-blue-500 shadow-sm mx-auto absolute -top-1.5 left-1/2 -translate-x-1/2 border border-blue-700 group-hover:scale-110 transition-transform"></div>
+                          <h6 className="text-emerald-200 font-bold text-sm mb-1.5 mt-1">Career Prep Support</h6>
+                          <p className="text-xs text-emerald-100/70 leading-relaxed">Get guidance on career paths, a resume builder, interview prep, and exclusive Grow with Google content.</p>
+                        </div>
+
+                        {/* Note 4 */}
+                        <div className="bg-rose-500/10 border border-rose-500/20 p-5 rounded shadow-lg transform rotate-1 hover:rotate-0 transition-transform relative hover:z-10 group">
+                          <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-sm mx-auto absolute -top-1.5 left-1/2 -translate-x-1/2 border border-emerald-700 group-hover:scale-110 transition-transform"></div>
+                          <h6 className="text-rose-200 font-bold text-sm mb-1.5 mt-1">1:1 Coaching</h6>
+                          <p className="text-xs text-rose-100/70 leading-relaxed">Receive personalized job search support through 1:1 sessions with specialized CareerCircle Advocates.</p>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 bg-white/5 p-5 rounded-lg border border-white/10 transform -rotate-1 shadow-md relative hover:rotate-0 transition-transform hover:z-10">
+                        <div className="absolute top-2 left-3 w-2 h-2 rounded-full bg-white/20"></div>
+                        <div className="absolute top-2 right-3 w-2 h-2 rounded-full bg-white/20"></div>
+                        <div className="absolute bottom-2 left-3 w-2 h-2 rounded-full bg-white/20"></div>
+                        <div className="absolute bottom-2 right-3 w-2 h-2 rounded-full bg-white/20"></div>
+                        
+                        <h6 className="text-white font-bold text-sm mb-3 flex items-center justify-center gap-2">
+                          <Flag size={14} className="text-[#FFBEA0]" /> More Resources for Certificate Grads
+                        </h6>
+                        <div className="space-y-3">
+                          <p className="text-xs leading-relaxed text-neutral-300">
+                            <strong className="text-white font-semibold">Cybersecurity:</strong> 30% discount on the CompTIA Security+ exam and CertMaster practice.
+                          </p>
+                          <p className="text-xs leading-relaxed text-neutral-300">
+                            <strong className="text-white font-semibold">Project Management:</strong> Discount on Certified Associate in Project Management, plus 40% off PSM I.
+                          </p>
+                          <p className="text-xs leading-relaxed text-neutral-300">
+                            <strong className="text-white font-semibold">IT Support:</strong> 30% discount on the CompTIA A+ certification exam.
+                          </p>
+                        </div>
+                        <div className="pt-4 border-t border-white/10 mt-4 text-center">
+                          <a href="https://grow.google/career-dreamer" className="inline-flex items-center gap-1.5 text-xs font-bold text-black bg-[#FFBEA0] hover:bg-white px-4 py-2 rounded-full transition-colors shadow-lg" target="_blank" rel="noopener noreferrer">
+                            Explore Career Dreamer <ArrowRight size={12} />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between mt-auto">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[10px] font-bold">
