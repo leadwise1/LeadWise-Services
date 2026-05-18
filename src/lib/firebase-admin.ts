@@ -15,25 +15,22 @@ try {
 
     if (configString || (clientEmail && privateKey)) {
       // Handle potentially escaped JSON from environment variables
-         const serviceAccount = configString 
+      const serviceAccount = configString 
         ? JSON.parse(configString.trim()) 
         : {
             projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "leadwise-services-rule",
             clientEmail: clientEmail,
             privateKey: privateKey
           };
-
-
       
-           // Normalize private key newlines (handles both JSON and individual variable formats)
-           if (serviceAccount.privateKey) serviceAccount.privateKey = serviceAccount.privateKey.replace(/\\n/g, '\n');
-           if (serviceAccount.private_key) serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+      // Normalize private key newlines (handles both JSON and individual variable formats)
+      if (serviceAccount.privateKey) serviceAccount.privateKey = serviceAccount.privateKey.replace(/\\n/g, '\n');
+      if (serviceAccount.private_key) serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
 
-
-           admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
-            projectId: serviceAccount.project_id || serviceAccount.projectId || "leadwise-services-rule"
-         });
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        projectId: serviceAccount.project_id || serviceAccount.projectId || "leadwise-services-rule"
+      });
       console.log('✅ Firebase Admin initialized successfully');
     } else {
       console.warn("⚠️ Firebase Admin: FIREBASE_ADMIN_SDK_CONFIG is missing from environment.");
