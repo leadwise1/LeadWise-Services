@@ -41,12 +41,14 @@ try {
 }
 
 /**
- * Safely export service instances.
- * Using getters ensures we don't call service methods before the app is ready.
+ * Safely export service instances. 
+ * These will be null if the environment variables are missing (e.g. during build).
  */
 export const adminDb = admin.apps.length > 0 ? admin.firestore() : null;
 export const adminAuth = admin.apps.length > 0 ? admin.auth() : null;
 
+// Global settings for Firestore Admin
+// We use the conditional check here too to satisfy TypeScript
 if (adminDb) {
   adminDb.settings({ ignoreUndefinedProperties: true });
 }

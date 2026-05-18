@@ -3,6 +3,11 @@ import { adminDb, admin } from '@/lib/firebase-admin';
 
 // GET all forum posts
 export async function GET() {
+  if (!adminDb) {
+    console.error("Forum API: adminDb is not initialized.");
+    return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  }
+
   try {
     const postsRef = adminDb.collection("artifacts").doc("leadwise-web").collection("public").doc("data").collection("forumPosts");
     // Sort by newest first
@@ -36,6 +41,11 @@ export async function GET() {
 
 // CREATE a new forum post
 export async function POST(request: NextRequest) {
+  if (!adminDb) {
+    console.error("Forum API: adminDb is not initialized.");
+    return NextResponse.json({ error: 'Database unavailable' }, { status: 500 });
+  }
+
   try {
     const body = await request.json();
     const { title, category, author } = body;
