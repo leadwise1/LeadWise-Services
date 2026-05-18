@@ -456,7 +456,7 @@ function ForumPageContent() {
             </div>
           </div>
           <a 
-            href={process.env.NEXT_PUBLIC_CALENDAR_LINK || "https://calendar.google.com/calendar/appointments/schedules"} 
+            href={process.env.NEXT_PUBLIC_CALENDAR_LINK || "https://calendar.app.google/1AXYeyfAXczZ2wi1A"} 
             target="_blank"
             rel="noopener noreferrer"
             className="whitespace-nowrap bg-white text-blue-600 px-6 py-2.5 rounded-xl font-black hover:bg-[#FFBEA0] transition-all hover:scale-105 shadow-lg shadow-black/20"
@@ -606,6 +606,7 @@ function ForumPageContent() {
         onClose={() => setIntakeOpen(false)} 
         onComplete={() => {
           setIsEnrolled(true);
+          setIntakeOpen(false);
           const intakeData = localStorage.getItem("leadwise_intake");
           if (intakeData) {
              const parsed = JSON.parse(intakeData);
