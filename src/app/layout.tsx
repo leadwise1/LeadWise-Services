@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* Google Analytics / Ad Grant Tag */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-T9GJJL0N2V"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17987808548"
           strategy="afterInteractive"
         />
         <Script id="gtag-init" strategy="afterInteractive">
@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-T9GJJL0N2V');
+            gtag('config', 'AW-17987808548');
           `}
         </Script>
 
