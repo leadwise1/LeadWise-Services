@@ -750,7 +750,7 @@ const CoursesPage = () => {
     setIsEnrolled(true);
     setIntakeOpen(false);
     if (selectedCourse?.externalUrl) {
-      window.open(selectedCourse.externalUrl, '_blank');
+      window.location.href = selectedCourse.externalUrl;
     }
   };
 
