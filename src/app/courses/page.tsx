@@ -78,6 +78,7 @@ const COURSERA_ORG = {
 const frontendCourse: Course = {
   id: "frontend-web-dev",
   title: "Frontend Web Development",
+  externalUrl: "https://www.coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
   subtitle: "Build the visual internet. From landing pages to complex apps.",
   description: "Learn HTML, CSS, and JavaScript with Google's official web.dev curriculum. Build a portfolio that proves you can do the work.",
   duration: "8-10 weeks",
@@ -158,6 +159,7 @@ const frontendCourse: Course = {
 const dataAnalyticsCourse: Course = {
   id: "data-analytics",
   title: "Data Analytics Fundamentals",
+  externalUrl: "https://www.coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
   subtitle: "Decode the data. Drive business decisions.",
   description: "Master the essentials of data analysis: Excel, SQL, and data visualization. Perfect for professionals looking to upskill.",
   duration: "8-10 weeks",
@@ -203,7 +205,7 @@ const cybersecurityCourse: Course = {
   id: "google-cybersecurity-cert",
   title: "Google Cybersecurity Professional Certificate",
   externalProgramId: "google-cybersecurity",
-  externalUrl: "https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
+  externalUrl: "https://www.coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
   subtitle: "Get on the fast track to a career in cybersecurity — powered by Coursera.",
   description: "A 9-course series by Google. Learn Python, Linux, SQL, SIEM tools & more. Earn an industry-recognized credential and prepare for the CompTIA Security+ exam. 100% free through LeadWise Foundation's Grow with Google partnership.",
   duration: "~6 months (10 hrs/week)",
