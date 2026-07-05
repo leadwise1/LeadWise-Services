@@ -23,8 +23,8 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "LeadWise Foundation | Guided Career System",
-  description: "A structured career readiness system built around Google Career Certificate programs hosted on Coursera. We combine structured learning pathways, live mentoring, and workforce readiness support to help learners move from education to employment. Transition from learning to employment with LeadWise Foundation.",
+  title: "LeadWise Foundation | The Career Transition System",
+  description: "Google Career Certificate programs hosted on Coursera. We combine structured learning pathways, live mentoring, and workforce readiness support to help learners transition from learning to employment.",
 };
 
 export default function HomePage() {
@@ -79,7 +79,7 @@ export default function HomePage() {
           <h1 className="text-5xl md:text-7xl font-extrabold mb-8 leading-tight tracking-tight">
             From Learning to Employment — <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#FFBEA0]">
-              A structured career readiness system built around Google Career Certificate programs hosted on Coursera.            </span>
+              Google Career Certificate programs hosted on Coursera. We combine structured learning pathways, live mentoring, and workforce readiness support to help learners transition from learning to employment. </span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-12 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
