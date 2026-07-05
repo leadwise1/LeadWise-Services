@@ -19,7 +19,16 @@ import {
   ChevronUp,
   Globe,
   Users,
-  Trophy
+  Trophy,
+  Compass,
+  Layers,
+  AlertTriangle,
+  BrainCircuit,
+  MessageSquare,
+  BarChart,
+  Target,
+  GraduationCap,
+  Cpu
 } from "lucide-react";
 import { auth, db } from "@/lib/firebase";
 import { signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
@@ -74,186 +83,45 @@ const COURSERA_ORG = {
   id: "PHXqt_bBMgu9thbuJnsLvQ"
 };
 
-// --- DATA: Frontend Course ---
-const frontendCourse: Course = {
-  id: "frontend-web-dev",
-  title: "Frontend Web Development",
-  externalUrl: "https://www.coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
-  subtitle: "Build the visual internet. From landing pages to complex apps.",
-  description: "Learn HTML, CSS, and JavaScript with Google's official web.dev curriculum. Build a portfolio that proves you can do the work.",
-  duration: "8-10 weeks",
-  level: "Beginner to Intermediate",
-  target: "Aspiring web developers, career changers",
-  tags: ["Web Dev", "Freelancing", "Creative"],
-  color: "blue",
-  salaryHook: "$65k - $95k avg. starting salary",
-  modules: [
-    {
-      id: "html-basics",
-      title: "Module 1: HTML Fundamentals",
-      duration: "1-2 weeks",
-      lessons: [
-        {
-          id: "html-intro",
-          title: "Introduction to HTML",
-          resources: [
-            { title: "Learn HTML by Google", type: "documentation", platform: "Google web.dev", url: "https://web.dev/learn/html" },
-            { title: "Semantic HTML Elements", type: "article", platform: "Google Developers", url: "https://developers.google.com/style/semantic-tagging" }
-          ]
-        },
-        {
-          id: "semantic-html",
-          title: "Web Structure & Accessibility",
-          resources: [
-            { title: "Accessibility Fundamentals", type: "documentation", platform: "Google web.dev", url: "https://web.dev/learn/accessibility" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "css-styling",
-      title: "Module 2: CSS & Styling",
-      duration: "2-3 weeks",
-      lessons: [
-        {
-          id: "css-fundamentals",
-          title: "CSS Basics & Box Model",
-          resources: [
-            { title: "Learn CSS by Google", type: "documentation", platform: "Google web.dev", url: "https://web.dev/learn/css" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "javascript-basics",
-      title: "Module 3: JavaScript Fundamentals",
-      duration: "3-4 weeks",
-      lessons: [
-        {
-          id: "js-intro",
-          title: "JavaScript Basics",
-          resources: [
-            { title: "Introduction to JavaScript", type: "interactive", platform: "MDN Web Docs", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "capstone-project",
-      title: "Module 4: Capstone Project",
-      duration: "1-2 weeks",
-      lessons: [
-        {
-          id: "deployment",
-          title: "Professional Deployment",
-          resources: [
-            { title: "Deploying to Vercel", type: "documentation", platform: "Vercel Docs", url: "https://vercel.com/docs/concepts/deployments/overview" }
-          ]
-        }
-      ]
-    }
-  ]
-};
-
-// --- DATA: Analytics Course ---
-const dataAnalyticsCourse: Course = {
-  id: "data-analytics",
-  title: "Data Analytics Fundamentals",
-  externalUrl: "https://www.coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
-  subtitle: "Decode the data. Drive business decisions.",
-  description: "Master the essentials of data analysis: Excel, SQL, and data visualization. Perfect for professionals looking to upskill.",
-  duration: "8-10 weeks",
-  level: "Beginner to Intermediate",
-  target: "Career changers, business professionals",
-  tags: ["SQL", "Business Intelligence", "Growth"],
-  color: "purple",
-  salaryHook: "$70k - $110k avg. starting salary",
-  modules: [
-    {
-      id: "data-analytics-intro",
-      title: "Module 1: Data Analytics Basics",
-      duration: "1 week",
-      lessons: [
-        {
-          id: "what-is-analytics",
-          title: "What is Data Analytics",
-          resources: [
-            { title: "Google Data Analytics Foundations", type: "documentation", platform: "Google Cloud Skills Boost", url: "https://www.cloudskillsboost.google/paths/18" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sql-databases",
-      title: "Module 2: SQL & Databases",
-      duration: "2-3 weeks",
-      lessons: [
-        {
-          id: "sql-basics",
-          title: "SQL Fundamentals",
-          resources: [
-            { title: "SQL Tutorial", type: "interactive", platform: "W3Schools", url: "https://www.w3schools.com/sql/" }
-          ]
-        }
-      ]
-    }
-  ]
-};
-
-// --- DATA: Google Cybersecurity Professional Certificate (Coursera / Grow with Google) ---
+// --- DATA: Google Cybersecurity Professional Certificate ---
 const cybersecurityCourse: Course = {
   id: "google-cybersecurity-cert",
   title: "Google Cybersecurity Professional Certificate",
   externalProgramId: "google-cybersecurity",
-  externalUrl: "https://www.coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
-  subtitle: "Get on the fast track to a career in cybersecurity — powered by Coursera.",
-  description: "A 9-course series by Google. Learn Python, Linux, SQL, SIEM tools & more. Earn an industry-recognized credential and prepare for the CompTIA Security+ exam. 100% free through LeadWise Foundation's Grow with Google partnership.",
-  duration: "~6 months (10 hrs/week)",
+  externalUrl: "https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
+  subtitle: "Prepare for a high-growth career in cybersecurity.",
+  description: "Learn Python, Linux, SQL, SIEM tools, and security frameworks to identify and mitigate risks. Earn an industry-recognized credential and prepare for the CompTIA Security+ exam.",
+  duration: "19 Courses",
   level: "Beginner — No experience required",
   target: "Career changers, job seekers, aspiring cybersecurity analysts",
-  tags: ["Google Career Certificate", "CompTIA Security+", "Cybersecurity"],
+  tags: ["Security", "CompTIA Security+", "Cybersecurity"],
   color: "emerald",
+  salaryHook: "$75k - $105k avg. starting salary",
   modules: [
     {
-      id: "cyber-1-foundations",
-      title: "Course 1: Foundations of Cybersecurity",
-      duration: "~14 hours",
+      id: "cyber-foundations",
+      title: "Foundations & Security Frameworks",
+      duration: "4 Courses",
       lessons: [
         {
-          id: "cyber-1-overview",
-          title: "Welcome to the Exciting World of Cybersecurity",
+          id: "cyber-intro",
+          title: "Introduction to Cybersecurity",
           resources: [
-            { title: "Foundations of Cybersecurity — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/foundations-of-cybersecurity?specialization=google-cybersecurity" }
-          ]
-        },
-        {
-          id: "cyber-1-skills",
-          title: "Core Skills & Knowledge",
-          resources: [
-            { title: "Recognize core skills needed to become a cybersecurity analyst", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/foundations-of-cybersecurity?specialization=google-cybersecurity" },
-            { title: "Identify how security attacks impact business operations", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/foundations-of-cybersecurity?specialization=google-cybersecurity" }
+            { title: "Foundations of Cybersecurity", type: "course", platform: "Coursera", url: "https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc" }
           ]
         }
       ]
     },
     {
-      id: "cyber-2-security-risks",
-      title: "Course 2: Play It Safe — Manage Security Risks",
-      duration: "~11 hours",
+      id: "cyber-tools",
+      title: "Linux, SQL, and Python Tools",
+      duration: "4 Courses",
       lessons: [
         {
-          id: "cyber-2-overview",
-          title: "Threats, Risks & Vulnerabilities",
+          id: "cyber-tech-skills",
+          title: "Technical Skills for Security Analysts",
           resources: [
-            { title: "Manage Security Risks — Full Course", type: "course", platform: "Coursera (Free via LeadWise)", url: "https://www.coursera.org/learn/manage-security-risks?specialization=google-cybersecurity" }
-          ]
-        },
-        {
-          id: "cyber-2-siem",
-          title: "Security Frameworks & SIEM Tools",
-          resources: [
-            { title: "Define commonly used SIEM tools", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks?specialization=google-cybersecurity" },
-            { title: "Use a playbook to respond to threats", type: "lesson", platform: "Coursera", url: "https://www.coursera.org/learn/manage-security-risks?specialization=google-cybersecurity" }
+            { title: "Connect and Protect: Networks and Network Security", type: "course", platform: "Coursera", url: "https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc" }
           ]
         }
       ]
@@ -261,7 +129,69 @@ const cybersecurityCourse: Course = {
   ]
 };
 
-const COURSES = [frontendCourse, dataAnalyticsCourse];
+// --- DATA: Google Data Analytics Professional Certificate ---
+const dataAnalyticsCourse: Course = {
+  id: "data-analytics",
+  title: "Google Data Analytics Professional Certificate",
+  externalUrl: "https://coursera.org/programs/google-data-analytics-professional-certificate-puv0b",
+  subtitle: "Decode the data. Drive business decisions.",
+  description: "Master the essentials of data analysis: spreadsheets, SQL, Tableau, and R programming. Learn how to clean, visualize, and analyze complex datasets.",
+  duration: "9 Courses",
+  level: "Beginner — No experience required",
+  target: "Career changers, business professionals, data enthusiasts",
+  tags: ["SQL", "Tableau", "R Programming"],
+  color: "purple",
+  salaryHook: "$70k - $110k avg. starting salary",
+  modules: [
+    {
+      id: "data-foundations",
+      title: "Data Foundations & Analysis Process",
+      duration: "3 Courses",
+      lessons: [
+        {
+          id: "data-intro",
+          title: "Introduction to Data Analytics",
+          resources: [
+            { title: "Foundations: Data, Data, Everywhere", type: "course", platform: "Coursera", url: "https://coursera.org/programs/google-data-analytics-professional-certificate-puv0b" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+// --- DATA: Google AI Professional Certificate ---
+const aiCourse: Course = {
+  id: "google-ai-cert",
+  title: "Google AI Professional Certificate",
+  externalUrl: "https://coursera.org/programs/ai-fundamental-lfgho",
+  subtitle: "Shape the future with Generative AI and Machine Learning.",
+  description: "Learn how to leverage AI tools to automate workflows, build smart applications, and analyze complex systems. Gain skills in prompting, model tuning, and AI ethics.",
+  duration: "7 Courses",
+  level: "Beginner to Intermediate",
+  target: "Developers, professionals looking to leverage AI",
+  tags: ["Generative AI", "Machine Learning", "Workflow Automation"],
+  color: "blue",
+  salaryHook: "$85k - $130k avg. starting salary",
+  modules: [
+    {
+      id: "ai-foundations",
+      title: "AI Fundamentals & Generative AI Basics",
+      duration: "3 Courses",
+      lessons: [
+        {
+          id: "ai-intro",
+          title: "Introduction to Artificial Intelligence",
+          resources: [
+            { title: "Generative AI Foundations", type: "course", platform: "Coursera", url: "https://coursera.org/programs/ai-fundamental-lfgho" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+const COURSES = [cybersecurityCourse, dataAnalyticsCourse, aiCourse];
 
 // --- COMPONENTS ---
 
@@ -301,7 +231,7 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: IntakeModalP
            await signInAnonymously(auth);
         }
         if (auth.currentUser) {
-          uid = auth.currentUser.uid;
+           uid = auth.currentUser.uid;
         }
       }
 
@@ -571,11 +501,11 @@ function CourseCard({
   isVerified
 }: CourseCardProps) {
   const [showModules, setShowModules] = useState(false);
-  const Icon = course.color === 'blue' ? Terminal : course.color === 'emerald' ? ShieldCheck : BarChart3;
+  const Icon = course.color === 'blue' ? Code : course.color === 'emerald' ? ShieldCheck : BarChart3;
 
   return (
-    <div className="group relative bg-white/5 border border-white/10 hover:border-[#FFBEA0]/30 rounded-[2rem] overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-10px_rgba(255,190,160,0.1)]">
-      <div className="p-8">
+    <div className="group relative bg-white/5 border border-white/10 hover:border-[#FFBEA0]/30 rounded-[2rem] overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-10px_rgba(255,190,160,0.1)] flex flex-col h-full">
+      <div className="p-8 flex-1 flex flex-col">
         <div className="flex items-start justify-between mb-6">
           <div className={`p-3 rounded-2xl ${course.color === 'blue' ? 'bg-blue-500/20 text-blue-300' : course.color === 'emerald' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-purple-500/20 text-purple-300'}`}>
             <Icon size={32} />
@@ -589,41 +519,41 @@ function CourseCard({
           </div>
         </div>
 
-        <h3 className="text-3xl font-bold mb-2 text-white">{course.title}</h3>
-        <p className="text-[#FFBEA0] font-medium mb-4">{course.subtitle}</p>
+        <h3 className="text-2xl font-bold mb-2 text-white leading-snug">{course.title}</h3>
+        <p className="text-[#FFBEA0] font-medium mb-4 text-sm">{course.subtitle}</p>
         
         {course.salaryHook && (
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#FF9E80]/10 border border-[#FF9E80]/20 text-[#FFBEA0] text-sm font-bold mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#FF9E80]/10 border border-[#FF9E80]/20 text-[#FFBEA0] text-sm font-bold mb-4 w-fit">
              <Briefcase size={14} /> {course.salaryHook}
           </div>
         )}
 
-        <p className="text-gray-300 leading-relaxed mb-8">
+        <p className="text-gray-300 leading-relaxed mb-6 text-sm flex-1">
           {course.description}
         </p>
 
-        <div className="flex items-center gap-4 text-sm text-gray-400 mb-6 pb-6 border-b border-white/10">
+        <div className="flex items-center gap-4 text-xs text-gray-400 mb-6 pb-6 border-b border-white/10">
           <span>{course.duration}</span> • <span>{course.level}</span>
         </div>
 
         {/* Progress Display */}
         {isEnrolled && progressPercentage !== undefined && (
-          <div className="mb-8 p-6 bg-white/5 rounded-2xl border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-500">
-             <div className="flex justify-between items-end mb-3">
+          <div className="mb-6 p-4 bg-white/5 rounded-2xl border border-white/10 animate-in fade-in slide-in-from-bottom-2 duration-500">
+             <div className="flex justify-between items-end mb-2">
                 <div>
-                  <p className="text-xs uppercase tracking-widest text-[#FFBEA0] font-bold mb-1">Your Progress</p>
-                  <p className="text-white font-bold">{progressText || `${progressPercentage}% Complete`}</p>
+                  <p className="text-[10px] uppercase tracking-widest text-[#FFBEA0] font-bold mb-0.5">Your Progress</p>
+                  <p className="text-white font-bold text-xs">{progressText || `${progressPercentage}% Complete`}</p>
                 </div>
                 <div className="flex flex-col items-end">
                   {isVerified && (
-                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-[10px] font-bold text-emerald-300 uppercase tracking-wider mb-2 animate-pulse">
-                      <ShieldCheck size={10} /> Verified
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-[9px] font-bold text-emerald-300 uppercase tracking-wider mb-1 animate-pulse">
+                      <ShieldCheck size={9} /> Verified
                     </div>
                   )}
-                  <p className="text-2xl font-black text-white">{progressPercentage}%</p>
+                  <p className="text-lg font-black text-white">{progressPercentage}%</p>
                 </div>
              </div>
-             <Progress.Root className="relative h-3 w-full overflow-hidden rounded-full bg-white/5 border border-white/10">
+             <Progress.Root className="relative h-2 w-full overflow-hidden rounded-full bg-white/5 border border-white/10">
                <Progress.Indicator
                  className="h-full w-full flex-1 bg-gradient-to-r from-[#FF9E80] to-[#FFBEA0] transition-all duration-1000 ease-out"
                  style={{ transform: `translateX(-${100 - progressPercentage}%)` }}
@@ -633,44 +563,44 @@ function CourseCard({
         )}
 
         {/* Action Area */}
-        <div className="space-y-4">
+        <div className="space-y-3 mt-auto">
           {!isEnrolled ? (
              <button 
               onClick={onTriggerIntake}
-              className="w-full py-4 rounded-xl bg-white text-[#090A0F] font-bold hover:bg-[#FFBEA0] transition-colors flex items-center justify-center gap-2 group-hover:shadow-[0_0_20px_rgba(255,190,160,0.4)]"
+              className="w-full py-3.5 rounded-xl bg-white text-[#090A0F] font-bold hover:bg-[#FFBEA0] transition-colors flex items-center justify-center gap-2 group-hover:shadow-[0_0_20px_rgba(255,190,160,0.4)] text-sm"
             >
-              Start Learning Free <ArrowRight size={18} />
+              Start Learning Free <ArrowRight size={16} />
             </button>
           ) : (
             <>
-              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex flex-col gap-3 mb-4">
-                 <div className="flex items-center gap-3 text-green-400">
-                    <CheckCircle size={20} />
-                    <span className="font-semibold text-sm">Enrolled & Syncing with Coursera</span>
+              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-3 flex flex-col gap-2 mb-2">
+                 <div className="flex items-center gap-2 text-green-400 text-xs">
+                    <CheckCircle size={16} />
+                    <span className="font-semibold">Enrolled & Syncing with Coursera</span>
                  </div>
                  {progressPercentage === 100 && (
                    <a 
                     href={certificateUrl || "https://www.coursera.org/accomplishments"} 
                     target="_blank" 
-                    className="w-full py-3 bg-green-500 text-white rounded-lg font-bold text-center hover:bg-green-400 transition-colors shadow-[0_0_20px_rgba(34,197,94,0.4)] flex items-center justify-center gap-2"
+                    className="w-full py-2 bg-green-500 text-white rounded-lg font-bold text-center hover:bg-green-400 transition-colors shadow-[0_0_15px_rgba(34,197,94,0.4)] flex items-center justify-center gap-1.5 text-xs"
                    >
-                     <Globe size={18} /> Download Verified Certificate
+                     <Globe size={14} /> Download Verified Certificate
                    </a>
                  )}
               </div>
               <button 
                 onClick={() => setShowModules(!showModules)}
-                className="w-full py-3 rounded-xl bg-[#FF9E80]/10 text-[#FFBEA0] border border-[#FF9E80]/20 font-bold hover:bg-[#FF9E80]/20 transition-colors flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-xl bg-[#FF9E80]/10 text-[#FFBEA0] border border-[#FF9E80]/20 font-bold hover:bg-[#FF9E80]/20 transition-colors flex items-center justify-center gap-2 text-xs"
               >
                 {showModules ? "Hide Curriculum" : "View Curriculum & Modules"}
-                {showModules ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                {showModules ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
               {!progressPercentage && (
                 <a 
                   href="/api/auth/login"
-                  className="w-full py-3 rounded-xl bg-blue-500/10 text-blue-300 border border-blue-500/20 font-bold hover:bg-blue-500/20 transition-colors flex items-center justify-center gap-2 text-sm"
+                  className="w-full py-2.5 rounded-xl bg-blue-500/10 text-blue-300 border border-blue-500/20 font-bold hover:bg-blue-500/20 transition-colors flex items-center justify-center gap-2 text-xs"
                 >
-                  <Globe size={16} /> Sync Coursera Progress
+                  <Globe size={14} /> Sync Coursera Progress
                 </a>
               )}
             </>
@@ -679,7 +609,7 @@ function CourseCard({
 
         {/* Expanded Curriculum (Only if Enrolled) */}
         {showModules && (
-          <div className="mt-8 space-y-4 animate-in slide-in-from-top-4 duration-300">
+          <div className="mt-6 space-y-3 animate-in slide-in-from-top-4 duration-300">
              {course.modules.map(module => (
                <ExpandableModule 
                  key={module.id} 
@@ -757,7 +687,7 @@ const CoursesPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+    <div className="min-h-screen w-full bg-[#090A0F] bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
       
       {/* --- NAVBAR --- */}
       <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50">
@@ -783,84 +713,348 @@ const CoursesPage = () => {
       </nav>
 
       {/* --- HERO SECTION --- */}
-      <header className="relative pt-20 pb-16 px-4 text-center max-w-5xl mx-auto">
+      <header className="relative pt-24 pb-16 px-4 text-center max-w-5xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-[#FFBEA0]/30 text-[#FFBEA0] text-sm font-semibold mb-6 animate-fade-in">
-          <CheckCircle size={16} /> 100% Free • Self-Paced • Industry-Relevant
+          <Compass size={16} /> The Career Transition System
         </div>
         <p className="text-[#FFBEA0] text-xs font-mono mb-2 opacity-50 uppercase tracking-widest">Partner Portal: {COURSERA_ORG.slug}</p>
         
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-[#FFBEA0]">
-          Don't Just Learn Skills. <br />
-          <span className="text-[#FFBEA0]">Learn to Get Hired.</span>
+          From Learning to Employment — <br />
+          <span className="text-[#FFBEA0]">A Guided Career System Built on Google Career Certificates.</span>
         </h1>
         
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed mb-10">
-          Access free, industry-verified training from a <span className="text-white font-semibold">Google Cloud Partner</span>. 
-          We turn ambition into employable skills—no tuition required.
+        <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-10">
+          LeadWise Foundation operates structured Google Career Certificate programs through Coursera <span className="font-semibold text-white">AND</span> provides live AI mentoring, simulation training, and workforce readiness support.
         </p>
       </header>
 
-      {/* --- PARTNERS BAR --- */}
-      <div className="w-full border-y border-white/5 bg-white/5 backdrop-blur-sm py-8 mb-20">
-        <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-80">
-          <div className="flex items-center gap-3">
-            <div className="font-bold text-2xl tracking-tighter">Google Cloud</div>
-            <div className="h-6 w-px bg-gray-500/50 mx-2"></div>
-            <div className="text-sm uppercase tracking-widest text-gray-400">Build Partner</div>
+      {/* --- SECTION 1: WHAT YOU ARE ENTERING --- */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 border-t border-white/5">
+        <div className="max-w-7xl mx-auto text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-300 text-sm font-bold mb-6 border border-blue-500/20">
+            <Layers size={18} /> Section 1: What You Are Entering
           </div>
-          <div className="flex items-center gap-3">
-            <div className="font-bold text-2xl tracking-tighter">Workspace</div>
-            <div className="h-6 w-px bg-gray-500/50 mx-2"></div>
-            <div className="text-sm uppercase tracking-widest text-gray-400">Authorized Partner</div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">When you join LeadWise, you are not just enrolling in courses.</h2>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">You are entering a career readiness system with 3 integrated layers:</p>
+        </div>
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Layer 1 */}
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl hover:border-green-400/50 transition-colors group">
+            <div className="w-14 h-14 bg-green-500/20 text-green-400 rounded-2xl flex items-center justify-center mb-6">
+              <GraduationCap size={28} />
+            </div>
+            <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-green-400"></span>
+              Learning Layer
+            </h3>
+            <p className="text-gray-400 mb-6 text-sm uppercase tracking-wider font-semibold">(Coursera)</p>
+            <ul className="space-y-4 text-gray-300">
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-green-400" /> Google Cybersecurity Certificate</li>
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-green-400" /> Data Analytics Certificate</li>
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-green-400" /> AI Certificate</li>
+            </ul>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="font-bold text-2xl tracking-tighter">Coursera</div>
-            <div className="h-6 w-px bg-gray-500/50 mx-2"></div>
-            <div className="text-sm uppercase tracking-widest text-gray-400">Grow with Google</div>
+
+          {/* Layer 2 */}
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl hover:border-blue-400/50 transition-colors group">
+            <div className="w-14 h-14 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mb-6">
+              <Activity size={28} />
+            </div>
+            <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-blue-400"></span>
+              Program Layer
+            </h3>
+            <p className="text-gray-400 mb-6 text-sm uppercase tracking-wider font-semibold">(LeadWise Control)</p>
+            <ul className="space-y-4 text-gray-300">
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-blue-400" /> Enrollment management</li>
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-blue-400" /> Structured learning pathways</li>
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-blue-400" /> Cohort tracking</li>
+            </ul>
+          </div>
+
+          {/* Layer 3 */}
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl hover:border-purple-400/50 transition-colors group">
+            <div className="w-14 h-14 bg-purple-500/20 text-purple-400 rounded-2xl flex items-center justify-center mb-6">
+              <Target size={28} />
+            </div>
+            <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-purple-400"></span>
+              Readiness Layer
+            </h3>
+            <p className="text-gray-400 mb-6 text-sm uppercase tracking-wider font-semibold">(Mentoring + Simulation)</p>
+            <ul className="space-y-4 text-gray-300">
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-purple-400" /> Live AI mentoring sessions</li>
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-purple-400" /> Interview simulation (Confidence Lab)</li>
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-purple-400" /> Behavioral training feedback</li>
+              <li className="flex items-center gap-3"><CheckCircle size={18} className="text-purple-400" /> Career coaching</li>
+            </ul>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* --- AVAILABLE LEARNING PATHS --- */}
-      <section className="max-w-7xl mx-auto px-6 pb-24">
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-          Available <span className="text-[#FFBEA0]">Learning Paths</span>
-        </h2>
+      {/* --- SECTION 2: WHY MOST LEARNERS FALL OFF --- */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative bg-black/30 border-y border-white/5">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+           <div>
+             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 text-red-400 text-sm font-bold mb-6 border border-red-500/20">
+               <AlertTriangle size={18} /> Section 2: The Gap
+             </div>
+             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Why Most Learners Fall Off</h2>
+             <p className="text-xl text-gray-400 mb-8">Most platforms stop at learning. Learners struggle because:</p>
+             
+             <div className="space-y-4">
+               {[
+                 "They complete courses but don’t know what comes next",
+                 "They don’t practice interview readiness",
+                 "They don’t receive real feedback on performance",
+                 "They lack accountability systems"
+               ].map((text, i) => (
+                 <div key={i} className="flex gap-4 items-start p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                   <div className="mt-0.5 text-red-400"><X size={20} /></div>
+                   <p className="text-gray-300 text-lg">{text}</p>
+                 </div>
+               ))}
+             </div>
+           </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <CourseCard 
-            course={cybersecurityCourse}
-            isEnrolled={isEnrolled}
-            onTriggerIntake={() => openEnrollment(cybersecurityCourse)}
-            progressPercentage={courseraProgress?.percentage}
-            progressText={courseraProgress?.text}
-            isVerified={courseraProgress?.isVerified}
-          />
+           <div className="relative">
+             <div className="absolute inset-0 bg-[#FF9E80]/10 blur-[100px] rounded-full pointer-events-none"></div>
+             <div className="bg-gradient-to-br from-[#FF9E80]/20 to-transparent border border-[#FF9E80]/30 rounded-3xl p-10 relative backdrop-blur-xl">
+                <h3 className="text-3xl font-bold text-white mb-6">👉 LeadWise exists to close THIS gap.</h3>
+                <p className="text-xl text-[#FFBEA0] leading-relaxed">
+                  We don't just hand you a certificate and wish you luck. We provide the infrastructure, the practice, and the professional network to turn your knowledge into a career.
+                </p>
+             </div>
+           </div>
+        </div>
+      </section>
+
+      {/* --- SECTION 3: LIVE MENTORING SYSTEM --- */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+        
+        <div className="max-w-7xl mx-auto text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 text-purple-300 text-sm font-bold mb-6 border border-purple-500/20">
+            <BrainCircuit size={18} /> Section 3: Your Live Mentoring System
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Confidence Lab + AI Simulation Engine</h2>
+        </div>
+
+        <div className="max-w-5xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-10 md:p-16 shadow-2xl relative">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+             <div>
+               <p className="text-xl text-gray-300 mb-8">
+                 Before applying for jobs, learners step into the simulated environment to:
+               </p>
+               <ul className="space-y-6">
+                 {[
+                   { icon: <MessageSquare size={24} />, text: "Practice real interview scenarios" },
+                   { icon: <Cpu size={24} />, text: "Receive AI feedback on responses" },
+                   { icon: <BarChart size={24} />, text: "Improve communication and structure" },
+                   { icon: <ShieldCheck size={24} />, text: "Build job readiness confidence" }
+                 ].map((item, i) => (
+                   <li key={i} className="flex items-center gap-4">
+                     <div className="w-12 h-12 bg-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center shrink-0">
+                       {item.icon}
+                     </div>
+                     <span className="text-lg text-white font-medium">{item.text}</span>
+                   </li>
+                 ))}
+               </ul>
+             </div>
+             
+             <div className="bg-[#090A0F]/80 border border-purple-500/30 rounded-3xl p-8 relative">
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <span className="w-3 h-3 rounded-full bg-red-500"></span>
+                  <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+                  <span className="w-3 h-3 rounded-full bg-green-500"></span>
+                </div>
+                <div className="space-y-4 mt-6">
+                  <div className="flex gap-4">
+                    <div className="w-10 h-10 rounded-full bg-white/10 shrink-0 flex items-center justify-center text-xs font-bold text-gray-400">User</div>
+                    <div className="bg-white/10 rounded-2xl rounded-tl-none p-4 text-sm text-gray-300 w-full">
+                      <p className="italic">"I handled server configurations by automating..."</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 flex-row-reverse">
+                    <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                      <BrainCircuit size={20} className="text-purple-400" />
+                    </div>
+                    <div className="bg-purple-500/10 border border-purple-500/20 rounded-2xl rounded-tr-none p-4 text-sm text-gray-300 w-full">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">Confidence Engine</span>
+                      </div>
+                      <p className="text-xs text-purple-300">Communication Structure: +18% improvement. Good inclusion of active verbs.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-8 text-center text-lg font-bold text-[#FFBEA0] border-t border-white/10 pt-6">
+                  👉 This transforms learning into performance ability.
+                </div>
+             </div>
+           </div>
+        </div>
+      </section>
+
+      {/* --- SECTION 4: HOW THE SYSTEM WORKS --- */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative bg-black/20 border-y border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FF9E80]/10 text-[#FFBEA0] text-sm font-bold mb-6 border border-[#FF9E80]/20">
+              <Compass size={18} /> Section 4: How The System Works
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">Your Guided 5-Step Process</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+            {[
+              { step: 1, title: "1. Enroll", desc: "You are placed into a Google Career Certificate program via Coursera." },
+              { step: 2, title: "2. Learn", desc: "Coursera delivers structured curriculum + certification." },
+              { step: 3, title: "3. Practice", desc: "LeadWise AI Mentoring + Confidence Lab activates coaching and feedback." },
+              { step: 4, title: "4. Prepare", desc: "Resume & LinkedIn optimization, job readiness checklist, and coaching." },
+              { step: 5, title: "5. Transition", desc: "Learner becomes job-ready and enters employment pipeline." }
+            ].map((item, i) => (
+              <div key={i} className="relative group">
+                <div className="bg-white/5 border border-white/10 p-6 rounded-3xl h-full hover:bg-white/10 hover:border-[#FFBEA0]/50 transition-all z-10 relative">
+                  <div className="text-[#FFBEA0] font-black text-4xl mb-4 opacity-30 group-hover:opacity-100 transition-opacity">0{item.step}</div>
+                  <h3 className="text-lg font-bold mb-2 text-white">{item.title}</h3>
+                  <p className="text-xs text-gray-400 leading-relaxed">{item.desc}</p>
+                </div>
+                {i < 4 && (
+                  <div className="hidden md:block absolute top-1/2 right-0 w-6 h-px bg-white/20 translate-x-full z-0"></div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- AVAILABLE LEARNING PATHS (Step 2 Implementation) --- */}
+      <section className="max-w-7xl mx-auto px-6 py-24">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Select Your <span className="text-[#FFBEA0]">Career Certificate Path</span>
+          </h2>
+          <p className="text-gray-400 max-w-xl mx-auto">
+            Kickstart step 1 & 2 by choosing one of the verified Google Career Certificate tracks below. 100% free of tuition.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8 items-stretch">
           {COURSES.map(course => (
             <CourseCard 
               key={course.id}
               course={course}
               isEnrolled={isEnrolled}
               onTriggerIntake={() => openEnrollment(course)}
+              progressPercentage={course.id === 'google-cybersecurity-cert' ? courseraProgress?.percentage : undefined}
+              progressText={course.id === 'google-cybersecurity-cert' ? courseraProgress?.text : undefined}
+              isVerified={course.id === 'google-cybersecurity-cert' ? courseraProgress?.isVerified : undefined}
             />
           ))}
         </div>
       </section>
 
-      {/* --- COMMUNITY CALL TO ACTION --- */}
-      <section className="max-w-7xl mx-auto px-6 pb-24">
-        <div className="bg-gradient-to-br from-[#1B2735] to-black border border-white/10 rounded-[3rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl relative overflow-hidden group">
+      {/* --- SECTION 5: WHAT HAPPENS AFTER YOU COMPLETE --- */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative bg-black/20 border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">What Happens After You Complete Your Certificate</h2>
+            <p className="text-xl text-[#FFBEA0] max-w-3xl mb-4 font-semibold">
+              You don’t stop here — your career activation begins now.
+            </p>
+            <p className="text-lg text-gray-300 max-w-3xl border-l-4 border-[#FFBEA0] pl-4 italic leading-relaxed">
+              After completing your Google Career Certificate through LeadWise + Coursera, you unlock a career transition system designed to help you move from learning → employment.
+            </p>
+          </div>
+
+          <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <Briefcase className="text-[#FFBEA0]" /> Your Career Activation Tools
+          </h3>
+          <p className="text-gray-400 mb-10 font-medium">These are not optional extras — they are part of your job readiness pathway.</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Tool 1 */}
+            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#FFBEA0]/50 transition-colors">
+              <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <span className="text-[#FFBEA0]">1.</span> Employer Network Access
+              </h4>
+              <p className="text-sm text-gray-400 mb-6 font-semibold">(CareerCircle Integration)</p>
+              <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed">
+                Get access to a network of 150+ hiring employers actively considering Google Career Certificate graduates. Explore job openings, connect with hiring partners, apply to entry-level roles, and get visibility with employers like Verizon, Deloitte, Siemens, and more.
+              </p>
+              <div className="bg-[#FF9E80]/10 border border-[#FF9E80]/20 p-3 rounded-xl text-xs font-bold text-[#FFBEA0] mt-auto">
+                👉 This is your first step into the job market ecosystem.
+              </div>
+            </div>
+
+            {/* Tool 2 */}
+            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#FFBEA0]/50 transition-colors">
+              <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <span className="text-[#FFBEA0]">2.</span> 360° Career Profile
+              </h4>
+              <p className="text-sm text-gray-400 mb-6 font-semibold">(Stand-Out System)</p>
+              <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed">
+                Build a professional profile that goes beyond a resume. Includes skills gained from your certificate, learning progress data, projects and coursework highlights, and strengths from assessments and experience.
+              </p>
+              <div className="bg-[#FF9E80]/10 border border-[#FF9E80]/20 p-3 rounded-xl text-xs font-bold text-[#FFBEA0] mt-auto">
+                👉 This helps employers see you as a whole candidate, not just a document.
+              </div>
+            </div>
+
+            {/* Tool 3 */}
+            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#FFBEA0]/50 transition-colors">
+              <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <span className="text-[#FFBEA0]">3.</span> Career Readiness Support
+              </h4>
+              <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed mt-2">
+                Once you complete your certificate, you gain access to resume building tools, interview preparation guides, career path recommendations, job search strategy support, and virtual hiring events & webinars.
+              </p>
+              <div className="bg-[#FF9E80]/10 border border-[#FF9E80]/20 p-3 rounded-xl text-xs font-bold text-[#FFBEA0] mt-auto">
+                👉 This is where learning turns into job strategy.
+              </div>
+            </div>
+
+            {/* Tool 4 */}
+            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#FFBEA0]/50 transition-colors">
+              <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <span className="text-[#FFBEA0]">4.</span> 1:1 Career Coaching Support
+              </h4>
+              <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed mt-2">
+                Get personalized support from career advisors who help you refine your resume, prepare for interviews, understand job requirements, and position yourself for entry-level roles.
+              </p>
+              <div className="bg-[#FF9E80]/10 border border-[#FF9E80]/20 p-3 rounded-xl text-xs font-bold text-[#FFBEA0] mt-auto">
+                👉 This is your human support layer after certification.
+              </div>
+            </div>
+
+            {/* Tool 5 */}
+            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col md:col-span-2 lg:col-span-1 hover:border-[#FFBEA0]/50 transition-colors">
+              <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <span className="text-[#FFBEA0]">5.</span> Optional Advanced Tools
+              </h4>
+              <p className="text-sm text-gray-400 mb-6 font-semibold">(Career Expansion)</p>
+              <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed">
+                Explore additional tools to strengthen your profile: career exploration tools (AI-guided path discovery), industry certifications discounts (where available), and skill expansion recommendations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- SECTION 6: OUTCOME STATEMENT (COMMUNITY) --- */}
+      <section className="py-24 px-6 border-t border-white/10 relative">
+        <div className="max-w-7xl mx-auto bg-gradient-to-br from-[#1B2735] to-black border border-white/10 rounded-[3rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -mr-48 -mt-48 transition-all group-hover:bg-blue-500/20" />
           
-          <div className="flex-1 relative z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-bold mb-6 uppercase tracking-widest">
-              <Users size={16} /> Digital Guardians Community
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white text-left">
-              Don't Learn in <span className="text-[#FFBEA0]">Isolation.</span>
+          <div className="flex-1 relative z-10 text-left">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white leading-tight">
+              LeadWise is not a course platform.
             </h2>
-            <p className="text-xl text-gray-400 mb-8 max-w-xl leading-relaxed text-left">
-              Join the Hub to connect with other learners, attend weekly sync sessions, and track your progress on the global leaderboard.
+            <p className="text-xl text-[#FFBEA0] mb-8 font-light leading-relaxed">
+              It is a career transformation system combining Coursera learning, AI simulation mentoring, and structured workforce readiness support.
             </p>
             <div className="flex flex-wrap gap-4">
               <a 
@@ -869,19 +1063,13 @@ const CoursesPage = () => {
               >
                 Enter Community Hub <ArrowRight size={20} />
               </a>
-              <a 
-                href="/forum/leaderboard" 
-                className="bg-white/5 border border-white/10 text-white px-8 py-4 rounded-2xl font-bold hover:bg-white/10 transition-all flex items-center gap-3"
-              >
-                <Trophy size={20} className="text-yellow-400" /> View Leaderboard
-              </a>
             </div>
           </div>
-          
+
           <div className="flex-1 w-full max-w-sm relative z-10 hidden lg:block">
             <div className="bg-neutral-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 transform rotate-2 group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white">SJ</div>
+                <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white">LW</div>
                 <div className="flex-1 text-left">
                   <div className="h-3 bg-white/20 w-3/4 rounded mb-2"></div>
                   <div className="h-2 bg-white/10 w-1/2 rounded"></div>
@@ -890,14 +1078,12 @@ const CoursesPage = () => {
               <div className="space-y-3">
                 <div className="h-2 bg-white/10 w-full rounded"></div>
                 <div className="h-2 bg-white/10 w-5/6 rounded"></div>
-                <div className="h-2 bg-white/10 w-4/6 rounded"></div>
               </div>
               <div className="mt-8 flex justify-between items-center">
                 <div className="flex -space-x-3">
-                  {[1,2,3,4].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-[#1B2735] bg-neutral-800" />)}
-                  <div className="w-8 h-8 rounded-full border-2 border-[#1B2735] bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">+12</div>
+                  {[1,2,3].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-[#1B2735] bg-neutral-800" />)}
                 </div>
-                <div className="text-blue-400 text-xs font-bold uppercase tracking-widest">Live Syncing...</div>
+                <div className="text-blue-400 text-xs font-bold uppercase tracking-widest">Digital Guardians Hub</div>
               </div>
             </div>
           </div>
