@@ -24,7 +24,7 @@ import {
 
 export const metadata: Metadata = {
   title: "LeadWise Foundation | Guided Career System",
-  description: "A Guided Career System Built on Google Career Certificates. Transition from learning to employment with LeadWise Foundation.",
+  description: "A structured career readiness system built around Google Career Certificate programs hosted on Coursera. We combine structured learning pathways, live mentoring, and workforce readiness support to help learners move from education to employment. Transition from learning to employment with LeadWise Foundation.",
 };
 
 export default function HomePage() {
@@ -79,13 +79,11 @@ export default function HomePage() {
           <h1 className="text-5xl md:text-7xl font-extrabold mb-8 leading-tight tracking-tight">
             From Learning to Employment — <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#FFBEA0]">
-              A Guided Career System Built on Google Career Certificates.
-            </span>
+              A structured career readiness system built around Google Career Certificate programs hosted on Coursera.            </span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-12 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
-            LeadWise Foundation operates structured Google Career Certificate programs through Coursera <span className="font-semibold text-white">AND</span> provides live AI mentoring, simulation training, and workforce readiness support.
-          </p>
+             We combine structured learning pathways, live mentoring, and workforce readiness support to help learners move from education to employment.          </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <a
@@ -105,8 +103,11 @@ export default function HomePage() {
             <Layers size={18} /> Section 1: What You Are Entering
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">When you join LeadWise, you are not just enrolling in courses.</h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">You are entering a career readiness system with 3 integrated layers:</p>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">You are entering a structured 3 career pathway built on 3 integrated layers”:</p>
         </div>
+        <p className="text-xl md:text-2xl mb-12 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
+           Certification → Readiness → Employment. </p>
+          
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Layer 1 */}
@@ -193,8 +194,7 @@ export default function HomePage() {
              <div className="bg-gradient-to-br from-[#FF9E80]/20 to-transparent border border-[#FF9E80]/30 rounded-3xl p-10 relative backdrop-blur-xl">
                 <h3 className="text-3xl font-bold text-white mb-6">👉 LeadWise exists to close THIS gap.</h3>
                 <p className="text-xl text-[#FFBEA0] leading-relaxed">
-                  We don't just hand you a certificate and wish you luck. We provide the infrastructure, the practice, and the professional network to turn your knowledge into a career.
-                </p>
+                   We don’t stop at certification — we convert learning into job readiness through structured practice, mentoring, and employer alignment. </p>
              </div>
            </div>
         </div>
