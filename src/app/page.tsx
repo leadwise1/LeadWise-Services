@@ -79,7 +79,7 @@ export default function HomePage() {
           <h1 className="text-5xl md:text-7xl font-extrabold mb-8 leading-tight tracking-tight">
             From Learning to Employment — <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#FFBEA0]">
-              Google Career Certificate programs hosted on Coursera. We combine structured learning pathways, live mentoring, and workforce readiness support to help learners transition from learning to employment. </span>
+              LeadWise Offers Google Career Certificate Programs Hosted On Coursera.  </span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-12 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
@@ -286,11 +286,11 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             {[
-              { step: 1, title: "Enroll", desc: "You are placed into a Google Career Certificate program via Coursera." },
-              { step: 2, title: "Learn", desc: "Coursera delivers structured curriculum + certification." },
-              { step: 3, title: "Practice", desc: "LeadWise AI Mentoring + Confidence Lab activates coaching & feedback." },
-              { step: 4, title: "Prepare", desc: "Resume building, job readiness checklist, and career coaching." },
-              { step: 5, title: "Transition", desc: "Learner becomes job-ready and enters employment pipeline." }
+              { step: 1, title: "Enroll", desc: "LeadWise + Google + Coursera." },
+              { step: 2, title: "Learn", desc: "Structured Curriculum + Certification." },
+              { step: 3, title: "Practice", desc: "Human mentorship From Industry Professionals (CSR partners + engineers) + Master Behavioral And Technical Interviews WithPrecise AI Feedback Based On The STAR Method." },
+              { step: 4, title: "Prepare", desc: "ATS Optimized Resume With Cover Letter, Job Readiness Checklist, And Career Coaching." },
+              { step: 5, title: "Transition", desc: "Learner Becomes Job-Ready and Enters Employment Pipeline." }
             ].map((item, i) => (
               <div key={i} className="relative group">
                 <div className="bg-white/5 border border-white/10 p-6 rounded-3xl h-full hover:bg-white/10 hover:border-[#FFBEA0]/50 transition-all z-10 relative">
