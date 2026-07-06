@@ -118,9 +118,15 @@ const COURSES = [
   }
 ];
 
+// --- TYPES ---
+interface Resource { title: string; type: string; platform: string; url: string; }
+interface Lesson { id: string; title: string; resources: Resource[]; }
+interface Module { id: string; title: string; duration: string; lessons: Lesson[]; }
+interface Course { id: string; title: string; subtitle: string; description: string; duration: string; level: string; tags: string[]; color: string; salaryHook?: string; modules: Module[]; externalUrl?: string; }
+
 // --- COMPONENTS ---
 
-function IntakeModal({ isOpen, onClose, onComplete, targetCourse }) {
+function IntakeModal({ isOpen, onClose, onComplete, targetCourse }: { isOpen: boolean; onClose: () => void; onComplete: () => void; targetCourse: Course | null }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -129,7 +135,7 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     // Simulating API/Firebase call for the preview
@@ -247,7 +253,7 @@ function IntakeModal({ isOpen, onClose, onComplete, targetCourse }) {
   );
 }
 
-function ProtectedResource({ resource, isEnrolled, onTriggerIntake }) {
+function ProtectedResource({ resource, isEnrolled, onTriggerIntake }: { resource: Resource; isEnrolled: boolean; onTriggerIntake: () => void }) {
   return (
     <div onClick={!isEnrolled ? onTriggerIntake : undefined} className={`flex items-start gap-3 p-4 rounded-xl transition-all duration-200 group relative ${isEnrolled ? "bg-white/5 hover:bg-white/10 border border-white/5 cursor-pointer" : "bg-black/20 border border-white/5 cursor-not-allowed opacity-60"}`}>
       <div className="flex-1">
@@ -264,7 +270,7 @@ function ProtectedResource({ resource, isEnrolled, onTriggerIntake }) {
   );
 }
 
-function ExpandableModule({ module, isEnrolled, onTriggerIntake }) {
+function ExpandableModule({ module, isEnrolled, onTriggerIntake }: { module: Module; isEnrolled: boolean; onTriggerIntake: () => void }) {
   const [expanded, setExpanded] = useState(false);
   return (
     <div className="border border-white/10 rounded-xl overflow-hidden bg-white/5 transition-all duration-200">
@@ -293,7 +299,7 @@ function ExpandableModule({ module, isEnrolled, onTriggerIntake }) {
   );
 }
 
-function CourseCard({ course, isEnrolled, onTriggerIntake }) {
+function CourseCard({ course, isEnrolled, onTriggerIntake }: { course: Course; isEnrolled: boolean; onTriggerIntake: () => void }) {
   const [showModules, setShowModules] = useState(false);
   const Icon = course.color === 'blue' ? Code : course.color === 'emerald' ? ShieldCheck : BarChart3;
 
@@ -357,7 +363,7 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }) {
 
 // --- PAGE VIEWS ---
 
-function SystemServicesView({ navigateTo }) {
+function SystemServicesView({ navigateTo }: { navigateTo: (view: string) => void }) {
   return (
     <div className="animate-in fade-in duration-500">
       {/* HERO SECTION */}
@@ -467,10 +473,10 @@ function SystemServicesView({ navigateTo }) {
 
 function CoursesView() {
   const [intakeOpen, setIntakeOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
 
-  const openEnrollment = (course) => {
+  const openEnrollment = (course: Course) => {
     setSelectedCourse(course);
     setIntakeOpen(true);
   };
