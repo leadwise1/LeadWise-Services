@@ -97,51 +97,20 @@ export default function HomePage() {
       </section>
 
 {/* --- SECTION 1: WHAT YOU ARE ENTERING --- */}
-       <section className="py-24 px-4 sm:px-6 lg:px-8 relative border-t border-white/5">
-       <div className="max-w-7xl mx-auto text-center mb-16">
-    
-    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-300 text-sm font-bold mb-6 border border-blue-500/20">
-      <Layers size={18} /> Section 1: What You Are Entering
-    </div>
+      <section className="py-24 px-4 sm:px-6 lg:px-8 relative border-t border-white/5">
+        <div className="max-w-7xl mx-auto text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-300 text-sm font-bold mb-6 border border-blue-500/20">
+            <Layers size={18} /> Section 1: What You Are Entering
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">When you join LeadWise, you are not just enrolling in courses.</h2>
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">You are entering a structured career pathway built on three integrated layers:</p>
+          <p className="text-xl md:text-2xl mt-8 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
+            Certification → Readiness → Employment
+          </p>
+        </div>
 
-    <h2 className="text-4xl md:text-5xl font-bold mb-6">
-      When you join LeadWise, you are not just enrolling in courses.
-    </h2>
-
-    <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-      You are entering a structured career pathway built on three integrated layers:
-    </p>
-
-    <p className="text-xl md:text-2xl mt-8 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
-      Certification → Readiness → Employment
-    </p>
-
-  </div>
-
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-    {/* --- SECTION 1: WHAT YOU ARE ENTERING --- */}
-<section className="py-24 px-4 sm:px-6 lg:px-8 relative border-t border-white/5">
-  <div className="max-w-7xl mx-auto text-center mb-16">
-    
-    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-300 text-sm font-bold mb-6 border border-blue-500/20">
-      <Layers size={18} /> Section 1: What You Are Entering
-    </div>
-
-    <h2 className="text-4xl md:text-5xl font-bold mb-6">
-      When you join LeadWise, you are not just enrolling in courses.
-    </h2>
-
-    <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-      You are entering a structured career pathway built on three integrated layers:
-    </p>
-
-    <p className="text-xl md:text-2xl mt-8 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
-      Certification → Readiness → Employment
-    </p>
-
-  </div>
-
-  <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">{/* Layer 1 */}
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Layer 1 */}
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl hover:border-green-400/50 transition-colors group">
             <div className="w-14 h-14 bg-green-500/20 text-green-400 rounded-2xl flex items-center justify-center mb-6">
               <GraduationCap size={28} />
@@ -411,6 +380,7 @@ export default function HomePage() {
                 👉 This is your human support layer after certification.
               </div>
             </div>
+          </div>
         </div>
       </section>
 
