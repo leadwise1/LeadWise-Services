@@ -138,13 +138,11 @@ function IntakeModal({
     setLoading(true);
     setError("");
     try {
+      // ✅ Only anonymous demographic data is sent — name and email are NOT stored
       const res = await fetch("/api/intake", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
           zipCode: formData.zipCode,
           householdIncome: formData.householdIncome,
           employmentStatus: formData.employmentStatus,
