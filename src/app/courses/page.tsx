@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
-  Code,
-  Database,
   CheckCircle,
   Briefcase,
   ArrowRight,
@@ -17,8 +15,6 @@ import {
   ChevronUp,
   BrainCircuit,
 } from "lucide-react";
-import { db } from "@/lib/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 interface Resource { title: string; type: string; platform: string; url: string; }
@@ -142,18 +138,21 @@ function IntakeModal({
     setLoading(true);
     setError("");
     try {
-      // Save anonymous learner intake to Firestore
-      await addDoc(collection(db, "learner_intakes"), {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        zipCode: formData.zipCode,
-        householdIncome: formData.householdIncome,
-        employmentStatus: formData.employmentStatus,
-        courseId: targetCourse?.id ?? "unknown",
-        courseTitle: targetCourse?.title ?? "unknown",
-        enrolledAt: serverTimestamp(),
+      const res = await fetch("/api/intake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          zipCode: formData.zipCode,
+          householdIncome: formData.householdIncome,
+          employmentStatus: formData.employmentStatus,
+          courseId: targetCourse?.id ?? "unknown",
+          courseTitle: targetCourse?.title ?? "unknown",
+        }),
       });
+      if (!res.ok) throw new Error(await res.text());
       setLoading(false);
       onComplete();
     } catch (err) {
