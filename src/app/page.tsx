@@ -96,21 +96,52 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- SECTION 1: WHAT YOU ARE ENTERING --- */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 relative border-t border-white/5">
-        <div className="max-w-7xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-300 text-sm font-bold mb-6 border border-blue-500/20">
-            <Layers size={18} /> Section 1: What You Are Entering
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">When you join LeadWise, you are not just enrolling in courses.</h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">You are entering a structured 3 career pathway built on 3 integrated layers”:</p>
-        </div>
-        <p className="text-xl md:text-2xl mb-12 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
-           Certification → Readiness → Employment. </p>
-          
+{/* --- SECTION 1: WHAT YOU ARE ENTERING --- */}
+       <section className="py-24 px-4 sm:px-6 lg:px-8 relative border-t border-white/5">
+       <div className="max-w-7xl mx-auto text-center mb-16">
+    
+    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-300 text-sm font-bold mb-6 border border-blue-500/20">
+      <Layers size={18} /> Section 1: What You Are Entering
+    </div>
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Layer 1 */}
+    <h2 className="text-4xl md:text-5xl font-bold mb-6">
+      When you join LeadWise, you are not just enrolling in courses.
+    </h2>
+
+    <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+      You are entering a structured career pathway built on three integrated layers:
+    </p>
+
+    <p className="text-xl md:text-2xl mt-8 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
+      Certification → Readiness → Employment
+    </p>
+
+  </div>
+
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+    {/* --- SECTION 1: WHAT YOU ARE ENTERING --- */}
+<section className="py-24 px-4 sm:px-6 lg:px-8 relative border-t border-white/5">
+  <div className="max-w-7xl mx-auto text-center mb-16">
+    
+    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-300 text-sm font-bold mb-6 border border-blue-500/20">
+      <Layers size={18} /> Section 1: What You Are Entering
+    </div>
+
+    <h2 className="text-4xl md:text-5xl font-bold mb-6">
+      When you join LeadWise, you are not just enrolling in courses.
+    </h2>
+
+    <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+      You are entering a structured career pathway built on three integrated layers:
+    </p>
+
+    <p className="text-xl md:text-2xl mt-8 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
+      Certification → Readiness → Employment
+    </p>
+
+  </div>
+
+  <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">{/* Layer 1 */}
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl hover:border-green-400/50 transition-colors group">
             <div className="w-14 h-14 bg-green-500/20 text-green-400 rounded-2xl flex items-center justify-center mb-6">
               <GraduationCap size={28} />
@@ -288,7 +319,7 @@ export default function HomePage() {
             {[
               { step: 1, title: "Enroll", desc: "LeadWise + Google + Coursera." },
               { step: 2, title: "Learn", desc: "Structured Curriculum + Certification." },
-              { step: 3, title: "Practice", desc: "Human mentorship From Industry Professionals (CSR partners + engineers) + Master Behavioral And Technical Interviews WithPrecise AI Feedback Based On The STAR Method." },
+              { step: 3, title: "Practice", desc: "1:1 mentorship from industry professionals (CSR partners and engineers from companies such as Google, Dell, and TI) combined with AI-powered interview simulation and STAR-based feedback in the Confidence Lab." },
               { step: 4, title: "Prepare", desc: "ATS Optimized Resume With Cover Letter, Job Readiness Checklist, And Career Coaching." },
               { step: 5, title: "Transition", desc: "Learner Becomes Job-Ready and Enters Employment Pipeline." }
             ].map((item, i) => (
@@ -380,18 +411,6 @@ export default function HomePage() {
                 👉 This is your human support layer after certification.
               </div>
             </div>
-
-            {/* Tool 5 */}
-            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col md:col-span-2 lg:col-span-1 hover:border-[#FFBEA0]/50 transition-colors">
-              <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-[#FFBEA0]">5.</span> Optional Advanced Tools
-              </h4>
-              <p className="text-sm text-gray-400 mb-6 font-semibold">(Career Expansion)</p>
-              <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed">
-                Explore additional tools to strengthen your profile: career exploration tools (AI-guided path discovery), industry certifications discounts (where available), and skill expansion recommendations.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
