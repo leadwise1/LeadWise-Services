@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import {
   CheckCircle,
@@ -17,6 +17,7 @@ import {
   GraduationCap,
   Users,
   Star,
+  Trophy,
 } from "lucide-react";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
@@ -521,24 +522,88 @@ export default function CoursesPage() {
         </div>
       </section>
 
-      {/* ── CTA STRIP ── */}
-      <section className="max-w-5xl mx-auto px-6 pb-20">
-        <div className="bg-slate-900 rounded-3xl p-10 text-center text-white">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3">Not sure which track is right for you?</h2>
-          <p className="text-slate-400 mb-7 max-w-xl mx-auto">Learn how LeadWise's guided career system helps you go from learning to employment.</p>
-          <Link href="/" className="inline-flex items-center gap-2 bg-orange-500 text-white px-8 py-4 rounded-full font-black hover:bg-orange-400 transition-colors">
-            Explore the System <ArrowRight size={18} />
-          </Link>
+      {/* --- COMMUNITY CALL TO ACTION --- */}
+      <section className="max-w-7xl mx-auto px-6 pb-24">
+        <div className="bg-gradient-to-br from-[#1B2735] to-black border border-white/10 rounded-[3rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -mr-48 -mt-48 transition-all group-hover:bg-blue-500/20" />
+
+          <div className="flex-1 relative z-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-bold mb-6 uppercase tracking-widest">
+              <Users size={16} /> Digital Guardians Community
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white text-left">
+              Don&apos;t Learn in <span className="text-[#FFBEA0]">Isolation.</span>
+            </h2>
+            <p className="text-xl text-gray-400 mb-8 max-w-xl leading-relaxed text-left">
+              Join the Hub to connect with other learners, attend weekly sync sessions, and track your progress on the global leaderboard.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="https://services.letsleadwise.org/forum"
+                className="bg-white text-[#1B2735] px-8 py-4 rounded-2xl font-black hover:bg-[#FFBEA0] transition-all transform hover:scale-105 flex items-center gap-3 shadow-xl"
+              >
+                Enter Community Hub <ArrowRight size={20} />
+              </a>
+              <a
+                href="https://services.letsleadwise.org/forum/leaderboard"
+                className="bg-white/5 border border-white/10 text-white px-8 py-4 rounded-2xl font-bold hover:bg-white/10 transition-all flex items-center gap-3"
+              >
+                <Trophy size={20} className="text-yellow-400" /> View Leaderboard
+              </a>
+            </div>
+          </div>
+
+          <div className="flex-1 w-full max-w-sm relative z-10 hidden lg:block">
+            <div className="bg-neutral-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 transform rotate-2 group-hover:rotate-0 transition-transform duration-500 shadow-2xl">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center font-bold text-white">SJ</div>
+                <div className="flex-1 text-left">
+                  <div className="h-3 bg-white/20 w-3/4 rounded mb-2"></div>
+                  <div className="h-2 bg-white/10 w-1/2 rounded"></div>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="h-2 bg-white/10 w-full rounded"></div>
+                <div className="h-2 bg-white/10 w-5/6 rounded"></div>
+                <div className="h-2 bg-white/10 w-4/6 rounded"></div>
+              </div>
+              <div className="mt-8 flex justify-between items-center">
+                <div className="flex -space-x-3">
+                  {[1,2,3,4].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-[#1B2735] bg-neutral-800" />)}
+                  <div className="w-8 h-8 rounded-full border-2 border-[#1B2735] bg-blue-600 flex items-center justify-center text-[10px] font-bold text-white">+12</div>
+                </div>
+                <div className="text-blue-400 text-xs font-bold uppercase tracking-widest">Live Syncing...</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── INTAKE MODAL ── */}
       <IntakeModal
         isOpen={intakeOpen}
         onClose={() => setIntakeOpen(false)}
         onComplete={handleEnrollmentComplete}
         targetCourse={selectedCourse}
       />
+
+      {/* --- FOOTER --- */}
+      <footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <img src="/logolw.jpg" alt="LeadWise Logo" className="w-8 h-8 rounded-lg object-cover" />
+            <span className="font-semibold text-gray-300">LeadWise Foundation</span>
+          </div>
+          <p className="text-sm">&copy; {new Date().getFullYear()} LeadWise Foundation. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
+  );
+}
+
+export default function CoursesPageWrapper() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><Loader2 className="animate-spin text-gray-400" /></div>}>
+      <CoursesPage />
+    </Suspense>
   );
 }
