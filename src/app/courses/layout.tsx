@@ -39,7 +39,7 @@ export const metadata = {
 
 export default function CoursesLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+    <div className="min-h-screen w-full bg-gray-50 text-gray-900 font-sans selection:bg-orange-200 selection:text-gray-900">
       {/* Global Google Ads gtag snippet (AW-17987808548) */}
       <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17987808548"></script>
       <script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-17987808548');` }} />
@@ -50,3 +50,4 @@ export default function CoursesLayout({ children }: { children: React.ReactNode 
     </div>
   );
 }
+
