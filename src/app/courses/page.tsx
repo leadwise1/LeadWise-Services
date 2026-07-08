@@ -435,7 +435,7 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: {
 }
 
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
-export default function CoursesPage() {
+function CoursesPage() {
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [enrolledCourseIds, setEnrolledCourseIds] = useState<Set<string>>(new Set());
