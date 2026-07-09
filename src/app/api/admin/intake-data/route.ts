@@ -19,8 +19,9 @@ export async function GET(req: NextRequest) {
     }
 
     const snapshot = await adminDb.collection("learner_intakes").orderBy("enrolledAt", "desc").get();
+    const legacySnapshot = await adminDb.collectionGroup("profile").get();
     
-    const students = snapshot.docs.map(doc => {
+    let students = snapshot.docs.map(doc => {
       const data = doc.data();
       return {
         id: data.studentId || doc.id,
@@ -34,6 +35,27 @@ export async function GET(req: NextRequest) {
         enrolledAt: data.enrolledAt ? data.enrolledAt.toDate().toISOString() : new Date().toISOString()
       };
     });
+
+    legacySnapshot.docs.forEach(doc => {
+      if (doc.id === "intake" || doc.data().email) {
+        const data = doc.data();
+        students.push({
+          id: data.participantId || data.studentId || doc.ref.parent.parent?.id || doc.id,
+          firstName: data.firstName || null,
+          lastName: data.lastName || null,
+          email: data.email || null,
+          zipCode: data.zipCode || "N/A",
+          householdIncome: data.incomeBracket || data.householdIncome || "N/A",
+          employmentStatus: data.employmentStatus || "N/A",
+          status: data.status || "Active",
+          enrolledAt: data.enrolledAt ? (typeof data.enrolledAt === 'string' ? data.enrolledAt : data.enrolledAt.toDate().toISOString()) : new Date().toISOString()
+        });
+      }
+    });
+
+    // Sort combined results by enrolledAt descending
+    students.sort((a, b) => new Date(b.enrolledAt).getTime() - new Date(a.enrolledAt).getTime());
+
 
     return NextResponse.json(students, { status: 200 });
   } catch (err: unknown) {
