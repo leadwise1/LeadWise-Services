@@ -6,6 +6,9 @@ import { Loader2, Printer, Filter, ShieldAlert, Lock, AlertTriangle } from "luci
 
 interface StudentRecord {
   id: string; 
+  firstName?: string;
+  lastName?: string;
+  email?: string;
   zipCode: string;
   householdIncome: string;
   employmentStatus: string;
@@ -19,6 +22,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [incomeFilter, setIncomeFilter] = useState("All");
+  const [showDetailedLedger, setShowDetailedLedger] = useState(false);
   const [debugLog, setDebugLog] = useState<string[]>([]);
 
   const addLog = (msg: string) => setDebugLog(prev => [...prev, `${new Date().toLocaleTimeString()}: ${msg}`]);
@@ -102,11 +106,19 @@ export default function AdminPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
                <ShieldAlert className="w-6 h-6 text-blue-600" />
-               <h1 className="text-2xl font-bold text-gray-900">Beneficiary Demographic & Equity Audit</h1>
+               <h1 className="text-2xl font-bold text-gray-900">
+                 {showDetailedLedger ? "Detailed Internal Ledger" : "Beneficiary Demographic & Equity Audit"}
+               </h1>
             </div>
             <p className="text-sm text-gray-500">Generated: {new Date().toLocaleDateString()} • LeadWise Foundation</p>
           </div>
           <div className="flex gap-4 mt-4 md:mt-0 print:hidden">
+            <button 
+              onClick={() => setShowDetailedLedger(!showDetailedLedger)} 
+              className="flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-lg hover:bg-blue-200 transition shadow-sm font-semibold"
+            >
+              {showDetailedLedger ? "View Anonymous Audit" : "View Detailed Ledger"}
+            </button>
             <button onClick={handlePrint} className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition shadow-sm">
               <Printer className="w-4 h-4" /> Print PDF
             </button>
@@ -146,7 +158,9 @@ export default function AdminPage() {
                     <table className="w-full text-left border-collapse">
                         <thead className="bg-gray-100 print:bg-gray-200 text-gray-900 border-b-2 border-gray-300">
                             <tr>
-                                <th className="p-4 text-xs font-bold uppercase tracking-wider">Student ID (Anonymized)</th>
+                                <th className="p-4 text-xs font-bold uppercase tracking-wider">{showDetailedLedger ? "Student ID" : "Student ID (Anonymized)"}</th>
+                                {showDetailedLedger && <th className="p-4 text-xs font-bold uppercase tracking-wider">Name</th>}
+                                {showDetailedLedger && <th className="p-4 text-xs font-bold uppercase tracking-wider">Email</th>}
                                 <th className="p-4 text-xs font-bold uppercase tracking-wider">Zip Code</th>
                                 <th className="p-4 text-xs font-bold uppercase tracking-wider">Income Bracket (LMI)</th>
                                 <th className="p-4 text-xs font-bold uppercase tracking-wider">Employment</th>
@@ -158,6 +172,16 @@ export default function AdminPage() {
                                 filteredStudents.map((student, idx) => (
                                     <tr key={idx} className="hover:bg-gray-50 print:hover:bg-transparent">
                                         <td className="p-4 text-sm font-mono text-gray-600">{student.id}</td>
+                                        {showDetailedLedger && (
+                                            <td className="p-4 text-sm font-medium text-gray-900">
+                                              {student.firstName || student.lastName ? `${student.firstName || ''} ${student.lastName || ''}`.trim() : <span className="text-gray-400 italic">Anonymous</span>}
+                                            </td>
+                                        )}
+                                        {showDetailedLedger && (
+                                            <td className="p-4 text-sm text-gray-600">
+                                              {student.email || <span className="text-gray-400 italic">Anonymous</span>}
+                                            </td>
+                                        )}
                                         <td className="p-4 text-sm font-bold text-gray-900">{student.zipCode}</td>
                                         <td className="p-4 text-sm">
                                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border

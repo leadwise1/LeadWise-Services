@@ -24,8 +24,11 @@ export async function GET(req: NextRequest) {
       const data = doc.data();
       return {
         id: data.studentId || doc.id,
+        firstName: data.firstName || null,
+        lastName: data.lastName || null,
+        email: data.email || null,
         zipCode: data.zipCode || "N/A",
-        householdIncome: data.incomeBracket || "N/A",
+        householdIncome: data.incomeBracket || data.householdIncome || "N/A",
         employmentStatus: data.employmentStatus || "N/A",
         status: data.status || "Active",
         enrolledAt: data.enrolledAt ? data.enrolledAt.toDate().toISOString() : new Date().toISOString()
