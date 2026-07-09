@@ -40,8 +40,8 @@ export async function POST(req: NextRequest) {
     await adminDb
       .collection("users")
       .doc(participantId)
-      .collection("intake")
-      .doc("profile")
+      .collection("profile")
+      .doc("intake")
       .set({
         participantId,
         firstName,
