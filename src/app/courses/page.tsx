@@ -444,14 +444,15 @@ function CoursesPage() {
     setSelectedCourse(course);
     setIntakeOpen(true);
   };
-
-  const handleEnrollmentComplete = () => {
-    if (selectedCourse) {
-      setEnrolledCourseIds(prev => new Set(prev).add(selectedCourse.id));
-    }
-    setIntakeOpen(false);
-  };
-
+ const handleEnrollmentComplete = (url: string) => {
+  if (selectedCourse) {
+    setEnrolledCourseIds(prev => new Set(prev).add(selectedCourse.id));
+    
+    // 🚀 Automatically open their specific Coursera enterprise link in a new tab!
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+  setIntakeOpen(false);
+};   
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       {/* ── NAVBAR ── */}
