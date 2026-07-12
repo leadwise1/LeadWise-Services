@@ -20,6 +20,9 @@ import {
   Trophy,
 } from "lucide-react";
 
+import { auth, db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
+
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 interface Resource { title: string; type: string; platform: string; url: string; }
 interface Lesson   { id: string; title: string; resources: Resource[]; }
@@ -130,7 +133,7 @@ function IntakeModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onComplete: () => void;
+  onComplete: (url: string) => void;
   targetCourse: Course | null;
 }) {
   const [step, setStep] = useState(1);
@@ -167,7 +170,7 @@ function IntakeModal({
       });
       if (!res.ok) throw new Error(await res.text());
       setLoading(false);
-      onComplete();
+      onComplete(targetCourse?.externalUrl ?? "");
     } catch (err) {
       console.error("Intake save error:", err);
       setError("There was a problem saving your enrollment. Please try again.");
@@ -438,16 +441,30 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: {
 function CoursesPage() {
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [enrolledCourseIds, setEnrolledCourseIds] = useState<Set<string>>(new Set());
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState<string[]>([]);
 
-  const openEnrollment = (course: Course) => {
+  const openEnrollment = async (course: Course) => {
     setSelectedCourse(course);
+
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const userIntakeRef = doc(db, "artifacts/leadwise-web/users", currentUser.uid, "profile", "intake");
+      const docSnap = await getDoc(userIntakeRef);
+
+      if (docSnap.exists()) {
+        setEnrolledCourseIds(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']);
+        window.open(course.externalUrl, '_blank', 'noopener,noreferrer');
+        return;
+      }
+    }
+
     setIntakeOpen(true);
   };
 
-  const handleEnrollmentComplete = () => {
+  const handleEnrollmentComplete = (url: string) => {
     if (selectedCourse) {
-      setEnrolledCourseIds(prev => new Set(prev).add(selectedCourse.id));
+      setEnrolledCourseIds(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']);
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
     setIntakeOpen(false);
   };
@@ -515,7 +532,7 @@ function CoursesPage() {
             <CourseCard
               key={course.id}
               course={course}
-              isEnrolled={enrolledCourseIds.has(course.id)}
+              isEnrolled={enrolledCourseIds.includes(course.id)}
               onTriggerIntake={() => openEnrollment(course)}
             />
           ))}
