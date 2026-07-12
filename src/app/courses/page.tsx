@@ -130,7 +130,7 @@ function IntakeModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onComplete: (url: string) => void;
+  onComplete: (url: string) => void; // Change this from () => void
   targetCourse: Course | null;
 }) {
   const [step, setStep] = useState(1);
@@ -653,12 +653,11 @@ function CoursesPage() {
       </section>
 
       <IntakeModal
-        isOpen={intakeOpen}
-        onClose={() => setIntakeOpen(false)}
-        onComplete={handleEnrollmentComplete}
-        targetCourse={selectedCourse}
-      />
-
+  isOpen={intakeOpen}
+  onClose={() => setIntakeOpen(false)}
+  onComplete={(url) => handleEnrollmentComplete(url)} Change this line
+  targetCourse={selectedCourse}
+/>
       {/* --- FOOTER --- */}
       <footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
