@@ -24,7 +24,7 @@ import {
 
 export const metadata: Metadata = {
   title: "LeadWise Foundation | The Career Transition System",
-  description: "Google Career Certificate programs hosted on Coursera. We combine structured learning pathways, live mentoring, and workforce readiness support to accelerate your journey from student to hired professional.",
+  description: "GWe don't just help people learn. We help them transition into the workforce.LeadWise combines Google Career Certificates, AI-assisted mentoring, interview simulations, and career readiness into one structured journey designed to help learners become job-ready.",
 };
 
 export default function HomePage() {
@@ -82,11 +82,11 @@ export default function HomePage() {
           <h1 className="text-5xl md:text-7xl font-extrabold mb-8 leading-tight tracking-tight">
             From Learning to Earning — <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#FFBEA0]">
-              LeadWise Offers Google Career Certificate Programs Hosted On Coursera.  </span>
+             We don't just help people learn. We help them transition into the workforce.</span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-12 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
-             But we don't just hand you a login and walk away. We combine structured learning pathways, live mentoring, and workforce readiness support to turn your new skills into a signed offer letter.          </p>
+             LeadWise combines Google Career Certificates, AI-assisted mentoring, interview simulations, and career readiness into one structured journey designed to help learners become job-ready. </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <a
@@ -108,7 +108,7 @@ export default function HomePage() {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">When you join LeadWise, you are not just enrolling in a course.</h2>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">You are stepping onto a structured career runway built on three integrated layers designed to get you hired:</p>
           <p className="text-xl md:text-2xl mt-8 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
-            Certification → Readiness → Employment
+            Learn → Practice → Mentor → Verify → Opportunity → Employment
           </p>
         </div>
 
