@@ -130,15 +130,20 @@ function IntakeModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onComplete: () => void;
+  onComplete: (url: string) => void;
   targetCourse: Course | null;
 }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    firstName: "", lastName: "", email: "", zipCode: "",
-    householdIncome: "", employmentStatus: "", consent: false,
+    firstName: "",
+    lastName: "",
+    email: "",
+    zipCode: "",
+    householdIncome: "",
+    employmentStatus: "",
+    consent: false,
   });
 
   if (!isOpen) return null;
@@ -165,16 +170,19 @@ function IntakeModal({
           courseTitle: targetCourse?.title ?? "unknown",
         }),
       });
+      
       if (!res.ok) throw new Error(await res.text());
+      
       setLoading(false);
-      onComplete();
+      // Pass the course link forward to unlock access and open the tab
+      onComplete(targetCourse?.externalUrl ?? "");
     } catch (err) {
       console.error("Intake save error:", err);
       setError("There was a problem saving your enrollment. Please try again.");
       setLoading(false);
     }
   };
-
+ 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-white border border-gray-200 rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative">
@@ -440,19 +448,83 @@ function CoursesPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [enrolledCourseIds, setEnrolledCourseIds] = useState<Set<string>>(new Set());
 
+  // 1. PLACE THE NEW RETURNING USER LOGIC HERE:
+  const openEnrollment = async (course: Course) => {
+    setSelectedCourse(course);
+    
+    // Check if user is logged in via Firebase Auth
+    const currentUser = firebase.auth().currentUser; 
+
+    if (currentUser) {
+      // Check Firestore to see if they already filled out the intake form previously
+      const userIntakeRef = doc(db, "artifacts/leadwise-web/users", currentUser.uid, "profile", "intake");
+      const docSnap = await getDoc(userIntakeRef);
+
+      if (docSnap.exists()) {
+        // Returning user verified: Unlock all courses immediately and open their track
+        setEnrolledCourseIds(new Set(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']));
+        window.open(course.externalUrl, '_blank', 'noopener,noreferrer');
+        return; // Stops here so the modal doesn't open
+      }
+    }
+
+    // If they aren't logged in or haven't done the intake, open the modal
+    setIntakeOpen(true);
+  };
+
+  // Your existing handler remains below it:
+  const handleEnrollmentComplete = (url: string) => {
+    if (selectedCourse) {
+      setEnrolledCourseIds(new Set(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']));
+// 1. PLACE THE NEW RETURNING USER LOGIC HERE:
+  const openEnrollment = async (course: Course) => {
+    setSelectedCourse(course);
+    
+    // Check if user is logged in via Firebase Auth
+    const currentUser = firebase.auth().currentUser; 
+
+    if (currentUser) {
+      // Check Firestore to see if they already filled out the intake form previously
+      const userIntakeRef = doc(db, "artifacts/leadwise-web/users", currentUser.uid, "profile", "intake");
+      const docSnap = await getDoc(userIntakeRef);
+
+      if (docSnap.exists()) {
+        // Returning user verified: Unlock all courses immediately and open their track
+        setEnrolledCourseIds(new Set(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']));
+        window.open(course.externalUrl, '_blank', 'noopener,noreferrer');
+        return; // Stops here so the modal doesn't open
+      }
+    }
+
+    // If they aren't logged in or haven't done the intake, open the modal
+    setIntakeOpen(true);
+  };
+
+  // Your existing handler remains below it:
+  const handleEnrollmentComplete = (url: string) => {
+    if (selectedCourse) {
+      setEnrolledCourseIds(new Set(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']));
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+    setIntakeOpen(false);
+  };window.open(url, '_blank', 'noopener,noreferrer');
+    }
+    setIntakeOpen(false);
+  };
   const openEnrollment = (course: Course) => {
     setSelectedCourse(course);
     setIntakeOpen(true);
   };
- const handleEnrollmentComplete = (url: string) => {
+  const handleEnrollmentComplete = (url: string) => {
+  // Instantly unlocks access across all course panels on the page
   if (selectedCourse) {
-    setEnrolledCourseIds(prev => new Set(prev).add(selectedCourse.id));
-    
-    // 🚀 Automatically open their specific Coursera enterprise link in a new tab!
+    setEnrolledCourseIds(new Set(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']));
+
+    // Immediately forwards them to their target course link
     window.open(url, '_blank', 'noopener,noreferrer');
   }
   setIntakeOpen(false);
-};   
+};
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       {/* ── NAVBAR ── */}
