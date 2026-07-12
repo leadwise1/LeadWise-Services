@@ -25,6 +25,7 @@ import {
 export const metadata: Metadata = {
   title: "LeadWise Foundation | The Career Transition System",
   description: "From Learning to Earning. Most platforms stop at certification. LeadWise continues the journey. We combine Google Career Certificates, AI-assisted mentoring, interview simulations, and workforce readiness support into a structured pathway that helps learners transform new skills into career opportunities.",
+};
 
 export default function HomePage() {
   return (
