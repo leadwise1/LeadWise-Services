@@ -79,7 +79,7 @@ export default function HomePage() {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-extrabold mb-8 leading-tight tracking-tight">
-            From Learning to Earning<br/>
+            From Learning to Earning <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#FFBEA0]">
              Most platforms stop at certification. LeadWise continues the journey.</span>
           </h1>
