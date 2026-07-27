@@ -1,6 +1,5 @@
 'use client';
 import React, { useState, Suspense } from "react";
-import Link from "next/link";
 import {
   CheckCircle,
   Briefcase,
@@ -20,8 +19,6 @@ import {
   Trophy,
 } from "lucide-react";
 
-import { auth, db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 interface Resource { title: string; type: string; platform: string; url: string; }
@@ -133,12 +130,13 @@ function IntakeModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onComplete: (url: string) => void;
+  onComplete: () => void;
   targetCourse: Course | null;
 }) {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "", lastName: "", email: "", zipCode: "",
     householdIncome: "", employmentStatus: "", consent: false,
@@ -151,8 +149,6 @@ function IntakeModal({
     setLoading(true);
     setError("");
     try {
-      // Send full profile including name and email so admin can sign learners up on Coursera.
-      // The API saves full data to users/{id}/intake AND anonymous data to learner_intakes for LMI reports.
       const res = await fetch("/api/intake", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -170,13 +166,55 @@ function IntakeModal({
       });
       if (!res.ok) throw new Error(await res.text());
       setLoading(false);
-      onComplete(targetCourse?.externalUrl ?? "");
+      setSubmitted(true);
+      onComplete();
     } catch (err) {
       console.error("Intake save error:", err);
       setError("There was a problem saving your enrollment. Please try again.");
       setLoading(false);
     }
   };
+
+  // ── THANK YOU SCREEN ───────────────────────────────────────────────────────
+  if (submitted) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="bg-white border border-gray-200 rounded-3xl max-w-md w-full overflow-hidden shadow-2xl relative">
+          <div className="bg-gradient-to-r from-slate-800 to-slate-900 px-8 pt-8 pb-6 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-orange-400/20 flex items-center justify-center mx-auto mb-4">
+              <CheckCircle size={32} className="text-orange-400" />
+            </div>
+            <h2 className="text-2xl font-extrabold text-white mb-2">You're on the list! 🎉</h2>
+            <p className="text-white/60 text-sm">We received your registration</p>
+          </div>
+          <div className="p-8 text-center space-y-5">
+            <p className="text-gray-700 text-base leading-relaxed">
+              Thank you for your interest in the{" "}
+              <strong className="text-gray-900">{targetCourse?.title}</strong>!
+            </p>
+            <div className="bg-orange-50 border border-orange-200 rounded-2xl px-6 py-5">
+              <p className="text-orange-800 font-semibold text-sm leading-relaxed">
+                ✉️ Our team will review your information and send you a Coursera enrollment link{" "}
+                <span className="font-extrabold">within 24 hours</span>.
+              </p>
+            </div>
+            <p className="text-gray-400 text-xs">
+              Questions? Email us at{" "}
+              <a href="mailto:mentor@letsleadwise.org" className="text-orange-500 font-semibold hover:underline">
+                mentor@letsleadwise.org
+              </a>
+            </p>
+            <button
+              onClick={onClose}
+              className="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-700 transition text-sm"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -441,32 +479,20 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: {
 function CoursesPage() {
   const [intakeOpen, setIntakeOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [enrolledCourseIds, setEnrolledCourseIds] = useState<string[]>([]);
+  // pendingCourseIds: submitted but awaiting admin provisioning on Coursera
+  const [pendingCourseIds, setPendingCourseIds] = useState<string[]>([]);
 
   const openEnrollment = async (course: Course) => {
+    // If already submitted this session, don't re-open the form
+    if (pendingCourseIds.includes(course.id)) return;
     setSelectedCourse(course);
-
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      const userIntakeRef = doc(db, "artifacts/leadwise-web/users", currentUser.uid, "profile", "intake");
-      const docSnap = await getDoc(userIntakeRef);
-
-      if (docSnap.exists()) {
-        setEnrolledCourseIds(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']);
-        window.open(course.externalUrl, '_blank', 'noopener,noreferrer');
-        return;
-      }
-    }
-
     setIntakeOpen(true);
   };
 
-  const handleEnrollmentComplete = (url: string) => {
-    if (selectedCourse) {
-      setEnrolledCourseIds(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']);
-      window.open(url, '_blank', 'noopener,noreferrer');
-    }
-    setIntakeOpen(false);
+  const handleEnrollmentComplete = () => {
+    // Mark all courses as pending — one submission covers all tracks
+    setPendingCourseIds(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']);
+    // Keep modal open so the thank-you screen is visible; user closes it manually
   };
 
   return (
@@ -532,7 +558,7 @@ function CoursesPage() {
             <CourseCard
               key={course.id}
               course={course}
-              isEnrolled={enrolledCourseIds.includes(course.id)}
+              isEnrolled={pendingCourseIds.includes(course.id)}
               onTriggerIntake={() => openEnrollment(course)}
             />
           ))}
@@ -598,7 +624,7 @@ function CoursesPage() {
 
       <IntakeModal
         isOpen={intakeOpen}
-        onClose={() => setIntakeOpen(false)}
+        onClose={() => { setIntakeOpen(false); }}
         onComplete={handleEnrollmentComplete}
         targetCourse={selectedCourse}
       />
