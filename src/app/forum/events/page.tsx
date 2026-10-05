@@ -466,7 +466,7 @@ export default function WeeklySyncHub() {
                     <span className="text-gray-500">{ticket.timeAgo}</span>
                   </div>
                   <div className="mb-1 text-[11px] font-semibold text-fuchsia-400">{ticket.module}</div>
-                  <p className="mb-2 line-clamp-2 text-xs text-gray-400">{ticket.description}</p>
+                  <p className="mb-2 text-xs text-gray-400">{ticket.description}</p>
 
                   {ticket.claimedBy ? (
                     <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
