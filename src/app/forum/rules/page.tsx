@@ -17,10 +17,10 @@ export default function RulesPage() {
             <Shield size={14} /> Community Charter
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-6 bg-gradient-to-r from-white via-[#f0abfc] to-white bg-clip-text text-transparent">
-            Welcome to the Digital Guardians Hub
+            Welcome to the LeadWise Tech Collective
           </h1>
           <p className="text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed">
-            A space built for learners, career changers, and future defenders of the digital world.
+            A shared space for learners, alumni, instructors, and career changers exploring technology together.
           </p>
         </motion.div>
 
@@ -31,9 +31,14 @@ export default function RulesPage() {
           transition={{ delay: 0.1 }}
           className="bg-gradient-to-br from-[#25282e] to-black border border-white/10 rounded-3xl p-8 md:p-12 mb-16 text-center relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-500/10 rounded-full blur-[80px] -mr-32 -mt-32" />
-          <p className="text-lg md:text-xl font-medium text-white relative z-10 leading-relaxed">
-            "This is more than a discussion board. It’s a support system where we learn, grow, and rise together."
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 leading-snug">
+            Belonging before brilliance.
+          </h2>
+          <p className="text-lg md:text-xl font-medium text-[#f0abfc] leading-relaxed">
+            Because brilliance is everywhere. Belonging is rare.
+          </p>
+          <p className="text-neutral-300 leading-relaxed mt-6 max-w-2xl mx-auto">
+            You don't have to learn alone. This is a support system where we ask questions, share what we're discovering, and help each other move forward.
           </p>
         </motion.div>
 
@@ -49,14 +54,14 @@ export default function RulesPage() {
             </h2>
             <div className="space-y-6">
               <p className="text-neutral-400 leading-relaxed">
-                LeadWise Foundation exists to create access, opportunity, and real career pathways through technology education and community support.
+                LeadWise connects technology education with human support. Across IT courses and career paths, we make room for questions, practice, mentorship, and the confidence to take the next step.
               </p>
               <div className="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 space-y-4">
                 <p className="text-sm font-bold text-neutral-500 uppercase tracking-widest mb-2">We are building:</p>
                 <ul className="space-y-3">
                   {[
-                    "Ethical tech learners",
-                    "Cybersecurity defenders",
+                    "Curious, thoughtful problem-solvers",
+                    "Confident technology learners",
                     "Career-ready professionals",
                     "A community that lifts each other"
                   ].map((item, i) => (
@@ -79,9 +84,9 @@ export default function RulesPage() {
           >
             <div className="bg-[#f0abfc]/5 border border-[#f0abfc]/20 rounded-3xl p-8 relative">
               <Award className="absolute -top-6 -right-6 w-16 h-16 text-[#f0abfc]/20" />
-              <h3 className="text-xl font-bold text-[#f0abfc] mb-4">Final Note</h3>
+              <h3 className="text-xl font-bold text-[#f0abfc] mb-4">You Belong Here</h3>
               <p className="text-neutral-300 leading-relaxed mb-6">
-                You’re not just joining a forum — you’re joining a mission. Welcome to the Digital Guardians.
+                Whether you're starting your first IT course, changing careers, sharing your experience, or returning as an alum, you have a place here. Bring your questions, your ideas, and your everyday wins.
               </p>
               <div className="pt-6 border-t border-[#f0abfc]/10">
                 <p className="font-bold text-white">— LeadWise Foundation Team</p>
@@ -102,12 +107,12 @@ export default function RulesPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
-              { id: 1, title: "Respect First", desc: "Treat every member with professionalism and kindness." },
-              { id: 2, title: "No Question is Too Basic", desc: "Ask freely — that’s how we grow." },
+              { id: 1, title: "Respect First", desc: "Meet each other with kindness, curiosity, and respect." },
+              { id: 2, title: "No Question is Too Basic", desc: "Ask freely. Your question may help someone else understand, too." },
               { id: 3, title: "Protect Privacy & Security", desc: "Never share passwords, API keys, or sensitive data." },
-              { id: 4, title: "Stay Productive", desc: "Keep discussions helpful and on-topic." },
+              { id: 4, title: "Make Room for Each Other", desc: "Share your thoughts and experiences. Listen, encourage, and keep conversations supportive." },
               { id: 5, title: "Celebrate Wins", desc: "Share certifications, breakthroughs, and progress." },
-              { id: 6, title: "Give Back", desc: "Help others as you grow." },
+              { id: 6, title: "Give Back", desc: "Share what helped you, offer an explanation, or welcome someone new." },
               { id: 7, title: "Zero Tolerance for Harmful Activity", desc: "This is an ethical learning space only." }
             ].map((rule, i) => (
               <motion.div
