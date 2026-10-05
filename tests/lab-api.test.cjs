@@ -110,6 +110,12 @@ const request = (body, token = "valid") =>
   });
 const context = { params: Promise.resolve({ id: "lab" }) };
 
+test("empty legacy session records are not announced as labs", async () => {
+  records.set(`${base}/blank`, { title: "", topic: "  " });
+  const result = await (await feed.GET(new Request("http://localhost/api/forum/sessions"))).json();
+  assert.equal(result.sessions.some(session => session.id === "blank"), false);
+});
+
 test("schedule gates joining at 15 minutes, handles default duration and missing time", () => {
   const start = Date.now() + 60_000;
   assert.equal(helper.labPhase(null, null, Date.now()), "unscheduled");

@@ -41,7 +41,8 @@ export async function GET(request: NextRequest) {
         .filter((doc) => {
           const data = doc.data();
           return (
-            typeof data.topic === "string" || typeof data.title === "string"
+            (typeof data.topic === "string" && data.topic.trim().length > 0) ||
+            (typeof data.title === "string" && data.title.trim().length > 0)
           );
         })
         .map(async (doc) => {
