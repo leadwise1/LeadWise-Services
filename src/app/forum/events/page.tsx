@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import FollowAlongLabs from './follow-along-labs';
 import {
   AlertTriangle,
   ArrowRight,
@@ -95,10 +96,9 @@ export default function WeeklySyncHub() {
   const [newTicketDesc, setNewTicketDesc] = useState("");
   const [wins, setWins] = useState<GrittyWin[]>(initialWins);
   const [winInput, setWinInput] = useState("");
-  const [checkpointStatus, setCheckpointStatus] = useState<"idle" | "green" | "yellow" | "red">("idle");
-
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const noiseNodeRef = useRef<AudioBufferSourceNode | null>(null);
+  const [rainVolume, setRainVolume] = useState(0.25);
+  const rainRef = useRef<HTMLAudioElement | null>(null);
+  const rainPendingRef = useRef(false);
 
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
@@ -147,83 +147,21 @@ export default function WeeklySyncHub() {
     return () => window.clearInterval(timer);
   }, [isBreak, isPomoRunning, pomoMinutes, pomoSeconds]);
 
-  const toggleAmbientSound = () => {
-    if (isAmbientPlaying) {
-      if (noiseNodeRef.current) {
-        try {
-          noiseNodeRef.current.stop();
-        } catch {
-          // no-op if already stopped
-        }
-        noiseNodeRef.current = null;
-      }
-
-      if (audioCtxRef.current) {
-        void audioCtxRef.current.close();
-        audioCtxRef.current = null;
-      }
-
-      setIsAmbientPlaying(false);
-      return;
-    }
-
-    try {
-      const AudioContextClass =
-        window.AudioContext ||
-        (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-
-      if (!AudioContextClass) {
-        triggerToast("🎧 Ambient sound is not supported in this browser.");
-        return;
-      }
-
-      const ctx = new AudioContextClass();
-      const bufferSize = ctx.sampleRate * 2;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let lastOut = 0;
-
-      for (let i = 0; i < bufferSize; i += 1) {
-        const white = Math.random() * 2 - 1;
-        data[i] = (lastOut + 0.02 * white) / 1.02;
-        lastOut = data[i];
-        data[i] *= 0.15;
-      }
-
-      const noise = ctx.createBufferSource();
-      noise.buffer = buffer;
-      noise.loop = true;
-
-      const gainNode = ctx.createGain();
-      gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-
-      noise.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      noise.start(0);
-
-      audioCtxRef.current = ctx;
-      noiseNodeRef.current = noise;
-      setIsAmbientPlaying(true);
-    } catch (err) {
-      console.error("Audio API error:", err);
-      triggerToast("🎧 Something went wrong while starting the ambient sound.");
-    }
+  const toggleAmbientSound = async () => {
+    if (rainPendingRef.current) return;
+    const audio = rainRef.current;
+    if (!audio) return;
+    if (!audio.paused) { audio.pause(); return; }
+    rainPendingRef.current = true;
+    try { await audio.play(); }
+    catch { triggerToast("Rain couldn't start. Please try again."); }
+    finally { rainPendingRef.current = false; }
   };
 
+  useEffect(() => { if (rainRef.current) rainRef.current.volume = rainVolume; }, [rainVolume]);
   useEffect(() => {
-    return () => {
-      if (noiseNodeRef.current) {
-        try {
-          noiseNodeRef.current.stop();
-        } catch {
-          // no-op
-        }
-      }
-
-      if (audioCtxRef.current) {
-        void audioCtxRef.current.close();
-      }
-    };
+    const audio = rainRef.current;
+    return () => { audio?.pause(); };
   }, []);
 
   const resetPomodoro = () => {
@@ -395,7 +333,8 @@ export default function WeeklySyncHub() {
               </button>
               <button
                 onClick={toggleAmbientSound}
-                title={isAmbientPlaying ? "Mute Lo-Fi Rain" : "Play Lo-Fi Rain Audio"}
+                title={isAmbientPlaying ? "Pause gentle rain" : "Play gentle rain"}
+                aria-pressed={isAmbientPlaying}
                 className={`flex items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-semibold transition ${
                   isAmbientPlaying
                     ? "border-fuchsia-500/50 bg-fuchsia-950/40 text-[#f0abfc]"
@@ -403,9 +342,14 @@ export default function WeeklySyncHub() {
                 }`}
               >
                 {isAmbientPlaying ? <Volume2 size={14} /> : <VolumeX size={14} />}
-                <span>{isAmbientPlaying ? "Lo-Fi Rain On" : "Lo-Fi Rain"}</span>
+                <span>{isAmbientPlaying ? "Rain On" : "Gentle Rain"}</span>
               </button>
             </div>
+            <audio ref={rainRef} src="/audio/gentle-rain.mp3" loop preload="none" onPlaying={() => setIsAmbientPlaying(true)} onPause={() => setIsAmbientPlaying(false)} onError={() => { setIsAmbientPlaying(false); triggerToast("Rain couldn't load. Please try again."); }} />
+            <label className="focus-rain-volume">
+              <Volume2 size={16} aria-hidden="true" /> Rain volume
+              <input type="range" min="0" max="1" step="0.05" value={rainVolume} onChange={event => setRainVolume(Number(event.target.value))} aria-label="Rain volume" />
+            </label>
           </div>
 
           <div className="rounded-3xl border border-gray-800 bg-[#17191d] p-6 transition hover:border-fuchsia-500/30">
@@ -550,97 +494,7 @@ export default function WeeklySyncHub() {
           </div>
         )}
 
-        <section className="relative overflow-hidden rounded-3xl border border-fuchsia-500/30 bg-gradient-to-r from-[#17191d] via-[#1c1a24] to-[#17191d] p-6 md:p-8">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-300">
-                <span className="h-2 w-2 animate-ping rounded-full bg-emerald-400" /> Live Interactive Lab
-              </span>
-              <span className="rounded-full border border-gray-700 bg-gray-800 px-3 py-1 text-xs text-gray-300">
-                Driver & Navigator Format
-              </span>
-            </div>
-            <div className="text-xs text-gray-400">
-              Prerequisite: <strong className="text-fuchsia-300">Coursera Lab #4 ready in side tab</strong>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-2">
-              <h3 className="mb-2 text-2xl font-bold text-white">"Break My Setup": Troubleshooting Firewalls Live</h3>
-              <p className="mb-4 text-sm leading-relaxed text-gray-300">
-                We have prepared an intentionally broken cloud virtual machine with corrupted iptables rules.
-                Touch the keys, suggest diagnostic commands, and troubleshoot errors together in real time.
-              </p>
-
-              <div>
-                <span className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400">
-                  Traffic Light Checkpoint: Are you keeping pace with the instructor?
-                </span>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => {
-                      setCheckpointStatus("green");
-                      triggerToast("🟢 Logged: You're good to go!");
-                    }}
-                    className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-bold transition ${
-                      checkpointStatus === "green"
-                        ? "border-emerald-500 bg-emerald-500/20 text-emerald-300"
-                        : "border-gray-700 bg-gray-800/80 text-gray-300 hover:text-white"
-                    }`}
-                  >
-                    <CheckCircle2 size={15} className="text-emerald-400" />
-                    <span>🟢 Command Worked, Moving On</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setCheckpointStatus("yellow");
-                      triggerToast("🟡 Speaker alerted: Pausing 60s for catch-up.");
-                    }}
-                    className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-bold transition ${
-                      checkpointStatus === "yellow"
-                        ? "border-amber-500 bg-amber-500/20 text-amber-300"
-                        : "border-gray-700 bg-gray-800/80 text-gray-300 hover:text-white"
-                    }`}
-                  >
-                    <span>🟡 Need 60 Seconds</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setCheckpointStatus("red");
-                      triggerToast("🔴 Assistance requested: Mentor looking at chat!");
-                    }}
-                    className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-bold transition ${
-                      checkpointStatus === "red"
-                        ? "border-rose-500 bg-rose-500/20 text-rose-300"
-                        : "border-gray-700 bg-gray-800/80 text-gray-300 hover:text-white"
-                    }`}
-                  >
-                    <AlertTriangle size={15} className="text-rose-400" />
-                    <span>🔴 Got Error Code</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-center justify-center gap-3 lg:items-end">
-              <a
-                href="https://meet.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#f0abfc] px-6 py-4 text-sm font-black text-[#17191d] transition hover:bg-white sm:w-auto"
-              >
-                <Video size={18} />
-                <span>Join Lab Stream</span>
-              </a>
-              <span className="text-[11px] text-gray-400">
-                Driver: Alum Marcus T. • Navigator: LeadWise Mentor
-              </span>
-            </div>
-          </div>
-        </section>
+        <FollowAlongLabs />
 
         <section className="rounded-3xl border border-gray-800 bg-[#17191d] p-6 md:p-8">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
