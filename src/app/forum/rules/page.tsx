@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export default function RulesPage() {
   return (
-    <div className="min-h-screen bg-[#090A0F] text-white selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+    <div className="min-h-screen bg-[#17191d] text-white selection:bg-[#f0abfc] selection:text-[#25282e]">
       <main className="p-6 md:p-10 max-w-4xl mx-auto pb-24">
         {/* Header */}
         <motion.div 
@@ -13,10 +13,10 @@ export default function RulesPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-16 text-center"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-6 uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fuchsia-500/10 border border-fuchsia-500/20 text-fuchsia-400 text-xs font-bold mb-6 uppercase tracking-widest">
             <Shield size={14} /> Community Charter
           </div>
-          <h1 className="text-4xl md:text-5xl font-black mb-6 bg-gradient-to-r from-white via-[#FFBEA0] to-white bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-black mb-6 bg-gradient-to-r from-white via-[#f0abfc] to-white bg-clip-text text-transparent">
             Welcome to the Digital Guardians Hub
           </h1>
           <p className="text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed">
@@ -29,9 +29,9 @@ export default function RulesPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="bg-gradient-to-br from-[#1B2735] to-black border border-white/10 rounded-3xl p-8 md:p-12 mb-16 text-center relative overflow-hidden"
+          className="bg-gradient-to-br from-[#25282e] to-black border border-white/10 rounded-3xl p-8 md:p-12 mb-16 text-center relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] -mr-32 -mt-32" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-500/10 rounded-full blur-[80px] -mr-32 -mt-32" />
           <p className="text-lg md:text-xl font-medium text-white relative z-10 leading-relaxed">
             "This is more than a discussion board. It’s a support system where we learn, grow, and rise together."
           </p>
@@ -61,7 +61,7 @@ export default function RulesPage() {
                     "A community that lifts each other"
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-white font-medium">
-                      <CheckCircle2 className="text-emerald-500 w-5 h-5 shrink-0" />
+                      <CheckCircle2 className="text-fuchsia-500 w-5 h-5 shrink-0" />
                       {item}
                     </li>
                   ))}
@@ -77,13 +77,13 @@ export default function RulesPage() {
             transition={{ delay: 0.3 }}
             className="flex flex-col justify-center"
           >
-            <div className="bg-[#FFBEA0]/5 border border-[#FFBEA0]/20 rounded-3xl p-8 relative">
-              <Award className="absolute -top-6 -right-6 w-16 h-16 text-[#FFBEA0]/20" />
-              <h3 className="text-xl font-bold text-[#FFBEA0] mb-4">Final Note</h3>
+            <div className="bg-[#f0abfc]/5 border border-[#f0abfc]/20 rounded-3xl p-8 relative">
+              <Award className="absolute -top-6 -right-6 w-16 h-16 text-[#f0abfc]/20" />
+              <h3 className="text-xl font-bold text-[#f0abfc] mb-4">Final Note</h3>
               <p className="text-neutral-300 leading-relaxed mb-6">
                 You’re not just joining a forum — you’re joining a mission. Welcome to the Digital Guardians.
               </p>
-              <div className="pt-6 border-t border-[#FFBEA0]/10">
+              <div className="pt-6 border-t border-[#f0abfc]/10">
                 <p className="font-bold text-white">— LeadWise Foundation Team</p>
               </div>
             </div>
@@ -97,7 +97,7 @@ export default function RulesPage() {
             whileInView={{ opacity: 1 }}
             className="text-2xl font-bold mb-10 flex items-center gap-3"
           >
-            <Scroll className="text-blue-400" /> Community Guidelines
+            <Scroll className="text-fuchsia-400" /> Community Guidelines
           </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -116,10 +116,10 @@ export default function RulesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group bg-neutral-900/30 border border-neutral-800 hover:border-blue-500/30 p-6 rounded-2xl transition-all hover:bg-neutral-900/50"
+                className="group bg-neutral-900/30 border border-neutral-800 hover:border-fuchsia-500/30 p-6 rounded-2xl transition-all hover:bg-neutral-900/50"
               >
                 <div className="flex gap-4">
-                  <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-bold text-neutral-500 border border-neutral-700 group-hover:border-blue-500/50 group-hover:text-blue-400 transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-bold text-neutral-500 border border-neutral-700 group-hover:border-fuchsia-500/50 group-hover:text-fuchsia-400 transition-colors">
                     {rule.id}
                   </div>
                   <div>

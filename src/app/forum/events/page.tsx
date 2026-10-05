@@ -91,20 +91,20 @@ export default function EventsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#090A0F] text-white selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+    <div className="min-h-screen bg-[#17191d] text-white selection:bg-[#f0abfc] selection:text-[#25282e]">
       {/* Tab Navigation */}
       <div className="border-b border-white/5 bg-black/20 sticky top-0 z-50 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-6">
           <div className="flex gap-8">
             <Link 
               href="/forum/leaderboard"
-              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/leaderboard' ? 'border-[#FFBEA0] text-[#FFBEA0]' : 'border-transparent text-gray-500 hover:text-white'}`}
+              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/leaderboard' ? 'border-[#f0abfc] text-[#f0abfc]' : 'border-transparent text-gray-500 hover:text-white'}`}
             >
               Leaderboard
             </Link>
             <Link 
               href="/forum/events"
-              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/events' ? 'border-[#FFBEA0] text-[#FFBEA0]' : 'border-transparent text-gray-500 hover:text-white'}`}
+              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/events' ? 'border-[#f0abfc] text-[#f0abfc]' : 'border-transparent text-gray-500 hover:text-white'}`}
             >
               Weekly Sync
             </Link>
@@ -117,14 +117,14 @@ export default function EventsPage() {
         <section>
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold flex items-center gap-3 relative">
-              <CalendarDays className="text-[#FFBEA0]" /> Weekly Syncs
+              <CalendarDays className="text-[#f0abfc]" /> Weekly Syncs
               {!loading && <span className="absolute -top-1 -right-2 w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Live Connection Active" />}
             </h2>
             <a 
               href={process.env.NEXT_PUBLIC_CALENDAR_LINK || "https://calendar.app.google/1AXYeyfAXczZ2wi1A"}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-bold uppercase tracking-widest bg-white/5 border border-white/10 px-4 py-2 rounded-full hover:bg-white/10 transition text-gray-400 hover:text-[#FFBEA0] flex items-center justify-center"
+              className="text-xs font-bold uppercase tracking-widest bg-white/5 border border-white/10 px-4 py-2 rounded-full hover:bg-white/10 transition text-gray-400 hover:text-[#f0abfc] flex items-center justify-center"
             >
               Sync to Google Calendar
             </a>
@@ -132,7 +132,7 @@ export default function EventsPage() {
 
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12 text-neutral-500 gap-3">
-              <Loader2 className="w-8 h-8 animate-spin text-[#FFBEA0]" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#f0abfc]" />
               <p>Fetching sync sessions...</p>
             </div>
           ) : (
@@ -140,7 +140,7 @@ export default function EventsPage() {
               {sessions.map((session) => (
                 <div key={session.id} className={`bg-neutral-900/80 border ${session.status?.toUpperCase() === 'LIVE NOW' ? 'border-red-500/50' : 'border-neutral-800'} rounded-2xl p-6 transition-all hover:border-neutral-700`}>
                   <div className="flex justify-between items-start mb-4">
-                    <div className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ${session.status?.toUpperCase() === 'LIVE NOW' ? 'bg-red-500/20 text-red-400 animate-pulse' : 'bg-blue-500/20 text-blue-400'}`}>
+                    <div className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ${session.status?.toUpperCase() === 'LIVE NOW' ? 'bg-red-500/20 text-red-400 animate-pulse' : 'bg-fuchsia-500/20 text-fuchsia-400'}`}>
                       {session.status || "Upcoming"}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-neutral-500">
@@ -152,17 +152,17 @@ export default function EventsPage() {
                   {session.desc ? (
                     <p className="text-sm text-neutral-400 mb-6">{session.desc}</p>
                   ) : (
-                    <div className="text-sm text-neutral-400 mb-6 bg-[#0B0C10] p-6 rounded-xl border-2 border-dashed border-neutral-700 relative overflow-hidden space-y-6 shadow-inner">
+                    <div className="text-sm text-neutral-400 mb-6 bg-[#1b1d22] p-6 rounded-xl border-2 border-dashed border-neutral-700 relative overflow-hidden space-y-6 shadow-inner">
                       
                       <div className="flex items-center justify-center -mt-2 mb-4">
-                        <div className="bg-[#FFBEA0] text-[#1B2735] px-4 py-1.5 font-black transform -rotate-2 shadow-lg shadow-[#FFBEA0]/10 uppercase tracking-widest text-xs flex items-center gap-2">
-                          <Pin size={14} className="text-[#1B2735]" /> Virtual Bulletin Board
+                        <div className="bg-[#f0abfc] text-[#25282e] px-4 py-1.5 font-black transform -rotate-2 shadow-lg shadow-[#f0abfc]/10 uppercase tracking-widest text-xs flex items-center gap-2">
+                          <Pin size={14} className="text-[#25282e]" /> Virtual Bulletin Board
                         </div>
                       </div>
 
                       <div className="text-center bg-white/5 border border-white/10 rounded-lg p-4 transform rotate-1">
                         <h5 className="font-bold text-white text-base">Resources for U.S. Graduates</h5>
-                        <p className="text-xs mt-1 text-neutral-300">Advance your job search with these tools at <a href="https://careercircle.com/google" className="text-blue-400 hover:text-blue-300 font-bold underline decoration-blue-500/50" target="_blank" rel="noopener noreferrer">careercircle.com/google</a></p>
+                        <p className="text-xs mt-1 text-neutral-300">Advance your job search with these tools at <a href="https://careercircle.com/google" className="text-fuchsia-400 hover:text-fuchsia-300 font-bold underline decoration-fuchsia-500/50" target="_blank" rel="noopener noreferrer">careercircle.com/google</a></p>
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
@@ -174,22 +174,22 @@ export default function EventsPage() {
                         </div>
 
                         {/* Note 2 */}
-                        <div className="bg-blue-500/10 border border-blue-500/20 p-5 rounded shadow-lg transform rotate-2 hover:rotate-0 transition-transform relative hover:z-10 group">
+                        <div className="bg-fuchsia-500/10 border border-fuchsia-500/20 p-5 rounded shadow-lg transform rotate-2 hover:rotate-0 transition-transform relative hover:z-10 group">
                           <div className="w-3 h-3 rounded-full bg-yellow-400 shadow-sm mx-auto absolute -top-1.5 left-1/2 -translate-x-1/2 border border-yellow-600 group-hover:scale-110 transition-transform"></div>
-                          <h6 className="text-blue-200 font-bold text-sm mb-1.5 mt-1">360° Profiles</h6>
-                          <p className="text-xs text-blue-100/70 leading-relaxed">Showcase your skills, lessons, and enrich your profile with career assessments to stand out to employers.</p>
+                          <h6 className="text-fuchsia-200 font-bold text-sm mb-1.5 mt-1">360° Profiles</h6>
+                          <p className="text-xs text-fuchsia-100/70 leading-relaxed">Showcase your skills, lessons, and enrich your profile with career assessments to stand out to employers.</p>
                         </div>
 
                         {/* Note 3 */}
-                        <div className="bg-emerald-500/10 border border-emerald-500/20 p-5 rounded shadow-lg transform -rotate-1 hover:rotate-0 transition-transform relative hover:z-10 group">
-                          <div className="w-3 h-3 rounded-full bg-blue-500 shadow-sm mx-auto absolute -top-1.5 left-1/2 -translate-x-1/2 border border-blue-700 group-hover:scale-110 transition-transform"></div>
-                          <h6 className="text-emerald-200 font-bold text-sm mb-1.5 mt-1">Career Prep Support</h6>
-                          <p className="text-xs text-emerald-100/70 leading-relaxed">Get guidance on career paths, a resume builder, interview prep, and exclusive Grow with Google content.</p>
+                        <div className="bg-fuchsia-500/10 border border-fuchsia-500/20 p-5 rounded shadow-lg transform -rotate-1 hover:rotate-0 transition-transform relative hover:z-10 group">
+                          <div className="w-3 h-3 rounded-full bg-fuchsia-500 shadow-sm mx-auto absolute -top-1.5 left-1/2 -translate-x-1/2 border border-fuchsia-700 group-hover:scale-110 transition-transform"></div>
+                          <h6 className="text-fuchsia-200 font-bold text-sm mb-1.5 mt-1">Career Prep Support</h6>
+                          <p className="text-xs text-fuchsia-100/70 leading-relaxed">Get guidance on career paths, a resume builder, interview prep, and exclusive Grow with Google content.</p>
                         </div>
 
                         {/* Note 4 */}
                         <div className="bg-rose-500/10 border border-rose-500/20 p-5 rounded shadow-lg transform rotate-1 hover:rotate-0 transition-transform relative hover:z-10 group">
-                          <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-sm mx-auto absolute -top-1.5 left-1/2 -translate-x-1/2 border border-emerald-700 group-hover:scale-110 transition-transform"></div>
+                          <div className="w-3 h-3 rounded-full bg-fuchsia-500 shadow-sm mx-auto absolute -top-1.5 left-1/2 -translate-x-1/2 border border-fuchsia-700 group-hover:scale-110 transition-transform"></div>
                           <h6 className="text-rose-200 font-bold text-sm mb-1.5 mt-1">1:1 Coaching</h6>
                           <p className="text-xs text-rose-100/70 leading-relaxed">Receive personalized job search support through 1:1 sessions with specialized CareerCircle Advocates.</p>
                         </div>
@@ -202,7 +202,7 @@ export default function EventsPage() {
                         <div className="absolute bottom-2 right-3 w-2 h-2 rounded-full bg-white/20"></div>
                         
                         <h6 className="text-white font-bold text-sm mb-3 flex items-center justify-center gap-2">
-                          <Flag size={14} className="text-[#FFBEA0]" /> More Resources for Certificate Grads
+                          <Flag size={14} className="text-[#f0abfc]" /> More Resources for Certificate Grads
                         </h6>
                         <div className="space-y-3">
                           <p className="text-xs leading-relaxed text-neutral-300">
@@ -216,7 +216,7 @@ export default function EventsPage() {
                           </p>
                         </div>
                         <div className="pt-4 border-t border-white/10 mt-4 text-center">
-                          <a href="https://grow.google/career-dreamer" className="inline-flex items-center gap-1.5 text-xs font-bold text-black bg-[#FFBEA0] hover:bg-white px-4 py-2 rounded-full transition-colors shadow-lg" target="_blank" rel="noopener noreferrer">
+                          <a href="https://grow.google/career-dreamer" className="inline-flex items-center gap-1.5 text-xs font-bold text-black bg-[#f0abfc] hover:bg-white px-4 py-2 rounded-full transition-colors shadow-lg" target="_blank" rel="noopener noreferrer">
                             Explore Career Dreamer <ArrowRight size={12} />
                           </a>
                         </div>
@@ -225,12 +225,12 @@ export default function EventsPage() {
                   )}
                   <div className="flex items-center justify-between mt-auto">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-[10px] font-bold">
+                      <div className="w-6 h-6 rounded-full bg-fuchsia-600 flex items-center justify-center text-[10px] font-bold">
                         {(session.mentor || "LeadWise Admin").split(' ').map(n => n[0]).join('')}
                       </div>
                       <span className="text-xs text-neutral-300">By {session.mentor || "LeadWise Admin"}</span>
                     </div>
-                    <button className={`flex items-center gap-2 px-6 py-2 rounded-xl font-bold text-sm transition ${session.status?.toUpperCase() === 'LIVE NOW' ? 'bg-red-600 hover:bg-red-700' : 'bg-[#FFBEA0] text-[#1B2735] hover:bg-white'}`}>
+                    <button className={`flex items-center gap-2 px-6 py-2 rounded-xl font-bold text-sm transition ${session.status?.toUpperCase() === 'LIVE NOW' ? 'bg-red-600 hover:bg-red-700' : 'bg-[#f0abfc] text-[#25282e] hover:bg-white'}`}>
                       {session.status?.toUpperCase() === 'LIVE NOW' ? <><Radio size={16}/> Join Meeting</> : 'RSVP'}
                     </button>
                   </div>
@@ -241,10 +241,10 @@ export default function EventsPage() {
         </section>
 
         {/* Admin Booking Section */}
-        <section className="bg-gradient-to-br from-[#1B2735] to-black border border-white/10 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden group">
-          <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <section className="bg-gradient-to-br from-[#25282e] to-black border border-white/10 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden group">
+          <div className="absolute inset-0 bg-fuchsia-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-300 text-xs font-bold mb-6 uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fuchsia-500/20 border border-fuchsia-500/30 text-fuchsia-300 text-xs font-bold mb-6 uppercase tracking-widest">
               <Video size={12} /> 1-on-1 Guidance
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Live Weekly Meet</h2>
@@ -255,7 +255,7 @@ export default function EventsPage() {
               href={process.env.NEXT_PUBLIC_CALENDAR_LINK || "https://calendar.app.google/1AXYeyfAXczZ2wi1A"} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 bg-white text-[#1B2735] px-10 py-5 rounded-2xl font-black hover:bg-[#FFBEA0] transition-all transform hover:scale-[1.02] shadow-2xl hover:shadow-[#FFBEA0]/20 group"
+              className="inline-flex items-center gap-3 bg-white text-[#25282e] px-10 py-5 rounded-2xl font-black hover:bg-[#f0abfc] transition-all transform hover:scale-[1.02] shadow-2xl hover:shadow-[#f0abfc]/20 group"
             >
               <CalendarDays size={20} className="group-hover:rotate-12 transition-transform" />
               Schedule on Google Calendar

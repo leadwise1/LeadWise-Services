@@ -172,8 +172,8 @@ export default function PostDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#090A0F] flex items-center justify-center text-white">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+      <div className="min-h-screen bg-[#17191d] flex items-center justify-center text-white">
+        <Loader2 className="w-8 h-8 animate-spin text-fuchsia-500" />
       </div>
     );
   }
@@ -181,17 +181,17 @@ export default function PostDetailsPage() {
   if (loadError) {
     return <div role="alert" className="p-8 text-center">
       <p className="mb-4 text-neutral-300">{loadError}</p>
-      <button onClick={() => setRetryCount(count => count + 1)} className="bg-blue-600 rounded-lg px-4 py-2">Try again</button>
-      <Link href="/forum" className="block mt-4 text-blue-300">Back to open forum</Link>
+      <button onClick={() => setRetryCount(count => count + 1)} className="bg-fuchsia-600 rounded-lg px-4 py-2">Try again</button>
+      <Link href="/forum" className="block mt-4 text-fuchsia-300">Back to open forum</Link>
     </div>;
   }
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-[#090A0F] flex flex-col items-center justify-center text-white p-6 text-center">
+      <div className="min-h-screen bg-[#17191d] flex flex-col items-center justify-center text-white p-6 text-center">
         <h2 className="text-2xl font-bold mb-4">Post not found</h2>
         <p className="text-neutral-400 mb-8">The discussion you are looking for may have been removed or doesn't exist.</p>
-        <button onClick={() => router.push('/forum')} className="bg-blue-600 px-6 py-2 rounded-full font-medium">
+        <button onClick={() => router.push('/forum')} className="bg-fuchsia-600 px-6 py-2 rounded-full font-medium">
           Back to Forum
         </button>
       </div>
@@ -199,7 +199,7 @@ export default function PostDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#090A0F] text-white p-6 md:p-10">
+    <div className="min-h-screen bg-[#17191d] text-white p-6 md:p-10">
       <div className="max-w-4xl mx-auto">
         {/* Navigation */}
         <button 
@@ -218,7 +218,7 @@ export default function PostDetailsPage() {
                 onClick={handleUpvote}
                 aria-label="Upvote this post"
                 disabled={upvoting}
-                className="text-neutral-500 hover:text-emerald-400 transition-colors p-2 rounded-xl hover:bg-emerald-400/10 active:scale-90 disabled:opacity-50"
+                className="text-neutral-500 hover:text-fuchsia-400 transition-colors p-2 rounded-xl hover:bg-fuchsia-400/10 active:scale-90 disabled:opacity-50"
               >
                 <ArrowUp className="w-6 h-6" />
               </button>
@@ -227,17 +227,17 @@ export default function PostDetailsPage() {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 mb-4 flex-wrap">
-                <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-blue-600/10 text-blue-400 border border-blue-500/20">
+                <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-fuchsia-600/10 text-fuchsia-400 border border-fuchsia-500/20">
                   {['Announcements', 'Opportunities', 'Workshops', 'Networking'].includes(post.category) ? post.category : 'Open forum'}
                 </span>
                 <span className="text-xs text-neutral-500">•</span>
                 <div className="flex items-center gap-1.5 text-xs text-neutral-400">
                   {post.authorId === ADMIN_UID ? (
-                    <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-fuchsia-400" />
                   ) : (
                     <User className="w-3.5 h-3.5" />
                   )}
-                  <span className={post.authorId === ADMIN_UID ? "text-blue-400 font-bold" : ""}>{post.author}</span>
+                  <span className={post.authorId === ADMIN_UID ? "text-fuchsia-400 font-bold" : ""}>{post.author}</span>
                 </div>
                 <span className="text-xs text-neutral-500">•</span>
                 <div className="flex items-center gap-1.5 text-xs text-neutral-500">
@@ -256,7 +256,7 @@ export default function PostDetailsPage() {
         {/* Comments Section */}
         <div className="space-y-6">
           <h3 className="text-xl font-bold flex items-center gap-2 mb-6">
-            <MessageCircle className="w-5 h-5 text-blue-400" />
+            <MessageCircle className="w-5 h-5 text-fuchsia-400" />
             {comments.length} {comments.length === 1 ? 'reply' : 'replies'}
           </h3>
 
@@ -271,14 +271,14 @@ export default function PostDetailsPage() {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Share an explanation, an experience, or a little encouragement."
-              className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-xl p-4 min-h-[120px] focus:outline-none focus:border-blue-500 transition-all resize-none mb-4"
+              className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-xl p-4 min-h-[120px] focus:outline-none focus:border-fuchsia-500 transition-all resize-none mb-4"
               required
             />
             <div className="flex justify-end">
               <button 
                 type="submit" 
                 disabled={isSubmitting || !newComment.trim() || !replyName.trim()}
-                className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-6 py-2.5 rounded-xl font-bold transition-all active:scale-95 flex items-center gap-2"
+                className="bg-fuchsia-600 hover:bg-fuchsia-700 disabled:opacity-50 text-white px-6 py-2.5 rounded-xl font-bold transition-all active:scale-95 flex items-center gap-2"
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 {isSubmitting ? 'Posting...' : 'Post reply'}
@@ -289,7 +289,7 @@ export default function PostDetailsPage() {
 
           {/* Comments List */}
           <div className="space-y-4">
-            {commentError ? <div role="alert" className="text-center py-6"><p className="text-neutral-300">{commentError}</p><button onClick={() => setRetryCount(count => count + 1)} className="mt-3 text-blue-300">Try again</button></div> : comments.length === 0 ? (
+            {commentError ? <div role="alert" className="text-center py-6"><p className="text-neutral-300">{commentError}</p><button onClick={() => setRetryCount(count => count + 1)} className="mt-3 text-fuchsia-300">Try again</button></div> : comments.length === 0 ? (
               <div className="text-center py-10 text-neutral-500 border border-dashed border-neutral-800 rounded-2xl">
                 No comments yet. Be the first to reply!
               </div>
@@ -298,9 +298,9 @@ export default function PostDetailsPage() {
                 <div key={comment.id} className="bg-neutral-900/30 border border-neutral-800/50 rounded-2xl p-6 transition-colors hover:bg-neutral-900/50">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neutral-700 to-neutral-800 flex items-center justify-center text-[10px] font-bold">
-                      {comment.authorId === ADMIN_UID ? <ShieldCheck className="w-4 h-4 text-blue-400" /> : comment.author.split(' ').map(n => n[0]).join('')}
+                      {comment.authorId === ADMIN_UID ? <ShieldCheck className="w-4 h-4 text-fuchsia-400" /> : comment.author.split(' ').map(n => n[0]).join('')}
                     </div>
-                    <span className={`text-sm font-bold ${comment.authorId === ADMIN_UID ? "text-blue-400" : "text-white"}`}>
+                    <span className={`text-sm font-bold ${comment.authorId === ADMIN_UID ? "text-fuchsia-400" : "text-white"}`}>
                       {comment.author}
                       {comment.authorId === ADMIN_UID && " (Admin)"}
                     </span>

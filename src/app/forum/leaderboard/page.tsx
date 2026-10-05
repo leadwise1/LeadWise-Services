@@ -119,7 +119,7 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
           {user.coursesCompleted} Courses
         </span>
         {user.estimatedHours ? (
-          <span className="text-[9px] text-blue-400/80 font-bold uppercase tracking-tighter mt-1">
+          <span className="text-[9px] text-fuchsia-400/80 font-bold uppercase tracking-tighter mt-1">
             {Math.round(user.estimatedHours)} Hours Invested
           </span>
         ) : null}
@@ -182,20 +182,20 @@ export default function LeaderboardPage() {
   const remaining = leaderboard.slice(3);
 
   return (
-    <div className="min-h-screen bg-[#090A0F] text-white selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+    <div className="min-h-screen bg-[#17191d] text-white selection:bg-[#f0abfc] selection:text-[#25282e]">
       {/* Navigation */}
       <div className="border-b border-white/5 bg-black/20 sticky top-0 z-50 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-6">
           <div className="flex gap-8">
             <Link 
               href="/forum/leaderboard"
-              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/leaderboard' ? 'border-[#FFBEA0] text-[#FFBEA0]' : 'border-transparent text-gray-500 hover:text-white'}`}
+              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/leaderboard' ? 'border-[#f0abfc] text-[#f0abfc]' : 'border-transparent text-gray-500 hover:text-white'}`}
             >
               Leaderboard
             </Link>
             <Link 
               href="/forum/events"
-              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/events' ? 'border-[#FFBEA0] text-[#FFBEA0]' : 'border-transparent text-gray-500 hover:text-white'}`}
+              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/events' ? 'border-[#f0abfc] text-[#f0abfc]' : 'border-transparent text-gray-500 hover:text-white'}`}
             >
               Weekly Sync
             </Link>
@@ -214,7 +214,7 @@ export default function LeaderboardPage() {
           </div>
 
           <div className="bg-neutral-900/80 border border-neutral-800 rounded-xl p-4 flex items-center gap-5 shadow-lg backdrop-blur-sm">
-            <TrendingUp className="w-6 h-6 text-[#FFBEA0]" />
+            <TrendingUp className="w-6 h-6 text-[#f0abfc]" />
             <div>
               <p className="text-[10px] text-neutral-500 font-bold tracking-[0.2em] uppercase">Current Season</p>
               <p className="text-sm font-bold text-white">May 2026 Audit</p>
@@ -228,7 +228,7 @@ export default function LeaderboardPage() {
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             >
-              <Loader2 className="w-12 h-12 text-blue-500" />
+              <Loader2 className="w-12 h-12 text-fuchsia-500" />
             </motion.div>
             <p className="text-lg font-medium animate-pulse">Syncing Coursera ledger data...</p>
           </div>
@@ -301,7 +301,7 @@ export default function LeaderboardPage() {
                           </p>
                         </div>
                       {user.estimatedHours ? (
-                        <div className="hidden md:flex ml-auto px-3 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold text-blue-400 uppercase">
+                        <div className="hidden md:flex ml-auto px-3 py-1 rounded-lg bg-fuchsia-500/10 border border-fuchsia-500/20 text-[10px] font-bold text-fuchsia-400 uppercase">
                           {Math.round(user.estimatedHours)}h Spent
                         </div>
                       ) : null}

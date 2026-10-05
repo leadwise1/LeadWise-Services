@@ -76,20 +76,20 @@ function IntakeModal({
       <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm" />
       <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] bg-neutral-900 border border-neutral-700 rounded-lg shadow-2xl w-[calc(100%-2rem)] max-w-md max-h-[90dvh] overflow-y-auto">
-        <div className="bg-purple-700 p-6 text-white">
+        <div className="bg-fuchsia-700 p-6 text-white">
           <Dialog.Title className="text-xl font-bold">Join the learner community</Dialog.Title>
           <Dialog.Description className="text-sm text-white/90 mt-2">Learners, alumni, and instructors are welcome.</Dialog.Description>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4 text-neutral-200">
           <label htmlFor="community-name" className="block text-sm font-medium">Name shown on your posts</label>
-          <input id="community-name" required autoComplete="nickname" maxLength={60} value={formData.displayName} onChange={e => setFormData({ displayName: e.target.value })} className="w-full bg-neutral-950 text-white p-3 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none" />
+          <input id="community-name" required autoComplete="nickname" maxLength={60} value={formData.displayName} onChange={e => setFormData({ displayName: e.target.value })} className="w-full bg-neutral-950 text-white p-3 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-fuchsia-400 outline-none" />
           <p className="text-sm text-neutral-400">Posts and replies are public. Share thoughtfully and look out for each other.</p>
-          <Link href="/forum/rules" className="text-sm text-purple-300 underline">Community charter</Link>
+          <Link href="/forum/rules" className="text-sm text-fuchsia-300 underline">Community charter</Link>
 
           <div className="flex justify-between pt-4 border-t border-neutral-700 mt-4">
               <button type="button" disabled={loading} onClick={onClose} className="px-4 py-2 text-neutral-300 hover:text-white">Cancel</button>
-              <button type="submit" disabled={loading} className="bg-purple-700 text-white px-8 py-2 rounded-lg font-bold hover:bg-purple-600 disabled:opacity-50">
+              <button type="submit" disabled={loading} className="bg-fuchsia-700 text-white px-8 py-2 rounded-lg font-bold hover:bg-fuchsia-600 disabled:opacity-50">
                 {loading ? "Joining..." : "Join community"}
               </button>
           </div>
@@ -280,7 +280,7 @@ function ForumPageContent() {
   });
 
   // Show a blank screen briefly while checking enrollment status to prevent flash
-  if (isEnrolled === null) return <div className="min-h-screen bg-[#090A0F]"></div>;
+  if (isEnrolled === null) return <div className="min-h-screen bg-[#17191d]"></div>;
 
   return (
     <div className="community-feed p-5 sm:p-6 md:p-10 max-w-5xl mx-auto relative min-h-screen text-white">
@@ -314,9 +314,9 @@ function ForumPageContent() {
             aria-pressed={activeFilter === "Recent"}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${activeFilter === "Recent" ? "bg-neutral-800 text-white shadow-inner" : "bg-transparent text-neutral-400 hover:bg-neutral-800 hover:text-white"}`}
           >
-            <Clock className={`w-4 h-4 ${activeFilter === "Recent" ? "text-blue-400" : ""}`} /> Recent
+            <Clock className={`w-4 h-4 ${activeFilter === "Recent" ? "text-fuchsia-400" : ""}`} /> Recent
           </button>
-          {!isBulletin && <button onClick={() => setActiveFilter("Awaiting replies")} aria-pressed={activeFilter === "Awaiting replies"} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${activeFilter === "Awaiting replies" ? "bg-emerald-500/15 text-emerald-300" : "text-neutral-400 hover:bg-neutral-800 hover:text-white"}`}>
+          {!isBulletin && <button onClick={() => setActiveFilter("Awaiting replies")} aria-pressed={activeFilter === "Awaiting replies"} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${activeFilter === "Awaiting replies" ? "bg-fuchsia-500/15 text-fuchsia-300" : "text-neutral-400 hover:bg-neutral-800 hover:text-white"}`}>
             <MessageCircle className="w-4 h-4" /> Awaiting replies
           </button>}
         </div>
@@ -331,7 +331,7 @@ function ForumPageContent() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={isBulletin ? "Search updates..." : "Search discussions..."}
-            className="w-full bg-neutral-900 border border-neutral-700 text-white text-sm rounded-md pl-10 pr-4 py-3 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all placeholder:text-neutral-400"
+            className="w-full bg-neutral-900 border border-neutral-700 text-white text-sm rounded-md pl-10 pr-4 py-3 focus:outline-none focus:border-fuchsia-400 focus:ring-1 focus:ring-fuchsia-400 transition-all placeholder:text-neutral-400"
           />
         </div>
       </div>
@@ -358,7 +358,7 @@ function ForumPageContent() {
             href={process.env.NEXT_PUBLIC_CALENDAR_LINK || "https://calendar.app.google/1AXYeyfAXczZ2wi1A"} 
             target="_blank"
             rel="noopener noreferrer"
-            className="whitespace-nowrap bg-white text-blue-600 px-6 py-2.5 rounded-xl font-black hover:bg-[#FFBEA0] transition-all hover:scale-105 shadow-lg shadow-black/20"
+            className="whitespace-nowrap bg-white text-fuchsia-600 px-6 py-2.5 rounded-xl font-black hover:bg-[#f0abfc] transition-all hover:scale-105 shadow-lg shadow-black/20"
           >
             Book a check-in
           </a>
@@ -371,11 +371,11 @@ function ForumPageContent() {
           {feedError ? (
             <div role="alert" className="py-10 text-center border border-neutral-800 rounded-lg p-6">
               <p className="text-neutral-300 mb-4">{feedError}</p>
-              <button onClick={() => setRetryCount(count => count + 1)} className="px-4 py-2 rounded-lg bg-blue-600 text-white">Try again</button>
+              <button onClick={() => setRetryCount(count => count + 1)} className="px-4 py-2 rounded-lg bg-fuchsia-600 text-white">Try again</button>
             </div>
           ) : loading ? (
             <div className="flex flex-col items-center justify-center h-64 text-neutral-500 gap-3">
-              <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-fuchsia-500" />
               <p className="animate-pulse">Syncing live discussions...</p>
             </div>
           ) : displayedPosts.length === 0 ? (
@@ -385,7 +385,7 @@ function ForumPageContent() {
               <p className="text-neutral-400 mb-6">{searchQuery ? "Try a different phrase." : isBulletin ? "Have an opportunity, workshop, or announcement to share with learners and alumni?" : activeFilter === "Awaiting replies" ? "Explore recent conversations or ask a question of your own." : "What are you learning, and where could a little support help?"}</p>
               <button 
                 onClick={() => isEnrolled ? setIsModalOpen(true) : setIntakeOpen(true)}
-                className="text-blue-400 font-medium hover:text-blue-300 transition-colors"
+                className="text-fuchsia-400 font-medium hover:text-fuchsia-300 transition-colors"
               >
                 {isBulletin ? "Post an update" : "Ask a question"}
               </button>
@@ -408,7 +408,7 @@ function ForumPageContent() {
                             whileHover={{ scale: 1.1 }}
                             onClick={(e) => handleUpvote(e, post.id)}
                             disabled={upvotingIds.has(post.id)}
-                            className="text-neutral-500 hover:text-emerald-400 transition-colors p-1.5 rounded-lg hover:bg-emerald-400/10 active:scale-90 disabled:opacity-50"
+                            className="text-neutral-500 hover:text-fuchsia-400 transition-colors p-1.5 rounded-lg hover:bg-fuchsia-400/10 active:scale-90 disabled:opacity-50"
                             title="Upvote this post"
                           >
                             <ArrowUp className="w-5 h-5" />
@@ -428,13 +428,13 @@ function ForumPageContent() {
                               Posted by {post.author}
                               {/* Admin badge */}
                               {(post.isAdmin || post.authorId === process.env.NEXT_PUBLIC_ADMIN_UID) && (
-                                <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black ml-1 flex items-center gap-1 uppercase tracking-tighter shadow-sm shadow-blue-500/50">
+                                <span className="bg-fuchsia-600 text-white text-[10px] px-2 py-0.5 rounded-full font-black ml-1 flex items-center gap-1 uppercase tracking-tighter shadow-sm shadow-fuchsia-500/50">
                                   Admin <Shield size={10} />
                                 </span>
                               )}
                               {/* Custom Badges */}
                               {post.badges && post.badges.map((badge, idx) => (
-                                <span key={idx} className="bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold ml-1 uppercase tracking-tighter shadow-sm">
+                                <span key={idx} className="bg-fuchsia-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold ml-1 uppercase tracking-tighter shadow-sm">
                                   {badge}
                                 </span>
                               ))}
@@ -456,15 +456,15 @@ function ForumPageContent() {
                             )}
                           </div>
                           
-                          <h3 className="text-lg font-semibold text-neutral-100 group-hover:text-blue-400 transition-colors mb-2 leading-snug break-words">
-                            <Link href={`/forum/post/${post.id}`} className="block line-clamp-4 hover:text-purple-300">{post.title}</Link>
+                          <h3 className="text-lg font-semibold text-neutral-100 group-hover:text-fuchsia-400 transition-colors mb-2 leading-snug break-words">
+                            <Link href={`/forum/post/${post.id}`} className="block line-clamp-4 hover:text-fuchsia-300">{post.title}</Link>
                           </h3>
                           {post.content && <p className="text-neutral-300 leading-relaxed line-clamp-3 break-words whitespace-pre-wrap">{post.content}</p>}
                           
                           <div className="flex items-center gap-4 mt-4">
                             <div className="flex items-center gap-1.5 text-neutral-500 text-sm group-hover:text-neutral-400 transition-colors">
                               <MessageCircle className="w-4 h-4" />
-                              <span className={`font-medium ${post.replies === 0 ? 'text-emerald-300' : ''}`}>{post.replies === 0 ? isBulletin ? "Discuss this update" : "Be the first to help" : `${post.replies} ${post.replies === 1 ? "reply" : "replies"}`}</span>
+                              <span className={`font-medium ${post.replies === 0 ? 'text-fuchsia-300' : ''}`}>{post.replies === 0 ? isBulletin ? "Discuss this update" : "Be the first to help" : `${post.replies} ${post.replies === 1 ? "reply" : "replies"}`}</span>
                             </div>
                           </div>
                         </div>
@@ -504,22 +504,22 @@ function ForumPageContent() {
             <form onSubmit={handleCreatePost} className="flex flex-col gap-5">
               {isBulletin && <div>
                 <label htmlFor="newCategory" className="block text-sm font-medium text-neutral-300 mb-2">{isBulletin ? "Update type" : "Course channel"}</label>
-                <select id="newCategory" name="category" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-xl p-3.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow appearance-none">
+                <select id="newCategory" name="category" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-xl p-3.5 focus:outline-none focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500 transition-shadow appearance-none">
                   {BULLETIN_CATEGORIES.map(category => <option key={category}>{category}</option>)}
                 </select>
               </div>}
               <div>
                 <label htmlFor="newTitle" className="block text-sm font-medium text-neutral-300 mb-2">{isBulletin ? "Update title" : "Topic"}</label>
-                <input autoFocus id="newTitle" name="title" maxLength={200} value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder={isBulletin ? "What's coming up?" : "What do Linux file permissions mean?"} className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+                <input autoFocus id="newTitle" name="title" maxLength={200} value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder={isBulletin ? "What's coming up?" : "What do Linux file permissions mean?"} className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-fuchsia-500" required />
               </div>
               <div>
                 <label htmlFor="newContent" className="block text-sm font-medium text-neutral-300 mb-2">{isBulletin ? "Details" : "A little more context (optional)"}</label>
-                <textarea id="newContent" required={isBulletin} value={newContent} onChange={e => setNewContent(e.target.value)} maxLength={10000} placeholder={isBulletin ? "Who is it for? Include dates, deadlines, location, and a link for more information." : "Which lesson are you on? What have you tried, and what is still unclear?"} className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-lg p-3 min-h-[140px] focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <textarea id="newContent" required={isBulletin} value={newContent} onChange={e => setNewContent(e.target.value)} maxLength={10000} placeholder={isBulletin ? "Who is it for? Include dates, deadlines, location, and a link for more information." : "Which lesson are you on? What have you tried, and what is still unclear?"} className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-lg p-3 min-h-[140px] focus:outline-none focus:ring-2 focus:ring-fuchsia-500" />
               </div>
               {actionError && <p role="alert" className="text-red-300">{actionError}</p>}
               <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-neutral-800">
                 <button type="button" disabled={isSubmitting} onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-lg font-medium transition-colors">Cancel</button>
-                <button type="submit" disabled={isSubmitting || !newTitle.trim()} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-6 py-2.5 rounded-lg font-medium transition-all active:scale-95">
+                <button type="submit" disabled={isSubmitting || !newTitle.trim()} className="flex items-center gap-2 bg-fuchsia-600 hover:bg-fuchsia-700 disabled:opacity-50 text-white px-6 py-2.5 rounded-lg font-medium transition-all active:scale-95">
                   {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                   {isSubmitting ? "Posting..." : "Post to the community"}
                 </button>
@@ -535,7 +535,7 @@ function ForumPageContent() {
 // --- MAIN FORUM PAGE WRAPPER ---
 export default function ForumPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#090A0F] flex items-center justify-center text-white"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#17191d] flex items-center justify-center text-white"><Loader2 className="w-8 h-8 animate-spin text-fuchsia-500" /></div>}>
       <ForumPageContent />
     </Suspense>
   );
