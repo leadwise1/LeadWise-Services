@@ -4,7 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, MessageCircle, ArrowUp, Loader2, User, Clock, ShieldCheck } from 'lucide-react';
 import { db, auth } from "@/lib/firebase";
-import { doc, onSnapshot, updateDoc, increment, collection, query, orderBy, serverTimestamp, runTransaction, Timestamp } from "firebase/firestore";
+import PostText from '../../post-text';
+import { getCommunityName } from '../../community-profile';
+import { saveCommunityUpdate } from '../../community-api';
+import { doc, onSnapshot, collection, query, orderBy, Timestamp } from "firebase/firestore";
 import Link from 'next/link';
 
 const appId = "leadwise-web";
@@ -39,12 +42,51 @@ export default function PostDetailsPage() {
   const [newComment, setNewComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [upvoting, setUpvoting] = useState(false);
+  const [loadError, setLoadError] = useState("");
+  const [commentError, setCommentError] = useState("");
+  const [actionError, setActionError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
+  const [replyName, setReplyName] = useState("");
+
+  useEffect(() => { setReplyName(getCommunityName() || ""); }, []);
 
   useEffect(() => {
-    if (!id || !db) return;
+    if (!id || !db) {
+      setLoadError("This discussion couldn't load. Please try again shortly.");
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setLoadError("");
+    setCommentError("");
 
     // Listen to post details
     const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string);
+    let cancelled = false;
+    let poll: ReturnType<typeof setInterval> | undefined;
+    const loadFromServer = async () => {
+      try {
+        const response = await fetch(`/api/forum/posts/${id}`, { cache: 'no-store' });
+        if (cancelled) return;
+        if (response.status === 404) { setPost(null); setLoading(false); return; }
+        if (!response.ok) throw new Error('Discussion unavailable');
+        const result = await response.json();
+        if (cancelled) return;
+        setPost({ ...result.post, createdAt: result.post.createdAtMillis ? Timestamp.fromMillis(result.post.createdAtMillis) : null });
+        setComments(result.comments.map((comment: Comment & { createdAtMillis: number | null }) => ({ ...comment, createdAt: comment.createdAtMillis ? Timestamp.fromMillis(comment.createdAtMillis) : null })));
+        setLoadError("");
+        setCommentError("");
+      } catch {
+        if (!cancelled) setLoadError("This discussion couldn't load. Please try again shortly.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    const startFallback = () => {
+      if (poll) return;
+      void loadFromServer();
+      poll = setInterval(() => { if (!document.hidden) void loadFromServer(); }, 30000);
+    };
     const unsubscribePost = onSnapshot(postRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -57,12 +99,14 @@ export default function PostDetailsPage() {
           replies: data.replies || 0,
           upvotes: data.upvotes || 0,
           createdAt: data.createdAt,
-          content: data.content || "No content provided."
+          content: data.content || ""
         });
       } else {
         setPost(null);
       }
       setLoading(false);
+    }, () => {
+      startFallback();
     });
 
     // Listen to comments
@@ -81,22 +125,26 @@ export default function PostDetailsPage() {
         });
       });
       setComments(fetchedComments);
-    });
+    }, startFallback);
 
     return () => {
+      cancelled = true;
+      if (poll) clearInterval(poll);
       unsubscribePost();
       unsubscribeComments();
     };
-  }, [id]);
+  }, [id, retryCount]);
 
   const handleUpvote = async () => {
     if (!id || !db || upvoting) return;
     setUpvoting(true);
+    setActionError("");
     try {
-      const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string);
-      await updateDoc(postRef, { upvotes: increment(1) });
+      await saveCommunityUpdate(`/api/forum/posts/${id}`, { action: 'upvote' });
+      setRetryCount(count => count + 1);
     } catch (error) {
       console.error("Failed to upvote:", error);
+      setActionError("Your upvote didn't save. Please try again.");
     } finally {
       setUpvoting(false);
     }
@@ -104,43 +152,19 @@ export default function PostDetailsPage() {
 
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newComment.trim() || !id || !db || isSubmitting) return;
+    if (!newComment.trim() || !replyName.trim() || !id || !db || isSubmitting) return;
 
     setIsSubmitting(true);
+    setActionError("");
     try {
-      const postRef = doc(db, 'artifacts', appId, 'public', 'data', 'forumPosts', id as string);
-      const commentsRef = collection(postRef, 'comments');
-      const currentUser = auth?.currentUser;
-      
-      let authorName = currentUser?.displayName;
-      if (!authorName) {
-        const intakeData = localStorage.getItem("leadwise_intake");
-        if (intakeData) {
-           const parsed = JSON.parse(intakeData);
-           authorName = `${parsed.firstName} ${parsed.lastName.charAt(0)}.`;
-        } else {
-           authorName = "LeadWise Student";
-        }
-      }
-      
-      // Use a transaction to atomically add comment and increment reply count
-      await runTransaction(db, async (transaction) => {
-        const commentDocRef = doc(commentsRef);
-        transaction.set(commentDocRef, {
-          author: authorName,
-          authorId: currentUser?.uid || "anonymous",
-          content: newComment,
-          createdAt: serverTimestamp()
-        });
-        
-        transaction.update(postRef, { 
-          replies: increment(1) 
-        });
-      });
+      const authorName = replyName.trim();
+      await saveCommunityUpdate(`/api/forum/posts/${id}`, { author: authorName, content: newComment.trim() });
 
       setNewComment("");
+      setRetryCount(count => count + 1);
     } catch (error) {
       console.error("Failed to add comment:", error);
+      setActionError("Your reply couldn't be saved. Your text is still here; please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -152,6 +176,14 @@ export default function PostDetailsPage() {
         <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
       </div>
     );
+  }
+
+  if (loadError) {
+    return <div role="alert" className="p-8 text-center">
+      <p className="mb-4 text-neutral-300">{loadError}</p>
+      <button onClick={() => setRetryCount(count => count + 1)} className="bg-blue-600 rounded-lg px-4 py-2">Try again</button>
+      <Link href="/forum" className="block mt-4 text-blue-300">Back to open forum</Link>
+    </div>;
   }
 
   if (!post) {
@@ -179,11 +211,12 @@ export default function PostDetailsPage() {
         </button>
 
         {/* Post Content */}
-        <div className="bg-neutral-900 border border-neutral-800 rounded-3xl p-8 mb-10 shadow-2xl">
-          <div className="flex items-start gap-6">
+        <article className="border-b border-neutral-800 pb-8 mb-8">
+          <div className="flex items-start gap-3 sm:gap-6">
             <div className="flex flex-col items-center gap-2">
               <button 
                 onClick={handleUpvote}
+                aria-label="Upvote this post"
                 disabled={upvoting}
                 className="text-neutral-500 hover:text-emerald-400 transition-colors p-2 rounded-xl hover:bg-emerald-400/10 active:scale-90 disabled:opacity-50"
               >
@@ -192,10 +225,10 @@ export default function PostDetailsPage() {
               <span className="font-bold text-lg text-neutral-200">{post.upvotes}</span>
             </div>
 
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-4">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3 mb-4 flex-wrap">
                 <span className="text-xs font-semibold px-3 py-1 rounded-lg bg-blue-600/10 text-blue-400 border border-blue-500/20">
-                  {post.category}
+                  {['Announcements', 'Opportunities', 'Workshops', 'Networking'].includes(post.category) ? post.category : 'Open forum'}
                 </span>
                 <span className="text-xs text-neutral-500">•</span>
                 <div className="flex items-center gap-1.5 text-xs text-neutral-400">
@@ -213,46 +246,50 @@ export default function PostDetailsPage() {
                 </div>
               </div>
 
-              <h1 className="text-3xl font-bold mb-6 leading-tight">{post.title}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-6 leading-tight break-words">{post.title}</h1>
               
-              <div className="text-neutral-300 leading-relaxed text-lg whitespace-pre-wrap">
-                {post.content}
-              </div>
+              {post.content && <div className="text-neutral-300 leading-relaxed text-lg whitespace-pre-wrap break-words"><PostText text={post.content} /></div>}
             </div>
           </div>
-        </div>
+        </article>
 
         {/* Comments Section */}
         <div className="space-y-6">
           <h3 className="text-xl font-bold flex items-center gap-2 mb-6">
             <MessageCircle className="w-5 h-5 text-blue-400" />
-            {comments.length} Comments
+            {comments.length} {comments.length === 1 ? 'reply' : 'replies'}
           </h3>
 
           {/* Comment Form */}
           <form onSubmit={handleAddComment} className="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 mb-10">
+            <label htmlFor="reply-name" className="block mb-2 text-sm text-neutral-300">Name shown on your reply</label>
+            <input id="reply-name" required maxLength={60} value={replyName} onChange={e => setReplyName(e.target.value)} className="mb-4 w-full rounded-lg border border-neutral-800 bg-neutral-950 p-3 text-white" />
+            <label htmlFor="community-reply" className="block mb-3 text-neutral-300">Share a reply</label>
             <textarea 
+              id="community-reply"
+              maxLength={10000}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="What are your thoughts?"
+              placeholder="Share an explanation, an experience, or a little encouragement."
               className="w-full bg-neutral-950 border border-neutral-800 text-white rounded-xl p-4 min-h-[120px] focus:outline-none focus:border-blue-500 transition-all resize-none mb-4"
               required
             />
             <div className="flex justify-end">
               <button 
                 type="submit" 
-                disabled={isSubmitting || !newComment.trim()}
+                disabled={isSubmitting || !newComment.trim() || !replyName.trim()}
                 className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-6 py-2.5 rounded-xl font-bold transition-all active:scale-95 flex items-center gap-2"
               >
                 {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                Post Comment
+                {isSubmitting ? 'Posting...' : 'Post reply'}
               </button>
             </div>
+            {actionError && <p role="alert" className="text-red-300 mt-4">{actionError}</p>}
           </form>
 
           {/* Comments List */}
           <div className="space-y-4">
-            {comments.length === 0 ? (
+            {commentError ? <div role="alert" className="text-center py-6"><p className="text-neutral-300">{commentError}</p><button onClick={() => setRetryCount(count => count + 1)} className="mt-3 text-blue-300">Try again</button></div> : comments.length === 0 ? (
               <div className="text-center py-10 text-neutral-500 border border-dashed border-neutral-800 rounded-2xl">
                 No comments yet. Be the first to reply!
               </div>
@@ -271,8 +308,8 @@ export default function PostDetailsPage() {
                       {comment.createdAt ? new Date(comment.createdAt.toMillis()).toLocaleDateString() : "Just now"}
                     </span>
                   </div>
-                  <p className="text-neutral-300 text-sm leading-relaxed">
-                    {comment.content}
+                  <p className="text-neutral-300 leading-relaxed whitespace-pre-wrap break-words">
+                    <PostText text={comment.content} />
                   </p>
                 </div>
               ))

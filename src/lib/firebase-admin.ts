@@ -31,6 +31,7 @@ try {
         credential: admin.credential.cert(serviceAccount),
         projectId: serviceAccount.project_id || serviceAccount.projectId || "leadwise-services-rule"
       });
+      admin.firestore().settings({ ignoreUndefinedProperties: true });
       console.log('✅ Firebase Admin initialized successfully');
     } else {
       console.warn("⚠️ Firebase Admin: FIREBASE_ADMIN_SDK_CONFIG is missing from environment.");
@@ -46,11 +47,5 @@ try {
  */
 export const adminDb = admin.apps.length > 0 ? admin.firestore() : null;
 export const adminAuth = admin.apps.length > 0 ? admin.auth() : null;
-
-// Global settings for Firestore Admin
-// We use the conditional check here too to satisfy TypeScript
-if (adminDb) {
-  adminDb.settings({ ignoreUndefinedProperties: true });
-}
 
 export { admin };
