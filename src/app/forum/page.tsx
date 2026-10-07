@@ -1,4 +1,4 @@
-import { Shield, Zap, Users, Heart, ArrowRight } from 'lucide-react';
+import { ArrowRight, Heart, Shield, Users, Zap } from 'lucide-react';
 
 export default function ForumHomePage() {
   return (
@@ -28,6 +28,15 @@ export default function ForumHomePage() {
           <p className="text-neutral-300 leading-relaxed mt-6 max-w-2xl mx-auto">
             You don&apos;t have to learn alone. This is a support system where we ask questions, share what we&apos;re discovering, and help each other move forward.
           </p>
+
+          <div className="mt-8 flex justify-center">
+            <a
+              href="/forum/rules"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-500 px-6 py-3 font-semibold text-white hover:opacity-95 transition"
+            >
+              Open the forum <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
@@ -88,15 +97,6 @@ export default function ForumHomePage() {
               <p className="text-neutral-400">We keep moving forward together, one win and one lesson at a time.</p>
             </div>
           </div>
-        </div>
-
-        <div className="mt-12 flex justify-center">
-          <a
-            href="/forum/rules"
-            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-fuchsia-500 to-purple-500 px-6 py-3 font-semibold text-white hover:opacity-95 transition"
-          >
-            Open the forum <ArrowRight className="w-4 h-4" />
-          </a>
         </div>
       </main>
     </div>
