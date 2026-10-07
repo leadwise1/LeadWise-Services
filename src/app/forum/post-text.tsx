@@ -1,3 +1,5 @@
+'use client';
+
 export default function PostText({ text }: { text: string }) {
   return <>{text.split(/(https?:\/\/[^\s<>]+)/g).map((part, index) => {
     if (!/^https?:\/\//i.test(part)) return part;
