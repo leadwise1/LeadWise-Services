@@ -68,6 +68,20 @@ export default function HomePage() {
       </nav>
 
       <main id="main-content">
+        
+
+<p className="text-xl md:text-2xl mb-12 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
+  We combine Google Career Certificates, AI-assisted mentoring, interview simulations, and workforce readiness support into a structured pathway that helps learners transform new skills into career opportunities.
+</p>
+
+<div className="flex flex-col sm:flex-row gap-6 justify-center">
+  <a
+    href="/courses"
+    className="bg-[#FF9E80] text-[#1B2735] font-bold px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(255,190,160,0.3)] transition transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(255,190,160,0.5)] text-lg flex items-center justify-center gap-3"
+  >
+    <Cloud size={24} /> Start Free Certification
+  </a>
+</div>
 
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-[85vh] flex flex-col items-center justify-center px-4 py-20 overflow-hidden">
