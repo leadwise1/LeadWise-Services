@@ -19,15 +19,51 @@ import {
   Filter
 } from 'lucide-react';
 
-const playHoloTone = (freq = 520, type = 'sine', duration = 0.1, enabled = true) => {
+type PostCategory = 'Networking' | 'General Discussion';
+type TechTag = 'Cloud/DevOps' | 'Cybersecurity' | 'FullStack' | 'Data & AI';
+
+type ForumComment = {
+  author: string;
+  authorId: string;
+  content: string;
+  timestamp?: string;
+};
+
+type ForumPost = {
+  id: string;
+  title: string;
+  content: string;
+  category: PostCategory;
+  techTag?: TechTag | string;
+  author: string;
+  authorId: string;
+  upvotes: number;
+  replies: number;
+  timeAgo: string;
+  comments: ForumComment[];
+};
+
+type ToastState = {
+  title: string;
+  message: string;
+  icon: string;
+};
+
+const playHoloTone = (freq = 520, type: OscillatorType = 'sine', duration = 0.1, enabled = true) => {
   if (!enabled || typeof window === 'undefined') return;
+
   try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as Window & typeof globalThis & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+
     if (!AudioContextClass) return;
+
     const ctx = new AudioContextClass();
     if (ctx.state === 'suspended') {
       ctx.resume();
     }
+
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = type;
@@ -38,21 +74,21 @@ const playHoloTone = (freq = 520, type = 'sine', duration = 0.1, enabled = true)
     gain.connect(ctx.destination);
     osc.start();
     osc.stop(ctx.currentTime + duration);
-  } catch (err) {
+  } catch {
     // Graceful fallback if audio is restricted by autoplay policies
   }
 };
 
 const CornerBrackets = () => (
   <>
-    <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t-2 border-l-2 border-purple-300/40 rounded-tl-sm pointer-events-none group-hover:border-fuchsia-300 group-hover:drop-shadow-[0_0_8px_rgba(245,208,254,0.8)] transition-all" />
-    <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 border-t-2 border-r-2 border-purple-300/40 rounded-tr-sm pointer-events-none group-hover:border-fuchsia-300 group-hover:drop-shadow-[0_0_8px_rgba(245,208,254,0.8)] transition-all" />
-    <div className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 border-b-2 border-l-2 border-purple-300/40 rounded-bl-sm pointer-events-none group-hover:border-fuchsia-300 group-hover:drop-shadow-[0_0_8px_rgba(245,208,254,0.8)] transition-all" />
-    <div className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 border-b-2 border-r-2 border-purple-300/40 rounded-br-sm pointer-events-none group-hover:border-fuchsia-300 group-hover:drop-shadow-[0_0_8px_rgba(245,208,254,0.8)] transition-all" />
+    <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t-2 border-l-2 border-purple-300/40 rounded-tl-sm pointer-events-none group-hover:border-fuchsia-300 group-hover:drop-shadow-[0_0_8px_rgba(216,180,254,0.5)]" />
+    <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 border-t-2 border-r-2 border-purple-300/40 rounded-tr-sm pointer-events-none group-hover:border-fuchsia-300 group-hover:drop-shadow-[0_0_8px_rgba(216,180,254,0.5)]" />
+    <div className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 border-b-2 border-l-2 border-purple-300/40 rounded-bl-sm pointer-events-none group-hover:border-fuchsia-300 group-hover:drop-shadow-[0_0_8px_rgba(216,180,254,0.5)]" />
+    <div className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 border-b-2 border-r-2 border-purple-300/40 rounded-br-sm pointer-events-none group-hover:border-fuchsia-300 group-hover:drop-shadow-[0_0_8px_rgba(216,180,254,0.5)]" />
   </>
 );
 
-const INITIAL_POSTS = [
+const INITIAL_POSTS: ForumPost[] = [
   {
     id: 'post-1',
     title: 'Free Linux Foundation & Kubernetes Workshop this Saturday!',
@@ -103,16 +139,16 @@ const INITIAL_POSTS = [
   }
 ];
 
-export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) {
-  const [posts, setPosts] = useState(INITIAL_POSTS);
-  const [filterCategory, setFilterCategory] = useState('all');
+export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }: { sessionToken?: string }) {
+  const [posts, setPosts] = useState<ForumPost[]>(INITIAL_POSTS);
+  const [filterCategory, setFilterCategory] = useState<PostCategory | 'all'>('all');
   const [sortByUpvotes, setSortByUpvotes] = useState(true);
-  const [activePost, setActivePost] = useState(null);
+  const [activePost, setActivePost] = useState<ForumPost | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [sfxEnabled, setSfxEnabled] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [toast, setToast] = useState(null);
+  const [toast, setToast] = useState<ToastState | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [liveUsersCount, setLiveUsersCount] = useState(38);
 
@@ -120,19 +156,19 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
   const [formAuthor, setFormAuthor] = useState('');
   const [formTitle, setFormTitle] = useState('');
   const [formContent, setFormContent] = useState('');
-  const [formCategory, setFormCategory] = useState('Networking');
-  const [formTechTag, setFormTechTag] = useState('Cloud/DevOps');
+  const [formCategory, setFormCategory] = useState<PostCategory>('Networking');
+  const [formTechTag, setFormTechTag] = useState<TechTag>('Cloud/DevOps');
 
   // Comment input
   const [replyAuthor, setReplyAuthor] = useState('');
   const [replyContent, setReplyContent] = useState('');
 
-  const showToast = useCallback((title, message, icon = '✨') => {
+  const showToast = useCallback((title: string, message: string, icon = '✨') => {
     setToast({ title, message, icon });
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setToast(null);
     }, 3800);
-    return () => clearTimeout(timer);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const fetchPostsFromApi = useCallback(async () => {
@@ -143,7 +179,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
       if (res.ok) {
         const json = await res.json();
         if (json && Array.isArray(json.data) && json.data.length > 0) {
-          setPosts(json.data);
+          setPosts(json.data as ForumPost[]);
         }
       }
     } catch {
@@ -156,10 +192,10 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
   }, [fetchPostsFromApi]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       setLiveUsersCount(prev => Math.max(28, prev + (Math.floor(Math.random() * 3) - 1)));
     }, 12000);
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, []);
 
   const filteredPosts = useMemo(() => {
@@ -187,7 +223,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
     return list;
   }, [posts, filterCategory, searchQuery, sortByUpvotes]);
 
-  const handleCreatePost = async (e) => {
+  const handleCreatePost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const title = formTitle.trim();
     const content = formContent.trim();
@@ -195,7 +231,6 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
     const category = formCategory;
     const techTag = formTechTag;
 
-    // Strict validation matching tested endpoints
     if (!title || !content || !author) {
       showToast('Missing Fields', 'Please complete title, author, and description.', '⚠️');
       return;
@@ -229,7 +264,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
 
       if (res.ok) {
         const responseData = await res.json();
-        const createdPost = {
+        const createdPost: ForumPost = {
           id: responseData?.data?.id || `post-${Date.now()}`,
           title,
           content,
@@ -244,8 +279,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
         };
         setPosts(prev => [createdPost, ...prev]);
       } else {
-        // Fallback for mock environment
-        const fallbackPost = {
+        const fallbackPost: ForumPost = {
           id: `post-${Date.now()}`,
           title,
           content,
@@ -267,8 +301,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
       setFormContent('');
       setFormAuthor('');
     } catch {
-      // Local optimistic fallback
-      const fallbackPost = {
+      const fallbackPost: ForumPost = {
         id: `post-${Date.now()}`,
         title,
         content,
@@ -289,11 +322,10 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
     }
   };
 
-  const handleUpvote = async (postId, e) => {
+  const handleUpvote = async (postId: string, e?: React.MouseEvent<HTMLButtonElement>) => {
     if (e) e.stopPropagation();
     playHoloTone(700, 'sine', 0.08, sfxEnabled);
 
-    // Optimistic UI update
     setPosts(prev => prev.map(p => {
       if (p.id === postId) {
         const nextUpvotes = (p.upvotes || 0) + 1;
@@ -321,7 +353,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
     }
   };
 
-  const handleSendReply = async (e) => {
+  const handleSendReply = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!activePost) return;
 
@@ -331,7 +363,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
 
     playHoloTone(650, 'sine', 0.09, sfxEnabled);
 
-    const newComment = {
+    const newComment: ForumComment = {
       author,
       authorId: 'verified-learner',
       content,
@@ -339,7 +371,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
     };
 
     const updatedComments = [...(activePost.comments || []), newComment];
-    const updatedPost = {
+    const updatedPost: ForumPost = {
       ...activePost,
       comments: updatedComments,
       replies: updatedComments.length
@@ -365,7 +397,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
     showToast('Comment Appended', `Reply added by ${author}`, '💬');
   };
 
-  const openDetail = async (post) => {
+  const openDetail = async (post: ForumPost) => {
     playHoloTone(550, 'sine', 0.06, sfxEnabled);
     setActivePost(post);
     setIsDetailOpen(true);
@@ -377,11 +409,11 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
       if (res.ok) {
         const json = await res.json();
         if (json && json.comments) {
-          setActivePost(prev => ({
+          setActivePost(prev => prev ? {
             ...prev,
             comments: json.comments,
             replies: json.comments.length
-          }));
+          } : prev);
         }
       }
     } catch {
@@ -389,7 +421,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
     }
   };
 
-  const getTechTagBadge = (tag) => {
+  const getTechTagBadge = (tag?: string) => {
     switch (tag) {
       case 'Cybersecurity':
         return 'bg-pink-500/15 text-pink-300 border-pink-400/40 shadow-[0_0_12px_rgba(244,114,182,0.18)]';
@@ -405,7 +437,6 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
 
   return (
     <div className="min-h-screen bg-[#07090e] text-slate-100 font-sans relative selection:bg-fuchsia-500 selection:text-white flex flex-col">
-      {/* Background Matrix & Subtle Gradient Mesh */}
       <div 
         className="fixed inset-0 pointer-events-none opacity-40"
         style={{
@@ -419,11 +450,8 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
         }}
       />
 
-      {/* Top Navbar */}
       <header className="sticky top-0 z-30 border-b border-purple-500/20 bg-[#07090e]/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
-          
-          {/* Logo & Identity */}
           <div className="flex items-center space-x-3">
             <div className="relative w-10 h-10 rounded-xl bg-purple-950/60 backdrop-blur-md border border-purple-400/50 flex items-center justify-center text-purple-300 shadow-[0_0_15px_rgba(216,180,254,0.25)]">
               <span className="absolute inset-0 rounded-xl bg-purple-400/20 animate-pulse pointer-events-none" />
@@ -442,7 +470,6 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
             </div>
           </div>
 
-          {/* Live Community Telemetry */}
           <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-slate-300 border border-purple-400/25 px-5 py-1.5 rounded-2xl bg-purple-950/25 backdrop-blur-md shadow-inner">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse" />
@@ -460,7 +487,6 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => {
@@ -481,7 +507,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                 playHoloTone(600, 'sine', 0.06, sfxEnabled);
                 setIsCreateOpen(true);
               }}
-              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400 hover:from-purple-300 hover:to-pink-300 text-slate-950 font-extrabold px-4 py-2 rounded-xl text-xs shadow-[0_0_20px_rgba(216,180,254,0.4)] hover:shadow-[0_0_30px_rgba(216,180,254,0.6)] transition transform hover:scale-[1.02]"
+              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400 hover:from-purple-300 hover:to-pink-300 text-slate-950 font-extrabold px-4 py-2 rounded-xl shadow-lg transition"
             >
               <Plus className="w-4 h-4 stroke-[3]" />
               Share Opportunity
@@ -490,14 +516,11 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
         </div>
       </header>
 
-      {/* Main Content Area */}
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 relative z-10">
-        
-        {/* LeadWise Hero Glass Banner */}
-        <section className="relative rounded-3xl p-6 sm:p-9 text-center overflow-hidden border border-purple-400/25 bg-gradient-to-br from-[#191c2a]/70 to-[#0e101a]/85 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.12)]">
+        <section className="relative rounded-3xl p-6 sm:p-9 text-center overflow-hidden border border-purple-400/25 bg-gradient-to-br from-[#191c2a]/70 to-[#0e101a]/85 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.45)]">
           <CornerBrackets />
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[34rem] h-56 bg-gradient-to-b from-purple-500/25 via-fuchsia-500/10 to-transparent blur-3xl pointer-events-none rounded-full" />
-          
+
           <div className="relative z-10 max-w-3xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
               Belonging before brilliance.
@@ -506,17 +529,16 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
               Because brilliance is everywhere. Belonging is rare.
             </p>
             <p className="text-xs sm:text-sm text-slate-300/80 leading-relaxed font-light max-w-2xl mx-auto">
-              You don&apos;t have to learn alone. This is an interactive support system where we announce workshops, pass on certification vouchers, ask technical questions, and help each other launch IT careers.
+              You don&apos;t have to learn alone. This is an interactive support system where we announce workshops, pass on certification vouchers, ask technical questions, and help each other launch our careers.
             </p>
 
-            {/* Direct Lounge Triggers */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => {
                   playHoloTone(580, 'sine', 0.1, sfxEnabled);
                   showToast('Live Study Room', 'Connecting to voice room channel...');
                 }}
-                className="text-xs font-semibold px-4 py-2.5 rounded-xl bg-purple-950/50 hover:bg-purple-900/60 text-purple-200 border border-purple-400/35 hover:border-purple-300 transition flex items-center gap-2 shadow-[0_0_15px_rgba(216,180,254,0.15)] hover:shadow-[0_0_20px_rgba(216,180,254,0.3)] backdrop-blur-md"
+                className="text-xs font-semibold px-4 py-2.5 rounded-xl bg-purple-950/50 hover:bg-purple-900/60 text-purple-200 border border-purple-400/35 hover:border-purple-300 transition flex items-center gap-2"
               >
                 <Headphones className="w-4 h-4 text-fuchsia-400" />
                 Enter Live Study Voice Room
@@ -527,7 +549,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                   playHoloTone(640, 'sine', 0.1, sfxEnabled);
                   showToast('1-on-1 Mentorship', 'Opening mentor booking schedules (2 slots available).');
                 }}
-                className="text-xs font-semibold px-4 py-2.5 rounded-xl bg-fuchsia-950/40 hover:bg-fuchsia-900/50 text-fuchsia-200 border border-fuchsia-400/35 hover:border-fuchsia-300 transition flex items-center gap-2 shadow-[0_0_15px_rgba(232,121,249,0.15)] hover:shadow-[0_0_20px_rgba(232,121,249,0.3)] backdrop-blur-md"
+                className="text-xs font-semibold px-4 py-2.5 rounded-xl bg-fuchsia-950/40 hover:bg-fuchsia-900/50 text-fuchsia-200 border border-fuchsia-400/35 hover:border-fuchsia-300 transition flex items-center gap-2"
               >
                 <Target className="w-4 h-4 text-purple-300" />
                 Book 1-on-1 Mentorship
@@ -536,10 +558,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
           </div>
         </section>
 
-        {/* Filters, Search, and Sorting Bar */}
         <section className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b border-purple-500/20 pb-4">
-          
-          {/* Category Tabs */}
           <div className="inline-flex rounded-xl bg-purple-950/30 backdrop-blur-md p-1 border border-purple-400/25 text-xs shadow-inner">
             <button
               onClick={() => { setFilterCategory('all'); playHoloTone(480, 'sine', 0.04, sfxEnabled); }}
@@ -573,7 +592,6 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
             </button>
           </div>
 
-          {/* Search and Sort controls */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative">
               <input
@@ -581,7 +599,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search tracks, Docker, AWS..."
-                className="px-3 py-1.5 pl-8 bg-purple-950/25 border border-purple-400/20 rounded-xl text-xs text-slate-100 placeholder-purple-300/40 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition w-44 sm:w-56"
+                className="px-3 py-1.5 pl-8 bg-purple-950/25 border border-purple-400/20 rounded-xl text-xs text-slate-100 placeholder-purple-300/40 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400/40"
               />
               <Filter className="w-3.5 h-3.5 text-purple-300/50 absolute left-2.5 top-2.5" />
               {searchQuery && (
@@ -599,7 +617,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                 setSortByUpvotes(!sortByUpvotes);
                 playHoloTone(520, 'sine', 0.05, sfxEnabled);
               }}
-              className="px-3.5 py-1.5 rounded-xl bg-purple-950/40 backdrop-blur-md border border-purple-400/25 text-purple-200 hover:text-white hover:border-purple-300 hover:shadow-[0_0_15px_rgba(216,180,254,0.2)] transition text-xs font-mono flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-xl bg-purple-950/40 backdrop-blur-md border border-purple-400/25 text-purple-200 hover:text-white hover:border-purple-300 hover:shadow-[0_0_15px_rgba(216,180,254,0.25)] transition flex items-center gap-2"
             >
               <Flame className="w-3.5 h-3.5 text-amber-300" />
               {sortByUpvotes ? 'Top Boosted' : 'Recent First'}
@@ -607,7 +625,6 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
           </div>
         </section>
 
-        {/* Opportunity Cards Grid */}
         <section className="mt-6">
           {filteredPosts.length === 0 ? (
             <div className="text-center py-16">
@@ -635,12 +652,11 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                   <div
                     key={post.id}
                     onClick={() => openDetail(post)}
-                    className="group relative rounded-2xl p-5 flex flex-col justify-between min-h-[250px] cursor-pointer transition-all duration-300 bg-gradient-to-br from-[#191c2a]/65 to-[#0e101a]/80 backdrop-blur-xl border border-purple-400/20 hover:border-fuchsia-400/60 hover:-translate-y-1 hover:shadow-[0_20px_40px_-8px_rgba(0,0,0,0.8),0_0_30px_rgba(216,180,254,0.22)]"
+                    className="group relative rounded-2xl p-5 flex flex-col justify-between min-h-[250px] cursor-pointer transition-all duration-300 bg-gradient-to-br from-[#191c2a]/65 to-[#0e101a]/80 border border-purple-400/15 hover:border-purple-400/35 hover:shadow-[0_0_35px_rgba(168,85,247,0.12)]"
                   >
                     <CornerBrackets />
 
                     <div>
-                      {/* Category & Tag Row */}
                       <div className="flex items-center justify-between gap-2 mb-3">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <span className={`text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full border backdrop-blur-md uppercase ${catBadgeClass}`}>
@@ -655,24 +671,21 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                         <span className="text-[10px] font-mono text-purple-300/60">{post.timeAgo || 'Just now'}</span>
                       </div>
 
-                      {/* Title */}
                       <h3 className="text-base font-bold text-white group-hover:text-purple-200 transition-colors leading-snug mb-2 drop-shadow-sm">
                         {post.title}
                       </h3>
 
-                      {/* Content Preview */}
                       <p className="text-xs text-slate-300/90 leading-relaxed line-clamp-4 font-normal">
                         {post.content}
                       </p>
                     </div>
 
-                    {/* Footer / Author & Signal Boost */}
                     <div 
                       className="pt-4 mt-4 border-t border-purple-500/15 flex items-center justify-between text-xs"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-purple-950/80 border border-purple-400/40 flex items-center justify-center text-[10px] text-purple-200 font-bold shadow-[0_0_8px_rgba(216,180,254,0.2)]">
+                        <div className="w-6 h-6 rounded-full bg-purple-950/80 border border-purple-400/40 flex items-center justify-center text-[10px] text-purple-200 font-bold shadow-[0_0_8px_rgba(216,180,254,0.15)]">
                           {post.author.charAt(0).toUpperCase()}
                         </div>
                         <div className="flex flex-col">
@@ -685,7 +698,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                         <button
                           onClick={(e) => handleUpvote(post.id, e)}
                           title="Boost signal"
-                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-950/50 backdrop-blur-md border border-purple-400/35 hover:border-purple-300 text-purple-200 font-bold transition hover:shadow-[0_0_15px_rgba(216,180,254,0.3)] active:scale-95"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-950/50 backdrop-blur-md border border-purple-400/35 hover:border-purple-300 text-purple-200 font-bold transition"
                         >
                           <ArrowBigUp className="w-4 h-4 text-purple-300 fill-purple-300/30" />
                           <span className="font-mono text-xs">{post.upvotes || 0}</span>
@@ -694,7 +707,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                         <button
                           onClick={() => openDetail(post)}
                           title="View discussion thread"
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-purple-950/30 backdrop-blur-md border border-purple-400/20 hover:border-purple-400/40 text-purple-300/80 hover:text-purple-200 transition"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-purple-950/30 backdrop-blur-md border border-purple-400/20 hover:border-purple-400/40 text-purple-300/80 transition"
                         >
                           <MessageSquare className="w-3.5 h-3.5" />
                           <span className="font-mono text-xs">{post.replies || 0}</span>
@@ -709,13 +722,11 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
         </section>
       </main>
 
-      {/* Detail & Reply Thread Modal */}
       {isDetailOpen && activePost && (
         <div className="fixed inset-0 bg-[#0c0e14]/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="relative rounded-3xl w-full max-w-xl border border-purple-400/35 bg-gradient-to-br from-[#191c2a]/90 to-[#0e101a]/95 backdrop-blur-2xl shadow-[0_0_60px_rgba(216,180,254,0.18)] overflow-hidden flex flex-col max-h-[85vh]">
+          <div className="relative rounded-3xl w-full max-w-xl border border-purple-400/35 bg-gradient-to-br from-[#191c2a]/90 to-[#0e101a]/95 backdrop-blur-2xl shadow-[0_0_60px_rgba(216,180,254,0.18)]">
             <CornerBrackets />
 
-            {/* Modal Header */}
             <div className="px-6 py-4 border-b border-white/[0.08] flex justify-between items-start bg-[#13151f]/80">
               <div>
                 <div className="flex items-center gap-2 mb-1.5">
@@ -740,12 +751,11 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
               </button>
             </div>
 
-            {/* Post Body */}
             <div className="p-6 border-b border-white/[0.08] bg-[#0f1118]/70 overflow-y-auto">
               <p className="text-slate-200 text-sm leading-relaxed whitespace-pre-line">
                 {activePost.content}
               </p>
-              
+
               <div className="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs text-slate-400">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded-full bg-purple-950 flex items-center justify-center text-purple-300 font-bold text-[10px] border border-purple-400/40">
@@ -767,7 +777,6 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
               </div>
             </div>
 
-            {/* Replies Header */}
             <div className="px-6 py-2.5 bg-[#13151f]/80 border-b border-white/[0.08] text-xs font-semibold text-slate-400 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <MessageSquare className="w-3.5 h-3.5 text-purple-300" />
@@ -778,7 +787,6 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
               </span>
             </div>
 
-            {/* Replies List */}
             <div className="flex-1 overflow-y-auto p-6 space-y-3 bg-[#0a0c12]">
               {(!activePost.comments || activePost.comments.length === 0) ? (
                 <p className="text-xs text-slate-500 italic text-center py-4">
@@ -802,7 +810,6 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
               )}
             </div>
 
-            {/* Reply Input Form */}
             <form onSubmit={handleSendReply} className="p-4 border-t border-white/[0.08] bg-[#13151f] flex flex-col gap-2">
               <div className="flex gap-2">
                 <input
@@ -823,7 +830,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-purple-400 to-fuchsia-400 hover:from-purple-300 hover:to-fuchsia-300 text-slate-950 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow-md"
+                  className="px-4 py-2 bg-gradient-to-r from-purple-400 to-fuchsia-400 hover:from-purple-300 hover:to-fuchsia-300 text-slate-950 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
                 >
                   <Send className="w-3.5 h-3.5" />
                   Reply
@@ -834,10 +841,9 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
         </div>
       )}
 
-      {/* Share Opportunity Composer Modal */}
       {isCreateOpen && (
         <div className="fixed inset-0 bg-[#0c0e14]/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="relative rounded-3xl w-full max-w-lg border border-purple-400/35 bg-gradient-to-br from-[#191c2a]/95 to-[#0e101a]/95 backdrop-blur-2xl shadow-[0_0_50px_rgba(216,180,254,0.2)] overflow-hidden">
+          <div className="relative rounded-3xl w-full max-w-lg border border-purple-400/35 bg-gradient-to-br from-[#191c2a]/95 to-[#0e101a]/95 backdrop-blur-2xl shadow-[0_0_50px_rgba(216,180,254,0.2)]">
             <CornerBrackets />
 
             <div className="px-6 py-4 border-b border-white/[0.08] flex justify-between items-center bg-[#13151f]/80">
@@ -867,7 +873,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                   onChange={(e) => setFormAuthor(e.target.value)}
                   required
                   placeholder="e.g. Alex"
-                  className="w-full px-3.5 py-2.5 bg-[#0e1017] border border-white/[0.1] rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
+                  className="w-full px-3.5 py-2.5 bg-[#0e1017] border border-white/[0.1] rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400/50"
                 />
               </div>
 
@@ -877,7 +883,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                 </label>
                 <select
                   value={formCategory}
-                  onChange={(e) => setFormCategory(e.target.value)}
+                  onChange={(e) => setFormCategory(e.target.value as PostCategory)}
                   className="w-full px-3.5 py-2.5 bg-[#0e1017] border border-white/[0.1] rounded-xl text-slate-100 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
                 >
                   <option value="Networking">Networking (Workshops, Meetups, Referrals)</option>
@@ -898,7 +904,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                   onChange={(e) => setFormTitle(e.target.value)}
                   required
                   placeholder="e.g. Free AWS Cloud Practitioner Voucher Study Group"
-                  className="w-full px-3.5 py-2.5 bg-[#0e1017] border border-white/[0.1] rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
+                  className="w-full px-3.5 py-2.5 bg-[#0e1017] border border-white/[0.1] rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400/50"
                 />
               </div>
 
@@ -912,11 +918,10 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                   required
                   rows={4}
                   placeholder="Share dates, links, vouchers, or study hours in the voice room..."
-                  className="w-full px-3.5 py-2.5 bg-[#0e1017] border border-white/[0.1] rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
+                  className="w-full px-3.5 py-2.5 bg-[#0e1017] border border-white/[0.1] rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400/50"
                 />
               </div>
 
-              {/* Specialization Track Badges */}
               <div>
                 <label className="block text-slate-400 mb-1 text-[11px]">IT Career Track Badge</label>
                 <div className="flex flex-wrap gap-1.5">
@@ -925,7 +930,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                       key={track}
                       type="button"
                       onClick={() => {
-                        setFormTechTag(track);
+                        setFormTechTag(track as TechTag);
                         playHoloTone(600, 'sine', 0.04, sfxEnabled);
                       }}
                       className={`px-2.5 py-1 rounded-lg border text-xs font-mono transition ${
@@ -951,7 +956,7 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2.5 font-bold bg-gradient-to-r from-purple-400 to-fuchsia-400 hover:from-purple-300 hover:to-fuchsia-300 text-slate-950 rounded-xl shadow-lg transition flex items-center gap-1.5 disabled:opacity-50"
+                  className="px-5 py-2.5 font-bold bg-gradient-to-r from-purple-400 to-fuchsia-400 hover:from-purple-300 hover:to-fuchsia-300 text-slate-950 rounded-xl shadow-lg transition flex items-center gap-2 disabled:opacity-70"
                 >
                   {isSubmitting ? (
                     <>
@@ -964,11 +969,10 @@ export default function LeadWiseBulletinBoard({ sessionToken = 'valid-token' }) 
                 </button>
               </div>
             </form>
-                      </div>
+          </div>
         </div>
       )}
 
-      {/* Non-blocking Holographic Toast */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 transition-all duration-300">
           <div className="rounded-2xl px-4 py-3 border border-purple-400/40 flex items-center gap-3 bg-[#161822]/95 backdrop-blur-xl shadow-2xl">
