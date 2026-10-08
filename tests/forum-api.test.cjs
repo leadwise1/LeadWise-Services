@@ -32,18 +32,27 @@ const adminDb = {
 };
 const adminModule = {
   adminDb,
-  adminAuth: { verifyIdToken: async token => { if (token !== 'valid-token') throw new Error('Invalid'); return { uid: 'verified-learner' }; } },
+  adminAuth: { verifyIdToken: async token => {
+    if (token === 'valid-token') return { uid: 'verified-learner' };
+    if (['admin-token', 'unverified-token', 'wrong-provider-token'].includes(token)) return {
+      uid: 'google-admin', email: 'lakhani@letsleadwise.org',
+      email_verified: token !== 'unverified-token',
+      firebase: { sign_in_provider: token === 'wrong-provider-token' ? 'password' : 'google.com' },
+    };
+    throw new Error('Invalid');
+  } },
   admin: { firestore: { FieldValue: { serverTimestamp: () => stamp, increment: amount => ({ increment: amount }) } } },
 };
 function load(relative) {
   const exports = {};
   const javascript = ts.transpileModule(fs.readFileSync(path.join(root, relative), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
-  vm.runInNewContext(javascript, { exports, require: name => name === '@/lib/firebase-admin' ? adminModule : deps(name), console, Date }, { filename: relative });
+  vm.runInNewContext(javascript, { exports, require: name => name === '@/lib/firebase-admin' ? adminModule : name === '@/lib/community-admin' ? load('src/lib/community-admin.ts') : deps(name), console, Date, process: { env: { COMMUNITY_ADMIN_EMAIL: 'lakhani@letsleadwise.org' } } }, { filename: relative });
   return exports;
 }
 const feed = load('src/app/api/forum/posts/route.ts');
 const detail = load('src/app/api/forum/posts/[id]/route.ts');
-const request = (body, token) => new Request('http://localhost/api/forum/posts', { method: 'POST', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify(body) });
+const access = load('src/app/api/forum/admin/route.ts');
+const request = (body, token, method = 'POST') => new Request('http://localhost/api/forum/posts', { method, headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, ...(method !== 'GET' ? { body: JSON.stringify(body) } : {}) });
 const postPath = 'artifacts/leadwise-web/public/data/forumPosts';
 
 test('posting requires a verified session and valid fields', async () => {
@@ -88,4 +97,56 @@ test('missing discussions return 404 and unsigned replies cannot write', async (
   const context = { params: Promise.resolve({ id: 'missing' }) };
   assert.equal((await detail.GET(new Request('http://localhost'), context)).status, 404);
   assert.equal((await detail.POST(request({ author: 'Sam', content: 'Hello' }), context)).status, 401);
-})
+});
+
+test('management requires the approved verified Google account', async () => {
+  assert.equal((await access.GET(request({}, undefined, 'GET'))).status, 401);
+  for (const token of ['valid-token', 'unverified-token', 'wrong-provider-token']) {
+    assert.equal((await access.GET(request({}, token, 'GET'))).status, 403);
+    assert.equal((await detail.PATCH(request({}, token, 'PATCH'), { params: Promise.resolve({ id: 'new-1' }) })).status, 403);
+    assert.equal((await detail.DELETE(request({}, token, 'DELETE'), { params: Promise.resolve({ id: 'new-1' }) })).status, 403);
+  }
+  assert.equal((await access.GET(request({}, 'invalid-token', 'GET'))).status, 401);
+  assert.equal((await access.GET(request({}, 'admin-token', 'GET'))).status, 200);
+});
+
+test('editing preserves ownership, votes, and replies and rejects unexpected fields', async () => {
+  const id = 'editable';
+  const saved = { title: 'Original', content: 'Details', category: 'Announcements', author: 'Sam', authorId: 'learner', replies: 3, upvotes: 7, createdAt: stamp };
+  records.set(`${postPath}/${id}`, saved);
+  const context = { params: Promise.resolve({ id }) };
+  const fields = { title: ' Revised ', content: ' Updated details ', category: 'Workshops' };
+  assert.equal((await detail.PATCH(request(fields, undefined, 'PATCH'), context)).status, 401);
+  for (const invalid of [{ ...fields, authorId: 'forged' }, { ...fields, title: ' ' }, { ...fields, category: 'Unknown' }, { ...fields, content: ' ' }]) {
+    assert.equal((await detail.PATCH(request(invalid, 'admin-token', 'PATCH'), context)).status, 400);
+    assert.equal(saved.title, 'Original');
+  }
+  assert.equal((await detail.PATCH(request(fields, 'admin-token', 'PATCH'), context)).status, 200);
+  assert.equal(saved.title, 'Revised');
+  assert.equal(saved.content, 'Updated details');
+  assert.equal(saved.category, 'Workshops');
+  assert.equal(saved.authorId, 'learner');
+  assert.equal(saved.replies, 3);
+  assert.equal(saved.upvotes, 7);
+  assert.equal(saved.createdAt, stamp);
+  assert.equal(saved.updatedAt, stamp);
+});
+
+test('removal hides posts without destroying their content or replies', async () => {
+  const id = 'editable';
+  const context = { params: Promise.resolve({ id }) };
+  records.set(`${postPath}/${id}/comments/comment`, { content: 'Keep this reply', author: 'Sam', createdAt: stamp });
+  assert.equal((await detail.DELETE(request({}, undefined, 'DELETE'), context)).status, 401);
+  assert.equal((await detail.DELETE(request({}, 'admin-token', 'DELETE'), context)).status, 200);
+  const saved = records.get(`${postPath}/${id}`);
+  assert.equal(saved.deleted, true);
+  assert.equal(saved.content, 'Updated details');
+  assert.equal(records.get(`${postPath}/${id}/comments/comment`).content, 'Keep this reply');
+  assert.equal((await detail.GET(request({}, undefined, 'GET'), context)).status, 404);
+  const feedResult = await (await feed.GET()).json();
+  assert.equal(feedResult.data.some(post => post.id === id), false);
+  assert.equal((await detail.PATCH(request({ title: 'Restore', content: '', category: 'General Discussion' }, 'admin-token', 'PATCH'), context)).status, 404);
+  assert.equal((await detail.DELETE(request({}, 'admin-token', 'DELETE'), context)).status, 404);
+  const missing = { params: Promise.resolve({ id: 'missing' }) };
+  assert.equal((await detail.DELETE(request({}, 'admin-token', 'DELETE'), missing)).status, 404);
+});

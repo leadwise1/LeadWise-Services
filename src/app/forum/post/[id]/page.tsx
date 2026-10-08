@@ -88,7 +88,7 @@ export default function PostDetailsPage() {
       poll = setInterval(() => { if (!document.hidden) void loadFromServer(); }, 30000);
     };
     const unsubscribePost = onSnapshot(postRef, (docSnap) => {
-      if (docSnap.exists()) {
+      if (docSnap.exists() && !docSnap.data()?.deleted) {
         const data = docSnap.data();
         setPost({
           id: docSnap.id,

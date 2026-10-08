@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { MessageSquare, Trophy, Calendar, ArrowLeft, Megaphone, Network } from 'lucide-react';
+import { MessageSquare, Trophy, Calendar, ArrowLeft, Megaphone, Network, Settings } from 'lucide-react';
 
 function Navigation() {
   const path = usePathname();
@@ -15,6 +15,7 @@ function Navigation() {
     { href: '/forum/discussions?board=bulletin', label: 'Bulletin board', Icon: Megaphone, active: path === '/forum/discussions' && isBulletin },
     { href: '/forum/events', label: 'Weekly syncs', Icon: Calendar, active: path === '/forum/events' },
     { href: '/forum/leaderboard', label: 'Learner progress', Icon: Trophy, active: path === '/forum/leaderboard' },
+    { href: '/forum/manage', label: 'Manage community', Icon: Settings, active: path === '/forum/manage' },
   ];
 
   return (

@@ -4,8 +4,8 @@ import React, { useState, useEffect, Suspense } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Search, PlusCircle, Flame, Clock, MessageCircle, ArrowUp, Loader2, X, Trash2, Shield, Zap, Pin, ArrowUpRight } from 'lucide-react';
 import { db, auth } from "@/lib/firebase";
-import { signInAnonymously, updateProfile } from "firebase/auth";
-import { collection, onSnapshot, doc, query, orderBy, deleteDoc } from "firebase/firestore";
+import { onAuthStateChanged, signInAnonymously, updateProfile } from "firebase/auth";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { getCommunityName } from '../community-profile';
 import { saveCommunityUpdate } from '../community-api';
 import Link from 'next/link';
@@ -32,12 +32,13 @@ interface Post {
   content?: string;
 }
 
-function BulletinNotice({ post, index, onUpvote, onDelete, upvoting }: {
+function BulletinNotice({ post, index, onUpvote, onDelete, upvoting, canManage }: {
   post: Post;
   index: number;
   onUpvote: (event: React.MouseEvent, id: string) => void;
   onDelete: (event: React.MouseEvent, id: string) => void;
   upvoting: boolean;
+  canManage: boolean;
 }) {
   const format = post.category === 'Workshops' ? 'flyer' : post.category === 'Opportunities' ? 'opportunity' : 'note';
   return (
@@ -57,7 +58,7 @@ function BulletinNotice({ post, index, onUpvote, onDelete, upvoting }: {
         <Link href={`/forum/post/${post.id}`}>
           {post.replies ? `${post.replies} ${post.replies === 1 ? 'reply' : 'replies'}` : 'View notice'} <ArrowUpRight size={16} />
         </Link>
-        {process.env.NEXT_PUBLIC_ADMIN_UID && auth?.currentUser?.uid === process.env.NEXT_PUBLIC_ADMIN_UID && (
+        {canManage && (
           <button onClick={event => onDelete(event, post.id)} aria-label="Delete post" title="Delete post"><Trash2 size={16} /></button>
         )}
       </footer>
@@ -160,6 +161,22 @@ function ForumPageContent() {
   const [newCategory, setNewCategory] = useState("General Discussion");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [upvotingIds, setUpvotingIds] = useState<Set<string>>(new Set());
+  const [canManage, setCanManage] = useState(false);
+
+  useEffect(() => {
+    let revision = 0;
+    const unsubscribe = onAuthStateChanged(auth, async user => {
+      const currentRevision = ++revision;
+      setCanManage(false);
+      if (!user || user.isAnonymous) return;
+      try {
+        const token = await user.getIdToken();
+        const response = await fetch('/api/forum/admin', { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' });
+        if (revision === currentRevision) setCanManage(response.ok);
+      } catch { if (revision === currentRevision) setCanManage(false); }
+    });
+    return () => { revision++; unsubscribe(); };
+  }, []);
 
   useEffect(() => {
     setNewCategory(isBulletin ? "Announcements" : "General Discussion");
@@ -211,6 +228,7 @@ function ForumPageContent() {
       const fetchedPosts: Post[] = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
+        if (data.deleted) return;
         fetchedPosts.push({
           id: doc.id,
           title: data.title || "Untitled",
@@ -268,11 +286,13 @@ function ForumPageContent() {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      const postRef = doc(db, ...FORUM_COLLECTION_PATH, postId);
-      await deleteDoc(postRef);
+      const token = await auth.currentUser?.getIdToken();
+      const response = await fetch(`/api/forum/posts/${postId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token || ''}` } });
+      if (!response.ok) throw new Error('Removal failed');
+      setRetryCount(count => count + 1);
     } catch (error) {
       console.error("Failed to delete post:", error);
-      alert("Delete failed. You likely need to update your Firestore Rules to allow deletions.");
+      setActionError('The post could not be removed. Open Manage community and sign in as an administrator.');
     }
   };
 
@@ -434,7 +454,7 @@ function ForumPageContent() {
                   transition={{ delay: i * 0.05 }}
                   key={post.id}
                 >
-                    {isBulletin ? <BulletinNotice post={post} index={i} onUpvote={handleUpvote} onDelete={handleDeletePost} upvoting={upvotingIds.has(post.id)} /> : <article className="community-post group border border-neutral-800 p-5 rounded-lg">
+                    {isBulletin ? <BulletinNotice post={post} index={i} onUpvote={handleUpvote} onDelete={handleDeletePost} upvoting={upvotingIds.has(post.id)} canManage={canManage} /> : <article className="community-post group border border-neutral-800 p-5 rounded-lg">
                       <div className="flex gap-4">
                         <div className="flex flex-col items-center gap-1 min-w-[40px]">
                           <motion.button
@@ -479,7 +499,7 @@ function ForumPageContent() {
                                 <Flame className="w-3 h-3" /> Trending
                               </span>
                             )}
-                            {process.env.NEXT_PUBLIC_ADMIN_UID && auth?.currentUser?.uid === process.env.NEXT_PUBLIC_ADMIN_UID && (
+                            {canManage && (
                               <button
                                 onClick={(e) => handleDeletePost(e, post.id)}
                                 className="ml-2 text-neutral-600 hover:text-red-400 transition-colors p-1"

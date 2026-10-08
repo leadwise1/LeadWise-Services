@@ -24,7 +24,7 @@ export async function GET() {
       .limit(200)
       .get();
     
-    const posts = snapshot.docs.map(doc => {
+    const posts = snapshot.docs.filter(doc => !doc.data().deleted).map(doc => {
       const data = doc.data();
       return {
         id: doc.id,
