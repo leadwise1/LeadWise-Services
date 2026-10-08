@@ -10,8 +10,9 @@ function Navigation() {
   const params = useSearchParams();
   const isBulletin = params.get('board') === 'bulletin';
   const links = [
-    { href: '/forum', label: 'Open forum', Icon: MessageSquare, active: path === '/forum' && !isBulletin },
-    { href: '/forum?board=bulletin', label: 'Bulletin board', Icon: Megaphone, active: path === '/forum' && isBulletin },
+    { href: '/forum', label: 'Welcome', Icon: Network, active: path === '/forum' },
+    { href: '/forum/discussions', label: 'Open forum', Icon: MessageSquare, active: path === '/forum/discussions' && !isBulletin },
+    { href: '/forum/discussions?board=bulletin', label: 'Bulletin board', Icon: Megaphone, active: path === '/forum/discussions' && isBulletin },
     { href: '/forum/events', label: 'Weekly syncs', Icon: Calendar, active: path === '/forum/events' },
     { href: '/forum/leaderboard', label: 'Learner progress', Icon: Trophy, active: path === '/forum/leaderboard' },
     { href: '/forum/rules', label: 'Community charter', Icon: Shield, active: path === '/forum/rules' },
@@ -23,12 +24,12 @@ function Navigation() {
         <Link href="/courses" className="text-sm text-neutral-400 hover:text-white hidden md:flex items-center gap-2 mb-5">
           <ArrowLeft className="w-4 h-4" /> Back to courses
         </Link>
-        <Link href="/forum" className="flex items-center gap-3 text-2xl font-bold text-white"><Network className="w-7 h-7 text-fuchsia-400" />LeadWise</Link>
+        <Link href="/forum" className="flex items-center gap-3 text-2xl font-bold text-white"><Network className="w-7 h-7 text-blue-400" />LeadWise</Link>
         <p className="text-sm text-neutral-400 mt-2">Learner community</p>
       </div>
       <nav aria-label="Community" className="flex flex-wrap md:flex-col gap-1">
         {links.map(({ href, label, Icon, active }) => (
-          <Link key={href} href={href} aria-current={active ? 'page' : undefined} className={`community-nav-link flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium ${active ? 'text-fuchsia-200' : 'text-neutral-300 hover:bg-neutral-800 hover:text-white'}`}>
+          <Link key={href} href={href} aria-current={active ? 'page' : undefined} className={`community-nav-link flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium ${active ? 'text-blue-200' : 'text-neutral-300 hover:bg-neutral-800 hover:text-white'}`}>
             <Icon className="w-5 h-5 shrink-0" /> {label}
           </Link>
         ))}

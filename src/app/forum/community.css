@@ -1,5 +1,5 @@
 .community-shell {
-  --community-accent: #f0abfc;
+  --community-accent: #47b3ff;
   background-color: #17191d;
   background-image: linear-gradient(#ffffff03 1px, transparent 1px), linear-gradient(90deg, #ffffff03 1px, transparent 1px);
   background-size: 48px 48px;
@@ -10,33 +10,33 @@
 .community-nav { background: #191b20; }
 .community-nav-link { border: 1px solid transparent; min-height: 44px; }
 .community-nav-link[aria-current="page"] {
-  background: #391e3b;
-  border-color: #85458c;
+  background: #25292b;
+  border-color: #334b66;
   box-shadow: inset 3px 0 0 var(--community-accent);
 }
 .community-header { border-bottom: 1px solid #30373b; }
 .community-primary {
-  background: #c026d3;
+  background: #1d4ed8;
   color: #fff;
-  border: 1px solid #e879f9;
-  box-shadow: 0 0 16px #c026d324;
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 16px #00000000;
 }
-.community-primary:hover { background: #a21caf; }
-.community-secondary { background: #391e3b; color: #f5d0fe; border: 1px solid #85458c; }
-.community-secondary:hover { background: #4a2450; }
+.community-primary:hover { background: #1e40af; }
+.community-secondary { background: #25292b; color: #bfdbfe; border: 1px solid #334b66; }
+.community-secondary:hover { background: #303638; }
 .community-tabs button { border-radius: 4px; min-height: 44px; }
 .community-tabs button[aria-pressed="true"] {
-  background: #352538;
-  color: #f5d0fe;
+  background: #25292b;
+  color: #bfdbfe;
   box-shadow: inset 0 -2px 0 var(--community-accent);
 }
 .community-post { background: #212429; border-color: #3d4148; transition: border-color 160ms; }
-.community-post:hover, .community-post:focus-within { border-color: #a45caf; }
+.community-post:hover, .community-post:focus-within { border-color: #47b3ff; }
 .community-shell :focus-visible { outline: 2px solid var(--community-accent); outline-offset: 4px; }
 .community-shell button, .community-shell a, .community-shell select { touch-action: manipulation; }
-.community-shell .text-fuchsia-300, .community-shell .text-fuchsia-400, .community-shell .text-fuchsia-500 { color: #f0abfc; }
-.community-shell .bg-fuchsia-600 { background-color: #c026d3; }
-.community-shell .bg-fuchsia-600:hover { background-color: #a21caf; }
+.community-shell .text-blue-300, .community-shell .text-blue-400, .community-shell .text-blue-500 { color: #47b3ff; }
+.community-shell .bg-blue-600 { background-color: #1d4ed8; }
+.community-shell .bg-blue-600:hover { background-color: #1e40af; }
 
 @media (max-width: 767px) {
   .community-nav { gap: 16px; }

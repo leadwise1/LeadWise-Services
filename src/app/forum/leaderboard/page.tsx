@@ -21,9 +21,9 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
   const isThird = rank === 3;
 
   const rankConfig = {
-    1: { color: "text-yellow-400", border: "border-yellow-500/50", bg: "from-yellow-500/20 to-transparent", height: "h-64 md:h-80", scale: 1.1 },
-    2: { color: "text-slate-300", border: "border-slate-400/50", bg: "from-slate-400/10 to-transparent", height: "h-48 md:h-64", scale: 1.0 },
-    3: { color: "text-amber-600", border: "border-amber-700/50", bg: "from-amber-700/10 to-transparent", height: "h-36 md:h-48", scale: 0.95 },
+    1: { color: "text-neutral-400", border: "border-neutral-500/50", bg: "from-neutral-500/20 to-transparent", height: "h-64 md:h-80", scale: 1.1 },
+    2: { color: "text-neutral-300", border: "border-neutral-400/50", bg: "from-neutral-400/10 to-transparent", height: "h-48 md:h-64", scale: 1.0 },
+    3: { color: "text-neutral-600", border: "border-neutral-700/50", bg: "from-neutral-700/10 to-transparent", height: "h-36 md:h-48", scale: 0.95 },
   }[rank as 1 | 2 | 3];
 
   return (
@@ -48,7 +48,7 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
               initial={{ rotate: -10, scale: 0 }}
               animate={{ rotate: 0, scale: 1 }}
               transition={{ delay: delay + 0.5, type: "spring" }}
-              className="absolute -top-8 left-1/2 -translate-x-1/2 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)] z-30"
+              className="absolute -top-8 left-1/2 -translate-x-1/2 text-neutral-400  z-30"
             >
               <Crown size={32} fill="currentColor" />
             </motion.div>
@@ -69,7 +69,7 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
                   delay: delay + 1 + (i * 0.2),
                   ease: "easeOut"
                 }}
-                className="absolute top-0 left-1/2 w-1 h-1 bg-yellow-400 rounded-full"
+                className="absolute top-0 left-1/2 w-1 h-1 bg-neutral-400 rounded-full"
               />
             ))}
           </>
@@ -119,7 +119,7 @@ const PodiumItem = ({ user, rank, delay }: { user: Learner; rank: number; delay:
           {user.coursesCompleted} Courses
         </span>
         {user.estimatedHours ? (
-          <span className="text-[9px] text-fuchsia-400/80 font-bold uppercase tracking-tighter mt-1">
+          <span className="text-[9px] text-blue-400/80 font-bold uppercase tracking-tighter mt-1">
             {Math.round(user.estimatedHours)} Hours Invested
           </span>
         ) : null}
@@ -182,20 +182,20 @@ export default function LeaderboardPage() {
   const remaining = leaderboard.slice(3);
 
   return (
-    <div className="min-h-screen bg-[#17191d] text-white selection:bg-[#f0abfc] selection:text-[#25282e]">
+    <div className="min-h-screen bg-[#17191d] text-white selection:bg-[#47b3ff] selection:text-[#25282e]">
       {/* Navigation */}
       <div className="border-b border-white/5 bg-black/20 sticky top-0 z-50 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-6">
           <div className="flex gap-8">
             <Link 
               href="/forum/leaderboard"
-              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/leaderboard' ? 'border-[#f0abfc] text-[#f0abfc]' : 'border-transparent text-gray-500 hover:text-white'}`}
+              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/leaderboard' ? 'border-[#47b3ff] text-[#47b3ff]' : 'border-transparent text-gray-500 hover:text-white'}`}
             >
               Leaderboard
             </Link>
             <Link 
               href="/forum/events"
-              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/events' ? 'border-[#f0abfc] text-[#f0abfc]' : 'border-transparent text-gray-500 hover:text-white'}`}
+              className={`py-4 text-sm font-bold transition-colors border-b-2 ${pathname === '/forum/events' ? 'border-[#47b3ff] text-[#47b3ff]' : 'border-transparent text-gray-500 hover:text-white'}`}
             >
               Weekly Sync
             </Link>
@@ -208,13 +208,13 @@ export default function LeaderboardPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div>
             <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-              <Trophy className="w-8 h-8 text-yellow-400" /> Champions Circle
+              <Trophy className="w-8 h-8 text-neutral-400" /> Champions Circle
             </h2>
             <p className="text-neutral-400">The elite learners leading the Cybersecurity frontier.</p>
           </div>
 
           <div className="bg-neutral-900/80 border border-neutral-800 rounded-xl p-4 flex items-center gap-5 shadow-lg backdrop-blur-sm">
-            <TrendingUp className="w-6 h-6 text-[#f0abfc]" />
+            <TrendingUp className="w-6 h-6 text-[#47b3ff]" />
             <div>
               <p className="text-[10px] text-neutral-500 font-bold tracking-[0.2em] uppercase">Current Season</p>
               <p className="text-sm font-bold text-white">May 2026 Audit</p>
@@ -228,13 +228,13 @@ export default function LeaderboardPage() {
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             >
-              <Loader2 className="w-12 h-12 text-fuchsia-500" />
+              <Loader2 className="w-12 h-12 text-blue-500" />
             </motion.div>
             <p className="text-lg font-medium animate-pulse">Syncing Coursera ledger data...</p>
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center h-96 text-neutral-400 gap-4 text-center">
-            <AlertTriangle className="w-12 h-12 text-amber-400" />
+            <AlertTriangle className="w-12 h-12 text-neutral-400" />
             <div>
               <p className="text-lg font-bold text-white">Coursera learner sync failed</p>
               <p className="text-sm text-neutral-500 max-w-xl mt-2">{error}</p>
@@ -301,7 +301,7 @@ export default function LeaderboardPage() {
                           </p>
                         </div>
                       {user.estimatedHours ? (
-                        <div className="hidden md:flex ml-auto px-3 py-1 rounded-lg bg-fuchsia-500/10 border border-fuchsia-500/20 text-[10px] font-bold text-fuchsia-400 uppercase">
+                        <div className="hidden md:flex ml-auto px-3 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[10px] font-bold text-blue-400 uppercase">
                           {Math.round(user.estimatedHours)}h Spent
                         </div>
                       ) : null}

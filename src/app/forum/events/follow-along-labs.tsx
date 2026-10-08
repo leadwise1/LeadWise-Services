@@ -359,7 +359,7 @@ export default function FollowAlongLabs() {
               <p>
                 {phase === "live"
                   ? "Pause here with the host and check in."
-                  : "Traffic-light checkpoints open with the lab."}
+                  : "Check-ins open with the lab."}
               </p>
               <div className="lab-lights">
                 {(["green", "yellow", "red"] as const).map((color) => (

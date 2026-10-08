@@ -238,7 +238,7 @@ export default function WeeklySyncHub() {
   return (
     <div className="min-h-screen bg-[#0d0f13] text-white">
       {toastMessage && (
-        <div className="fixed right-4 top-4 z-50 rounded-xl border border-fuchsia-500/40 bg-[#17191d] px-4 py-2 text-sm font-semibold text-fuchsia-100 shadow-lg shadow-fuchsia-950/30">
+        <div className="fixed right-4 top-4 z-50 rounded-xl border border-blue-500/40 bg-[#17191d] px-4 py-2 text-sm font-semibold text-blue-100 shadow-lg shadow-blue-950/30">
           {toastMessage}
         </div>
       )}
@@ -250,8 +250,8 @@ export default function WeeklySyncHub() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="relative flex h-3 w-3">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75" />
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-blue-500" />
             </span>
             <span className="text-sm font-medium text-gray-200">
               <strong className="font-bold text-white">{onlineCount} LeadWise learners</strong> grinding through labs right now
@@ -261,14 +261,14 @@ export default function WeeklySyncHub() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => handleSendNudge("coffee")}
-              className="flex items-center gap-1.5 rounded-xl border border-gray-700 bg-gray-800/80 px-3 py-1.5 text-xs font-semibold text-gray-300 transition hover:border-fuchsia-500/60 hover:text-white"
+              className="flex items-center gap-1.5 rounded-xl border border-gray-700 bg-gray-800/80 px-3 py-1.5 text-xs font-semibold text-gray-300 transition hover:border-blue-500/60 hover:text-white"
             >
-              <Coffee size={14} className="text-amber-400" />
+              <Coffee size={14} className="text-neutral-400" />
               <span>Send Warm Coffee</span>
             </button>
             <button
               onClick={() => handleSendNudge("highfive")}
-              className="flex items-center gap-1.5 rounded-xl border border-gray-700 bg-gray-800/80 px-3 py-1.5 text-xs font-semibold text-gray-300 transition hover:border-fuchsia-500/60 hover:text-white"
+              className="flex items-center gap-1.5 rounded-xl border border-gray-700 bg-gray-800/80 px-3 py-1.5 text-xs font-semibold text-gray-300 transition hover:border-blue-500/60 hover:text-white"
             >
               <span>👏 High Five All</span>
             </button>
@@ -278,7 +278,7 @@ export default function WeeklySyncHub() {
 
       <main className="mx-auto max-w-6xl space-y-12 px-4 py-10">
         <header className="mx-auto max-w-2xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-fuchsia-300">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-300">
             <Radio size={12} className="animate-pulse" /> Community Living Room
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-white md:text-5xl">
@@ -290,12 +290,12 @@ export default function WeeklySyncHub() {
         </header>
 
         <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="rounded-3xl border border-gray-800 bg-[#17191d] p-6 transition hover:border-fuchsia-500/30">
+          <div className="rounded-3xl border border-gray-800 bg-[#17191d] p-6 transition hover:border-blue-500/30">
             <div className="mb-4 flex items-center justify-between">
-              <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-fuchsia-400">
+              <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-400">
                 <BookOpen size={16} /> Room A: Silent Library
               </span>
-              <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-400">
+              <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-2 py-0.5 text-xs text-blue-400">
                 14 Focusers
               </span>
             </div>
@@ -319,7 +319,7 @@ export default function WeeklySyncHub() {
             <div className="flex items-center justify-center gap-3">
               <button
                 onClick={() => setIsPomoRunning((prev) => !prev)}
-                className="flex items-center gap-2 rounded-xl bg-fuchsia-600 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-fuchsia-500"
+                className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-blue-500"
               >
                 {isPomoRunning ? <Pause size={14} /> : <Play size={14} />}
                 {isPomoRunning ? "Pause" : "Start Sprint"}
@@ -337,7 +337,7 @@ export default function WeeklySyncHub() {
                 aria-pressed={isAmbientPlaying}
                 className={`flex items-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-semibold transition ${
                   isAmbientPlaying
-                    ? "border-fuchsia-500/50 bg-fuchsia-950/40 text-[#f0abfc]"
+                    ? "border-blue-500/50 bg-blue-950/40 text-[#47b3ff]"
                     : "border-gray-700 bg-gray-800 text-gray-400 hover:text-white"
                 }`}
               >
@@ -352,12 +352,12 @@ export default function WeeklySyncHub() {
             </label>
           </div>
 
-          <div className="rounded-3xl border border-gray-800 bg-[#17191d] p-6 transition hover:border-fuchsia-500/30">
+          <div className="rounded-3xl border border-gray-800 bg-[#17191d] p-6 transition hover:border-blue-500/30">
             <div className="mb-4 flex items-center justify-between">
-              <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400">
+              <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-neutral-400">
                 <Coffee size={16} /> Room B: The Break Room
               </span>
-              <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs text-amber-400">
+              <span className="rounded-full border border-neutral-500/20 bg-neutral-500/10 px-2 py-0.5 text-xs text-neutral-400">
                 3 in Watercooler
               </span>
             </div>
@@ -368,7 +368,7 @@ export default function WeeklySyncHub() {
             </p>
 
             <div className="mb-6 rounded-2xl border border-gray-800/80 bg-[#121417] p-4">
-              <div className="mb-1 text-xs font-bold uppercase tracking-wider text-fuchsia-300">
+              <div className="mb-1 text-xs font-bold uppercase tracking-wider text-blue-300">
                 Today&apos;s Prompt:
               </div>
               <p className="text-sm italic text-gray-300">
@@ -387,12 +387,12 @@ export default function WeeklySyncHub() {
             </a>
           </div>
 
-          <div className="rounded-3xl border border-gray-800 bg-[#17191d] p-6 transition hover:border-fuchsia-500/30">
+          <div className="rounded-3xl border border-gray-800 bg-[#17191d] p-6 transition hover:border-blue-500/30">
             <div className="mb-4 flex items-center justify-between">
-              <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-rose-400">
+              <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-neutral-400">
                 <HelpCircle size={16} /> Room C: The Stuck Bench
               </span>
-              <span className="rounded-full border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-xs text-rose-400">
+              <span className="rounded-full border border-neutral-500/20 bg-neutral-500/10 px-2 py-0.5 text-xs text-neutral-400">
                 {stuckTickets.length} Waiting
               </span>
             </div>
@@ -409,17 +409,17 @@ export default function WeeklySyncHub() {
                     <span className="font-bold text-gray-200">{ticket.learnerName}</span>
                     <span className="text-gray-500">{ticket.timeAgo}</span>
                   </div>
-                  <div className="mb-1 text-[11px] font-semibold text-fuchsia-400">{ticket.module}</div>
+                  <div className="mb-1 text-[11px] font-semibold text-blue-400">{ticket.module}</div>
                   <p className="mb-2 text-xs text-gray-400">{ticket.description}</p>
 
                   {ticket.claimedBy ? (
-                    <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                    <span className="rounded-md bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold text-blue-400">
                       {ticket.claimedBy}
                     </span>
                   ) : (
                     <button
                       onClick={() => handleClaimTicket(ticket.id)}
-                      className="w-full rounded-lg border border-fuchsia-500/30 bg-fuchsia-600/20 py-1 text-center text-[11px] font-bold text-fuchsia-300 transition hover:bg-fuchsia-600/40"
+                      className="w-full rounded-lg border border-blue-500/30 bg-blue-600/20 py-1 text-center text-[11px] font-bold text-blue-300 transition hover:bg-blue-600/40"
                     >
                       🪑 Pull Up a Chair (Unblock 15m)
                     </button>
@@ -430,7 +430,7 @@ export default function WeeklySyncHub() {
 
             <button
               onClick={() => setShowBenchModal(true)}
-              className="w-full rounded-2xl bg-rose-600/90 px-3 py-3 text-xs font-bold text-white transition hover:bg-rose-500"
+              className="w-full rounded-2xl border border-neutral-600 bg-neutral-800 px-3 py-3 text-xs font-bold text-white transition hover:border-neutral-500 hover:bg-neutral-700"
             >
               Sit on the Bench (Ask for Help)
             </button>
@@ -456,7 +456,7 @@ export default function WeeklySyncHub() {
                     placeholder="e.g. Google Cybersecurity Week 3 - Linux Bash"
                     value={newTicketModule}
                     onChange={(e) => setNewTicketModule(e.target.value)}
-                    className="w-full rounded-xl border border-gray-700 bg-[#121417] px-3 py-2 text-sm text-white focus:border-fuchsia-500 focus:outline-none"
+                    className="w-full rounded-xl border border-gray-700 bg-[#121417] px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none"
                   />
                 </div>
 
@@ -470,7 +470,7 @@ export default function WeeklySyncHub() {
                     placeholder="e.g. Terminal says Permission Denied even after I run chmod +x..."
                     value={newTicketDesc}
                     onChange={(e) => setNewTicketDesc(e.target.value)}
-                    className="w-full rounded-xl border border-gray-700 bg-[#121417] px-3 py-2 text-sm text-white focus:border-fuchsia-500 focus:outline-none"
+                    className="w-full rounded-xl border border-gray-700 bg-[#121417] px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none"
                   />
                 </div>
 
@@ -484,7 +484,7 @@ export default function WeeklySyncHub() {
                   </button>
                   <button
                     type="submit"
-                    className="rounded-xl bg-fuchsia-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-fuchsia-500"
+                    className="rounded-xl bg-blue-600 px-5 py-2 text-xs font-bold text-white transition hover:bg-blue-500"
                   >
                     Post to Bench
                   </button>
@@ -499,7 +499,7 @@ export default function WeeklySyncHub() {
         <section className="rounded-3xl border border-gray-800 bg-[#17191d] p-6 md:p-8">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
             <div>
-              <div className="mb-1 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-fuchsia-400">
+              <div className="mb-1 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-400">
                 <Flame size={16} /> The Anti-Podium Feed
               </div>
               <h3 className="text-2xl font-bold text-white">The Gritty Wins</h3>
@@ -516,11 +516,11 @@ export default function WeeklySyncHub() {
                 placeholder="What gave you a hard time this week that you pushed through anyway?"
                 value={winInput}
                 onChange={(e) => setWinInput(e.target.value)}
-                className="w-full rounded-2xl border border-gray-700 bg-[#121417] py-4 pl-5 pr-28 text-sm text-white transition focus:border-[#f0abfc] focus:outline-none"
+                className="w-full rounded-2xl border border-gray-700 bg-[#121417] py-4 pl-5 pr-28 text-sm text-white transition focus:border-[#47b3ff] focus:outline-none"
               />
               <button
                 type="submit"
-                className="absolute bottom-2 right-2 top-2 flex items-center gap-1.5 rounded-xl bg-white px-5 text-xs font-bold text-[#17191d] transition hover:bg-[#f0abfc]"
+                className="absolute bottom-2 right-2 top-2 flex items-center gap-1.5 rounded-xl bg-white px-5 text-xs font-bold text-[#17191d] transition hover:bg-[#47b3ff]"
               >
                 <span>Share</span>
                 <Send size={13} />
@@ -537,7 +537,7 @@ export default function WeeklySyncHub() {
                 <div>
                   <div className="mb-2 flex items-center justify-between">
                     <span className="text-xs font-bold text-white">{win.name}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-fuchsia-400/80">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400/80">
                       {win.track}
                     </span>
                   </div>
@@ -570,9 +570,9 @@ export default function WeeklySyncHub() {
         </section>
 
         <section className="relative overflow-hidden rounded-3xl border border-gray-800 bg-[#17191d] px-4 py-12 text-center">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-fuchsia-500/5 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent" />
           <div className="relative z-10">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/20 px-3 py-1 text-xs font-bold uppercase tracking-widest text-fuchsia-300">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/20 px-3 py-1 text-xs font-bold uppercase tracking-widest text-blue-300">
               <Video size={12} /> 1-on-1 Guidance
             </div>
             <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">Live Weekly Meet</h2>
@@ -583,7 +583,7 @@ export default function WeeklySyncHub() {
               href={process.env.NEXT_PUBLIC_CALENDAR_LINK || "https://calendar.app.google/1AXYeyfAXczZ2wi1A"}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 rounded-2xl bg-white px-10 py-5 font-black text-[#25282e] shadow-2xl transition hover:bg-[#f0abfc]"
+              className="inline-flex items-center gap-3 rounded-2xl bg-white px-10 py-5 font-black text-[#25282e] shadow-2xl transition hover:bg-[#47b3ff]"
             >
               <CalendarDays size={20} />
               <span>Schedule on Google Calendar</span>
