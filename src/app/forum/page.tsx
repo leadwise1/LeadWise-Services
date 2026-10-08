@@ -6,7 +6,7 @@ export default function ForumHomePage() {
       <main className="p-6 md:p-10 max-w-5xl mx-auto pb-24">
         <div className="mb-16 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-6 uppercase tracking-widest">
-            <Shield size={14} /> Community Charter
+            <Shield size={14} /> Welcome to the community
           </div>
 
           <h1 className="text-4xl md:text-5xl font-black mb-6 text-white">

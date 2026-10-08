@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import { Search, PlusCircle, Flame, Clock, MessageCircle, ArrowUp, Loader2, X, Trash2, Shield, Zap } from 'lucide-react';
+import { Search, PlusCircle, Flame, Clock, MessageCircle, ArrowUp, Loader2, X, Trash2, Shield, Zap, Pin, ArrowUpRight } from 'lucide-react';
 import { db, auth } from "@/lib/firebase";
 import { signInAnonymously, updateProfile } from "firebase/auth";
 import { collection, onSnapshot, doc, query, orderBy, deleteDoc } from "firebase/firestore";
@@ -30,6 +30,39 @@ interface Post {
   badges?: string[];
   isAdmin?: boolean;
   content?: string;
+}
+
+function BulletinNotice({ post, index, onUpvote, onDelete, upvoting }: {
+  post: Post;
+  index: number;
+  onUpvote: (event: React.MouseEvent, id: string) => void;
+  onDelete: (event: React.MouseEvent, id: string) => void;
+  upvoting: boolean;
+}) {
+  const format = post.category === 'Workshops' ? 'flyer' : post.category === 'Opportunities' ? 'opportunity' : 'note';
+  return (
+    <article className={`bulletin-paper bulletin-paper-${format} bulletin-paper-tone-${index % 3}`}>
+      <Pin className="bulletin-pin" aria-hidden="true" />
+      <div className="bulletin-paper-top">
+        <span className="bulletin-paper-category">{post.category}</span>
+        {post.isAdmin && <span className="bulletin-paper-admin"><Shield size={12} /> LeadWise</span>}
+      </div>
+      <h3><Link href={`/forum/post/${post.id}`}>{post.title}</Link></h3>
+      {post.content && <p className="bulletin-paper-details">{post.content}</p>}
+      <div className="bulletin-paper-signature">{post.author} <span>{post.timeAgo}</span></div>
+      <footer className="bulletin-paper-footer">
+        <button onClick={event => onUpvote(event, post.id)} disabled={upvoting} aria-label="Upvote this post" title="Upvote this post">
+          <ArrowUp size={16} /> {post.upvotes}
+        </button>
+        <Link href={`/forum/post/${post.id}`}>
+          {post.replies ? `${post.replies} ${post.replies === 1 ? 'reply' : 'replies'}` : 'View notice'} <ArrowUpRight size={16} />
+        </Link>
+        {process.env.NEXT_PUBLIC_ADMIN_UID && auth?.currentUser?.uid === process.env.NEXT_PUBLIC_ADMIN_UID && (
+          <button onClick={event => onDelete(event, post.id)} aria-label="Delete post" title="Delete post"><Trash2 size={16} /></button>
+        )}
+      </footer>
+    </article>
+  );
 }
 
 function IntakeModal({
@@ -85,7 +118,7 @@ function IntakeModal({
           <label htmlFor="community-name" className="block text-sm font-medium">Name shown on your posts</label>
           <input id="community-name" required autoComplete="nickname" maxLength={60} value={formData.displayName} onChange={e => setFormData({ displayName: e.target.value })} className="w-full bg-neutral-950 text-white p-3 border border-neutral-700 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" />
           <p className="text-sm text-neutral-400">Posts and replies are public. Share thoughtfully and look out for each other.</p>
-          <Link href="/forum/rules" className="text-sm text-blue-300 underline">Community charter</Link>
+          <Link href="/forum" className="text-sm text-blue-300 underline">Welcome to the community</Link>
 
           <div className="flex justify-between pt-4 border-t border-neutral-700 mt-4">
               <button type="button" disabled={loading} onClick={onClose} className="px-4 py-2 text-neutral-300 hover:text-white">Cancel</button>
@@ -283,7 +316,7 @@ function ForumPageContent() {
   if (isEnrolled === null) return <div className="min-h-screen bg-[#17191d]"></div>;
 
   return (
-    <div className="community-feed p-5 sm:p-6 md:p-10 max-w-5xl mx-auto relative min-h-screen text-white">
+    <div className={`community-feed p-5 sm:p-6 md:p-10 max-w-5xl mx-auto relative min-h-screen text-white ${isBulletin ? 'bulletin-feed' : ''}`}>
       {/* Header */}
       <div className="community-header flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6">
         <div>
@@ -295,7 +328,7 @@ function ForumPageContent() {
           className="community-primary flex items-center justify-center gap-2 px-5 py-3 rounded-md font-semibold transition-all active:scale-95 shrink-0"
         >
           <PlusCircle className="w-5 h-5" />
-          {isBulletin ? "Post an update" : "Share something"}
+          {isBulletin ? "Pin a notice" : "Share something"}
         </button>
       </div>
 
@@ -343,7 +376,7 @@ function ForumPageContent() {
       </div>}
 
       {/* 3. ACCOUNTABILITY SYNC BANNER: Urgent anchor to prevent dropouts */}
-      {isEnrolled && (
+      {isEnrolled && !isBulletin && (
         <div className="border-y border-neutral-800 py-5 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-4 text-center md:text-left">
             <div className="text-neutral-300 p-2">
@@ -367,7 +400,7 @@ function ForumPageContent() {
 
       {/* Community feed */}
       {actionError && !isModalOpen && <p role="alert" className="mb-4 text-red-300">{actionError}</p>}
-        <div className="flex flex-col gap-4 min-h-[400px]">
+        <div className={isBulletin ? 'bulletin-board' : 'flex flex-col gap-4 min-h-[400px]'} aria-label={isBulletin ? 'Community notice board' : undefined}>
           {feedError ? (
             <div role="alert" className="py-10 text-center border border-neutral-800 rounded-lg p-6">
               <p className="text-neutral-300 mb-4">{feedError}</p>
@@ -394,13 +427,14 @@ function ForumPageContent() {
             <AnimatePresence>
               {displayedPosts.map((post, i) => (
                 <motion.div
+                  className={isBulletin ? `bulletin-placement bulletin-placement-${post.category === 'Workshops' ? 'flyer' : post.category === 'Opportunities' ? 'opportunity' : 'note'}` : undefined}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ delay: i * 0.05 }}
                   key={post.id}
                 >
-                    <article className="community-post group border border-neutral-800 p-5 rounded-lg">
+                    {isBulletin ? <BulletinNotice post={post} index={i} onUpvote={handleUpvote} onDelete={handleDeletePost} upvoting={upvotingIds.has(post.id)} /> : <article className="community-post group border border-neutral-800 p-5 rounded-lg">
                       <div className="flex gap-4">
                         <div className="flex flex-col items-center gap-1 min-w-[40px]">
                           <motion.button
@@ -469,7 +503,7 @@ function ForumPageContent() {
                           </div>
                         </div>
                       </div>
-                    </article>
+                    </article>}
                 </motion.div>
               ))}
             </AnimatePresence>
