@@ -1,24 +1,36 @@
-import { ArrowRight, Heart, Shield, Users, Zap } from 'lucide-react';
+"use client";
+import React from 'react';
+import { Shield, Scroll, CheckCircle2, Zap, Award, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function ForumHomePage() {
   return (
     <div className="min-h-screen bg-[#17191d] text-white selection:bg-[#47b3ff] selection:text-[#25282e]">
-      <main className="p-6 md:p-10 max-w-5xl mx-auto pb-24">
-        <div className="mb-16 text-center">
+      <main className="p-6 md:p-10 max-w-4xl mx-auto pb-24">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-16 text-center"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-6 uppercase tracking-widest">
             <Shield size={14} /> Welcome to the community
           </div>
-
           <h1 className="text-4xl md:text-5xl font-black mb-6 text-white">
             Welcome to the LeadWise Tech Collective
           </h1>
-
           <p className="text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed">
             A shared space for learners, alumni, instructors, and career changers exploring technology together.
           </p>
-        </div>
+        </motion.div>
 
-        <section className="bg-neutral-900 border border-white/10 rounded-3xl p-8 md:p-12 mb-16 text-center relative overflow-hidden">
+        {/* Intro Card */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+          className="bg-neutral-900 border border-white/10 rounded-3xl p-8 md:p-12 mb-16 text-center relative overflow-hidden"
+        >
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 leading-snug">
             Belonging before brilliance.
           </h2>
@@ -28,76 +40,107 @@ export default function ForumHomePage() {
           <p className="text-neutral-300 leading-relaxed mt-6 max-w-2xl mx-auto">
             You don&apos;t have to learn alone. This is a support system where we ask questions, share what we&apos;re discovering, and help each other move forward.
           </p>
-
           <div className="mt-8 flex justify-center">
-            <a
-              href="/forum/discussions"
-              className="inline-flex items-center gap-2 rounded-full bg-blue-700 hover:bg-blue-800 px-6 py-3 font-semibold text-white hover:opacity-95 transition"
-            >
+            <a href="/forum/discussions" className="inline-flex items-center gap-2 rounded-full bg-blue-700 hover:bg-blue-800 px-6 py-3 font-semibold text-white transition">
               Open the forum <ArrowRight className="w-4 h-4" />
             </a>
           </div>
-        </section>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
-          <section>
+          {/* Mission Section */}
+          <motion.section
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+          >
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
               <Zap className="text-neutral-400" /> Our Mission
             </h2>
-            <div className="space-y-6 text-neutral-400 leading-relaxed">
-              <p>
+            <div className="space-y-6">
+              <p className="text-neutral-400 leading-relaxed">
                 LeadWise connects technology education with human support. Across IT courses and career paths, we make room for questions, practice, mentorship, and the confidence to take the next step.
               </p>
-              <p>
-                We believe learning is stronger when it is supported by community, encouragement, and real connection.
+              <div className="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 space-y-4">
+                <p className="text-sm font-bold text-neutral-500 uppercase tracking-widest mb-2">We are building:</p>
+                <ul className="space-y-3">
+                  {[
+                    "Curious, thoughtful problem-solvers",
+                    "Confident technology learners",
+                    "Career-ready professionals",
+                    "A community that lifts each other"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-3 text-white font-medium">
+                      <CheckCircle2 className="text-blue-500 w-5 h-5 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </motion.section>
+
+          {/* Note Section */}
+          <motion.section
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex flex-col justify-center"
+          >
+            <div className="bg-[#47b3ff]/5 border border-[#47b3ff]/20 rounded-3xl p-8 relative">
+              <Award className="absolute -top-6 -right-6 w-16 h-16 text-[#47b3ff]/20" />
+              <h3 className="text-xl font-bold text-[#47b3ff] mb-4">You Belong Here</h3>
+              <p className="text-neutral-300 leading-relaxed mb-6">
+                Whether you&apos;re starting your first IT course, changing careers, sharing your experience, or returning as an alum, you have a place here. Bring your questions, your ideas, and your everyday wins.
               </p>
+              <div className="pt-6 border-t border-[#47b3ff]/10">
+                <p className="font-bold text-white">LeadWise Foundation Team</p>
+              </div>
             </div>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
-              <Heart className="text-neutral-400" /> What we are building
-            </h2>
-            <ul className="space-y-4 text-neutral-300">
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2.5 w-2.5 rounded-full bg-blue-400" />
-                <span>Curious, thoughtful problem-solvers</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2.5 w-2.5 rounded-full bg-blue-400" />
-                <span>Confident technology learners</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2.5 w-2.5 rounded-full bg-blue-400" />
-                <span>Career-ready professionals</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="mt-1 h-2.5 w-2.5 rounded-full bg-blue-400" />
-                <span>A community that lifts each other</span>
-              </li>
-            </ul>
-          </section>
+          </motion.section>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-[#1b1d25] p-8 md:p-10">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
-            <Users className="text-blue-400" /> Community values
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-neutral-300">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <h3 className="font-bold text-white mb-2">Kindness</h3>
-              <p className="text-neutral-400">We meet each other with patience, respect, and room to grow.</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <h3 className="font-bold text-white mb-2">Curiosity</h3>
-              <p className="text-neutral-400">Questions are welcome, and exploration is part of the process.</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <h3 className="font-bold text-white mb-2">Momentum</h3>
-              <p className="text-neutral-400">We keep moving forward together, one win and one lesson at a time.</p>
-            </div>
+        {/* Guidelines Section */}
+        <section>
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-2xl font-bold mb-10 flex items-center gap-3"
+          >
+            <Scroll className="text-blue-400" /> Community Guidelines
+          </motion.h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { id: 1, title: "Respect First", desc: "Meet each other with kindness, curiosity, and respect." },
+              { id: 2, title: "No Question is Too Basic", desc: "Ask freely. Your question may help someone else understand, too." },
+              { id: 3, title: "Protect Privacy & Security", desc: "Never share passwords, API keys, or sensitive data." },
+              { id: 4, title: "Make Room for Each Other", desc: "Share your thoughts and experiences. Listen, encourage, and keep conversations supportive." },
+              { id: 5, title: "Celebrate Wins", desc: "Share certifications, breakthroughs, and progress." },
+              { id: 6, title: "Give Back", desc: "Share what helped you, offer an explanation, or welcome someone new." },
+              { id: 7, title: "Zero Tolerance for Harmful Activity", desc: "This is an ethical learning space only." }
+            ].map((rule, i) => (
+              <motion.div
+                key={rule.id}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group bg-neutral-900/30 border border-neutral-800 hover:border-blue-500/30 p-6 rounded-2xl transition-all hover:bg-neutral-900/50"
+              >
+                <div className="flex gap-4">
+                  <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-bold text-neutral-500 border border-neutral-700 group-hover:border-blue-500/50 group-hover:text-blue-400 transition-colors">
+                    {rule.id}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white mb-1">{rule.title}</h4>
+                    <p className="text-sm text-neutral-400 leading-relaxed">{rule.desc}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </section>
       </main>
     </div>
   );
