@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { 
   Trash2, Plus, FileText, 
   ChevronLeft, Mail, Phone, MapPin, Linkedin, Printer,
-  Palette, Layout, Cloud, CheckCircle, ArrowRight
+  Palette, Layout, Cloud, CheckCircle, ArrowRight, Compass
 } from "lucide-react";
 
 // ==========================================
@@ -1009,9 +1009,9 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
 
   return (
     <>
-      <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+      <div className="min-h-screen w-full bg-[#0c0c0e] bg-[radial-gradient(ellipse_at_top,_#1a102b_0%,_#0c0c0e_100%)] text-white font-sans selection:bg-[#A855F7] selection:text-black">
         <style dangerouslySetInnerHTML={{ __html: printStyles }} />
-        <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50 no-print">
+        <nav className="border-b border-white/10 bg-[#0c0c0e]/70 backdrop-blur-md sticky top-0 z-50 no-print">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
               <div className="flex items-center gap-6">
                   <button onClick={onBack} className="flex items-center gap-2 text-gray-400 hover:text-white transition">
@@ -1023,12 +1023,12 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
                  <select 
                     value={activeTemplateId} 
                     onChange={(e) => setActiveTemplateId(e.target.value)} 
-                    className="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#FFBEA0]"
+                    className="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#A855F7]"
                 >
                   {templates.map(t => <option key={t.id} value={t.id} className="text-black">{t.name}</option>)}
                 </select>
                 <button onClick={() => downloadATS(resume)} className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"><FileText size={16}/> ATS Text</button>
-                <button onClick={() => window.print()} className="bg-[#FFBEA0] hover:bg-white text-[#1B2735] px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(255,190,160,0.3)]"><Printer size={16}/> Save PDF</button>
+                <button onClick={() => window.print()} className="bg-[#A855F7] hover:bg-white text-black px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(168,85,247,0.4)]"><Printer size={16}/> Save PDF</button>
               </div>
           </div>
         </nav>
@@ -1036,7 +1036,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 max-w-7xl mx-auto">
           <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print custom-scrollbar">
             <div className="bg-black/20 border border-white/5 rounded-xl p-4 mb-6">
-                <div className="flex items-center gap-2 mb-3 text-[#FFBEA0] font-bold text-sm uppercase tracking-wider"><Palette size={16}/> Design Settings</div>
+                <div className="flex items-center gap-2 mb-3 text-[#C084FC] font-bold text-sm uppercase tracking-wider"><Palette size={16}/> Design Settings</div>
                 <div className="grid grid-cols-2 gap-6">
                   <div>
                      <label className="text-xs font-semibold text-gray-400 mb-2 block">Accent Color</label>
@@ -1050,7 +1050,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
                      <label className="text-xs font-semibold text-gray-400 mb-2 block">Font Style</label>
                      <div className="flex gap-2 text-xs">
                         {['sans', 'serif', 'mono'].map(f => (
-                          <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 py-1 rounded border transition-colors ${resume.settings?.font === f ? 'bg-[#FFBEA0] border-[#FFBEA0] text-[#1B2735] font-bold' : 'bg-transparent border-white/10 text-gray-400 hover:text-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
+                          <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 py-1 rounded border transition-colors ${resume.settings?.font === f ? 'bg-[#A855F7] border-[#A855F7] text-black font-bold' : 'bg-transparent border-white/10 text-gray-400 hover:text-white'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
                         ))}
                      </div>
                   </div>
@@ -1059,35 +1059,35 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
 
             <div className="space-y-8">
               <section>
-                <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Personal Info</h2>
+                <h2 className="text-sm font-bold text-[#C084FC] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Personal Info</h2>
                 <div className="space-y-3">
-                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Full Name" value={resume.personalInfo.fullName} onChange={e => updateInfo('fullName', e.target.value)} />
+                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7]" placeholder="Full Name" value={resume.personalInfo.fullName} onChange={e => updateInfo('fullName', e.target.value)} />
                   <div className="grid grid-cols-2 gap-3">
-                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Email" value={resume.personalInfo.email} onChange={e => updateInfo('email', e.target.value)} />
-                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Phone" value={resume.personalInfo.phone} onChange={e => updateInfo('phone', e.target.value)} />
+                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7]" placeholder="Email" value={resume.personalInfo.email} onChange={e => updateInfo('email', e.target.value)} />
+                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7]" placeholder="Phone" value={resume.personalInfo.phone} onChange={e => updateInfo('phone', e.target.value)} />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Location" value={resume.personalInfo.location} onChange={e => updateInfo('location', e.target.value)} />
-                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="LinkedIn" value={resume.personalInfo.linkedIn} onChange={e => updateInfo('linkedIn', e.target.value)} />
+                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7]" placeholder="Location" value={resume.personalInfo.location} onChange={e => updateInfo('location', e.target.value)} />
+                    <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7]" placeholder="LinkedIn" value={resume.personalInfo.linkedIn} onChange={e => updateInfo('linkedIn', e.target.value)} />
                   </div>
                 </div>
               </section>
               
               <section>
-                <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Summary</h2>
-                <textarea className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0] min-h-[120px]" placeholder="Brief professional summary..." value={resume.professionalSummary} onChange={e => setResume(p => ({...p, professionalSummary: e.target.value}))} />
+                <h2 className="text-sm font-bold text-[#C084FC] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Summary</h2>
+                <textarea className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7] min-h-[120px]" placeholder="Brief professional summary..." value={resume.professionalSummary} onChange={e => setResume(p => ({...p, professionalSummary: e.target.value}))} />
               </section>
 
               <section>
                 <div className="flex justify-between mb-4 border-b border-white/10 pb-2">
-                  <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider">Experience</h2>
-                  <button onClick={addExp} className="text-white hover:text-[#FFBEA0] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add Position</button>
+                  <h2 className="text-sm font-bold text-[#C084FC] uppercase tracking-wider">Experience</h2>
+                  <button onClick={addExp} className="text-white hover:text-[#C084FC] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add Position</button>
                 </div>
                 {resume.experience.map(exp => (
                   <div key={exp.id} className="p-4 bg-black/20 rounded-xl mb-4 border border-white/5 relative group hover:border-white/20 transition-colors">
                     <button onClick={() => delExp(exp.id)} className="absolute top-2 right-2 text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16}/></button>
-                    <input className="w-full p-1 bg-transparent font-bold text-lg text-white mb-2 border-b border-transparent focus:border-[#FFBEA0] focus:outline-none" placeholder="Company Name" value={exp.company} onChange={e => updateExp(exp.id, 'company', e.target.value)} />
-                    <input className="w-full p-1 bg-transparent text-gray-300 text-sm mb-3 border-b border-transparent focus:border-[#FFBEA0] focus:outline-none" placeholder="Job Title" value={exp.position} onChange={e => updateExp(exp.id, 'position', e.target.value)} />
+                    <input className="w-full p-1 bg-transparent font-bold text-lg text-white mb-2 border-b border-transparent focus:border-[#A855F7] focus:outline-none" placeholder="Company Name" value={exp.company} onChange={e => updateExp(exp.id, 'company', e.target.value)} />
+                    <input className="w-full p-1 bg-transparent text-gray-300 text-sm mb-3 border-b border-transparent focus:border-[#A855F7] focus:outline-none" placeholder="Job Title" value={exp.position} onChange={e => updateExp(exp.id, 'position', e.target.value)} />
                     <div className="flex gap-2 mb-3">
                       <input className="w-1/2 p-2 bg-white/5 border border-white/10 rounded text-xs text-gray-300" placeholder="Start Date" value={exp.startDate} onChange={e => updateExp(exp.id, 'startDate', e.target.value)} />
                       <input className="w-1/2 p-2 bg-white/5 border border-white/10 rounded text-xs text-gray-300" placeholder="End Date" value={exp.endDate} onChange={e => updateExp(exp.id, 'endDate', e.target.value)} disabled={exp.currentlyWorking}/>
@@ -1099,13 +1099,13 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
 
                <section>
                 <div className="flex justify-between mb-4 border-b border-white/10 pb-2">
-                  <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider">Education</h2>
-                  <button onClick={addEdu} className="text-white hover:text-[#FFBEA0] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add School</button>
+                  <h2 className="text-sm font-bold text-[#C084FC] uppercase tracking-wider">Education</h2>
+                  <button onClick={addEdu} className="text-white hover:text-[#C084FC] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add School</button>
                 </div>
                 {resume.education.map(edu => (
                   <div key={edu.id} className="p-4 bg-black/20 rounded-xl mb-3 border border-white/5 relative group hover:border-white/20 transition-colors">
                     <button onClick={() => delEdu(edu.id)} className="absolute top-2 right-2 text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={16}/></button>
-                    <input className="w-full p-1 bg-transparent font-bold text-white mb-1 focus:outline-none border-b border-transparent focus:border-[#FFBEA0]" placeholder="School Name" value={edu.school} onChange={e => updateEdu(edu.id, 'school', e.target.value)} />
+                    <input className="w-full p-1 bg-transparent font-bold text-white mb-1 focus:outline-none border-b border-transparent focus:border-[#A855F7]" placeholder="School Name" value={edu.school} onChange={e => updateEdu(edu.id, 'school', e.target.value)} />
                     <div className="flex gap-2 mt-2">
                       <input className="w-full p-2 bg-white/5 border border-white/10 rounded text-sm text-gray-300" placeholder="Degree / Certification" value={edu.degree} onChange={e => updateEdu(edu.id, 'degree', e.target.value)} />
                       <input className="w-24 p-2 bg-white/5 border border-white/10 rounded text-sm text-gray-300" placeholder="Year" value={edu.graduationDate} onChange={e => updateEdu(edu.id, 'graduationDate', e.target.value)} />
@@ -1116,12 +1116,12 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
 
                <section>
                 <div className="flex justify-between mb-4 border-b border-white/10 pb-2">
-                  <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider">Skills</h2>
-                  <button onClick={addSkill} className="text-white hover:text-[#FFBEA0] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add Skill</button>
+                  <h2 className="text-sm font-bold text-[#C084FC] uppercase tracking-wider">Skills</h2>
+                  <button onClick={addSkill} className="text-white hover:text-[#C084FC] text-sm font-medium flex items-center gap-1"><Plus size={14}/> Add Skill</button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {resume.skills.map(skill => (
-                    <div key={skill.id} className="flex items-center bg-white/10 rounded-full px-3 py-1 border border-white/10 group hover:border-[#FFBEA0]/50 transition-colors">
+                    <div key={skill.id} className="flex items-center bg-white/10 rounded-full px-3 py-1 border border-white/10 group hover:border-[#A855F7]/50 transition-colors">
                       <input className="bg-transparent text-sm w-24 text-white focus:outline-none" placeholder="Skill" value={skill.name} onChange={e => updateSkill(skill.id, e.target.value)} />
                       <button onClick={() => delSkill(skill.id)} className="ml-1 text-gray-500 hover:text-red-400"><Trash2 size={12}/></button>
                     </div>
@@ -1133,7 +1133,7 @@ export const ResumeEditorView: React.FC<{ templateId: string, onBack: () => void
 
           <div className="hidden lg:block relative">
              <div className="sticky top-24">
-                <div className="bg-[#1B2735] border border-white/10 border-b-0 text-white text-xs uppercase font-bold py-3 px-4 rounded-t-xl flex justify-between no-print items-center">
+                <div className="bg-[#121217] border border-white/10 border-b-0 text-white text-xs uppercase font-bold py-3 px-4 rounded-t-xl flex justify-between no-print items-center">
                    <span className="flex items-center gap-2"><Layout size={14}/> Live Preview</span>
                    <span className="opacity-50">A4 Size</span>
                 </div>
@@ -1196,10 +1196,10 @@ export const CoverLetterEditorView: React.FC<Omit<EditorProps, "initialView">> =
   const backHref: string = switchHref ?? "/resume";
 return (
   <>
-  <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+  <div className="min-h-screen w-full bg-[#0c0c0e] bg-[radial-gradient(ellipse_at_top,_#1a102b_0%,_#0c0c0e_100%)] text-white font-sans selection:bg-[#A855F7] selection:text-black">
     <style dangerouslySetInnerHTML={{ __html: printStyles }} />
     
-    <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50 no-print">
+    <nav className="border-b border-white/10 bg-[#0c0c0e]/70 backdrop-blur-md sticky top-0 z-50 no-print">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
          <div className="flex items-center gap-6">
              <button
@@ -1214,13 +1214,13 @@ return (
             <select 
                value={activeTemplateId} 
                onChange={(e) => setActiveTemplateId(e.target.value)} 
-               className="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#FFBEA0]"
+               className="bg-white/5 border border-white/10 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-[#A855F7]"
             >
               {templates.map(t => <option key={t.id} value={t.id} className="text-black">{t.name}</option>)}
             </select>
             <button 
               onClick={() => window.print()} 
-              className="bg-[#FFBEA0] hover:bg-white text-[#1B2735] px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(255,190,160,0.3)]"
+              className="bg-[#A855F7] hover:bg-white text-black px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors shadow-[0_0_15px_rgba(168,85,247,0.4)]"
             >
               <Printer size={16}/> Save PDF
             </button>
@@ -1231,7 +1231,7 @@ return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 max-w-7xl mx-auto">
       <div className="bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 h-fit lg:sticky lg:top-24 overflow-y-auto max-h-[calc(100vh-120px)] no-print custom-scrollbar">
          <div className="bg-black/20 border border-white/5 rounded-xl p-4 mb-6">
-            <div className="flex items-center gap-2 mb-3 text-[#FFBEA0] font-bold text-sm uppercase tracking-wider">
+            <div className="flex items-center gap-2 mb-3 text-[#C084FC] font-bold text-sm uppercase tracking-wider">
                <Palette size={16}/> Appearance
             </div>
             <div className="flex gap-4">
@@ -1243,7 +1243,7 @@ return (
                <div className="h-5 w-px bg-white/10"></div>
                <div className="flex gap-2 text-xs">
                   {['sans', 'serif', 'mono'].map(f => (
-                  <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 rounded border transition-colors ${data.settings?.font === f ? 'bg-[#FFBEA0] text-[#1B2735] font-bold border-[#FFBEA0]' : 'bg-transparent border-white/10 text-gray-400'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
+                  <button key={f} onClick={() => updateSettings('font', f)} className={`px-2 rounded border transition-colors ${data.settings?.font === f ? 'bg-[#A855F7] text-black font-bold border-[#A855F7]' : 'bg-transparent border-white/10 text-gray-400'}`}>{f === 'sans' ? 'Modern' : f === 'serif' ? 'Classic' : 'Tech'}</button>
                   ))}
                </div>
             </div>
@@ -1251,20 +1251,20 @@ return (
 
          <div className="space-y-6">
             <section>
-               <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Recipient</h2>
+               <h2 className="text-sm font-bold text-[#C084FC] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Recipient</h2>
                <div className="space-y-3">
-               <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Hiring Manager Name" value={data.recipient.name} onChange={e => updateRecipient('name', e.target.value)} />
-               <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Title" value={data.recipient.title} onChange={e => updateRecipient('title', e.target.value)} />
-               <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0]" placeholder="Company" value={data.recipient.company} onChange={e => updateRecipient('company', e.target.value)} />
-               <textarea className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FFBEA0] h-20" placeholder="Address" value={data.recipient.address} onChange={e => updateRecipient('address', e.target.value)} />
+               <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7]" placeholder="Hiring Manager Name" value={data.recipient.name} onChange={e => updateRecipient('name', e.target.value)} />
+               <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7]" placeholder="Title" value={data.recipient.title} onChange={e => updateRecipient('title', e.target.value)} />
+               <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7]" placeholder="Company" value={data.recipient.company} onChange={e => updateRecipient('company', e.target.value)} />
+               <textarea className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#A855F7] h-20" placeholder="Address" value={data.recipient.address} onChange={e => updateRecipient('address', e.target.value)} />
                </div>
             </section>
             <section>
-               <h2 className="text-sm font-bold text-[#FFBEA0] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Content</h2>
+               <h2 className="text-sm font-bold text-[#C084FC] uppercase tracking-wider mb-4 border-b border-white/10 pb-2">Content</h2>
                <div className="space-y-3">
-                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white font-medium focus:outline-none focus:border-[#FFBEA0]" placeholder="Greeting" value={data.content.greeting} onChange={e => updateContent('greeting', e.target.value)} />
-                  <textarea className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#FFBEA0] min-h-[300px]" placeholder="Body..." value={data.content.body} onChange={e => updateContent('body', e.target.value)} />
-                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white font-medium focus:outline-none focus:border-[#FFBEA0]" placeholder="Closing" value={data.content.closing} onChange={e => updateContent('closing', e.target.value)} />
+                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white font-medium focus:outline-none focus:border-[#A855F7]" placeholder="Greeting" value={data.content.greeting} onChange={e => updateContent('greeting', e.target.value)} />
+                  <textarea className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#A855F7] min-h-[300px]" placeholder="Body..." value={data.content.body} onChange={e => updateContent('body', e.target.value)} />
+                  <input className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white font-medium focus:outline-none focus:border-[#A855F7]" placeholder="Closing" value={data.content.closing} onChange={e => updateContent('closing', e.target.value)} />
                </div>
             </section>
          </div>
@@ -1272,7 +1272,7 @@ return (
 
       <div className="hidden lg:block relative">
          <div className="sticky top-24">
-            <div className="bg-[#1B2735] border border-white/10 border-b-0 text-white text-xs uppercase font-bold py-3 px-4 rounded-t-xl flex justify-between no-print items-center">
+            <div className="bg-[#121217] border border-white/10 border-b-0 text-white text-xs uppercase font-bold py-3 px-4 rounded-t-xl flex justify-between no-print items-center">
                <span className="flex items-center gap-2"><Layout size={14}/> Preview</span>
             </div>
             <div className="bg-black/40 border border-white/10 backdrop-blur-sm p-8 rounded-b-xl h-[calc(100vh-160px)] overflow-y-auto print-container custom-scrollbar">
@@ -1335,22 +1335,28 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
   if (currentView === "templates") {
     return (
       <>
-      <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+      <div className="min-h-screen w-full bg-[#0c0c0e] bg-[radial-gradient(ellipse_at_top,_#1a102b_0%,_#0c0c0e_100%)] text-white font-sans selection:bg-[#A855F7] selection:text-black">
         
         {/* --- NAVBAR --- */}
-        <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50">
+        <nav className="border-b border-white/10 bg-[#0c0c0e]/70 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <a href="/" className="flex items-center gap-2">
               <img src="/logolw.jpg" alt="LeadWise Logo" className="w-8 h-8 rounded-lg object-cover" />
               <span className="font-bold text-white text-lg tracking-tight">LeadWise Foundation</span>
             </a>
-            <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+            <div className="hidden md:flex items-center gap-7 text-sm font-medium">
               <a href="/" className="text-gray-400 hover:text-white transition">Home</a>
-              <span className="text-[#FFBEA0]">Templates</span>
+              <a href="/resume" className="text-[#C084FC] font-bold border-b-2 border-[#A855F7] pb-0.5">Resume Builder</a>
+              <a href="/cover-letter" className="text-gray-400 hover:text-white transition">Cover Letter</a>
               <a href="/courses" className="text-gray-400 hover:text-white transition">Courses</a>
+              <a href="/pathfinder" className="text-gray-400 hover:text-white transition flex items-center gap-1">
+                <Compass size={14} className="text-[#A855F7]" /> Pathfinder
+              </a>
+              <a href="https://blog.letsleadwise.org" className="text-gray-400 hover:text-white transition">Blog</a>
+              <a href="/forum" className="text-gray-400 hover:text-white transition">Forum</a>
               <a 
                 href="https://donation.letsleadwise.org" 
-                className="bg-[#FF9E80] text-[#1B2735] px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,190,160,0.4)]"
+                className="bg-[#A855F7] text-black px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(168,85,247,0.4)]"
               >
                 Donate Now
               </a>
@@ -1361,15 +1367,15 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
         {/* --- HERO SECTION --- */}
         <div className="relative overflow-hidden py-24 text-center px-4">
            {/* Background Glow */}
-           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#FF9E80] rounded-full blur-[150px] opacity-10 pointer-events-none"></div>
+           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[600px] bg-[#A855F7] rounded-full blur-[180px] opacity-15 pointer-events-none"></div>
            
            <div className="relative z-10 max-w-3xl mx-auto">
-             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-[#FFBEA0]/30 text-[#FFBEA0] text-sm font-semibold mb-8">
+             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A855F7]/10 border border-[#A855F7]/30 text-[#C084FC] text-sm font-semibold mb-8">
                <CheckCircle size={16} /> ATS-Optimized Technology
              </div>
              <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
                Build a Resume that <br/>
-               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#FFBEA0]">Gets You Hired.</span>
+               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#C084FC] to-[#A855F7]">Gets You Hired.</span>
              </h1>
              <p className="text-xl text-gray-300 font-light tracking-wide leading-relaxed">
                Professionally designed, ATS-friendly templates engineered to highlight your Google Certifications and pass automated screenings.
@@ -1381,12 +1387,12 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {templates.map((template) => (
-              <div key={template.id} className="group bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[#FFBEA0]/50 transition-all duration-300 overflow-hidden hover:-translate-y-1 shadow-lg hover:shadow-[0_0_30px_rgba(255,190,160,0.1)]">
+              <div key={template.id} className="group bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[#A855F7]/50 transition-all duration-300 overflow-hidden hover:-translate-y-1 shadow-lg hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]">
                 {/* --- TEMPLATE CARD -- */}
                 
                 {/* Card Header / Preview */}
-                <div className="h-56 bg-[#1B2735]/50 relative overflow-hidden flex items-center justify-center p-8">
-                   <div className="absolute inset-0 bg-gradient-to-tr from-[#FF9E80]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="h-56 bg-[#121217] relative overflow-hidden flex items-center justify-center p-8">
+                   <div className="absolute inset-0 bg-gradient-to-tr from-[#A855F7]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                    
                    {/* Abstract representation of the resume */}
                    <div className="bg-white w-32 h-44 shadow-2xl transform group-hover:scale-110 transition-transform duration-500 rounded flex flex-col p-2 gap-2 opacity-90">
@@ -1403,8 +1409,8 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
                   <p className="text-gray-400 text-sm mb-6 h-10 leading-relaxed">{template.description}</p>
                   
                   <div className="flex gap-3">
-                    <button onClick={() => setPreviewModalTemplate(template.id)} className="flex-1 border border-white/20 hover:border-[#FFBEA0] hover:text-[#FFBEA0] text-gray-300 font-bold py-3 px-4 rounded-xl transition-colors text-sm">Preview</button>
-                    <button onClick={() => navigateToEditor(template.id)} className="flex-1 bg-[#FF9E80] hover:bg-white text-[#1B2735] font-bold py-3 px-4 rounded-xl transition-colors text-sm shadow-lg">Use Template</button>
+                    <button onClick={() => setPreviewModalTemplate(template.id)} className="flex-1 border border-white/20 hover:border-[#A855F7] hover:text-[#C084FC] text-gray-300 font-bold py-3 px-4 rounded-xl transition-colors text-sm">Preview</button>
+                    <button onClick={() => navigateToEditor(template.id)} className="flex-1 bg-[#A855F7] hover:bg-white text-black font-bold py-3 px-4 rounded-xl transition-colors text-sm shadow-lg">Use Template</button>
                   </div>
                   
                   <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-3">
@@ -1418,7 +1424,7 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
           
           <div className="mt-16 text-center">
              <h3 className="text-2xl font-bold text-white mb-4">Ready to fill these out?</h3>
-             <a href="/courses" className="inline-flex items-center gap-2 text-[#FFBEA0] border-b border-[#FFBEA0] pb-1 hover:text-white hover:border-white transition-colors">
+             <a href="/courses" className="inline-flex items-center gap-2 text-[#C084FC] border-b border-[#A855F7] pb-1 hover:text-white hover:border-white transition-colors">
                Take our free Google Certification courses first <ArrowRight size={16}/>
              </a>
           </div>
@@ -1427,7 +1433,7 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
         {/* --- PREVIEW MODAL --- */}
         {previewModalTemplate && ModalComponent && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-            <div className="bg-[#1B2735] border border-white/10 rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+            <div className="bg-[#121217] border border-white/10 rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <div>
@@ -1451,14 +1457,14 @@ export default function Editor({ initialView = "templates" }: EditorProps) {
                 </div>
               </div>
               {/* Footer Buttons */}
-              <div className="p-6 border-t border-white/10 flex justify-end gap-3 bg-[#1B2735]">
+              <div className="p-6 border-t border-white/10 flex justify-end gap-3 bg-[#121217]">
                 <button onClick={() => setPreviewModalTemplate(null)} className="px-6 py-3 border border-white/10 rounded-xl hover:bg-white/5 text-white font-medium transition-colors">
                   Close
                 </button>
-                <button onClick={() => { setPreviewModalTemplate(null); navigateToEditor(previewModalTemplate!); }} className="px-6 py-3 bg-[#FF9E80] text-[#1B2735] rounded-xl font-bold hover:bg-white transition-colors shadow-lg">
+                <button onClick={() => { setPreviewModalTemplate(null); navigateToEditor(previewModalTemplate!); }} className="px-6 py-3 bg-[#A855F7] text-black rounded-xl font-bold hover:bg-white transition-colors shadow-lg">
                   Use for Resume
                 </button>
-                <button onClick={() => { setPreviewModalTemplate(null); navigateToCoverLetter(previewModalTemplate!); }} className="px-6 py-3 bg-[#6C5CE7] text-white rounded-xl font-bold hover:bg-indigo-700 transition-colors shadow-lg">
+                <button onClick={() => { setPreviewModalTemplate(null); navigateToCoverLetter(previewModalTemplate!); }} className="px-6 py-3 bg-[#C084FC] text-black rounded-xl font-bold hover:bg-white transition-colors shadow-lg">
                   Use for Cover Letter
                 </button>
               </div>

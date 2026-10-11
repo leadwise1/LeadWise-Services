@@ -19,7 +19,9 @@ import {
   Users,
   Briefcase,
   Target,
-  GraduationCap
+  GraduationCap,
+  Sparkles,
+  MapPin
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -29,37 +31,40 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen w-full bg-[#090A0F] bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+    <div className="min-h-screen w-full bg-[#0c0c0e] bg-[radial-gradient(ellipse_at_top,_#1a102b_0%,_#0c0c0e_100%)] text-white font-sans selection:bg-[#A855F7] selection:text-black">
       
       {/* --- NAVBAR --- */}
-      <nav className="border-b border-white/10 bg-[#090A0F]/50 backdrop-blur-md sticky top-0 z-50">
+      <nav className="border-b border-white/10 bg-[#0c0c0e]/70 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-2">
             <img src="/logolw.jpg" alt="LeadWise Logo" className="w-8 h-8 rounded-lg object-cover" />
             <span className="font-bold text-white text-lg tracking-tight">LeadWise Foundation</span>
           </a>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="/" className="text-[#FFBEA0]">
+            <a href="/" className="text-[#C084FC]">
               Home
             </a>
-            <a href="https://services.letsleadwise.org/resume" className="text-gray-400 hover:text-white transition">
+            <a href="/resume" className="text-gray-400 hover:text-white transition">
               Resume Builder
             </a>
-            <a href="https://services.letsleadwise.org/cover-letter" className="text-gray-400 hover:text-white transition">
+            <a href="/cover-letter" className="text-gray-400 hover:text-white transition">
               Cover Letter
             </a>
             <a href="/courses" className="text-gray-400 hover:text-white transition">
               Courses
             </a>
+            <a href="/pathfinder" className="text-gray-400 hover:text-white transition flex items-center gap-1">
+              <Compass size={14} className="text-[#A855F7]" /> Pathfinder
+            </a>
             <a href="https://blog.letsleadwise.org" className="text-gray-400 hover:text-white transition">
               Blog
             </a>
-            <a href="https://services.letsleadwise.org/forum" className="text-gray-400 hover:text-white transition">
+            <a href="/forum" className="text-gray-400 hover:text-white transition">
               Forum
             </a>
             <a 
               href="https://donation.letsleadwise.org" 
-              className="bg-[#FF9E80] text-[#1B2735] px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(255,190,160,0.4)]"
+              className="bg-[#A855F7] text-black px-5 py-2 rounded-full font-bold hover:bg-white transition-colors shadow-[0_0_15px_rgba(168,85,247,0.4)]"
             >
               Donate Now
             </a>
@@ -68,34 +73,20 @@ export default function HomePage() {
       </nav>
 
       <main id="main-content">
-        
-
-<p className="text-xl md:text-2xl mb-12 text-gray-300 font-light tracking-wide max-w-3xl mx-auto leading-relaxed">
-  We combine Google Career Certificates, AI-assisted mentoring, interview simulations, and workforce readiness support into a structured pathway that helps learners transform new skills into career opportunities.
-</p>
-
-<div className="flex flex-col sm:flex-row gap-6 justify-center">
-  <a
-    href="/courses"
-    className="bg-[#FF9E80] text-[#1B2735] font-bold px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(255,190,160,0.3)] transition transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(255,190,160,0.5)] text-lg flex items-center justify-center gap-3"
-  >
-    <Cloud size={24} /> Start Free Certification
-  </a>
-</div>
 
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-[85vh] flex flex-col items-center justify-center px-4 py-20 overflow-hidden">
         {/* Background Glows */}
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#FF9E80] rounded-full blur-[150px] opacity-10 pointer-events-none"></div>
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[700px] h-[600px] bg-[#A855F7] rounded-full blur-[180px] opacity-15 pointer-events-none"></div>
 
         <div className="max-w-5xl mx-auto z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-[#FFBEA0]/30 text-[#FFBEA0] text-sm font-semibold mb-8 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A855F7]/10 border border-[#A855F7]/30 text-[#C084FC] text-sm font-semibold mb-8 animate-fade-in">
             <Compass size={16} /> The Career Transition System
           </div>
           
           <h1 className="text-5xl md:text-7xl font-extrabold mb-8 leading-tight tracking-tight">
             From Learning to Earning <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#FFBEA0]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#C084FC] to-[#A855F7]">
              Most platforms stop at certification. LeadWise continues the journey.</span>
           </h1>
           
@@ -105,9 +96,15 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <a
               href="/courses"
-              className="bg-[#FF9E80] text-[#1B2735] font-bold px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(255,190,160,0.3)] transition transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(255,190,160,0.5)] text-lg flex items-center justify-center gap-3"
+              className="bg-[#A855F7] text-black font-bold px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.4)] transition transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] text-lg flex items-center justify-center gap-3"
             >
               <Cloud size={24} /> Start Free Certification
+            </a>
+            <a
+              href="/pathfinder"
+              className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-xl border border-white/20 hover:border-[#A855F7] transition transform hover:-translate-y-1 text-lg flex items-center justify-center gap-3 backdrop-blur-md"
+            >
+              <Compass size={24} className="text-[#C084FC]" /> Explore Career Paths
             </a>
           </div>
         </div>
@@ -207,10 +204,10 @@ export default function HomePage() {
            </div>
 
            <div className="relative">
-             <div className="absolute inset-0 bg-[#FF9E80]/10 blur-[100px] rounded-full pointer-events-none"></div>
-             <div className="bg-gradient-to-br from-[#FF9E80]/20 to-transparent border border-[#FF9E80]/30 rounded-3xl p-10 relative backdrop-blur-xl">
+             <div className="absolute inset-0 bg-[#A855F7]/15 blur-[100px] rounded-full pointer-events-none"></div>
+             <div className="bg-gradient-to-br from-[#A855F7]/20 to-transparent border border-[#A855F7]/30 rounded-3xl p-10 relative backdrop-blur-xl">
                 <h3 className="text-3xl font-bold text-white mb-6">👉 LeadWise exists to close THIS gap.</h3>
-                <p className="text-xl text-[#FFBEA0] leading-relaxed">
+                <p className="text-xl text-[#C084FC] leading-relaxed">
                    We don’t stop at certification — we convert learning into job readiness through structured practice, mentoring, and employer alignment. </p>
              </div>
            </div>
@@ -220,14 +217,14 @@ export default function HomePage() {
       {/* --- SECTION 3: LIVE MENTORING SYSTEM --- */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Abstract Tech Background */}
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-96 h-96 bg-[#A855F7]/15 rounded-full blur-[100px] pointer-events-none"></div>
         
         <div className="max-w-7xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 text-purple-300 text-sm font-bold mb-6 border border-purple-500/20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A855F7]/10 text-[#C084FC] text-sm font-bold mb-6 border border-[#A855F7]/20">
             <BrainCircuit size={18} /> Section 3: The Engine
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">Your Live Mentoring System</h2>
-          <p className="text-2xl text-[#FFBEA0] font-light max-w-3xl mx-auto">
+          <p className="text-2xl text-[#C084FC] font-light max-w-3xl mx-auto">
             Confidence Lab + AI Simulation Engine
           </p>
         </div>
@@ -283,7 +280,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-8 text-center text-xl font-bold text-[#FFBEA0] border-t border-white/10 pt-6">
+                <div className="mt-8 text-center text-xl font-bold text-[#C084FC] border-t border-white/10 pt-6">
                   👉 This transforms learning into performance ability.
                 </div>
              </div>
@@ -291,11 +288,113 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* --- PATHFINDER FEATURE SECTION --- */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-y border-white/5 bg-[#0c0c0e]">
+        {/* Background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#A855F7] rounded-full blur-[200px] opacity-[0.10] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+          {/* Left: copy */}
+          <div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A855F7]/10 border border-[#A855F7]/30 text-[#C084FC] text-sm font-bold mb-6">
+              <Compass size={16} /> New Tool
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+              Not sure where to start?{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#C084FC] to-[#A855F7]">
+                Let the Pathfinder guide you.
+              </span>
+            </h2>
+            <p className="text-xl text-gray-400 mb-8 leading-relaxed">
+              Answer a few quick questions and our AI Career Pathfinder matches you to the right job titles, skill roadmaps, and certificates — before you commit to anything.
+            </p>
+
+            <div className="space-y-4 mb-10">
+              {[
+                { icon: <Sparkles size={20} />, title: "AI-Powered Matching", desc: "Get matched to careers based on your strengths & interests" },
+                { icon: <MapPin size={20} />, title: "Real Salary Ranges", desc: "See earning potential for every career path" },
+                { icon: <Zap size={20} />, title: "Skill Roadmaps", desc: "Know exactly what to learn and in what order" },
+              ].map((feat) => (
+                <div key={feat.title} className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/8 transition-colors">
+                  <div className="w-10 h-10 bg-[#A855F7]/20 text-[#C084FC] rounded-xl flex items-center justify-center shrink-0">
+                    {feat.icon}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white">{feat.title}</p>
+                    <p className="text-sm text-gray-400">{feat.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <a
+              href="/pathfinder"
+              className="inline-flex items-center gap-3 bg-[#A855F7] text-black font-bold px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.4)] transition transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] text-lg"
+            >
+              <Compass size={22} /> Discover My Career Path
+            </a>
+          </div>
+
+          {/* Right: preview card */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-[#A855F7]/10 blur-[80px] rounded-full pointer-events-none" />
+            <div className="bg-[#121217]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 relative">
+              {/* Mock terminal header */}
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
+                <div className="flex gap-1.5">
+                  <span className="w-3 h-3 rounded-full bg-red-500/70" />
+                  <span className="w-3 h-3 rounded-full bg-yellow-500/70" />
+                  <span className="w-3 h-3 rounded-full bg-green-500/70" />
+                </div>
+                <span className="text-xs font-mono text-[#C084FC] tracking-widest">LEADWISE_PATHFINDER</span>
+                <span className="ml-auto flex items-center gap-1.5 text-xs text-green-400 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" /> SYS_READY
+                </span>
+              </div>
+
+              <p className="text-xs font-mono text-gray-500 mb-4 tracking-wider">SELECT_USER_PROFILE</p>
+
+              {/* Profile cards */}
+              <div className="space-y-2">
+                {[
+                  { label: "High School Student", desc: "Exploring future majors & tech pathways", active: false },
+                  { label: "College / University Student", desc: "Targeting entry-level jobs & internships", active: true },
+                  { label: "Career Changer", desc: "Pivoting into a high-growth profession", active: false },
+                  { label: "Early Career Professional", desc: "Levelling up towards mid-level titles", active: false },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className={`p-4 rounded-xl border transition-colors ${
+                      item.active
+                        ? "bg-[#A855F7]/20 border-[#A855F7]/40"
+                        : "bg-white/3 border-white/5 hover:bg-white/8"
+                    }`}
+                  >
+                    <p className={`font-bold text-sm font-mono ${ item.active ? "text-[#C084FC]" : "text-gray-300" }`}>{item.label.toUpperCase()}</p>
+                    <p className="text-xs text-gray-500 mt-0.5 font-mono">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Match result teaser */}
+              <div className="mt-6 p-4 rounded-2xl bg-[#A855F7]/10 border border-[#A855F7]/30">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-mono text-[#C084FC] tracking-widest">TOP MATCH</span>
+                  <span className="text-sm font-bold text-[#C084FC] font-mono">91%</span>
+                </div>
+                <p className="font-black text-white text-lg leading-tight">AI & MACHINE LEARNING ENGINEER</p>
+                <p className="text-xs text-gray-400 mt-1 font-mono">$95,000 – $180,000 / yr · +35% Growth</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* --- SECTION 4: HOW IT WORKS --- */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 relative bg-black/20 border-y border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FF9E80]/10 text-[#FFBEA0] text-sm font-bold mb-6 border border-[#FF9E80]/20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#A855F7]/10 text-[#C084FC] text-sm font-bold mb-6 border border-[#A855F7]/20">
               <Compass size={18} /> Section 4: The Process
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">How The System Works</h2>
@@ -310,8 +409,8 @@ export default function HomePage() {
               { step: 5, title: "Transition", desc: "Learner Becomes Job-Ready and Enters Employment Pipeline." }
             ].map((item, i) => (
               <div key={i} className="relative group">
-                <div className="bg-white/5 border border-white/10 p-6 rounded-3xl h-full hover:bg-white/10 hover:border-[#FFBEA0]/50 transition-all z-10 relative">
-                  <div className="text-[#FFBEA0] font-black text-5xl mb-4 opacity-30 group-hover:opacity-100 transition-opacity">0{item.step}</div>
+                <div className="bg-white/5 border border-white/10 p-6 rounded-3xl h-full hover:bg-white/10 hover:border-[#A855F7]/50 transition-all z-10 relative">
+                  <div className="text-[#C084FC] font-black text-5xl mb-4 opacity-30 group-hover:opacity-100 transition-opacity">0{item.step}</div>
                   <h3 className="text-xl font-bold mb-3 text-white">{item.title}</h3>
                   <p className="text-sm text-gray-400">{item.desc}</p>
                 </div>
@@ -333,67 +432,67 @@ export default function HomePage() {
             <p className="text-xl text-gray-400 max-w-3xl mb-4">
               You don’t stop here — your career activation begins now.
             </p>
-            <p className="text-lg text-gray-300 max-w-3xl border-l-4 border-[#FFBEA0] pl-4 italic">
+            <p className="text-lg text-gray-300 max-w-3xl border-l-4 border-[#A855F7] pl-4 italic">
               After completing your Google Career Certificate through LeadWise + Coursera, you unlock a career transition system designed to help you move from learning → employment.
             </p>
           </div>
 
           <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
-            <Briefcase className="text-[#FFBEA0]" /> Your Career Activation Tools
+            <Briefcase className="text-[#C084FC]" /> Your Career Activation Tools
           </h3>
           <p className="text-gray-400 mb-10 font-medium">These are not optional extras — they are part of your job readiness pathway.</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Tool 1 */}
-            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#FFBEA0]/50 transition-colors">
+            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#A855F7]/50 transition-colors">
               <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-[#FFBEA0]">1.</span> Employer Network Access
+                <span className="text-[#C084FC]">1.</span> Employer Network Access
               </h4>
               <p className="text-sm text-gray-400 mb-6 font-semibold">(CareerCircle Integration)</p>
               <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed">
                 Get access to a network of 150+ hiring employers actively considering Google Career Certificate graduates. Explore job openings, connect with hiring partners, apply to entry-level roles, and get visibility with employers like Verizon, Deloitte, and Siemens.
               </p>
-              <div className="bg-[#FF9E80]/10 border border-[#FF9E80]/20 p-3 rounded-xl text-xs font-bold text-[#FFBEA0] mt-auto">
+              <div className="bg-[#A855F7]/10 border border-[#A855F7]/20 p-3 rounded-xl text-xs font-bold text-[#C084FC] mt-auto">
                 👉 Your first step into the job market ecosystem.
               </div>
             </div>
 
             {/* Tool 2 */}
-            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#FFBEA0]/50 transition-colors">
+            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#A855F7]/50 transition-colors">
               <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-[#FFBEA0]">2.</span> 360° Career Profile
+                <span className="text-[#C084FC]">2.</span> 360° Career Profile
               </h4>
               <p className="text-sm text-gray-400 mb-6 font-semibold">(Stand-Out System)</p>
               <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed">
                 Build a professional profile that goes beyond a resume. Includes skills gained from your certificate, learning progress data, projects and coursework highlights, and strengths from assessments and experience.
               </p>
-              <div className="bg-[#FF9E80]/10 border border-[#FF9E80]/20 p-3 rounded-xl text-xs font-bold text-[#FFBEA0] mt-auto">
+              <div className="bg-[#A855F7]/10 border border-[#A855F7]/20 p-3 rounded-xl text-xs font-bold text-[#C084FC] mt-auto">
                 👉 Helps employers see you as a whole candidate.
               </div>
             </div>
 
             {/* Tool 3 */}
-            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#FFBEA0]/50 transition-colors">
+            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#A855F7]/50 transition-colors">
               <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-[#FFBEA0]">3.</span> Career Readiness Support
+                <span className="text-[#C084FC]">3.</span> Career Readiness Support
               </h4>
               <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed mt-2">
                 Once you complete your certificate, you gain access to resume building tools, interview preparation guides, career path recommendations, job search strategy support, and virtual hiring events & webinars.
               </p>
-              <div className="bg-[#FF9E80]/10 border border-[#FF9E80]/20 p-3 rounded-xl text-xs font-bold text-[#FFBEA0] mt-auto">
+              <div className="bg-[#A855F7]/10 border border-[#A855F7]/20 p-3 rounded-xl text-xs font-bold text-[#C084FC] mt-auto">
                 👉 This is where learning turns into job strategy.
               </div>
             </div>
 
             {/* Tool 4 */}
-            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#FFBEA0]/50 transition-colors">
+            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col hover:border-[#A855F7]/50 transition-colors">
               <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <span className="text-[#FFBEA0]">4.</span> 1:1 Career Coaching
+                <span className="text-[#C084FC]">4.</span> 1:1 Career Coaching
               </h4>
               <p className="text-gray-300 mb-6 flex-1 text-sm leading-relaxed mt-2">
                 Get personalized support from career advisors who help you refine your resume, prepare for interviews, understand job requirements, and position yourself for entry-level roles.
               </p>
-              <div className="bg-[#FF9E80]/10 border border-[#FF9E80]/20 p-3 rounded-xl text-xs font-bold text-[#FFBEA0] mt-auto">
+              <div className="bg-[#A855F7]/10 border border-[#A855F7]/20 p-3 rounded-xl text-xs font-bold text-[#C084FC] mt-auto">
                 👉 This is your human support layer after certification.
               </div>
             </div>
@@ -403,12 +502,12 @@ export default function HomePage() {
 
       {/* --- SECTION 6: OUTCOME STATEMENT (CTA) --- */}
       <section className="py-32 px-4 text-center relative overflow-hidden bg-black/40 border-t border-white/10">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#FF9E80]/10 to-transparent pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#A855F7]/15 to-transparent pointer-events-none"></div>
         <div className="max-w-4xl mx-auto relative z-10">
           
           <div className="mb-12">
             <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6">LeadWise is not a course platform.</h2>
-            <p className="text-xl sm:text-2xl text-[#FFBEA0] mb-8 font-light leading-relaxed">
+            <p className="text-xl sm:text-2xl text-[#C084FC] mb-8 font-light leading-relaxed">
               It is a career transformation system combining Coursera learning, AI simulation mentoring, and structured workforce readiness support.
             </p>
           </div>
@@ -416,13 +515,13 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <a
               href="/courses"
-              className="bg-[#FF9E80] text-[#1B2735] font-bold px-10 py-5 rounded-xl shadow-[0_0_20px_rgba(255,190,160,0.4)] transition transform hover:-translate-y-1 text-lg flex items-center justify-center gap-3"
+              className="bg-[#A855F7] text-black font-bold px-10 py-5 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.4)] transition transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] text-lg flex items-center justify-center gap-3"
             >
               <Cloud size={24} /> Get Certified
             </a>
             <a
               href="https://donation.letsleadwise.org"
-              className="bg-white/10 hover:bg-white/20 text-white font-bold px-10 py-5 rounded-xl border border-white/20 hover:border-[#FFBEA0] transition transform hover:-translate-y-1 text-lg flex items-center justify-center gap-3 backdrop-blur-md"
+              className="bg-white/10 hover:bg-white/20 text-white font-bold px-10 py-5 rounded-xl border border-white/20 hover:border-[#A855F7] transition transform hover:-translate-y-1 text-lg flex items-center justify-center gap-3 backdrop-blur-md"
             >
               <Users size={24} /> Support the Mission
             </a>
@@ -433,7 +532,7 @@ export default function HomePage() {
       </main>
 
      {/* --- FOOTER --- */}
-      <footer className="bg-[#090A0F] text-gray-500 border-t border-white/10">
+      <footer className="bg-[#0c0c0e] text-gray-500 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col items-center gap-8">
           <div className="flex items-center gap-2">
             <img

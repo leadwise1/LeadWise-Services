@@ -4,38 +4,38 @@
 
 @layer base {
   :root {
-    /* DEFAULT THEME: LeadWise Dark Mode */
+    /* DEFAULT THEME: LeadWise Dark Mode (Pathfinder Aesthetic) */
     
-    /* Main Background: #090A0F (Deep Dark Blue) */
-    --background: 232 25% 5%; 
+    /* Main Background: #0c0c0e (Obsidian Black) */
+    --background: 240 10% 5%; 
     
     /* Main Text: White */
     --foreground: 0 0% 100%;
 
-    /* Card Background: #1B2735 (Lighter Dark Blue) */
-    --card: 214 33% 16%;
+    /* Card Background: #121217 */
+    --card: 240 12% 8%;
     --card-foreground: 0 0% 100%;
     
     /* Popover/Modal Background */
-    --popover: 214 33% 16%;
+    --popover: 240 12% 8%;
     --popover-foreground: 0 0% 100%;
 
-    /* Primary Accent: #FF9E80 (Peach) */
-    --primary: 14 100% 75%;
-    --primary-foreground: 232 25% 5%;
+    /* Primary Accent: #A855F7 (Electric Purple) */
+    --primary: 270 95% 65%;
+    --primary-foreground: 0 0% 0%;
 
-    /* Secondary: #1B2735 */
-    --secondary: 214 33% 16%;
+    /* Secondary: #1f1430 (Deep Violet Black) */
+    --secondary: 270 40% 14%;
     --secondary-foreground: 0 0% 100%;
 
     /* Muted Text: Grayish */
-    --muted: 215 25% 27%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 240 6% 25%;
+    --muted-foreground: 240 5% 65%;
 
-    /* Borders: #FFFFFF with 10% opacity equivalent */
-    --border: 217 32% 17%;
-    --input: 217 32% 17%;
-    --ring: 14 100% 75%;
+    /* Borders: Subtle white/purple tint */
+    --border: 240 10% 15%;
+    --input: 240 10% 15%;
+    --ring: 270 95% 65%;
 
     --radius: 0.75rem;
   }
@@ -50,7 +50,7 @@
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     min-height: 100vh;
-    background-color: #090A0F; /* Fallback hex */
+    background-color: #0c0c0e; /* Fallback hex */
   }
 }
 
@@ -70,5 +70,5 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #FF9E80;
+  background: #A855F7;
 }

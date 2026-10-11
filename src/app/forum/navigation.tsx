@@ -21,15 +21,25 @@ function Navigation() {
   return (
     <aside className="community-nav w-full md:w-64 md:shrink-0 border-b md:border-b-0 md:border-r border-neutral-800 p-5 md:p-6 flex flex-col gap-6">
       <div>
-        <Link href="/courses" className="text-sm text-neutral-400 hover:text-white hidden md:flex items-center gap-2 mb-5">
-          <ArrowLeft className="w-4 h-4" /> Back to courses
-        </Link>
-        <Link href="/forum" className="flex items-center gap-3 text-2xl font-bold text-white"><Network className="w-7 h-7 text-blue-400" />LeadWise</Link>
+        <div className="flex items-center gap-4 mb-5 text-sm">
+          <Link href="/" className="text-neutral-400 hover:text-white flex items-center gap-1.5 transition">
+            <ArrowLeft className="w-4 h-4" /> Home
+          </Link>
+          <span className="text-neutral-700">|</span>
+          <Link href="/courses" className="text-neutral-400 hover:text-white transition">
+            Courses
+          </Link>
+          <span className="text-neutral-700">|</span>
+          <Link href="/pathfinder" className="text-neutral-400 hover:text-[#C084FC] transition">
+            Pathfinder
+          </Link>
+        </div>
+        <Link href="/forum" className="flex items-center gap-3 text-2xl font-bold text-white"><Network className="w-7 h-7 text-[#A855F7]" />LeadWise</Link>
         <p className="text-sm text-neutral-400 mt-2">Learner community</p>
       </div>
       <nav aria-label="Community" className="flex flex-wrap md:flex-col gap-1">
         {links.map(({ href, label, Icon, active }) => (
-          <Link key={href} href={href} aria-current={active ? 'page' : undefined} className={`community-nav-link flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium ${active ? 'text-blue-200' : 'text-neutral-300 hover:bg-neutral-800 hover:text-white'}`}>
+          <Link key={href} href={href} aria-current={active ? 'page' : undefined} className={`community-nav-link flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium ${active ? 'text-[#C084FC] font-bold' : 'text-neutral-300 hover:bg-white/5 hover:text-white'}`}>
             <Icon className="w-5 h-5 shrink-0" /> {label}
           </Link>
         ))}

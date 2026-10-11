@@ -38,7 +38,7 @@ export const metadata = {
 
 export default function CoverLetterLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top,_#1B2735_0%,_#090A0F_100%)] text-white font-sans selection:bg-[#FFBEA0] selection:text-[#1B2735]">
+    <div className="min-h-screen w-full bg-[#0c0c0e] bg-[radial-gradient(ellipse_at_top,_#1a102b_0%,_#0c0c0e_100%)] text-white font-sans selection:bg-[#A855F7] selection:text-black">
       <main id="main-content">
         <h1 className="sr-only">Cover Letter Builder | LeadWise Foundation</h1>
         {children}

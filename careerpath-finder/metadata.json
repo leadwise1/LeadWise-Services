@@ -1,0 +1,6 @@
+{
+  "name": "LeadWise Foundation",
+  "description": "An interactive career pathfinder helping learners discover matching professions, specific job titles, workplace environments, and personalized learning roadmaps based on multiple-choice assessments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

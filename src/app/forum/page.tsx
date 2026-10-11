@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export default function ForumHomePage() {
   return (
-    <div className="min-h-screen bg-[#17191d] text-white selection:bg-[#47b3ff] selection:text-[#25282e]">
+    <div className="min-h-screen bg-[#0c0c0e] bg-[radial-gradient(ellipse_at_top,_#1a102b_0%,_#0c0c0e_100%)] text-white selection:bg-[#A855F7] selection:text-black">
       <main className="p-6 md:p-10 max-w-4xl mx-auto pb-24">
         {/* Header */}
         <motion.div
@@ -13,7 +13,7 @@ export default function ForumHomePage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-16 text-center"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-6 uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#A855F7]/10 border border-[#A855F7]/30 text-[#C084FC] text-xs font-bold mb-6 uppercase tracking-widest">
             <Shield size={14} /> Welcome to the community
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-6 text-white">
@@ -29,19 +29,19 @@ export default function ForumHomePage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="bg-neutral-900 border border-white/10 rounded-3xl p-8 md:p-12 mb-16 text-center relative overflow-hidden"
+          className="bg-neutral-900/60 border border-white/10 rounded-3xl p-8 md:p-12 mb-16 text-center relative overflow-hidden backdrop-blur-sm"
         >
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 leading-snug">
             Belonging before brilliance.
           </h2>
-          <p className="text-lg md:text-xl font-medium text-[#47b3ff] leading-relaxed">
+          <p className="text-lg md:text-xl font-medium text-[#C084FC] leading-relaxed">
             Because brilliance is everywhere. Belonging is rare.
           </p>
           <p className="text-neutral-300 leading-relaxed mt-6 max-w-2xl mx-auto">
             You don&apos;t have to learn alone. This is a support system where we ask questions, share what we&apos;re discovering, and help each other move forward.
           </p>
           <div className="mt-8 flex justify-center">
-            <a href="/forum/discussions" className="inline-flex items-center gap-2 rounded-full bg-blue-700 hover:bg-blue-800 px-6 py-3 font-semibold text-white transition">
+            <a href="/forum/discussions" className="inline-flex items-center gap-2 rounded-full bg-[#A855F7] hover:bg-white text-black font-bold px-6 py-3 transition shadow-[0_0_15px_rgba(168,85,247,0.4)]">
               Open the forum <ArrowRight className="w-4 h-4" />
             </a>
           </div>
@@ -71,7 +71,7 @@ export default function ForumHomePage() {
                     "A community that lifts each other"
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-white font-medium">
-                      <CheckCircle2 className="text-blue-500 w-5 h-5 shrink-0" />
+                      <CheckCircle2 className="text-[#A855F7] w-5 h-5 shrink-0" />
                       {item}
                     </li>
                   ))}
@@ -87,13 +87,13 @@ export default function ForumHomePage() {
             transition={{ delay: 0.3 }}
             className="flex flex-col justify-center"
           >
-            <div className="bg-[#47b3ff]/5 border border-[#47b3ff]/20 rounded-3xl p-8 relative">
-              <Award className="absolute -top-6 -right-6 w-16 h-16 text-[#47b3ff]/20" />
-              <h3 className="text-xl font-bold text-[#47b3ff] mb-4">You Belong Here</h3>
+            <div className="bg-[#A855F7]/5 border border-[#A855F7]/20 rounded-3xl p-8 relative">
+              <Award className="absolute -top-6 -right-6 w-16 h-16 text-[#A855F7]/20" />
+              <h3 className="text-xl font-bold text-[#C084FC] mb-4">You Belong Here</h3>
               <p className="text-neutral-300 leading-relaxed mb-6">
                 Whether you&apos;re starting your first IT course, changing careers, sharing your experience, or returning as an alum, you have a place here. Bring your questions, your ideas, and your everyday wins.
               </p>
-              <div className="pt-6 border-t border-[#47b3ff]/10">
+              <div className="pt-6 border-t border-[#A855F7]/10">
                 <p className="font-bold text-white">LeadWise Foundation Team</p>
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function ForumHomePage() {
             whileInView={{ opacity: 1 }}
             className="text-2xl font-bold mb-10 flex items-center gap-3"
           >
-            <Scroll className="text-blue-400" /> Community Guidelines
+            <Scroll className="text-[#C084FC]" /> Community Guidelines
           </motion.h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -126,10 +126,10 @@ export default function ForumHomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group bg-neutral-900/30 border border-neutral-800 hover:border-blue-500/30 p-6 rounded-2xl transition-all hover:bg-neutral-900/50"
+                className="group bg-neutral-900/30 border border-neutral-800 hover:border-[#A855F7]/30 p-6 rounded-2xl transition-all hover:bg-neutral-900/50"
               >
                 <div className="flex gap-4">
-                  <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-bold text-neutral-500 border border-neutral-700 group-hover:border-blue-500/50 group-hover:text-blue-400 transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-bold text-neutral-500 border border-neutral-700 group-hover:border-[#A855F7]/50 group-hover:text-[#C084FC] transition-colors">
                     {rule.id}
                   </div>
                   <div>

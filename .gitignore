@@ -27,3 +27,9 @@ node_modules
 
 # dist/
 /dist
+
+# Build cache & scripts
+*.tsbuildinfo
+.firebase/
+careerpath-finder/.firebase/
+check_*.ts
