@@ -71,7 +71,7 @@ export default function LearnerHub() {
         <p className="text-sm text-neutral-400 mt-4">Already enrolled with another email or account provider? Keep using your existing access and contact <a href="mailto:mentor@letsleadwise.org" className="underline">mentor@letsleadwise.org</a> for linking support.</p>
       </section>
       : !account ? <p>Your learner account could not be loaded. Please retry before submitting an intake.</p>
-      : !account.member ? <section className="rounded-2xl border border-purple-400/30 p-7 mb-8">
+      : !account.intakeComplete ? <section className="rounded-2xl border border-purple-400/30 p-7 mb-8">
         <h2 className="text-2xl font-bold mb-3">{account.canLinkExisting ? 'Your enrollment record is ready to connect.' : 'Choose your free course and complete intake.'}</h2>
         <p className="text-neutral-300 mb-5">Your intake details stay private. Your first name will be used as your community name. External course enrollment remains subject to LeadWise provisioning.</p>
         {account.canLinkExisting ? <button onClick={linkExisting} className="rounded-xl bg-purple-600 px-6 py-3 font-bold">Connect my enrollment and join community</button> : <Link href="/courses" className="inline-block rounded-xl bg-purple-600 px-6 py-3 font-bold">Choose a free course</Link>}

@@ -61,6 +61,24 @@ export async function POST(req: NextRequest) {
   const { user, email } = identity;
   let body;
   try { body = await req.json(); } catch { return reply({ error: 'Invalid request.' }, 400); }
+  if (body?.joinCommunity === true) {
+    const ref = adminDb!.collection('learner_accounts').doc(user!.uid);
+    try {
+      const result = await adminDb!.runTransaction(async tx => {
+        const existing = await tx.get(ref);
+        if (existing.exists && existing.data()?.email !== email) return { conflict: true };
+        if (!existing.exists) tx.set(ref, {
+          uid: user!.uid, email,
+          displayName: typeof user!.name === 'string' ? user!.name.trim().split(/\s+/)[0].slice(0, 80) : 'Learner',
+          communityMember: true, intakeComplete: false,
+          joinedAt: new Date().toISOString(),
+        });
+        return { success: true, next: '/forum/courses' };
+      });
+      if ('conflict' in result) return reply({ error: 'This account needs staff review before linking.' }, 409);
+      return reply(result);
+    } catch { return reply({ error: 'Unable to join the community. Please retry.' }, 503); }
+  }
   const claim = body?.claimExisting === true;
   const parsed = intakeSchema.safeParse(body);
   if (!claim && !parsed.success) return reply({ error: 'Please complete all intake fields and consent.' }, 400);
@@ -75,6 +93,7 @@ export async function POST(req: NextRequest) {
       if (legacy.exists && !sameEmail(old?.email, email!)) return { conflict: true };
       if (account.exists && account.data()?.email !== email) return { conflict: true };
       if (claim && (!legacy.exists || old?.consent !== true)) return { missing: true };
+      if (!claim && account.data()?.communityMember !== true) return { joinRequired: true };
       const intake = claim ? old! : parsed.data!;
       const courseId = intake.courseId;
       const courseTitle = (claim ? old?.courseTitle || old?.targetCourse : COURSES.find(course => course.id === parsed.data?.courseId)?.title) || 'Existing enrollment';
@@ -86,6 +105,10 @@ export async function POST(req: NextRequest) {
         uid: user!.uid, email, legacyParticipantId: legacyRef.parent.parent!.id,
         displayName: intake.firstName, intakeComplete: true, communityMember: true,
         joinedAt: now, consentVersion: 'existing-intake-v1',
+      });
+      if (account.exists) tx.update(accountRef, {
+        intakeComplete: true, communityMember: true,
+        displayName: intake.firstName, legacyParticipantId: legacyRef.parent.parent!.id,
       });
       if (!enrollment.exists) {
         const status = legacy.exists && old?.courseId === courseId ? old.status || 'Pending' : 'Pending';
@@ -113,9 +136,10 @@ export async function POST(req: NextRequest) {
           lmiVerified: ['0-25k', '25-50k'].includes(intake.householdIncome),
         });
       }
-      return { success: true, next: '/learner', alreadySubmitted: enrollment.exists };
+      return { success: true, next: '/forum', alreadySubmitted: enrollment.exists };
     });
     if ('conflict' in result) return reply({ error: 'This record needs a staff review before linking. Contact mentor@letsleadwise.org.' }, 409);
+    if ('joinRequired' in result) return reply({ error: 'Please join the community before completing intake.' }, 409);
     if ('missing' in result) return reply({ error: 'Please complete the course intake to join.' }, 409);
     if (!claim && parsed.success) await notifyEnrollment(user!.uid, parsed.data.courseId);
     return reply(result);

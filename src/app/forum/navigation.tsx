@@ -2,16 +2,16 @@
 
 import { Suspense } from 'react';
 import Link from 'next/link';
-import { unifiedOnboarding } from '@/lib/learner-auth';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { MessageSquare, Trophy, Calendar, ArrowLeft, Megaphone, Network, Settings } from 'lucide-react';
+import { MessageSquare, Trophy, Calendar, ArrowLeft, Megaphone, Network, Settings, ScrollText } from 'lucide-react';
 
 function Navigation() {
   const path = usePathname();
   const params = useSearchParams();
   const isBulletin = params.get('board') === 'bulletin';
   const links = [
-    ...(unifiedOnboarding ? [{ href: '/learner', label: 'My learner hub', Icon: Network, active: path === '/learner' }] : []),
+    { href: '/forum/courses', label: 'Free Courses', Icon: Network, active: path === '/forum/courses' },
+    { href: '/forum/enroll', label: 'Enrollment Intake', Icon: ScrollText, active: path === '/forum/enroll' },
     { href: '/forum', label: 'Welcome', Icon: Network, active: path === '/forum' },
     { href: '/forum/discussions', label: 'Open forum', Icon: MessageSquare, active: path === '/forum/discussions' && !isBulletin },
     { href: '/forum/discussions?board=bulletin', label: 'Bulletin board', Icon: Megaphone, active: path === '/forum/discussions' && isBulletin },

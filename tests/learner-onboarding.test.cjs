@@ -17,7 +17,7 @@ function collection(key) {
 }
 const db = { collection, runTransaction: async fn => {
   const writes = [];
-  const result = await fn({ get: item => item.get(), set: (item, value) => writes.push([item.key, value]) });
+  const result = await fn({ get: item => item.get(), set: (item, value) => writes.push([item.key, value]), update: (item, value) => writes.push([item.key, { ...records.get(item.key), ...value }]) });
   if (failTransaction) throw new Error('injected failure');
   for (const [key, value] of writes) records.set(key, value);
   return result;
@@ -66,6 +66,7 @@ test('requires explicit consent and signed-in email', async () => {
  assert.equal(records.size, 0);
 });
 test('atomic intake grants membership and retries do not duplicate reporting or requests', async () => {
+ await exportsObject.POST(request({ joinCommunity: true }));
  assert.equal((await exportsObject.POST(request(intake))).status, 200);
  const original = JSON.stringify([...records]);
  assert.equal((await exportsObject.POST(request(intake))).data.alreadySubmitted, true);
@@ -97,6 +98,7 @@ test('another account cannot silently take over an existing linked account recor
  assert.equal((await exportsObject.POST(request(intake))).status, 409);
 });
 test('new course preserves existing approved intake and separate enrollment', async () => {
+ await exportsObject.POST(request({ joinCommunity: true }));
  await exportsObject.POST(request(intake));
  const old = records.get(legacyPath);
  const second = await exportsObject.POST(request({ ...intake, courseId: 'data-analytics', courseTitle: 'Data Analytics' }));
@@ -105,6 +107,7 @@ test('new course preserves existing approved intake and separate enrollment', as
  assert.equal([...records.keys()].filter(k => k.startsWith('learner_intakes/')).length, 1);
 });
 test('hub response exposes no email, income, ZIP, employment or reporting ID', async () => {
+ await exportsObject.POST(request({ joinCommunity: true }));
  await exportsObject.POST(request(intake));
  const response = await exportsObject.GET(request(null));
  assert.equal(response.status, 200); assert.equal(response.headers['Cache-Control'], 'private, no-store');
@@ -113,4 +116,24 @@ test('hub response exposes no email, income, ZIP, employment or reporting ID', a
 test('malformed JSON returns validation response', async () => {
  const req = request(null); req.json = async () => { throw new Error(); };
  assert.equal((await exportsObject.POST(req)).status, 400);
+});
+
+test('community signup creates membership before intake without any reporting or enrollment rows', async () => {
+ const joined = await exportsObject.POST(request({ joinCommunity: true }));
+ assert.equal(joined.status, 200);
+ assert.equal(joined.data.next, '/forum/courses');
+ assert.equal(records.size, 1);
+ assert.equal(records.get('learner_accounts/learner').communityMember, true);
+ assert.equal(records.get('learner_accounts/learner').intakeComplete, false);
+ const before = JSON.stringify([...records]);
+ await exportsObject.POST(request({ joinCommunity: true }));
+ assert.equal(JSON.stringify([...records]), before);
+});
+test('intake requires community signup first and then completes the same account', async () => {
+ assert.equal((await exportsObject.POST(request(intake))).status, 409);
+ assert.equal(records.size, 0);
+ await exportsObject.POST(request({ joinCommunity: true }));
+ assert.equal((await exportsObject.POST(request(intake))).status, 200);
+ assert.equal(records.get('learner_accounts/learner').intakeComplete, true);
+ assert.equal([...records.keys()].filter(k => k.startsWith('learner_accounts/') && !k.includes('/enrollments/')).length, 1);
 });

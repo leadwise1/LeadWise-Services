@@ -55,3 +55,12 @@ The report access improvement applies when this source is deployed; the live app
 7. Confirm current production SHA has not changed, stage a production build, verify it, then release through normal review.
 
 Rollback: redeploy the prior commit (this is the tested full rollback, including reporting access); for onboarding-only fallback, disable both flags and rebuild. Do not delete newly created Firestore documents.
+
+## Community-first revision (October 19, 2026)
+Entry is /forum. The left menu now contains Free Courses (/forum/courses) and Enrollment Intake (/forum/enroll).
+Both pages retain the existing community sidebar and reuse the existing catalog/intake component.
+Community signup happens BEFORE course intake. POST joinCommunity creates only the private membership/account record with intakeComplete=false.
+Submitting intake requires membership, then sets intakeComplete=true on that same account and writes the private intake, anonymous reporting row and course request transactionally.
+Joining by itself never adds an LMI row or enrollment request.
+Existing verified learner records can still be connected without resubmitting intake.
+The separate /learner hub remains available, but is not the primary community onboarding destination.

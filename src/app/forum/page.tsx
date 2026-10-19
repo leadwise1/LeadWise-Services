@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import CommunityEntry from './community-entry';
 import { Shield, Scroll, CheckCircle2, Zap, Award, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -23,6 +24,8 @@ export default function ForumHomePage() {
             A shared space for learners, alumni, instructors, and career changers exploring technology together.
           </p>
         </motion.div>
+
+        <CommunityEntry />
 
         {/* Intro Card */}
         <motion.div
