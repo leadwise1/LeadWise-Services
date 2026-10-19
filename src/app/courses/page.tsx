@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import {
   CheckCircle,
   Briefcase,
@@ -21,109 +21,10 @@ import {
 } from "lucide-react";
 
 
-// ─── TYPES ────────────────────────────────────────────────────────────────────
-interface Resource { title: string; type: string; platform: string; url: string; }
-interface Lesson   { id: string; title: string; resources: Resource[]; }
-interface Module   { id: string; title: string; duration: string; lessons: Lesson[]; }
-interface Course   {
-  id: string; title: string; subtitle: string; description: string;
-  duration: string; level: string; tags: string[]; accentColor: string; bgColor: string; textColor: string;
-  salaryHook?: string; modules: Module[]; externalUrl: string;
-}
-
-// ─── DATA ─────────────────────────────────────────────────────────────────────
-const COURSES: Course[] = [
-  {
-    id: "google-cybersecurity-cert",
-    title: "Google Cybersecurity Professional Certificate",
-    subtitle: "Prepare for a high-growth career in cybersecurity.",
-    description: "Learn Python, Linux, SQL, SIEM tools, and security frameworks to identify and mitigate risks. Earn an industry-recognized credential and prepare for the CompTIA Security+ exam.",
-    duration: "19 Courses",
-    level: "Beginner — No experience required",
-    tags: ["Security", "CompTIA Security+", "Cybersecurity"],
-    accentColor: "#059669",
-    bgColor: "#ECFDF5",
-    textColor: "#065F46",
-    salaryHook: "$75k – $105k avg. starting salary",
-    externalUrl: "https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc",
-    modules: [
-      {
-        id: "cyber-foundations",
-        title: "Foundations & Security Frameworks",
-        duration: "4 Courses",
-        lessons: [
-          {
-            id: "cyber-intro",
-            title: "Introduction to Cybersecurity",
-            resources: [
-              { title: "Foundations of Cybersecurity", type: "Course", platform: "Coursera", url: "https://coursera.org/programs/google-cybersecurity-professional-certificate-76vpc" },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "data-analytics",
-    title: "Google Data Analytics Professional Certificate",
-    subtitle: "Decode the data. Drive business decisions.",
-    description: "Master the essentials of data analysis: spreadsheets, SQL, Tableau, and R programming. Learn how to clean, visualize, and analyze complex datasets.",
-    duration: "9 Courses",
-    level: "Beginner — No experience required",
-    tags: ["SQL", "Tableau", "R Programming"],
-    accentColor: "#7C3AED",
-    bgColor: "#F5F3FF",
-    textColor: "#4C1D95",
-    salaryHook: "$70k – $110k avg. starting salary",
-    externalUrl: "https://coursera.org/programs/google-data-analytics-professional-certificate-puv0b",
-    modules: [
-      {
-        id: "data-foundations",
-        title: "Data Foundations & Analysis Process",
-        duration: "3 Courses",
-        lessons: [
-          {
-            id: "data-intro",
-            title: "Introduction to Data Analytics",
-            resources: [
-              { title: "Foundations: Data, Data, Everywhere", type: "Course", platform: "Coursera", url: "https://coursera.org/programs/google-data-analytics-professional-certificate-puv0b" },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "google-ai-cert",
-    title: "Google AI Professional Certificate",
-    subtitle: "Shape the future with Generative AI and Machine Learning.",
-    description: "Learn how to leverage AI tools to automate workflows, build smart applications, and analyze complex systems. Gain skills in prompting, model tuning, and AI ethics.",
-    duration: "7 Courses",
-    level: "Beginner to Intermediate",
-    tags: ["Generative AI", "Machine Learning"],
-    accentColor: "#2563EB",
-    bgColor: "#EFF6FF",
-    textColor: "#1E3A8A",
-    salaryHook: "$85k – $130k avg. starting salary",
-    externalUrl: "https://coursera.org/programs/ai-fundamental-lfgho",
-    modules: [
-      {
-        id: "ai-foundations",
-        title: "AI Fundamentals & Generative AI Basics",
-        duration: "3 Courses",
-        lessons: [
-          {
-            id: "ai-intro",
-            title: "Introduction to Artificial Intelligence",
-            resources: [
-              { title: "Generative AI Foundations", type: "Course", platform: "Coursera", url: "https://coursera.org/programs/ai-fundamental-lfgho" },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
+import { COURSES, type Course, type Resource, type Module } from '@/lib/course-catalog';
+import { auth } from '@/lib/firebase';
+import { signInLearner, unifiedOnboarding, learnerRequest } from '@/lib/learner-auth';
+import Link from 'next/link';
 
 // ─── INTAKE MODAL ─────────────────────────────────────────────────────────────
 function IntakeModal({
@@ -143,6 +44,12 @@ function IntakeModal({
     householdIncome: "", employmentStatus: "", consent: false,
   });
 
+  useEffect(() => {
+    if (!isOpen || !unifiedOnboarding) return;
+    const user = auth.currentUser;
+    if (user && !user.isAnonymous) setFormData(previous => ({ ...previous, email: user.email || '' }));
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -150,9 +57,14 @@ function IntakeModal({
     setLoading(true);
     setError("");
     try {
+      await auth.authStateReady();
+      if (unifiedOnboarding && (!auth.currentUser || auth.currentUser.isAnonymous)) {
+        throw new Error("Please sign in before completing intake.");
+      }
+      const token = unifiedOnboarding ? await auth.currentUser!.getIdToken() : null;
       const res = await fetch("/api/intake", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
         body: JSON.stringify({
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -165,13 +77,13 @@ function IntakeModal({
           courseTitle: targetCourse?.title ?? "unknown",
         }),
       });
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) { const data = await res.json(); throw new Error(data.error || "Unable to save intake. Please retry."); }
       setLoading(false);
       setSubmitted(true);
       onComplete();
     } catch (err) {
       console.error("Intake save error:", err);
-      setError("There was a problem saving your enrollment. Please try again.");
+      setError(err instanceof Error ? err.message : "There was a problem saving your enrollment. Please try again.");
       setLoading(false);
     }
   };
@@ -206,10 +118,10 @@ function IntakeModal({
               </a>
             </p>
             <button
-              onClick={onClose}
+              onClick={() => unifiedOnboarding ? window.location.assign("/learner") : onClose()}
               className="w-full bg-[#A855F7] text-black py-3 rounded-xl font-bold hover:bg-white transition text-sm shadow-[0_0_15px_rgba(168,85,247,0.4)]"
             >
-              Close
+              {unifiedOnboarding ? "Go to my learner hub" : "Close"}
             </button>
           </div>
         </div>
@@ -260,7 +172,7 @@ function IntakeModal({
                 </div>
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Email Address</label>
-                  <input type="email" required className="w-full border border-white/10 rounded-xl px-4 py-3 text-white bg-[#0c0c0e] focus:outline-none focus:border-[#A855F7] transition text-sm" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                  <input type="email" required readOnly={unifiedOnboarding} className="w-full border border-white/10 rounded-xl px-4 py-3 text-white bg-[#0c0c0e] focus:outline-none focus:border-[#A855F7] transition text-sm" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Zip Code</label>
@@ -478,6 +390,8 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: {
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 function CoursesPage() {
   const [intakeOpen, setIntakeOpen] = useState(false);
+  const [accountError, setAccountError] = useState("");
+  const [connecting, setConnecting] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   // pendingCourseIds: submitted but awaiting admin provisioning on Coursera
   const [pendingCourseIds, setPendingCourseIds] = useState<string[]>([]);
@@ -485,18 +399,39 @@ function CoursesPage() {
   const openEnrollment = async (course: Course) => {
     // If already submitted this session, don't re-open the form
     if (pendingCourseIds.includes(course.id)) return;
-    setSelectedCourse(course);
-    setIntakeOpen(true);
+    if (connecting) return;
+    setAccountError("");
+    setConnecting(true);
+    try {
+      if (unifiedOnboarding) {
+        await signInLearner();
+        const account = await learnerRequest();
+        if (account.canLinkExisting && !account.member) {
+          window.location.assign('/learner');
+          return;
+        }
+      }
+      setSelectedCourse(course);
+      setIntakeOpen(true);
+    } catch {
+      setAccountError("Please finish sign-in to enroll. Existing account access remains available. Contact mentor@letsleadwise.org if you need help.");
+    } finally { setConnecting(false); }
   };
 
   const handleEnrollmentComplete = () => {
     // Mark all courses as pending — one submission covers all tracks
-    setPendingCourseIds(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']);
+    setPendingCourseIds(previous => unifiedOnboarding && selectedCourse ? [...new Set([...previous, selectedCourse.id])] : ['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']);
     // Keep modal open so the thank-you screen is visible; user closes it manually
   };
 
   return (
     <div className="min-h-screen w-full bg-[#0c0c0e] bg-[radial-gradient(ellipse_at_top,_#1a102b_0%,_#0c0c0e_100%)] text-white font-sans selection:bg-[#A855F7] selection:text-black">
+      {unifiedOnboarding && <div className="max-w-7xl mx-auto px-5 py-4 border-b border-white/10">
+        <Link href="/learner" className="text-purple-300 underline">My learner hub — courses and community</Link>
+        <p className="text-sm text-neutral-300 mt-2">Sign in once before intake. Your intake details stay private; your first name is used in the community.</p>
+        {connecting && <p role="status">Connecting your account…</p>}
+        {accountError && <p role="alert" className="text-amber-300 mt-2">{accountError}</p>}
+      </div>}
       {/* ── NAVBAR ── */}
       <nav className="border-b border-white/10 bg-[#0c0c0e]/70 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
@@ -587,13 +522,13 @@ function CoursesPage() {
             </p>
             <div className="flex flex-wrap gap-4">
               <a
-                href="https://services.letsleadwise.org/forum"
+                href={unifiedOnboarding ? "/learner" : "/forum"}
                 className="bg-[#A855F7] text-black px-8 py-4 rounded-2xl font-black hover:bg-white transition-all transform hover:scale-105 flex items-center gap-3 shadow-[0_0_20px_rgba(168,85,247,0.4)]"
               >
                 Enter Community Hub <ArrowRight size={20} />
               </a>
               <a
-                href="https://services.letsleadwise.org/forum/leaderboard"
+                href="/forum/leaderboard"
                 className="bg-white/5 border border-white/10 text-white px-8 py-4 rounded-2xl font-bold hover:bg-white/10 transition-all flex items-center gap-3"
               >
                 <Trophy size={20} className="text-[#C084FC]" /> View Leaderboard
