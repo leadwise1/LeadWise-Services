@@ -30,7 +30,7 @@ const source = ts.transpileModule(fs.readFileSync('src/app/api/learner/route.ts'
 vm.runInNewContext(source, {
   exports: exportsObject, process: { env: environment },
   require: name => {
-    if (name === '@/lib/course-catalog') return { COURSES: [{id:'google-ai-cert',title:'Google AI Professional Certificate'},{id:'data-analytics',title:'Google Data Analytics Professional Certificate'}] };
+    if (name === '@/lib/course-catalog') return { COURSES: [{id:'google-ai-cert',title:'Google AI Professional Certificate'},{id:'data-analytics',title:'Google Data Analytics Professional Certificate'},{id:'google-prompting-essentials',title:'Google Prompting Essentials Specialization'}] };
     if (name === 'next/server') return { NextResponse: { json: (data, options) => ({ data, ...options }) } };
     if (name === '@/lib/learner-notifications') return { notifyEnrollment: async () => {} };
     if (name === '@/lib/firebase-admin') return {
@@ -121,7 +121,7 @@ test('malformed JSON returns validation response', async () => {
 test('community signup creates membership before intake without any reporting or enrollment rows', async () => {
  const joined = await exportsObject.POST(request({ joinCommunity: true }));
  assert.equal(joined.status, 200);
- assert.equal(joined.data.next, '/forum/courses');
+ assert.equal(joined.data.next, '/forum');
  assert.equal(records.size, 1);
  assert.equal(records.get('learner_accounts/learner').communityMember, true);
  assert.equal(records.get('learner_accounts/learner').intakeComplete, false);
@@ -136,4 +136,31 @@ test('intake requires community signup first and then completes the same account
  assert.equal((await exportsObject.POST(request(intake))).status, 200);
  assert.equal(records.get('learner_accounts/learner').intakeComplete, true);
  assert.equal([...records.keys()].filter(k => k.startsWith('learner_accounts/') && !k.includes('/enrollments/')).length, 1);
+});
+
+test('prompting enrollment is accepted and duplicate retries preserve reports and outbox', async () => {
+ await exportsObject.POST(request({ joinCommunity: true }));
+ const body = { ...intake, courseId: 'google-prompting-essentials', courseTitle: 'Client-supplied title' };
+ assert.equal((await exportsObject.POST(request(body))).status, 200);
+ assert.equal(records.get('learner_accounts/learner/enrollments/google-prompting-essentials').courseTitle, 'Google Prompting Essentials Specialization');
+ const before = JSON.stringify([...records]);
+ assert.equal((await exportsObject.POST(request(body))).data.alreadySubmitted, true);
+ assert.equal(JSON.stringify([...records]), before);
+ assert.equal((await exportsObject.POST(request({ ...body, courseId: 'unknown-course' }))).status, 400);
+});
+test('saved intake is returned only for an explicitly requested authenticated self-service view', async () => {
+ await exportsObject.POST(request({ joinCommunity: true }));
+ await exportsObject.POST(request(intake));
+ const req = request(null); req.nextUrl = { searchParams: new URLSearchParams('view=intake') };
+ const response = await exportsObject.GET(req);
+ assert.equal(response.status, 200);
+ assert.equal(response.headers['Cache-Control'], 'private, no-store');
+ assert.equal(response.data.intake.firstName, intake.firstName);
+ assert.equal(response.data.intake.zipCode, intake.zipCode);
+ assert.equal(response.data.intake.consent, undefined);
+ assert.equal(response.data.intake.email, undefined);
+ records.set(legacyPath, { ...intake, email: 'someone-else@example.org' });
+ assert.equal((await exportsObject.GET(req)).data.intake, null);
+ const guest = request(null, null); guest.nextUrl = req.nextUrl;
+ assert.equal((await exportsObject.GET(guest)).status, 401);
 });

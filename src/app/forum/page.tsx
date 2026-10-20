@@ -18,7 +18,7 @@ export default function ForumHomePage() {
             <Shield size={14} /> Welcome to the community
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-6 text-white">
-            Welcome to the LeadWise Tech Collective
+            Welcome to the LW Learning Hub
           </h1>
           <p className="text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed">
             A shared space for learners, alumni, instructors, and career changers exploring technology together.

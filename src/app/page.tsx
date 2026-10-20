@@ -50,8 +50,8 @@ export default function HomePage() {
             <a href="/cover-letter" className="text-gray-400 hover:text-white transition">
               Cover Letter
             </a>
-            <a href="/courses" className="text-gray-400 hover:text-white transition">
-              Courses
+            <a href="/forum" className="text-gray-400 hover:text-white transition">
+              LW Learning Hub
             </a>
             <a href="/pathfinder" className="text-gray-400 hover:text-white transition flex items-center gap-1">
               <Compass size={14} className="text-[#A855F7]" /> Pathfinder
@@ -60,7 +60,7 @@ export default function HomePage() {
               Blog
             </a>
             <a href="/forum" className="text-gray-400 hover:text-white transition">
-              Forum
+              Community
             </a>
             <a 
               href="https://donation.letsleadwise.org" 
@@ -95,7 +95,7 @@ export default function HomePage() {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <a
-              href="/courses"
+              href="/forum"
               className="bg-[#A855F7] text-black font-bold px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.4)] transition transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] text-lg flex items-center justify-center gap-3"
             >
               <Cloud size={24} /> Start Free Certification
@@ -514,7 +514,7 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <a
-              href="/courses"
+              href="/forum"
               className="bg-[#A855F7] text-black font-bold px-10 py-5 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.4)] transition transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] text-lg flex items-center justify-center gap-3"
             >
               <Cloud size={24} /> Get Certified

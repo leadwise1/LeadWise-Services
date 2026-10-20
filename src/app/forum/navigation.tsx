@@ -28,7 +28,7 @@ function Navigation() {
             <ArrowLeft className="w-4 h-4" /> Home
           </Link>
           <span className="text-neutral-700">|</span>
-          <Link href="/courses" className="text-neutral-400 hover:text-white transition">
+          <Link href="/forum/courses" className="text-neutral-400 hover:text-white transition">
             Courses
           </Link>
           <span className="text-neutral-700">|</span>
@@ -37,7 +37,7 @@ function Navigation() {
           </Link>
         </div>
         <Link href="/forum" className="flex items-center gap-3 text-2xl font-bold text-white"><Network className="w-7 h-7 text-[#A855F7]" />LeadWise</Link>
-        <p className="text-sm text-neutral-400 mt-2">Learner community</p>
+        <p className="text-sm text-neutral-400 mt-2">LW Learning Hub</p>
       </div>
       <nav aria-label="Community" className="flex flex-wrap md:flex-col gap-1">
         {links.map(({ href, label, Icon, active }) => (

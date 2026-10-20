@@ -16,7 +16,7 @@ Preview: https://sb-160t3ythc0de.vercel.run/learner (temporary sandbox server).
 - Existing intake records, timestamps, enrollment approvals and historical anonymous rows are never overwritten/deleted.
 - Course/provider enrollment remains Pending until staff provisions it; membership never represents provider access.
 - Hub shows existing catalog, community links, weekly events, career tools and recent discussions.
-- Forum retains existing public/guest access for compatibility. This patch does not make historical public posts private.
+- With unified onboarding enabled, all forum pages show an account gate until verified community membership is confirmed. Existing public post APIs are unchanged; this is not a migration of historical public content into private storage.
 
 ## Two reports
 1. Private ledger queries profile/intake records only and includes names/email.
@@ -64,3 +64,16 @@ Submitting intake requires membership, then sets intakeComplete=true on that sam
 Joining by itself never adds an LMI row or enrollment request.
 Existing verified learner records can still be connected without resubmitting intake.
 The separate /learner hub remains available, but is not the primary community onboarding destination.
+
+
+## LW Learning Hub update
+- Services links enter /forum, branded LW Learning Hub. Legacy /courses redirects to /forum/courses.
+- Membership entry returns to the welcome page. The shared forum layout gates every nested screen.
+- Added Google Prompting Essentials Specialization to the catalog and server-side accepted course IDs.
+- Intake prefill reads only the signed-in learner's exact-email-matched, consented existing intake through GET /api/learner?view=intake, with private/no-store responses. The ordinary hub response still excludes demographics.
+- Returning learners review saved details and explicitly consent to each course request. Historical reporting rows remain untouched.
+- Course requests retain pending status across reloads. Pending requests no longer offer immediate Coursera access.
+- Email delivery still requires LEARNER_NOTIFICATIONS_ENABLED=true, RESEND_API_KEY, and valid sender configuration. These are deliberately absent in this preview.
+- Production Firebase authentication, storage, and delivery have not been exercised in this sandbox.
+
+Validation for LW Learning Hub: all 29 onboarding, report-privacy, and forum API tests pass; TypeScript and optimized Next.js production build pass. Sandbox HTTP: /forum 200; /courses redirects with 307. /api/learner returns 503 because Firebase Admin configuration is absent. Browser visual verification could not complete because the browser connection closed. No real learner enrollment or email was sent.

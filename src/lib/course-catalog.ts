@@ -100,5 +100,19 @@ export const COURSES: Course[] = [
       },
     ],
   },
+  {
+    id: "google-prompting-essentials",
+    title: "Google Prompting Essentials Specialization",
+    subtitle: "Unlock AI’s potential with effective prompts.",
+    description: "Learn from Google experts to write clear, specific prompts using a five-step framework. Practice everyday work tasks, data analysis, presentations, and responsible AI use. Build a reusable prompt library and earn a shareable Google certificate.",
+    duration: "4 courses · Under 10 hours",
+    level: "Beginner — No experience required",
+    tags: ["Prompting", "Generative AI", "AI Literacy"],
+    accentColor: "#A855F7",
+    bgColor: "#F5F3FF",
+    textColor: "#4C1D95",
+    externalUrl: "https://www.coursera.org/specializations/prompting-essentials-google",
+    modules: [],
+  },
 ];
 

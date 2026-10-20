@@ -19,12 +19,12 @@ export async function signInLearner() {
   return (await signInWithPopup(auth, provider)).user;
 }
 
-export async function learnerRequest(method = 'GET', body?: object) {
+export async function learnerRequest(method = 'GET', body?: object, view?: 'intake') {
   await auth.authStateReady();
   const user = auth.currentUser;
   if (!user || user.isAnonymous) throw new Error('Please sign in to continue.');
   const token = await user.getIdToken();
-  const response = await fetch('/api/learner', {
+  const response = await fetch(view === 'intake' ? '/api/learner?view=intake' : '/api/learner', {
     method, cache: 'no-store',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     ...(body ? { body: JSON.stringify(body) } : {}),

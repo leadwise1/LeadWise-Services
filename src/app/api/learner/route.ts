@@ -13,7 +13,7 @@ const intakeSchema = z.object({
   zipCode: z.string().trim().min(1).max(20),
   householdIncome: z.enum(['0-25k', '25-50k', '50-75k', '75k+']),
   employmentStatus: z.string().trim().min(1).max(80),
-  courseId: z.enum(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']),
+  courseId: z.enum(['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert', 'google-prompting-essentials']),
   courseTitle: z.string().trim().min(1).max(160),
   consent: z.literal(true),
 });
@@ -45,6 +45,15 @@ export async function GET(req: NextRequest) {
     ]);
     const profile = account.data();
     const existing = legacy.data();
+    if (req.nextUrl?.searchParams.get('view') === 'intake') {
+      // Private self-service only: verified email must match the saved intake.
+      const saved = legacy.exists && sameEmail(existing?.email, email!) && existing?.consent === true ? existing : null;
+      return reply({ intake: saved ? {
+        firstName: saved.firstName || '', lastName: saved.lastName || '',
+        zipCode: saved.zipCode || '', householdIncome: saved.householdIncome || '',
+        employmentStatus: saved.employmentStatus || '',
+      } : null });
+    }
     return reply({
       intakeComplete: profile?.intakeComplete === true,
       member: profile?.communityMember === true,
@@ -73,7 +82,7 @@ export async function POST(req: NextRequest) {
           communityMember: true, intakeComplete: false,
           joinedAt: new Date().toISOString(),
         });
-        return { success: true, next: '/forum/courses' };
+        return { success: true, next: '/forum' };
       });
       if ('conflict' in result) return reply({ error: 'This account needs staff review before linking.' }, 409);
       return reply(result);

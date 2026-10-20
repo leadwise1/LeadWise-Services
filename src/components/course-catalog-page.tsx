@@ -46,9 +46,22 @@ function IntakeModal({
 
   useEffect(() => {
     if (!isOpen || !unifiedOnboarding) return;
+    let cancelled = false;
     const user = auth.currentUser;
-    if (user && !user.isAnonymous) setFormData(previous => ({ ...previous, email: user.email || '' }));
-  }, [isOpen]);
+    const names = (user?.displayName || '').trim().split(/\s+/);
+    setFormData({ firstName: names[0] || '', lastName: names.slice(1).join(' '),
+      email: user?.email || '', zipCode: '', householdIncome: '', employmentStatus: '', consent: false });
+    setStep(1); setSubmitted(false); setError('');
+    if (user && !user.isAnonymous) {
+      learnerRequest('GET', undefined, 'intake').then(account => {
+        if (cancelled || !account.intake) return;
+        const saved = account.intake;
+        setFormData(previous => ({ ...previous, ...saved, email: user.email || '', consent: false }));
+        if (saved.firstName && saved.lastName && saved.zipCode && saved.householdIncome && saved.employmentStatus) setStep(3);
+      }).catch(() => { /* Keep the form usable if saved details cannot be loaded. */ });
+    }
+    return () => { cancelled = true; };
+  }, [isOpen, targetCourse?.id]);
 
   if (!isOpen) return null;
 
@@ -97,8 +110,8 @@ function IntakeModal({
             <div className="w-16 h-16 rounded-2xl bg-[#A855F7]/20 flex items-center justify-center mx-auto mb-4 border border-[#A855F7]/30">
               <CheckCircle size={32} className="text-[#C084FC]" />
             </div>
-            <h2 className="text-2xl font-extrabold text-white mb-2">You&apos;re on the list! 🎉</h2>
-            <p className="text-gray-400 text-sm">We received your registration</p>
+            <h2 className="text-2xl font-extrabold text-white mb-2">Enrollment requested</h2>
+            <p className="text-gray-400 text-sm">Your request has been saved</p>
           </div>
           <div className="p-8 text-center space-y-5">
             <p className="text-gray-300 text-base leading-relaxed">
@@ -107,8 +120,7 @@ function IntakeModal({
             </p>
             <div className="bg-[#A855F7]/10 border border-[#A855F7]/30 rounded-2xl px-6 py-5">
               <p className="text-[#C084FC] font-semibold text-sm leading-relaxed">
-                ✉️ Our team will review your information and send you a Coursera enrollment link{" "}
-                <span className="font-extrabold text-white">within 24 hours</span>.
+                Your course access link will be emailed after our team completes your registration. You can use the community while you wait.
               </p>
             </div>
             <p className="text-gray-400 text-xs">
@@ -212,7 +224,11 @@ function IntakeModal({
             {step === 3 && (
               <div className="space-y-4">
                 <div className="border border-white/10 p-4 rounded-xl bg-white/5 text-sm text-gray-300 space-y-2">
-                  <h3 className="font-bold text-white">Program Participation Agreement</h3>
+                  <h3 className="font-bold text-white">Confirm your enrollment request</h3>
+                  <p className="font-semibold text-purple-300">{targetCourse?.title}</p>
+                  <p>{formData.firstName} {formData.lastName} · {formData.email}</p>
+                  <p>ZIP: {formData.zipCode} · Income: {formData.householdIncome} · Employment: {formData.employmentStatus}</p>
+                  <button type="button" onClick={() => setStep(1)} className="text-purple-300 underline">Update intake details</button>
                   <p className="text-gray-400">By clicking &quot;Submit&quot;, I certify that the information provided is true. I understand that LeadWise Foundation is a non-profit and will use demographic data in aggregate form for grant reporting purposes.</p>
                 </div>
                 <label className="flex items-start gap-3 p-3 cursor-pointer hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 transition">
@@ -306,11 +322,11 @@ function ExpandableModule({ module, isEnrolled, onTriggerIntake }: {
 }
 
 // ─── COURSE CARD ──────────────────────────────────────────────────────────────
-function CourseCard({ course, isEnrolled, onTriggerIntake }: {
-  course: Course; isEnrolled: boolean; onTriggerIntake: () => void;
+function CourseCard({ course, isEnrolled, requestStatus, onTriggerIntake }: {
+  course: Course; isEnrolled: boolean; requestStatus?: string; onTriggerIntake: () => void;
 }) {
   const [showModules, setShowModules] = useState(false);
-  const Icon = course.id === 'google-ai-cert' ? BrainCircuit : course.id === 'google-cybersecurity-cert' ? ShieldCheck : BarChart3;
+  const Icon = ['google-ai-cert', 'google-prompting-essentials'].includes(course.id) ? BrainCircuit : course.id === 'google-cybersecurity-cert' ? ShieldCheck : BarChart3;
 
   return (
     <div className="group relative bg-[#121217] border border-white/10 hover:border-[#A855F7]/50 rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] flex flex-col h-full text-white">
@@ -350,12 +366,17 @@ function CourseCard({ course, isEnrolled, onTriggerIntake }: {
         </div>
 
         <div className="space-y-2.5 mt-auto">
-          {!isEnrolled ? (
+          {requestStatus && requestStatus !== 'Enrolled' ? (
+            <div role="status" className="rounded-xl bg-purple-500/10 border border-purple-400/30 p-4 text-sm text-purple-200">
+              <strong>Enrollment requested</strong>
+              <p className="mt-1 text-neutral-300">Your access link will be emailed after registration.</p>
+            </div>
+          ) : !isEnrolled ? (
             <button
               onClick={onTriggerIntake}
               className="w-full py-3.5 rounded-xl font-bold bg-[#A855F7] text-black hover:bg-white transition-all flex items-center justify-center gap-2 text-sm shadow-[0_0_20px_rgba(168,85,247,0.3)] active:scale-[0.98]"
             >
-              Start Learning Free <ArrowRight size={16} />
+              Request Enrollment <ArrowRight size={16} />
             </button>
           ) : (
             <>
@@ -396,9 +417,20 @@ export function CoursesPage({ embedded = false }: { embedded?: boolean }) {
   // pendingCourseIds: submitted but awaiting admin provisioning on Coursera
   const [pendingCourseIds, setPendingCourseIds] = useState<string[]>([]);
 
+  const [requestStatuses, setRequestStatuses] = useState<Record<string, string>>({});
+  useEffect(() => {
+    if (!unifiedOnboarding) return;
+    let cancelled = false;
+    learnerRequest().then(account => {
+      if (cancelled) return;
+      setRequestStatuses(Object.fromEntries(account.enrollments.map((item: { courseId: string; status: string }) => [item.courseId, item.status])));
+    }).catch(() => { /* Server still prevents duplicate enrollment requests. */ });
+    return () => { cancelled = true; };
+  }, []);
+
   const openEnrollment = async (course: Course) => {
     // If already submitted this session, don't re-open the form
-    if (pendingCourseIds.includes(course.id)) return;
+    if (pendingCourseIds.includes(course.id) || requestStatuses[course.id]) return;
     if (connecting) return;
     setAccountError("");
     setConnecting(true);
@@ -419,8 +451,9 @@ export function CoursesPage({ embedded = false }: { embedded?: boolean }) {
   };
 
   const handleEnrollmentComplete = () => {
-    // Mark all courses as pending — one submission covers all tracks
-    setPendingCourseIds(previous => unifiedOnboarding && selectedCourse ? [...new Set([...previous, selectedCourse.id])] : ['google-cybersecurity-cert', 'data-analytics', 'google-ai-cert']);
+    if (selectedCourse) setRequestStatuses(previous => ({ ...previous, [selectedCourse.id]: 'Pending' }));
+    // Track each selected course request independently.
+    setPendingCourseIds(previous => unifiedOnboarding && selectedCourse ? [...new Set([...previous, selectedCourse.id])] : COURSES.map(course => course.id));
     // Keep modal open so the thank-you screen is visible; user closes it manually
   };
 
@@ -465,19 +498,19 @@ export function CoursesPage({ embedded = false }: { embedded?: boolean }) {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[#A855F7] rounded-full blur-[180px] opacity-15 pointer-events-none" />
         <div className="max-w-3xl mx-auto relative z-10">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#A855F7]/10 border border-[#A855F7]/30 text-[#C084FC] text-sm font-semibold mb-6">
-            🎓 Google Career Certificates — 100% Free
+            🎓 Google Certificates & Specializations — Free through LeadWise
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-white">
             Select Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#C084FC] to-[#A855F7]">Career Path</span>
           </h1>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Choose one of the three verified Google Career Certificate tracks below. Completely free — backed by LeadWise Foundation grants.
+            Choose a Google certificate program or short specialization. Request free access through LeadWise Foundation.
           </p>
           {/* Stats row */}
           <div className="flex items-center justify-center gap-8 mt-8 text-sm text-gray-400">
             <div className="flex items-center gap-2">
               <Users size={16} className="text-[#C084FC]" />
-              <span><strong className="text-white">500+</strong> learners enrolled</span>
+              <span><strong className="text-white">Self-paced</strong> learning</span>
             </div>
             <div className="flex items-center gap-2">
               <Star size={16} className="text-[#C084FC]" />
@@ -493,12 +526,13 @@ export function CoursesPage({ embedded = false }: { embedded?: boolean }) {
 
       {/* ── COURSE CARDS ── */}
       <section className="max-w-7xl mx-auto px-6 py-14">
-        <div className="grid md:grid-cols-3 gap-7 items-stretch">
+        <div className="grid md:grid-cols-2 xl:grid-cols-2 gap-7 items-stretch">
           {COURSES.map(course => (
             <CourseCard
               key={course.id}
               course={course}
-              isEnrolled={pendingCourseIds.includes(course.id)}
+              isEnrolled={requestStatuses[course.id] === 'Enrolled'}
+              requestStatus={requestStatuses[course.id] || (pendingCourseIds.includes(course.id) ? 'Pending' : undefined)}
               onTriggerIntake={() => openEnrollment(course)}
             />
           ))}
@@ -562,7 +596,7 @@ export function CoursesPage({ embedded = false }: { embedded?: boolean }) {
         </div>
       </section>
 
-      <IntakeModal
+      <IntakeModal key={selectedCourse?.id}
         isOpen={intakeOpen}
         onClose={() => { setIntakeOpen(false); }}
         onComplete={handleEnrollmentComplete}
