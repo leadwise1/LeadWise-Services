@@ -2,6 +2,7 @@ import Script from 'next/script'
 import type { Metadata } from "next";
 import React from "react";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "../styles/globals.css";
 
 
@@ -87,6 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
