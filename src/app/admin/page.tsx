@@ -1,216 +1,73 @@
-"use client";
+'use client';
+import { useEffect, useRef, useState } from 'react';
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import Link from 'next/link';
 
-import { useState } from "react";
-import { db } from "@/lib/firebase";
-import { Loader2, Printer, Filter, ShieldAlert, Lock, AlertTriangle } from "lucide-react";
-
-interface StudentRecord {
-  id: string; 
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  zipCode: string;
-  householdIncome: string;
-  employmentStatus: string;
-  status: string;
-  enrolledAt: string;
-}
-
+type RecordRow = { id: string; firstName?: string; lastName?: string; email?: string; zipCode: string; householdIncome: string; employmentStatus: string; status: string; enrolledAt: string | null; courseTitle: string };
+type Report = 'lmi' | 'private';
 export default function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [students, setStudents] = useState<StudentRecord[]>([]);
-  const [incomeFilter, setIncomeFilter] = useState("All");
-  const [showDetailedLedger, setShowDetailedLedger] = useState(false);
-  const [debugLog, setDebugLog] = useState<string[]>([]);
-
-  const addLog = (msg: string) => setDebugLog(prev => [...prev, `${new Date().toLocaleTimeString()}: ${msg}`]);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // We no longer check the password here. 
-    // We attempt to fetch the data; if the password is wrong, 
-    // the server will return a 401 Unauthorized.
-    fetchData();
-  };
-
-  const fetchData = async () => {
-    setLoading(true);
-    setDebugLog([]);
-    addLog("Starting Data Fetch via Admin API...");
-
-    try {
-      // Call the new Next.js API route to securely fetch all intake data
-      const response = await fetch('/api/admin/intake-data', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${password}`
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Invalid Access Code. Access Denied.');
-        }
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch admin data from API.');
-      }
-
-      // If we reach here, the password was correct
-      setIsAuthenticated(true);
-      
-      const data: StudentRecord[] = await response.json();
-      addLog(`API Fetch Complete. Found ${data.length} documents.`);
-      setStudents(data);
-    } catch (error: any) {
-      console.error("Error:", error);
-      addLog(`CRITICAL ERROR: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filteredStudents = incomeFilter === "All" 
-    ? students 
-    : students.filter(s => s.householdIncome === incomeFilter);
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 text-slate-900">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm border border-gray-200">
-          <div className="flex justify-center mb-4"><Lock className="w-12 h-12 text-blue-600" /></div>
-          <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Compliance Portal</h2>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label htmlFor="access-code" className="block text-sm font-medium text-gray-700 mb-1">Access Code</label>
-              <input id="access-code" type="password" required className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-600 outline-none" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter code..." />
-            </div>
-            <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-opacity-90 font-bold transition-colors">Access Reports</button>
-          </form>
-        </div>
-      </div>
-    );
+  const [report, setReport] = useState<Report>('lmi');
+  const [rows, setRows] = useState<RecordRow[]>([]);
+  const [signedIn, setSignedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [month, setMonth] = useState('');
+  const [income, setIncome] = useState('All');
+  const generation = useRef(0);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async user => {
+      const request = ++generation.current;
+      setRows([]); setError('');
+      setSignedIn(Boolean(user && !user.isAnonymous)); setLoading(true);
+      if (!user || user.isAnonymous) { setLoading(false); return; }
+      try {
+        const token = await user.getIdToken();
+        const response = await fetch('/api/admin/intake-data?report=' + report, {
+          cache: 'no-store', headers: { Authorization: 'Bearer ' + token },
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || data.message || 'This account is not authorized for intake reports.');
+        if (request === generation.current) setRows(data);
+      } catch (err) {
+        if (request === generation.current) setError(err instanceof Error ? err.message : 'Unable to load report.');
+      } finally { if (request === generation.current) setLoading(false); }
+    });
+    return () => { generation.current++; unsubscribe(); };
+  }, [report]);
+  async function login() {
+    setError('');
+    try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+    catch { setError('Sign-in did not finish. Please retry with your authorized admin Google account.'); }
   }
-
-  return (
-    <div className="min-h-screen bg-gray-50 p-8 print:p-0 print:bg-white text-slate-900">
-      <div className="max-w-7xl mx-auto">
-        
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 print:mb-6 border-b print:border-none pb-6">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-               <ShieldAlert className="w-6 h-6 text-blue-600" />
-               <h1 className="text-2xl font-bold text-gray-900">
-                 {showDetailedLedger ? "Detailed Internal Ledger" : "Beneficiary Demographic & Equity Audit"}
-               </h1>
-            </div>
-            <p className="text-sm text-gray-500">Generated: {new Date().toLocaleDateString()} • LeadWise Foundation</p>
-          </div>
-          <div className="flex gap-4 mt-4 md:mt-0 print:hidden">
-            <button 
-              onClick={() => setShowDetailedLedger(!showDetailedLedger)} 
-              className="flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-lg hover:bg-blue-200 transition shadow-sm font-semibold"
-            >
-              {showDetailedLedger ? "View Anonymous Audit" : "View Detailed Ledger"}
-            </button>
-            <button onClick={handlePrint} className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition shadow-sm">
-              <Printer className="w-4 h-4" /> Print PDF
-            </button>
-          </div>
-        </div>
-
-        {/* DEBUG LOG - VISIBLE ONLY TO ADMIN */}
-        <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6 text-xs font-mono text-yellow-800 print:hidden">
-            <h3 className="font-bold flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4"/> System Logs</h3>
-            <div className="space-y-1 max-h-32 overflow-y-auto">
-                {debugLog.length === 0 ? "Waiting for action..." : debugLog.map((log, i) => <div key={i}>{log}</div>)}
-            </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6 print:hidden flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2 text-gray-700 font-medium">
-              <Filter className="w-4 h-4" />
-              <label htmlFor="income-filter" className="font-semibold text-gray-700">Filter by Income:</label>
-            </div>
-            <select id="income-filter" className="p-2 border rounded bg-gray-50 text-sm" value={incomeFilter} onChange={(e) => setIncomeFilter(e.target.value)}>
-                <option value="All">All Income Ranges</option>
-                <option value="0-25k">$0 - $25,000 (Very Low)</option>
-                <option value="25-50k">$25,001 - $50,000 (Low)</option>
-                <option value="50-75k">$50,001 - $75,000 (Moderate)</option>
-                <option value="75k+">$75,001+ (Above Moderate)</option>
-            </select>
-            <div className="ml-auto text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                Total Records: <strong>{filteredStudents.length}</strong>
-            </div>
-        </div>
-
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden print:shadow-none print:border-2 print:border-gray-900">
-            {loading ? (
-                <div className="p-12 flex justify-center text-gray-500"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>
-            ) : (
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead className="bg-gray-100 print:bg-gray-200 text-gray-900 border-b-2 border-gray-300">
-                            <tr>
-                                <th className="p-4 text-xs font-bold uppercase tracking-wider">{showDetailedLedger ? "Student ID" : "Student ID (Anonymized)"}</th>
-                                {showDetailedLedger && <th className="p-4 text-xs font-bold uppercase tracking-wider">Name</th>}
-                                {showDetailedLedger && <th className="p-4 text-xs font-bold uppercase tracking-wider">Email</th>}
-                                <th className="p-4 text-xs font-bold uppercase tracking-wider">Zip Code</th>
-                                <th className="p-4 text-xs font-bold uppercase tracking-wider">Income Bracket (LMI)</th>
-                                <th className="p-4 text-xs font-bold uppercase tracking-wider">Employment</th>
-                                <th className="p-4 text-xs font-bold uppercase tracking-wider">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {filteredStudents.length > 0 ? (
-                                filteredStudents.map((student, idx) => (
-                                    <tr key={idx} className="hover:bg-gray-50 print:hover:bg-transparent">
-                                        <td className="p-4 text-sm font-mono text-gray-600">{student.id}</td>
-                                        {showDetailedLedger && (
-                                            <td className="p-4 text-sm font-medium text-gray-900">
-                                              {student.firstName || student.lastName ? `${student.firstName || ''} ${student.lastName || ''}`.trim() : <span className="text-gray-400 italic">Anonymous</span>}
-                                            </td>
-                                        )}
-                                        {showDetailedLedger && (
-                                            <td className="p-4 text-sm text-gray-600">
-                                              {student.email || <span className="text-gray-400 italic">Anonymous</span>}
-                                            </td>
-                                        )}
-                                        <td className="p-4 text-sm font-bold text-gray-900">{student.zipCode}</td>
-                                        <td className="p-4 text-sm">
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
-                                                ${student.householdIncome === '0-25k' ? 'bg-green-100 text-green-800 border-green-200' : 
-                                                  student.householdIncome === '25-50k' ? 'bg-blue-100 text-blue-800 border-blue-200' : 
-                                                  'bg-gray-100 text-gray-800 border-gray-200'}`}>
-                                                {student.householdIncome}
-                                            </span>
-                                        </td>
-                                        <td className="p-4 text-sm text-gray-700 capitalize">{student.employmentStatus}</td>
-                                        <td className="p-4 text-sm">
-                                            <span className="inline-flex items-center gap-1 text-green-700 font-bold bg-green-50 px-2 py-1 rounded border border-green-100">
-                                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse print:hidden"></div>
-                                                {student.status}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={5} className="p-12 text-center text-gray-500 italic">No student records found matching this criteria.</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </div>
+  function switchReport(next: Report) {
+    generation.current++; setRows([]); setLoading(true); setReport(next);
+  }
+  const filtered = rows.filter(row => (!month || row.enrolledAt?.startsWith(month)) && (income === 'All' || row.householdIncome === income));
+  return <main className="min-h-screen bg-gray-50 text-slate-900 p-5 md:p-10 print:p-0 print:bg-white">
+    <div className="max-w-7xl mx-auto">
+      <nav className="flex flex-wrap gap-5 mb-8 print:hidden"><Link href="/learner" className="underline">Learner hub</Link><Link href="/forum/manage" className="underline">Community management</Link>{signedIn && <button onClick={() => signOut(auth)} className="underline">Sign out</button>}</nav>
+      <h1 className="font-bold text-3xl">{report === 'lmi' ? 'Anonymous LMI report' : 'Private learner ledger'}</h1>
+      <p className="my-3 text-slate-600">{report === 'lmi' ? 'Anonymous learner IDs, ZIP code, income bracket, employment, course, status and intake date. Names and emails are excluded by the server.' : 'Internal use: names, emails and learner intake details. Keep this ledger private.'}</p>
+      <p className="text-sm mb-6">Period: {month || 'All available dates'} · Records: {filtered.length} · Income filter: {income}</p>
+      {error && <p role="alert" className="border border-red-300 bg-red-50 p-4 mb-5 print:hidden">{error}</p>}
+      {!signedIn ? <section className="p-6 bg-white border rounded-xl print:hidden"><h2 className="text-xl font-bold mb-3">Authorized administrator access</h2><button onClick={login} className="bg-purple-700 text-white rounded-lg px-5 py-3">Sign in with Google</button></section>
+      : <><div className="flex flex-wrap gap-4 items-center my-6 print:hidden">
+        <button disabled={report === 'lmi'} onClick={() => switchReport('lmi')} className="border rounded-lg px-4 py-2 disabled:bg-purple-100">Anonymous LMI report</button>
+        <button disabled={report === 'private'} onClick={() => switchReport('private')} className="border rounded-lg px-4 py-2 disabled:bg-purple-100">Private learner ledger</button>
+        <label>Month <input type="month" value={month} onChange={e => setMonth(e.target.value)} className="border rounded-lg p-2" /></label>
+        <button onClick={() => setMonth('')} className="underline">All dates</button>
+        <label>Income <select value={income} onChange={e => setIncome(e.target.value)} className="border rounded-lg p-2">{['All', '0-25k', '25-50k', '50-75k', '75k+'].map(value => <option key={value}>{value}</option>)}</select></label>
+        <button disabled={loading || Boolean(error)} onClick={() => window.print()} className="bg-purple-700 text-white rounded-lg px-4 py-2 disabled:opacity-40">Print / Save PDF</button>
       </div>
+      {loading ? <p role="status">Loading report…</p> : <div className="overflow-x-auto bg-white border rounded-xl print:overflow-visible"><table className="w-full text-left text-sm">
+        <thead><tr className="bg-gray-100 border-b">{['Learner ID', ...(report === 'private' ? ['Name', 'Email'] : []), 'ZIP', 'Income', 'Employment', 'Course', 'Status', 'Intake date'].map(label => <th key={label} className="p-3">{label}</th>)}</tr></thead>
+        <tbody>{filtered.map((row, index) => <tr key={row.id + index} className="border-b">
+          <td className="p-3 font-mono">{row.id}</td>
+          {report === 'private' && <><td className="p-3">{row.firstName} {row.lastName}</td><td className="p-3">{row.email}</td></>}
+          <td className="p-3">{row.zipCode}</td><td className="p-3">{row.householdIncome}</td><td className="p-3">{row.employmentStatus}</td><td className="p-3">{row.courseTitle}</td><td className="p-3">{row.status}</td><td className="p-3">{row.enrolledAt ? row.enrolledAt.slice(0, 10) : 'Unknown'}</td>
+        </tr>)}</tbody>
+      </table>{filtered.length === 0 && <p className="p-5">No matching records.</p>}</div>}</>}
     </div>
-  );
+  </main>;
 }

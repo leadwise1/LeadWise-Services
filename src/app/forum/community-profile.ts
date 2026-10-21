@@ -1,5 +1,11 @@
+import { auth } from '@/lib/firebase';
+import { unifiedOnboarding } from '@/lib/learner-auth';
 export function getCommunityName(): string | null {
   if (typeof window === 'undefined') return null;
+  if (unifiedOnboarding) {
+    const user = auth.currentUser;
+    return user && !user.isAnonymous ? (user.displayName?.trim().split(/\s+/)[0] || 'Learner') : null;
+  }
   try {
     const community = JSON.parse(localStorage.getItem('leadwise_community_profile') || 'null');
     if (typeof community?.displayName === 'string' && community.displayName.trim()) return community.displayName.trim();

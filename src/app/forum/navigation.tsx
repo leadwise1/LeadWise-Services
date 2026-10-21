@@ -3,13 +3,15 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { MessageSquare, Trophy, Calendar, ArrowLeft, Megaphone, Network, Settings } from 'lucide-react';
+import { MessageSquare, Trophy, Calendar, ArrowLeft, Megaphone, Network, Settings, ScrollText } from 'lucide-react';
 
 function Navigation() {
   const path = usePathname();
   const params = useSearchParams();
   const isBulletin = params.get('board') === 'bulletin';
   const links = [
+    { href: '/forum/courses', label: 'Free Courses', Icon: Network, active: path === '/forum/courses' },
+    { href: '/forum/enroll', label: 'Enrollment Intake', Icon: ScrollText, active: path === '/forum/enroll' },
     { href: '/forum', label: 'Welcome', Icon: Network, active: path === '/forum' },
     { href: '/forum/discussions', label: 'Open forum', Icon: MessageSquare, active: path === '/forum/discussions' && !isBulletin },
     { href: '/forum/discussions?board=bulletin', label: 'Bulletin board', Icon: Megaphone, active: path === '/forum/discussions' && isBulletin },
@@ -26,7 +28,7 @@ function Navigation() {
             <ArrowLeft className="w-4 h-4" /> Home
           </Link>
           <span className="text-neutral-700">|</span>
-          <Link href="/courses" className="text-neutral-400 hover:text-white transition">
+          <Link href="/forum/courses" className="text-neutral-400 hover:text-white transition">
             Courses
           </Link>
           <span className="text-neutral-700">|</span>
@@ -35,7 +37,7 @@ function Navigation() {
           </Link>
         </div>
         <Link href="/forum" className="flex items-center gap-3 text-2xl font-bold text-white"><Network className="w-7 h-7 text-[#A855F7]" />LeadWise</Link>
-        <p className="text-sm text-neutral-400 mt-2">Learner community</p>
+        <p className="text-sm text-neutral-400 mt-2">LW Learning Hub</p>
       </div>
       <nav aria-label="Community" className="flex flex-wrap md:flex-col gap-1">
         {links.map(({ href, label, Icon, active }) => (

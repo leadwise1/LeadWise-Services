@@ -1,3 +1,4 @@
+import { POST as unifiedIntake } from '@/app/api/learner/route';
 import { NextRequest, NextResponse } from "next/server";
 import { adminDb, admin } from "@/lib/firebase-admin";
 import { Resend } from "resend";
@@ -149,6 +150,7 @@ function buildAdminEmailHtml(data: {
 }
 
 export async function POST(req: NextRequest) {
+  if (process.env.UNIFIED_ONBOARDING_ENABLED === "true") return unifiedIntake(req);
   try {
     const body = await req.json();
     const {
