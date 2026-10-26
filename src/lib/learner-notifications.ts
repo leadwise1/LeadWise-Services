@@ -26,7 +26,7 @@ export async function notifyEnrollment(uid: string, courseId: string) {
       from: 'LeadWise Enrollments <' + (process.env.RESEND_FROM_EMAIL || 'enrollments@letsleadwise.org') + '>',
       to: [process.env.NOTIFY_EMAIL || 'mentor@letsleadwise.org'],
       subject: 'New LeadWise course enrollment request',
-      text: `First name: ${firstName || 'Not provided — check the private intake'}\nLast name: ${lastName || 'Not provided — check the private intake'}\nVerified learner: ${event.email}\nCourse: ${event.courseTitle}\nStatus: Pending. Please provision access using the existing LeadWise process.\nLearner UID: ${uid}`,
+      text: `Learner: ${[firstName, lastName].filter(Boolean).join(' ') || 'Name not provided — check the private intake'}\nEmail: ${event.email}\nCourse: ${event.courseTitle}`,
     }, { idempotencyKey: 'learner-enrollment-' + eventId });
     if (!result.error) await ref.update({ status: 'Sent', sentAt: new Date().toISOString() });
   } catch {

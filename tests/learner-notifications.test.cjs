@@ -30,8 +30,7 @@ test('notification contains intake first and last names and the requested course
   await flow.notifyEnrollment('uid', 'google-prompting-essentials');
   assert.equal(flow.sent.length, 1);
   const text = flow.sent[0].mail.text;
-  assert.match(text, /First name: Example\nLast name: Learner/);
-  assert.ok(text.includes(base.courseTitle));
+  assert.equal(text, `Learner: Example Learner\nEmail: ${base.email}\nCourse: ${base.courseTitle}`);
   assert.equal(text.includes('25-50k'), false);
   assert.equal(text.includes('Employed'), false);
   assert.equal(flow.updates[0].status, 'Sent');
@@ -40,13 +39,13 @@ test('notification contains intake first and last names and the requested course
 test('older pending notification uses matching saved intake names', async () => {
   const flow = load(base, { email: base.email, firstName: 'Existing', lastName: 'Learner' });
   await flow.notifyEnrollment('uid', 'course');
-  assert.match(flow.sent[0].mail.text, /First name: Existing\nLast name: Learner/);
+  assert.match(flow.sent[0].mail.text, /Learner: Existing Learner/);
 });
 test('legacy email-key collisions cannot expose another learner name', async () => {
   const flow = load(base, { email: 'different@example.org', firstName: 'Wrong', lastName: 'Person' });
   await flow.notifyEnrollment('uid', 'course');
   assert.equal(flow.sent[0].mail.text.includes('Wrong'), false);
-  assert.match(flow.sent[0].mail.text, /Not provided/);
+  assert.match(flow.sent[0].mail.text, /Name not provided/);
 });
 test('sent notifications are not resent', async () => {
   const flow = load({ ...base, status: 'Sent' });
