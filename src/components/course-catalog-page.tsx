@@ -23,7 +23,7 @@ import {
 
 import { COURSES, type Course, type Resource, type Module } from '@/lib/course-catalog';
 import { auth } from '@/lib/firebase';
-import { signInLearner, unifiedOnboarding, learnerRequest } from '@/lib/learner-auth';
+import { signInLearner, learnerSignInError, unifiedOnboarding, learnerRequest } from '@/lib/learner-auth';
 import Link from 'next/link';
 
 // ─── INTAKE MODAL ─────────────────────────────────────────────────────────────
@@ -445,8 +445,8 @@ export function CoursesPage({ embedded = false }: { embedded?: boolean }) {
       }
       setSelectedCourse(course);
       setIntakeOpen(true);
-    } catch {
-      setAccountError("Please finish sign-in to enroll. Existing account access remains available. Contact mentor@letsleadwise.org if you need help.");
+    } catch (error) {
+      setAccountError(learnerSignInError(error));
     } finally { setConnecting(false); }
   };
 

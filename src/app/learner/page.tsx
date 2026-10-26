@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import { learnerRequest, signInLearner, unifiedOnboarding } from '@/lib/learner-auth';
+import { learnerRequest, learnerSignInError, signInLearner, unifiedOnboarding } from '@/lib/learner-auth';
 import { COURSES } from '@/lib/course-catalog';
 
 type Account = { intakeComplete: boolean; member: boolean; displayName: string; canLinkExisting: boolean; enrollments: { courseId: string; status: string }[] };
@@ -42,7 +42,7 @@ export default function LearnerHub() {
   async function connect() {
     setBusy(true); setError('');
     try { await signInLearner(); }
-    catch { setError('Sign-in did not finish. Retry, or use your existing account provider.'); setBusy(false); }
+    catch (err) { setError(learnerSignInError(err)); setBusy(false); }
   }
   async function linkExisting() {
     setBusy(true); setError('');

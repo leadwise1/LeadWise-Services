@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import Link from 'next/link';
 import { auth } from '@/lib/firebase';
-import { learnerRequest, signInLearner, unifiedOnboarding } from '@/lib/learner-auth';
+import { learnerRequest, learnerSignInError, signInLearner, unifiedOnboarding } from '@/lib/learner-auth';
 
 export default function CommunityEntry() {
   const [member, setMember] = useState(false);
@@ -33,7 +33,7 @@ export default function CommunityEntry() {
       await learnerRequest('POST', { joinCommunity: true });
       window.location.assign('/forum');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to join. Please retry.');
+      setError(learnerSignInError(err));
       setBusy(false);
     }
   }
