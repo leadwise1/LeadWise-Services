@@ -126,7 +126,9 @@ export async function POST(req: NextRequest) {
           // Transactional outbox; no email or external-provider action runs in a transaction.
           const eventId = createHash('sha256').update(user!.uid + ':' + courseId).digest('hex');
           tx.set(db.collection('learner_enrollment_outbox').doc(eventId), {
-            uid: user!.uid, courseId, courseTitle, email, status: 'Pending', createdAt: now,
+            uid: user!.uid, courseId, courseTitle, email,
+            firstName: intake.firstName, lastName: intake.lastName,
+            status: 'Pending', createdAt: now,
           });
         }
       }

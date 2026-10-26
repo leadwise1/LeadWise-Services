@@ -72,6 +72,16 @@ test('atomic intake grants membership and retries do not duplicate reporting or 
  assert.equal((await exportsObject.POST(request(intake))).data.alreadySubmitted, true);
  assert.equal(JSON.stringify([...records]), original);
  assert.equal(records.get('learner_accounts/learner').communityMember, true);
+ assert.equal(records.get(legacyPath).firstName, intake.firstName);
+ assert.equal(records.get(legacyPath).lastName, intake.lastName);
+ assert.equal(records.get(legacyPath).employmentStatus, intake.employmentStatus);
+ assert.equal(records.get(legacyPath).householdIncome, intake.householdIncome);
+ assert.equal(records.get('learner_accounts/learner/enrollments/google-ai-cert').courseId, intake.courseId);
+ const notification = [...records.entries()].find(([key]) => key.startsWith('learner_enrollment_outbox/'))[1];
+ assert.equal(notification.firstName, intake.firstName);
+ assert.equal(notification.lastName, intake.lastName);
+ assert.equal('householdIncome' in notification, false);
+ assert.equal('employmentStatus' in notification, false);
  assert.equal([...records.keys()].filter(k => k.startsWith('learner_intakes/')).length, 1);
  assert.equal([...records.keys()].filter(k => k.startsWith('learner_enrollment_outbox/')).length, 1);
 });
